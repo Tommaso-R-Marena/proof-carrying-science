@@ -265,6 +265,11 @@ def checkCertificate (c : StructuredCertificate) : Option VerifiedJudgment :=
           | isTrue h => some js[c.conclusionStep]
           | isFalse _ => none
 
+/-- Executable trace validity (Finding D fix). Unlike abstract `Certificate.valid`,
+this requires the recorded step list to check. -/
+def StructuredCertificate.traceValid (c : StructuredCertificate) : Prop :=
+  ∃ j, checkCertificate c = some j
+
 theorem checkCertificate_sound
     (c : StructuredCertificate) (j : VerifiedJudgment)
     (h : checkCertificate c = some j) :
@@ -283,6 +288,13 @@ theorem checkCertificate_sound
               exact checkStepsLTR_sound c.toContext c.steps js
                 (by simpa [StructuredCertificate.toContext] using hs)
                 _ (List.getElem_mem hlt)
+
+theorem traceValid_implies_derives
+    (c : StructuredCertificate) (h : c.traceValid) :
+    ∃ j, checkCertificate c = some j ∧
+      Derives c.toContext j.support j.assurance.declared j.formula := by
+  obtain ⟨j, hj⟩ := h
+  exact ⟨j, hj, checkCertificate_sound c j hj⟩
 
 theorem checkCertificate_implies_entails
     (c : StructuredCertificate) (j : VerifiedJudgment)
@@ -335,3 +347,4 @@ end ScientificReasoning
 #print axioms ScientificReasoning.checkCertificate_mathEstablished_false
 #print axioms ScientificReasoning.checkCertificate_requires_unique_ids
 #print axioms ScientificReasoning.hyp_not_math_established
+#print axioms ScientificReasoning.traceValid_implies_derives

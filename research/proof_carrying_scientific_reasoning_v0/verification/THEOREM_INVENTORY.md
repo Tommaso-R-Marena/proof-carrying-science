@@ -19,8 +19,11 @@ Lean **4.28.0**. No `sorry` / `admit` / custom axioms.
 | **`derives_iff_interpret`** | Completeness | Derives ↔ ∃ interpret (unique ids) | propext, Quot.sound |
 | **`derives_completeness`** | Completeness | Derives ⇒ ∃ accepted structured cert | propext, Quot.sound |
 | **`derives_iff_python_certificate`** | Equivalence | Derives ↔ ∃ Python-model acceptance | propext, Quot.sound |
+| **`demoΓ_classically_unsatisfiable` / `classical_entails_atom99_demoΓ`** | Contradictions | Classical Entails explodes on demoΓ | propext |
+| **`not_entails4_atom99_demoΓ`** | Belnap | Entails4 does **not** explode on demoΓ | propext |
+| **`traceValid_implies_derives` / `traceValid_implies_entails4`** | CheckCertificate / Belnap | Finding D: executable trace validity | propext |
 
-See `PYTHON_LEAN_EQUIVALENCE.md` for the trust boundary (CPython/JSON unproved).
+See `PYTHON_LEAN_EQUIVALENCE.md` and `EQUIVALENCE_BREAKS.md`.
 
 ## Distinctions
 

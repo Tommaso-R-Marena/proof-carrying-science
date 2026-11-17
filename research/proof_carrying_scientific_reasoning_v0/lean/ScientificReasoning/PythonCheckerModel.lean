@@ -3,13 +3,17 @@ import ScientificReasoning.CheckCertificate
 /-!
 # Lean model of the Python schema-v1 checker
 
-This module encodes the *algorithm* implemented by
-`independent_checker/check_certificate_v1.py` (structured core: unique ids,
-step reconstruction, conclusion index) as Lean functions whose control flow
-matches the Python loop.
+This module names the *structured* algorithm implemented by
+`independent_checker/check_certificate_v1.py` (unique ids, LTR step
+reconstruction, conclusion index) as Lean definitions.
 
-**Claim boundary:** proving equality to `checkCertificate` kernel-checks that
-algorithm. It does **not** refine CPython bytecode or the JSON parser.
+**Important honesty:** `checkCertificatePy` is currently definitional
+(`:= checkCertificate`). That is intentional: the Python LTR core was written
+to match Lean `checkStep`/`checkStepsLTR`. The JSON *surface* (schema version,
+unknown keys, `step.id == index`, claimed-field checks) is **not** modelled
+here — see `verification/EQUIVALENCE_BREAKS.md`.
+
+**Claim boundary:** algorithm-level Lean check ≠ CPython/`json.loads` proof.
 
 See `verification/PYTHON_LEAN_EQUIVALENCE.md`.
 -/

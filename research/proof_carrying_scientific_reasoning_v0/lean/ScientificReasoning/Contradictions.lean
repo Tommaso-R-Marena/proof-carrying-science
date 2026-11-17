@@ -76,8 +76,30 @@ theorem no_ex_falso_unrelated_atom
   have hat := derives_atoms_from_context demoΓ S a (Formula.atom 99) h 99 (by simp [Formula.atoms])
   exact demo_atoms_no_99 hat
 
+/-- Classical Boolean models of `demoΓ` do not exist (P ∧ ¬P premises). -/
+theorem demoΓ_classically_unsatisfiable :
+    ¬ ∃ σ : Assignment, Context.satisfied demoΓ σ := by
+  intro ⟨σ, hsat⟩
+  have h0 : Formula.eval σ (Formula.atom 0) = true := by
+    simpa [p0] using hsat p0 (by simp [demoΓ])
+  have h1 : Formula.eval σ (Formula.not (Formula.atom 0)) = true := by
+    simpa [p1] using hsat p1 (by simp [demoΓ])
+  simp [Formula.eval] at h0 h1
+  cases hσ : σ 0 <;> simp [hσ] at h0 h1
+
+/-- **Break point:** classical `Entails` explodes on inconsistent Γ (vacuous truth). -/
+theorem classical_entails_explodes_on_demoΓ (φ : Formula) : Entails demoΓ φ := by
+  intro σ hsat
+  exact (demoΓ_classically_unsatisfiable ⟨σ, hsat⟩).elim
+
+/-- In particular classical Entails yields atom 99 — unlike derivability / Entails4. -/
+theorem classical_entails_atom99_demoΓ : Entails demoΓ (Formula.atom 99) :=
+  classical_entails_explodes_on_demoΓ _
+
 end ScientificReasoning
 
 #print axioms ScientificReasoning.derives_atoms_from_context
 #print axioms ScientificReasoning.no_ex_falso_unrelated_atom
 #print axioms ScientificReasoning.demo_locally_contradictory
+#print axioms ScientificReasoning.demoΓ_classically_unsatisfiable
+#print axioms ScientificReasoning.classical_entails_explodes_on_demoΓ

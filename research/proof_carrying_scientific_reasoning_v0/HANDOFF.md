@@ -1,21 +1,21 @@
-# HANDOFF — Phase IV (Python↔Lean equivalence)
+# HANDOFF — Phase IV+ (verify / break / fix)
 
 - **Branch:** `research/proof_carrying_scientific_reasoning_v0`
 - **PR:** #218 draft — do not merge
-- **CI:** `source-policy` / `verified-public-integration` census failure expected — do not weaken
+- **CI:** sealed-census failures expected — do not weaken
 
-## Phase IV
+## Latest
 
-1. Lean model of schema-v1 checker (`PythonCheckerModel`) definitionally `=` `checkCertificate`
-2. Completeness: `Derives` ↔ `ProofTerm.interpret`; `compile_ok` / `interpret_checkCertificate` (no `sorryAx`)
-3. Equivalence package: `derives_iff_python_certificate` + Entails4 acceptance
-4. Docs: `verification/PYTHON_LEAN_EQUIVALENCE.md`; differential harness `tests/test_python_lean_differential.py`
+1. Documented break catalog: `verification/EQUIVALENCE_BREAKS.md`
+2. **Fixed (kernel):** classical `Entails` explodes on `demoΓ`; `¬ Entails4 demoΓ (atom 99)`; `traceValid` vs abstract `Certificate.valid`
+3. **Locked (tests):** v1.meet ≡ authority.meet (6×6); andE-on-atom; WF empty steps / step-id; claimed authority & math_established; bool schema_version
+4. Honest `PythonCheckerModel` docs (rfl = structured algorithm only)
+5. `check_all.sh` audits phase4 log for `sorryAx`
 
 ## Reproduce
 
 ```bash
 bash scripts/check_all.sh
-# or:
-cd lean && lake build
-cd .. && python -m pytest tests/ -q
 ```
+
+Expect: Lean OK (no sorryAx), 46 pytest, isolation OK.

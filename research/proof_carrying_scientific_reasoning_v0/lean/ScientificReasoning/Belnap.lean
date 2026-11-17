@@ -1,5 +1,6 @@
 import ScientificReasoning.Derivations
 import ScientificReasoning.CheckCertificate
+import ScientificReasoning.Contradictions
 
 /-!
 # Belnap FOUR semantics (truth/falsity components)
@@ -165,6 +166,41 @@ theorem not_entails4_atom99_from_demo_assignment :
     designated (Formula.eval4 σ_demo (Formula.atom 99)) = false := by
   decide
 
+theorem demoΓ_designated_under_σ_demo :
+    ∀ p ∈ demoΓ.premises, designated (Formula.eval4 σ_demo p.formula) = true := by
+  intro p hp
+  simp [demoΓ, p0, p1, p2] at hp
+  rcases hp with (rfl | rfl | rfl)
+  · -- atom 0 under σ_demo = both
+    decide
+  · -- not atom 0 under σ_demo = both
+    decide
+  · -- atom 2 under σ_demo = onlyTrue
+    decide
+
+/-- **Break fix (semantic):** Entails4 does *not* yield unrelated atom 99 from demoΓ,
+    while classical `Entails` does (`classical_entails_atom99_demoΓ`). -/
+theorem not_entails4_atom99_demoΓ : ¬ Entails4 demoΓ (Formula.atom 99) := by
+  intro h
+  have := h σ_demo demoΓ_designated_under_σ_demo
+  simp [Formula.eval4, σ_demo, designated, TruthValue.hasT] at this
+
+/-- Accepted certificates only get Entails4 — not classical explosion. -/
+theorem checkCertificate_entails4_not_classical_explosion
+    (c : StructuredCertificate) (j : VerifiedJudgment)
+    (h : checkCertificate c = some j)
+    (hctx : c.toContext = demoΓ)
+    (hform : j.formula = Formula.atom 99) : False := by
+  have he4 := checkCertificate_entails4 c j h
+  rw [hctx, hform] at he4
+  exact not_entails4_atom99_demoΓ he4
+
+theorem traceValid_implies_entails4
+    (c : StructuredCertificate) (h : c.traceValid) :
+    ∃ j, checkCertificate c = some j ∧ Entails4 c.toContext j.formula := by
+  obtain ⟨j, hj⟩ := h
+  exact ⟨j, hj, checkCertificate_entails4 c j hj⟩
+
 end ScientificReasoning.Belnap
 
 #print axioms ScientificReasoning.Belnap.and_truth_table
@@ -172,3 +208,6 @@ end ScientificReasoning.Belnap
 #print axioms ScientificReasoning.Belnap.derives_entails4
 #print axioms ScientificReasoning.Belnap.checkCertificate_entails4
 #print axioms ScientificReasoning.Belnap.designated_and
+#print axioms ScientificReasoning.Belnap.not_entails4_atom99_demoΓ
+#print axioms ScientificReasoning.Belnap.checkCertificate_entails4_not_classical_explosion
+#print axioms ScientificReasoning.Belnap.traceValid_implies_entails4

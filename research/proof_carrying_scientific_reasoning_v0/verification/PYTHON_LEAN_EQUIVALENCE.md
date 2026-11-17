@@ -25,6 +25,8 @@ Lean models the **structured schema-v1 checking algorithm** (unique premise IDs,
 
 So: **Python is Lean-checked at the algorithm level**, not at the CPython runtime level.
 
+Catalog of concrete break points (fixed vs open): `EQUIVALENCE_BREAKS.md`.
+
 ## Differential harness
 
 `tests/test_python_lean_differential.py` builds hyp / andI / andE1 / andE2 certificates and checks that:
