@@ -118,7 +118,7 @@ PROVENANCE = [
      "PCS configuration: pins the Lean toolchain and Mathlib revisions (Mathlib, Apache-2.0, is fetched at build time, not vendored)"),
     (r"\.(py|lean|toml|yml|mjs|sh|html|css)$", "PCS code written for this project"),
     (r"\.(md|txt)$", "PCS documentation written for this project"),
-    (r"\.(json|jsonl|csv|patch|tsv)$", "PCS record or generated evidence (reproducible; see the producing script named in the file or its directory README)"),
+    (r"\.(json|jsonl|csv|patch|diff|tsv)$", "PCS record or generated evidence (reproducible; see the producing script named in the file or its directory README)"),
 ]
 LICENCE_DEEDS = {"cc by": "https://creativecommons.org/licenses/by/4.0/", "cc-zero": "https://creativecommons.org/publicdomain/zero/1.0/",
                  "cc0": "https://creativecommons.org/publicdomain/zero/1.0/"}
