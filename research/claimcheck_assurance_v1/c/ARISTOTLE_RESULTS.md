@@ -42,7 +42,11 @@ reproduced here with gcc and both sanitizers): `out` is the eight bytes of a `si
 them with the representation of 8, and returns success. My stated preconditions kept `out` apart
 from `buf` but said nothing about `*m`. That was an error in the specification I wrote; the
 differential tests could not find it because they never alias. The header now states the
-precondition. The C file is unchanged so that the results above still refer to the committed bytes.
+precondition. The bytes the results above refer to are kept in `aristotle/sim/pcs_srcbind_v1.c` and
+`aristotle/sim/pcs_srcbind_v1_as_submitted.h` (SHA-256 in `aristotle/sim/README.md`); the counterexample
+still reproduces against them (`test_counterexample.py`). The decoder in `pcs_srcbind.c` was redesigned
+on 2026-11-16 so that it has no length pointer (`DESIGN_DECODER_V2.md`); none of the results above is a
+result about the redesigned decoder.
 
 **What the summary reports beyond the recorded results** (`aristotle/ARISTOTLE_SUMMARY.md`): with
 the added precondition that `*m` overlaps neither `buf` nor `out`, P1, P2 and P3 "do hold, with
@@ -85,11 +89,13 @@ to the Python generator on the 8 real data files and 300 random ones; the decode
 committed obligation files; 332 truncations and 123 non-canonical spellings are rejected; of 1,328
 single-byte mutations, 1,245 are rejected and the rest are canonical headers of other data.
 
-## Proposal for the remaining credits (needs the owner's approval; nothing has been started)
+## Follow-up (superseded proposal; nothing has been started)
 
-One follow-up run on the same project, restating P1 to P3 with the disjointness precondition and
-dropping P4 and P5 (the encoder is not on the trust path: a verifier only decodes). Continuing a
-project reuses its model and proofs, so this should cost much less than the first run, but the
-service gives no estimate. Suggested hard stop: 60 credits, enforced by someone who can cancel.
-Alternative: change the decoder to return `1 + length` instead of writing through `m`, which
-removes the aliasing hazard, and verify that version instead.
+The earlier proposal here (restate P1 to P3 of the first decoder with a disjointness precondition,
+60-credit stop) is superseded. The owner asked for the hazard to be removed rather than documented;
+the decoder was redesigned (`DESIGN_DECODER_V2.md`: lengths returned by value, validation before any
+write, nothing written on rejection) and the continuation for P1 to P3 of the redesigned decoder is
+prepared in `ARISTOTLE_PROMPT_V2.md`. It has **not** been submitted: the tools offer no enforceable
+per-run spending limit, and cancellation by a supervising session failed once (the 92-credit
+overrun) and could fail again for the same reason (the session was suspended by a usage limit again
+on 2026-11-16). See `ARISTOTLE_PROMPT_V2.md` for what would be sent and the conditions for sending it.

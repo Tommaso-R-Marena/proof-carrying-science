@@ -13,10 +13,10 @@ size_t pcs_header_decode(const uint8_t *buf, size_t n, uint8_t *out, size_t cap,
 ```
 
 It reported the data length through `m` and wrote `out` while still validating. Aristotle refuted
-P2 and P3 as I had stated them: when `m` points into `out`, the final store `*m = len` overwrites
+P2 and P3 as they had been stated: when `m` points into `out`, the final store `*m = len` overwrites
 decoded bytes and the call still succeeds (`aristotle/sim/pcs_header_decode_counterexample.c`, kept
-runnable by `test_counterexample.py`). My preconditions separated `out` from `buf` but not `*m` from
-`out`. A second weakness, not a refutation: on rejection, `out` could already hold part of a
+runnable by `test_counterexample.py`). The stated preconditions separated `out` from `buf` but not
+`*m` from `out`. A second weakness, not a refutation: on rejection, `out` could already hold part of a
 decoding.
 
 ## Options

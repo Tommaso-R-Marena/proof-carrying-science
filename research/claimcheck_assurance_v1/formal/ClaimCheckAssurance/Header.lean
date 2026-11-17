@@ -11,7 +11,7 @@ the data file into the Lean text:
 
 This module states the canonical header `canon d` of a byte string `d` and a strict decoder
 `decode`, written step by step after `c/pcs_srcbind.c::pcs_header_decode` (same checks, same
-order; the C function is compared with it by test, `runner/test_header_refinement.py`).  Proved:
+order; the C function is compared with it by test, `conformance/test_header_refinement.py`).  Proved:
 
 * `decode_canon`        every canonical header is accepted, whatever follows it, and decodes to its data;
 * `decode_sound`        whatever the decoder accepts begins with the canonical header of what it returns;

@@ -27,7 +27,10 @@ Read first: `README.md` (this directory), `../claimcheck_v1_1/OWNER_DECISIONS.md
   withdrawn runner kept in `findings/record/`). Since 2026-11-16 the grammar lives in one place,
   `parse_tail` of the installed runner `../claimcheck_v1_1/claimcheck_kernel_runner.py`; the
   prototype that was here was removed once installed.
-* `c/`: `pcs_srcbind.c`, `test_srcbind.py`, Aristotle prompt, results and counterexample.
+* `c/`: `pcs_srcbind.c` (decoder v2: lengths by value, validate before writing), `test_srcbind.py`,
+  `test_counterexample.py`, `DESIGN_DECODER_V2.md`, the first Aristotle prompt, results and
+  counterexample (first decoder kept in `c/aristotle/sim/`), and the prepared, unsent
+  `ARISTOTLE_PROMPT_V2.md`.
 * `.github/workflows/pcs-claimcheck-assurance.yml` runs all of the above.
 
 ## 3. Open proof obligations (precise)
@@ -49,10 +52,11 @@ Read first: `README.md` (this directory), `../claimcheck_v1_1/OWNER_DECISIONS.md
    `parseTail (renderTail d cs os) = some (d, cs, os)` (under the generator's preconditions) and
    `parseTail t = some (d, cs, os) → t = renderTail d cs os`. `Header.lean` is the template: its
    `decode_canon` / `decode_sound` pair is exactly this shape for the header.
-2. **C decoder, memory safety and functional correctness with the non-aliasing precondition.**
-   *Reported* by Aristotle as proved under that precondition but not recorded as a result; P1, P4, P5
-   unresolved. Needs the owner's approval of more credits (decision E2), or the alternative of
-   returning `1 + length` instead of writing through `m`, which removes the aliasing hazard.
+2. **C decoder v2, memory safety (P1), soundness (P2) and completeness (P3).** The aliasing hazard
+   is removed by design (`c/DESIGN_DECODER_V2.md`); the remaining caller condition is the usual
+   input/output non-overlap. The continuation is prepared in `c/ARISTOTLE_PROMPT_V2.md` and was not
+   submitted because no enforceable spending limit is available through the tools (see that file).
+   For the first decoder, P1 under the precondition is only *reported* by Aristotle, not recorded.
 3. **The verdict policy as verified code.** Today the Lean model and the Python policy agree by
    test. To make the decision logic itself verified: compile `Authority.core`/`outward` from Lean and
    have `policy._decide` call it with the findings Python computes; the conformance test then checks

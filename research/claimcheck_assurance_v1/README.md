@@ -32,9 +32,13 @@ checker, a benchmark, a protected file or any production path. Kernel-checked wi
 * `Selection.lean`: the documented "2 %" decoy limit is a local density, not a bound on coincidental
   confirmation. Owner decision A6 (2026-11-16): the rule is retained and its descriptions in the
   ClaimCheck branch were corrected to state the proved bound, its model and its assumptions.
-* [`c/ARISTOTLE_RESULTS.md`](c/ARISTOTLE_RESULTS.md): Aristotle refuted two decoder properties as I
-  had stated them (missing non-aliasing precondition, runnable counterexample) and proved four
-  smaller ones; 92 credits were billed against an authorised 50.
+* [`c/ARISTOTLE_RESULTS.md`](c/ARISTOTLE_RESULTS.md): Aristotle refuted two decoder properties as
+  they had been stated (missing non-aliasing precondition, runnable counterexample) and proved four
+  smaller ones; 92 credits were billed against an authorised 50. The decoder was then redesigned so
+  that the hazard cannot be expressed (lengths returned by value, validation before any write,
+  nothing written on rejection: [`c/DESIGN_DECODER_V2.md`](c/DESIGN_DECODER_V2.md)); the first version
+  and the counterexample are kept and still reproduce (`c/test_counterexample.py`). The continuation
+  for the redesigned decoder is prepared, not submitted ([`c/ARISTOTLE_PROMPT_V2.md`](c/ARISTOTLE_PROMPT_V2.md)).
 
 ## Main theorems (all in namespace `PCS.ClaimCheck.Assurance`)
 
@@ -124,8 +128,9 @@ concrete case, and `coreFlawed` shows that the monotonicity theorem fails for a 
 
 * That the Python policy *is* the Lean model: tested on real receipts and on every table state, not
   proved. The functions that compute findings from text and data are outside the model.
-* That the C decoder is memory safe for every input: sanitizer tests pass; Aristotle's memory-safety
-  property for the decoder is unresolved.
+* That the C decoder is memory safe for every input: sanitizer tests pass (including: nothing written
+  on any of 2,134 rejections, nothing beyond the data on acceptance); no proof of the redesigned
+  decoder exists, and Aristotle's memory-safety property for the first decoder was unresolved.
 * That the runner's Python parser *is* the proved Lean parser: tested on 7,248 inputs, not proved.
   That Lean's elaborator reads the accepted text as `denote` says (numerals, `((n : Rat) / d)`,
   string literals without backslash or quote, the structure instance, constructor names): trusted,

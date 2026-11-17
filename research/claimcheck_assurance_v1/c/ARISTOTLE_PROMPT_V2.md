@@ -7,7 +7,16 @@ cancels it in time). Whoever starts a run establishes that limit and records it 
 first. Preparing this file started nothing and spent nothing.
 
 What would be sent: the text between PROMPT START and PROMPT END, as the prompt of a continuation of
-the existing project, together with exactly the three files listed under "Files to upload".
+the existing project, together with exactly the three files listed under "Files to upload". Per the
+tool's description, an upload passed to a continuation replaces the project's files at the same
+paths and keeps the project's other files (so Aristotle's own counterexample and proofs stay there).
+
+Status on 2026-11-17: not sent. Balance 407.8 promotional credits (0 paid), expiring
+2026-11-29 06:00 UTC. The MCP tools and the CLI take no budget; cancel_run stops an MCP-started run at
+once, but only while a supervising session is active, and that session was suspended by usage limits
+during both the first run (92 credits billed against an authorised 50) and this preparation. The owner
+can make a limit enforceable outside this file, for example with a credit check-in configured in the
+Aristotle web app (the service then pauses the run and asks), or can submit it from the web app.
 -->
 
 # Aristotle continuation: the redesigned header decoder (P1 to P3)
