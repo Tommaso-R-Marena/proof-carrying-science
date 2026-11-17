@@ -81,4 +81,18 @@ theorem affected_topology_only
       intro next prior; exact (hsame next prior).symm
     exact ⟨root, hr, downstream_transport g₂ g₁ root id hsame' path⟩
 
+
+/-- `Affected` is the least predicate containing `changes` and closed under `dependsOn`. -/
+theorem affected_least
+    (g : Graph) (changes : ChangeSet) (P : NodeId → Prop)
+    (hseeds : ∀ id ∈ changes, P id)
+    (hstep : ∀ prior next, P prior → dependsOn g next prior → P next)
+    (id : NodeId) (h : Affected g changes id) : P id := by
+  rcases h with ⟨root, hr, path⟩
+  have hroot : P root := hseeds root hr
+  clear hr
+  induction path with
+  | refl => exact hroot
+  | cons path' hd ih => exact hstep _ _ ih hd
+
 end PCSIncremental
