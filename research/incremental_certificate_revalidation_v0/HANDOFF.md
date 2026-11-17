@@ -3,6 +3,7 @@
 ## Branch / commits
 
 - **Branch:** `research/pcs-incremental-revalidation-v0`
+- **Current commit:** `fd057407b77d1b2e3df43b7c79a94989747afe01`
 - **Worktree:** `/home/ubuntu/worktrees/pcs-incremental-revalidation-v0`
 - **Base main:** `bc78660b5fac857fce3873eb6cda0445d1903da1`
 - **Exclusive path:** `research/incremental_certificate_revalidation_v0/` only
