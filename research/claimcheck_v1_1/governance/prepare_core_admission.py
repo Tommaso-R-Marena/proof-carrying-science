@@ -57,6 +57,9 @@ PROPOSED_TAG = "pcs-source-intake/core-claimcheck-v1-20261114"
 DRY_TAG = "pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag"
 ADDED_ROOTS = ("research/claimcheck_v1/", "research/claimcheck_v1_1/", "docs/integration/claimcheck/")
 ADDED_FILES = (".github/workflows/pcs-claimcheck-v1.yml",)
+# files the dry run and the audit rewrite; a commit that changes only these after the commit they describe adds no source
+EVIDENCE = {"docs/integration/claimcheck/dry-run.json", "docs/integration/claimcheck/ADMISSION_CENSUS.json",
+            "docs/integration/claimcheck/proposed-control-changes.patch", "docs/integration/claimcheck/ADMISSION_AUDIT.json"}
 FIXED = {"GIT_AUTHOR_NAME": "PCS admission dry run", "GIT_AUTHOR_EMAIL": "dry-run@example.invalid", "GIT_COMMITTER_NAME": "PCS admission dry run",
          "GIT_COMMITTER_EMAIL": "dry-run@example.invalid", "GIT_AUTHOR_DATE": "2026-11-14T00:00:00Z", "GIT_COMMITTER_DATE": "2026-11-14T00:00:00Z"}
 
@@ -213,6 +216,14 @@ def main(argv=None) -> int:
     report: dict = {"what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. "
                             "No tag with a real name was created. Not an approval.",
                     "generated_from_commit": head, "valid_only_for_that_commit": True}
+    # the evidence committed in this tree describes an earlier commit (it cannot describe the commit that contains it):
+    # check that everything after that commit is evidence only, so the numbers below are the ones for this commit
+    committed = subprocess.run(["git", "show", f"{head}:docs/integration/claimcheck/dry-run.json"], cwd=ROOT, capture_output=True)
+    if committed.returncode == 0:
+        described = json.loads(committed.stdout).get("generated_from_commit")
+        since = sorted(set(git(ROOT, "diff", "--name-only", described, head).splitlines()) - {""}) if described else None
+        report["evidence_committed_in_this_tree"] = {"describes_commit": described, "files_changed_since_then": since,
+                                                     "only_evidence_files_changed": since is not None and set(since) <= EVIDENCE}
     try:
         git(ROOT, "worktree", "add", "--detach", str(work / "main"), V22_COMMIT)
         report["gate_on_the_protected_v22_commit"] = gate(work / "main", "--require-committed")
