@@ -145,6 +145,9 @@ class IncrementalVerifier:
         changes: ChangeSet,
         provided_certs: Optional[Mapping[int, Certificate]] = None,
         compare_fresh: bool = True,
+        *,
+        recheck_on_reuse: bool = True,
+        record_trace: bool = True,
     ) -> IncrementalReport:
         """
         Apply changes relative to prior ValidState.
@@ -155,6 +158,9 @@ class IncrementalVerifier:
             raise ValueError("no prior ValidState; call initial_verify first")
 
         report = IncrementalReport(accepted=False, changes=list(changes))
+        def _trace(ev: TraceEvent) -> None:
+            if record_trace:
+                report.trace.append(ev)
         try:
             new_graph.check_well_formed()
             new_graph.topological_rank()
@@ -188,7 +194,7 @@ class IncrementalVerifier:
             if node.id in unaffected:
                 # May attempt reuse — only if reuse_permitted
                 hit = self.cache.lookup(current_key)
-                report.trace.append(
+                _trace(
                     TraceEvent(
                         "lookup",
                         node.id,
@@ -196,34 +202,39 @@ class IncrementalVerifier:
                     )
                 )
                 if hit is not None and reuse_permitted(hit, current_key):
-                    # Defense in depth: re-run local check even for authoritative reuse.
-                    ok = self.registry.local_check_node(
-                        node.op,
-                        node.version,
-                        node.policy,
-                        node.evidence,
-                        dep_vals,
-                        hit.cert.payload,
-                        hit.cert.output,
-                    )
-                    if not ok:
-                        report.rejected.append(node.id)
-                        report.error = f"reused cert failed local check at {node.id}"
-                        report.outputs = outputs
-                        report.trace.append(TraceEvent("reuse_check_failed", node.id, {}))
-                        return report
+                    # Optional defense in depth: re-run local check on reuse.
+                    # Under the restrictive local ValidState trust model, authority
+                    # already implies a prior local check; recheck_on_reuse=False
+                    # measures pure invalidation savings. Default True resists
+                    # forged prior_accepted bits inside the process.
+                    if recheck_on_reuse:
+                        ok = self.registry.local_check_node(
+                            node.op,
+                            node.version,
+                            node.policy,
+                            node.evidence,
+                            dep_vals,
+                            hit.cert.payload,
+                            hit.cert.output,
+                        )
+                        if not ok:
+                            report.rejected.append(node.id)
+                            report.error = f"reused cert failed local check at {node.id}"
+                            report.outputs = outputs
+                            _trace(TraceEvent("reuse_check_failed", node.id, {}))
+                            return report
                     outputs[node.id] = hit.cert.output
                     certs[node.id] = hit.cert
                     new_cache.put_authoritative(current_key, hit.cert)
                     report.reused.append(node.id)
-                    report.trace.append(
+                    _trace(
                         TraceEvent("reuse", node.id, {"key": list(current_key.as_tuple()[:5])})
                     )
                     continue
                 # Fallback: must recheck even if unaffected if no authoritative reuse
                 # (e.g. dep outputs somehow differ — shouldn't happen if unaffected,
                 # but fail-closed).
-                report.trace.append(
+                _trace(
                     TraceEvent(
                         "reuse_denied",
                         node.id,
@@ -258,7 +269,7 @@ class IncrementalVerifier:
                 cert.payload,
                 cert.output,
             )
-            report.trace.append(TraceEvent("recheck", node.id, {"ok": ok}))
+            _trace(TraceEvent("recheck", node.id, {"ok": ok}))
             if not ok:
                 report.rejected.append(node.id)
                 report.error = f"local check failed for node {node.id}"

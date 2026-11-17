@@ -54,27 +54,37 @@ def reuse_permitted(entry: CacheEntry, current: ObligationKey) -> bool:
 
 @dataclass
 class Cache:
-    """Finite cache as a list of entries. Lookup is retrieval only."""
+    """Finite cache with exact-key index. Lookup is retrieval only."""
 
     entries: List[CacheEntry] = field(default_factory=list)
+    _index: Dict[ObligationKey, int] = field(default_factory=dict, repr=False)
+
+    def __post_init__(self) -> None:
+        self._reindex()
+
+    def _reindex(self) -> None:
+        self._index = {e.key: i for i, e in enumerate(self.entries)}
 
     def lookup(self, key: ObligationKey) -> Optional[CacheEntry]:
         """
         Lookup by exact obligation key.
         Presence alone does NOT prove validity or grant authority.
         """
-        for e in self.entries:
-            if e.key == key:
-                return e
-        return None
+        i = self._index.get(key)
+        if i is None:
+            return None
+        return self.entries[i]
 
     def lookup_by_node_id(self, node_id: int) -> List[CacheEntry]:
         return [e for e in self.entries if e.key.id == node_id]
 
     def put(self, entry: CacheEntry) -> None:
-        # replace same key if present
-        self.entries = [e for e in self.entries if e.key != entry.key]
-        self.entries.append(entry)
+        i = self._index.get(entry.key)
+        if i is not None:
+            self.entries[i] = entry
+        else:
+            self._index[entry.key] = len(self.entries)
+            self.entries.append(entry)
 
     def put_authoritative(self, key: ObligationKey, cert: Certificate) -> None:
         """Record an entry that a trusted verifier accepted."""
@@ -98,6 +108,7 @@ class Cache:
 
     def clear(self) -> None:
         self.entries.clear()
+        self._index.clear()
 
     def copy(self) -> "Cache":
         return Cache(entries=list(self.entries))

@@ -172,3 +172,5 @@ end PCSIncremental
 #print axioms PCSIncremental.safe_reuse_preserves_obligation
 #print axioms PCSIncremental.compositional_fresh
 #print axioms PCSIncremental.mutation_safety_no_forgery
+
+#print axioms PCSIncremental.affected_least

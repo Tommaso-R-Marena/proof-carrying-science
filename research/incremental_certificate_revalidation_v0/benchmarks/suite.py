@@ -124,29 +124,36 @@ def scientific_synthetic(n_meas: int) -> Graph:
     return Graph(nodes=nodes)
 
 
-def _run_case(name: str, g: Graph, change_ids: Sequence[int]) -> BenchRow:
+def _run_case(
+    name: str,
+    g: Graph,
+    change_ids: Sequence[int],
+    *,
+    recheck_on_reuse: bool = False,
+) -> BenchRow:
+    """Default recheck_on_reuse=False measures invalidation savings under ValidState trust."""
     reg = default_registry()
     v = IncrementalVerifier(reg)
     assert v.initial_verify(g).accepted
     replacements = []
     for cid in change_ids:
         node = g.by_id()[cid]
-        if node.op == OP_INT_CONST:
-            replacements.append(
-                Node(node.id, node.op, node.deps, node.policy, node.version, node.evidence + 1)
-            )
-        else:
-            replacements.append(
-                Node(node.id, node.op, node.deps, node.policy, node.version, node.evidence + 1)
-            )
+        replacements.append(
+            Node(node.id, node.op, node.deps, node.policy, node.version, node.evidence + 1)
+        )
     new_g = g.replace_nodes(replacements)
 
     tracemalloc.start()
     t0 = time.perf_counter()
     fresh = fresh_verify(new_g, reg)
     t1 = time.perf_counter()
-    # Time incremental without nested fresh comparison (fair wall-clock).
-    incr = v.revalidate(new_g, list(change_ids), compare_fresh=False)
+    incr = v.revalidate(
+        new_g,
+        list(change_ids),
+        compare_fresh=False,
+        recheck_on_reuse=recheck_on_reuse,
+        record_trace=False,
+    )
     t2 = time.perf_counter()
     _, peak = tracemalloc.get_traced_memory()
     tracemalloc.stop()
