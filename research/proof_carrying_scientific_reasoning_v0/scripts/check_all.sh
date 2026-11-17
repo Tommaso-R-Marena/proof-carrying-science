@@ -13,6 +13,7 @@ python3 -m pytest -q "${ROOT}/tests" "${ROOT}/adversarial"
 echo "== case studies =="
 python3 "${ROOT}/case_studies/pkpd_synthetic.py"
 python3 "${ROOT}/case_studies/causal_identification.py"
+python3 "${ROOT}/case_studies/proteomics_synthetic.py"
 
 echo "== benchmarks =="
 python3 "${ROOT}/benchmarks/reproduce.py"
@@ -20,7 +21,7 @@ python3 "${ROOT}/benchmarks/reproduce.py"
 echo "== isolation =="
 python3 "${ROOT}/scripts/check_isolation.py"
 
-echo "== axiom audit (no sorryAx in CheckCertificate) =="
-grep -R "sorryAx" "${ROOT}/results/lean_build_phase2.log" && exit 1 || echo "no sorryAx in phase2 build log"
+echo "== axiom audit (no sorryAx) =="
+grep -E "sorryAx" "${ROOT}/results/lean_build_phase3.log" && exit 1 || echo "no sorryAx in phase3 build log"
 
 echo "ALL_OK"

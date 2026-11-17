@@ -1,21 +1,24 @@
-# Lean ↔ Python correspondence (Phase II)
+# Lean ↔ Python correspondence (Phase III)
 
-## Mapping
+## Well-formedness contract
 
-| Concern | Lean | Python | Bound |
-|---|---|---|---|
-| Step citations | `StepSpec` + `checkCertificate` | `check_certificate_v1.py` | Structural; differential tests |
-| Soundness | `checkCertificate_sound` → `Derives` | N/A (tested) | Kernel-checked |
-| Meet | `Authority.meet` commutative | `authority.meet` | Enumerated agree |
-| math_established | `hyp_not_math_established` | Hyp ⇒ False | Proved / tested |
-| Legacy forged JSON | N/A | Rejected by v1 | Regressions A/B/C |
+| Rule | Lean | Python |
+|---|---|---|
+| Unique premise IDs | `uniquePremiseIds`; reject in `checkCertificate` | duplicate premise id → CheckError |
+| schema_version | N/A (structured) | must be int `1` (bool rejected) |
+| mathEstablished | always false on accept (`checkCertificate_mathEstablished_false`) | Hyp false; claim True rejected |
+| andI authority | `Authority.meet` | `meet` (rank+tie) |
 
-## Levels achieved
+## Finite coverage (Python)
 
-1. Differential / mutation testing on schema v1.  
-2. Small exhaustive meet table (6×6 authorities).  
-3. **Not** claimed: CPython source refinement; serialized JSON parser correctness in Lean.
+- Meet: all 6×6 authority pairs (commutative).  
+- Hyp: 2 atoms × 6 authorities.  
+- AndI: 6×6 authority pairs.  
+- Belnap ∧: all 16 cells.
 
-## Open trust boundary
+**Not claimed:** CPython ≡ Lean source refinement; JSON parser proved in Lean.
 
-JSON parsing, resource limits, and OS I/O remain outside Lean. Independent checker must stay import-free of the reference evaluator.
+## Duplicate-ID finding (resolved)
+
+Pre-Phase-III Lean `findPremise` took the first match and could accept duplicate-id contexts.  
+Now both sides reject non-unique premise ids before step checking.

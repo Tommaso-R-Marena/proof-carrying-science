@@ -7,13 +7,14 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Set
 
 SCHEMA_VERSION = 1
 MAX_PREMISES = 256
 MAX_STEPS = 1024
 MAX_DEPTH = 64
 MAX_PROPID = 2_147_483_647
+MAX_JSON_BYTES = 1_000_000
 
 RANK = {
     "disputed": 0,
@@ -24,7 +25,6 @@ RANK = {
     "mathVerified": 4,
 }
 
-# Total order for commutative meet when ranks tie (Finding G).
 TIE_ORDER = {
     "disputed": 0,
     "hypothesis": 1,
@@ -32,6 +32,33 @@ TIE_ORDER = {
     "empiricalAsserted": 3,
     "derived": 4,
     "mathVerified": 5,
+}
+
+ALLOWED_TOP = {
+    "schema_version",
+    "premises",
+    "steps",
+    "conclusion_step",
+    "conclusion",
+    "final_support",
+    "final_authority",
+}
+
+ALLOWED_PREMISE = {"id", "formula", "declared_authority", "authority"}
+ALLOWED_STEP_COMMON = {
+    "id",
+    "rule",
+    "formula",
+    "support",
+    "declared_authority",
+    "authority",
+    "math_established",
+}
+ALLOWED_STEP_BY_RULE = {
+    "hyp": ALLOWED_STEP_COMMON | {"premise_id"},
+    "andI": ALLOWED_STEP_COMMON | {"left", "right"},
+    "andE1": ALLOWED_STEP_COMMON | {"from"},
+    "andE2": ALLOWED_STEP_COMMON | {"from"},
 }
 
 
@@ -46,16 +73,12 @@ def meet(a: str, b: str) -> str:
         return a
     if RANK[b] < RANK[a]:
         return b
-    # equal rank: lower tie-order wins (commutative)
     return a if TIE_ORDER[a] <= TIE_ORDER[b] else b
-
-
-Formula = Any  # nested list structure
 
 
 @dataclass
 class Judgment:
-    formula: Formula
+    formula: Any
     support: List[int]
     declared_authority: str
     math_established: bool
@@ -75,6 +98,8 @@ def _formula_depth(φ: Any, d: int = 0) -> int:
     if not isinstance(φ, list) or len(φ) < 2:
         raise CheckError("malformed formula")
     tag = φ[0]
+    if not isinstance(tag, str):
+        raise CheckError("formula tag must be string")
     if tag == "atom":
         if len(φ) != 2:
             raise CheckError("atom arity")
@@ -95,11 +120,43 @@ def _eq_formula(a: Any, b: Any) -> bool:
     return a == b
 
 
+def _reject_unknown(obj: dict, allowed: Set[str], what: str) -> None:
+    extra = set(obj.keys()) - allowed
+    if extra:
+        raise CheckError(f"unknown fields in {what}: {sorted(extra)}")
+
+
+def _object_pairs_hook(pairs: list) -> dict:
+    out: dict = {}
+    for k, v in pairs:
+        if k in out:
+            raise CheckError(f"duplicate JSON key {k!r}")
+        out[k] = v
+    return out
+
+
+def parse_certificate_json(text: str) -> dict:
+    if len(text.encode("utf-8")) > MAX_JSON_BYTES:
+        raise CheckError("JSON too large")
+    try:
+        data = json.loads(text, object_pairs_hook=_object_pairs_hook)
+    except json.JSONDecodeError as e:
+        raise CheckError(f"malformed JSON: {e}") from e
+    if not isinstance(data, dict):
+        raise CheckError("certificate must be object")
+    return data
+
+
 def check(cert: dict) -> Judgment:
     if not isinstance(cert, dict):
         raise CheckError("certificate must be object")
-    if cert.get("schema_version") != SCHEMA_VERSION:
+    _reject_unknown(cert, ALLOWED_TOP, "certificate")
+
+    # Boolean True must not masquerade as schema version 1
+    sv = cert.get("schema_version")
+    if isinstance(sv, bool) or not isinstance(sv, int) or sv != SCHEMA_VERSION:
         raise CheckError("unsupported schema_version")
+
     premises = cert.get("premises")
     steps = cert.get("steps")
     if not isinstance(premises, list) or not isinstance(steps, list):
@@ -113,6 +170,7 @@ def check(cert: dict) -> Judgment:
     for p in premises:
         if not isinstance(p, dict):
             raise CheckError("premise must be object")
+        _reject_unknown(p, ALLOWED_PREMISE, "premise")
         i = _require_int(p.get("id"), "premise id")
         if i in pm:
             raise CheckError(f"duplicate premise id {i}")
@@ -120,7 +178,6 @@ def check(cert: dict) -> Judgment:
         _formula_depth(φ)
         auth = p.get("declared_authority")
         if auth not in RANK:
-            # legacy key
             auth = p.get("authority")
         if auth not in RANK:
             raise CheckError("bad declared_authority")
@@ -130,12 +187,16 @@ def check(cert: dict) -> Judgment:
     for idx, s in enumerate(steps):
         if not isinstance(s, dict):
             raise CheckError("step must be object")
+        rule = s.get("rule")
+        if rule not in ALLOWED_STEP_BY_RULE:
+            raise CheckError(f"unknown rule {rule}")
+        _reject_unknown(s, ALLOWED_STEP_BY_RULE[rule], f"step/{rule}")
         sid = _require_int(s.get("id"), "step id")
         if sid != idx:
             raise CheckError(f"step id {sid} != index {idx}")
         if sid in judgments:
             raise CheckError("duplicate step id")
-        rule = s.get("rule")
+
         if rule == "hyp":
             pid = _require_int(s.get("premise_id"), "premise_id")
             if pid not in pm:
@@ -145,7 +206,7 @@ def check(cert: dict) -> Judgment:
                 formula=p["formula"],
                 support=[pid],
                 declared_authority=p["declared_authority"],
-                math_established=False,  # Finding F: declaration ≠ established
+                math_established=False,
             )
         elif rule == "andI":
             left = _require_int(s.get("left"), "left")
@@ -161,7 +222,7 @@ def check(cert: dict) -> Judgment:
                 declared_authority=meet(jl.declared_authority, jr.declared_authority),
                 math_established=jl.math_established and jr.math_established,
             )
-        elif rule in ("andE1", "andE2"):
+        else:  # andE1 / andE2
             fr = _require_int(s.get("from"), "from")
             if fr >= idx:
                 raise CheckError("forward reference")
@@ -178,17 +239,22 @@ def check(cert: dict) -> Judgment:
                 declared_authority=jf.declared_authority,
                 math_established=jf.math_established,
             )
-        else:
-            raise CheckError(f"unknown rule {rule}")
 
-        # Optional claimed fields must match reconstruction
         if "formula" in s and not _eq_formula(s["formula"], j.formula):
             raise CheckError("claimed formula mismatch")
-        if "support" in s and list(s["support"]) != j.support:
-            raise CheckError("claimed support mismatch")
+        if "support" in s:
+            if not isinstance(s["support"], list):
+                raise CheckError("claimed support must be array")
+            # reject bools in support
+            for x in s["support"]:
+                _require_int(x, "claimed support id")
+            if list(s["support"]) != j.support:
+                raise CheckError("claimed support mismatch")
         claimed_auth = s.get("declared_authority", s.get("authority"))
         if claimed_auth is not None and claimed_auth != j.declared_authority:
             raise CheckError("claimed authority mismatch")
+        if s.get("math_established") is True:
+            raise CheckError("cannot claim math_established without attestation")
 
         judgments[sid] = j
 
@@ -197,26 +263,42 @@ def check(cert: dict) -> Judgment:
         raise CheckError("conclusion_step missing")
     final = judgments[cstep]
 
-    # Optional top-level claimed fields
     if "conclusion" in cert and not _eq_formula(cert["conclusion"], final.formula):
         raise CheckError("top-level conclusion mismatch")
-    if "final_support" in cert and list(cert["final_support"]) != final.support:
-        raise CheckError("final_support mismatch")
+    if "final_support" in cert:
+        if not isinstance(cert["final_support"], list):
+            raise CheckError("final_support must be array")
+        for x in cert["final_support"]:
+            _require_int(x, "final_support id")
+        if list(cert["final_support"]) != final.support:
+            raise CheckError("final_support mismatch")
     if "final_authority" in cert and cert["final_authority"] != final.declared_authority:
         raise CheckError("final_authority mismatch")
+
+    if final.math_established:
+        raise CheckError("math_established must be false without attestation")
 
     return final
 
 
 def check_path(path: str) -> Judgment:
     with open(path, encoding="utf-8") as f:
-        return check(json.load(f))
+        text = f.read()
+    return check(parse_certificate_json(text))
 
 
 if __name__ == "__main__":
     import sys
 
     j = check_path(sys.argv[1])
-    print("OK", json.dumps({"formula": j.formula, "support": j.support,
-                            "declared_authority": j.declared_authority,
-                            "math_established": j.math_established}))
+    print(
+        "OK",
+        json.dumps(
+            {
+                "formula": j.formula,
+                "support": j.support,
+                "declared_authority": j.declared_authority,
+                "math_established": j.math_established,
+            }
+        ),
+    )
