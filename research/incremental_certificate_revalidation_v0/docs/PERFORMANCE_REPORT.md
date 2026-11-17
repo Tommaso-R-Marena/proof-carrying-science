@@ -63,8 +63,25 @@ Cost axes distinguished:
 3. Optional defense-in-depth recheck on reuse.
 4. Python interpreter overhead vs trivial arithmetic (cheap-ops regime).
 
+## Real Lean kernel baseline (not incremental reuse yet)
+
+Source: `benchmarks/lean_kernel_suite.py` → `results/lean_kernel_benchmark_report.json`.
+File: `formal/bench/BenchObligations.lean` (`native_decide` Nat obligations).
+
+| Metric | ms (approx) |
+|---|---:|
+| Cold `lean BenchObligations.lean` | ~211 |
+| Warm recheck | ~167–187 |
+| `lean --help` startup | ~34 |
+| Approx check − startup | ~177 |
+
+This establishes a **real** Lean 4.28.0 kernel workload. It is **not** yet an
+incremental certificate-revalidation speedup experiment. Synthetic DelayedRegistry
+results remain separate historical evidence.
+
 ## Future optimization directions (not weakening assurance)
 
 - Frontier-only scheduling of unaffected subgraphs.
 - Persistent assignments when dep outputs unchanged (still prove eligibility).
 - Native/Lean-extracted checkers for expensive obligations.
+- Incremental reuse of checked Lean obligations with matched trust assumptions.

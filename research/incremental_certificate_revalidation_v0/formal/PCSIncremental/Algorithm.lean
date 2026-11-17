@@ -41,9 +41,7 @@ theorem computeChanges_complete (g g' : Graph) :
     List.any_eq_true.2 ⟨n, hpriors_mem, by simp [hdiffB]⟩
   match hpriors : g.nodes.filter (fun x => decide (x.id = n'.id)) with
   | [] =>
-      have : n ∈ ([] : List Node) := by
-        simp [hpriors] at hpriors_mem
-        exact hpriors_mem
+      have : n ∈ ([] : List Node) := by simpa [hpriors] using hpriors_mem
       cases this
   | p :: ps =>
       simp [hpriors, hany]

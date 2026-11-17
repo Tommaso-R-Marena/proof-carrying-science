@@ -11,55 +11,44 @@
 
 ## Completed
 
-- [x] Overlap audit vs PRs #199–#216 and main research (checked-reuse, workflow, epistemic, intake Incremental.lean)
-- [x] Isolated worktree + Lean `PCSIncremental` library (builds; no sorry/admit)
-- [x] Substantive `IncrementalAccept` (premises only) + `incremental_implies_fresh`
-- [x] New-graph invalidation aligned Lean ↔ Python; prior mode retained for negatives
-- [x] Assumption-removal counterexamples (forgery / prior Affected / ChangesComplete)
-- [x] Expensive-check benchmarks: trusted reuse ~60–90× vs fresh on sparse leaf edits
-- [x] Cheap-ops negative performance result preserved
-- [x] Theorems A–J + correspondence gap doc (differential ≠ refinement)
-- [x] Python verifier + fresh reference + adversarial suite
-- [x] Docs + manuscript draft
-- [x] Draft PR #217 opened (clearance required before non-draft)
+- [x] Overlap audit; exclusive namespace; draft PR #217
+- [x] Substantive `IncrementalAccept` + `incremental_implies_fresh` (non-vacuous)
+- [x] **GC-II:** assumption audit (logical vs operational); evidence-bound LocalCheck
+- [x] **GC-II:** `Algorithm.lean` — `computeChanges` complete, `runIncremental`, `incremental_run_sound`
+- [x] **GC-II:** Python `compute_changes` / atomic ValidState commit; evidence/atomic tests
+- [x] New-graph invalidation; assumption-removal counterexamples
+- [x] Cheap-ops slowdown preserved; synthetic expensive-check speedups labeled
+- [x] PRIOR_ART survey draft; baseline/progress docs
 
 ## Proven theorems (Lean)
 
-`incremental_implies_fresh` (derives FreshValid; does not assume it),
-`reuse_entry_checks`, invalidation soundness/completeness, `affected_least`,
-`new_edge_requires_new_graph_invalidation`, policy/version/op/evidence/dep
-eligibility breaks, non-escalation, compositional fresh, mutation safety,
-demo forged/policy/dep counterexamples, `executableAcceptImpliesLeanFresh`.
-Axioms: none, or `propext` / `Classical.choice` / `Quot.sound` from `by_cases`.
+`logical_implies_fresh`, `incremental_implies_fresh`, `reuse_entry_checks` (evidence-bound),
+`computeChanges_complete`, `runIncremental_changes_complete`, `incremental_run_sound`,
+`affectedClosure_step_sound`, invalidation sound/complete, `affected_least`,
+`new_edge_requires_new_graph_invalidation`, eligibility/non-escalation families,
+`executableAcceptImpliesLeanFresh`. No sorry/admit/custom axioms.
 
 ## Implemented but unproved
 
+- `runIncremental` ok ⇒ constructed `LogicalAccept` (bridge)
 - Python affected-closure ≡ Lean `Affected` (differentially tested)
-- Full refinement of Python `IncrementalVerifier` to `IncrementalAccept`
-- Minimal work bounds / complexity theorems
-- Proof-carrying cache update certificates for third-party checkers
+- Full Python⇒Lean refinement
+- Real Lean-kernel performance advantage (synthetic only so far)
 
 ## Tests
 
-- `pytest` under `tests/` (core, differential, adversarial, assumption counterexamples)
-- Adversarial: all defenses held under default posture
-- Demo: agree with fresh; forgery rejected under defense-in-depth
+- pytest: 22 passed (core, differential, adversarial, assumption, evidence/atomic)
+- `lake build` green
 
-## Performance
+## CI
 
-- Cheap Int ops: incremental slower (~0.45–0.53×) — negative result kept.
-- Expensive synthetic checks: trusted sparse reuse ~64–123×; root-heavy ~1× failure;
-  defense recheck-on-reuse ~1×. See `docs/PERFORMANCE_REPORT.md`.
-
-## Overlap concerns
-
-PR #201 `Incremental.lean` is related abstractly; scoped to intake; not duplicated.
-Do not edit other research dirs.
+- Research/portability checks green
+- `source-policy` / `verified-public-integration` fail on sealed census (**expected**; do not weaken)
 
 ## Next highest-value objectives
 
-1. Bridge `runIncremental` ok-result ⇒ `LogicalAccept` (kernel-checked).
-2. Real Lean 4.28.0 proof-check benchmarks (cold/warm/trusted/defense).
-3. Independent arithmetic reference (no shared op registry).
-4. Multistep history soundness; PRIOR_ART novelty comparison.
-5. Independent human review of theorem statements and trust model.
+1. Bridge `runIncremental` ok ⇒ `LogicalAccept`
+2. Real Lean 4.28.0 proof-check benchmarks
+3. Independent arithmetic reference (no shared registry)
+4. Multistep history; novelty vs PRIOR_ART
+5. Independent human review
