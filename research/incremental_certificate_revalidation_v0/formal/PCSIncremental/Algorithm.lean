@@ -254,6 +254,75 @@ theorem incremental_run_sound
     FreshValid check g' σ' certs' :=
   logical_implies_fresh check vs g' changes σ' certs' h
 
+/-! ## Bridge lemmas: algorithm steps imply local checks -/
+
+/-- Any successful `stepNode` returns a certificate that passes `check` on the
+node's evidence-bound obligation. This is the local half of the executable bridge. -/
+theorem stepNode_ok_checks
+    (check : LocalCheck) (cache : Cache) (affected : List NodeId)
+    (mkCert : Node → List Value → Option Certificate)
+    (n : Node) (depVals : List Value)
+    (v : Value) (c : Certificate) (didReuse : Bool)
+    (h : stepNode check cache affected mkCert n depVals = some (v, c, didReuse)) :
+    check n.op n.version n.policy n.evidence depVals c.payload c.output = true ∧
+      v = c.output := by
+  unfold stepNode at h
+  match ha : decide (n.id ∈ affected) with
+  | true =>
+      simp [ha] at h
+      match hmk : mkCert n depVals with
+      | none => simp [hmk] at h
+      | some c0 =>
+          simp [hmk] at h
+          match hchk : check n.op n.version n.policy n.evidence depVals c0.payload c0.output with
+          | true =>
+              simp [hchk] at h
+              rcases h with ⟨rfl, rfl, rfl⟩
+              exact ⟨hchk, rfl⟩
+          | false => simp [hchk] at h
+  | false =>
+      simp [ha] at h
+      match hru : tryReuse cache (obligationOf n depVals) with
+      | some c0 =>
+          simp [hru] at h
+          match hchk : check n.op n.version n.policy n.evidence depVals c0.payload c0.output with
+          | true =>
+              simp [hchk] at h
+              rcases h with ⟨rfl, rfl, rfl⟩
+              exact ⟨hchk, rfl⟩
+          | false =>
+              simp [hchk] at h
+              match hmk : mkCert n depVals with
+              | none => simp [hmk] at h
+              | some c1 =>
+                  simp [hmk] at h
+                  match hchk2 : check n.op n.version n.policy n.evidence depVals c1.payload c1.output with
+                  | true =>
+                      simp [hchk2] at h
+                      rcases h with ⟨rfl, rfl, rfl⟩
+                      exact ⟨hchk2, rfl⟩
+                  | false => simp [hchk2] at h
+      | none =>
+          simp [hru] at h
+          match hmk : mkCert n depVals with
+          | none => simp [hmk] at h
+          | some c0 =>
+              simp [hmk] at h
+              match hchk : check n.op n.version n.policy n.evidence depVals c0.payload c0.output with
+              | true =>
+                  simp [hchk] at h
+                  rcases h with ⟨rfl, rfl, rfl⟩
+                  exact ⟨hchk, rfl⟩
+              | false => simp [hchk] at h
+
+/-- Body always records the supplied change set (hence complete when from `computeChanges`). -/
+theorem runIncrementalBody_accepted_changes
+    (check : LocalCheck) (vs : ValidState) (topo : List Node)
+    (mkCert : Node → List Value → Option Certificate)
+    (changes : ChangeSet) (affected : List NodeId) (topoOk : Bool) :
+    (runIncrementalBody check vs topo mkCert changes affected topoOk).changes = changes :=
+  runIncrementalBody_changes check vs topo mkCert changes affected topoOk
+
 end PCSIncremental
 
 #print axioms PCSIncremental.computeChanges_complete
@@ -262,3 +331,4 @@ end PCSIncremental
 #print axioms PCSIncremental.runIncremental_changes_complete
 #print axioms PCSIncremental.affectedClosure_step_sound
 #print axioms PCSIncremental.collectDependents_implies_dependsOn
+#print axioms PCSIncremental.stepNode_ok_checks
