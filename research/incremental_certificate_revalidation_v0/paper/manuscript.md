@@ -26,25 +26,30 @@ fresh correspondence and explicit non-escalation — see `OVERLAP_AUDIT.md`.
 
 ## Formal results
 
-Central theorem `incremental_implies_fresh`: any state satisfying
-`IncrementalAccept` is `FreshValid`. Supporting families cover dependency
-correctness, invalidation, safe reuse, policy/version sensitivity, non-escalation,
-composition, and mutation safety. Axiom audit: only `propext` where used; no
-`sorry`/`admit`/custom axioms. `affected_least` shows Affected is the least
-predicate closed under dependency from change seeds.
+`IncrementalAccept` states minimal sufficient premises (prior FreshWitness,
+ChangesComplete, idsCovered, Affected recheck on the updated graph, eligible
+authoritative reuse) and does **not** embed `FreshValid`. Central theorem
+`incremental_implies_fresh` derives fresh validity from those premises.
+Supporting families cover dependency correctness, invalidation (including
+new-edge / new-graph requirements), safe reuse, policy/version sensitivity,
+non-escalation, composition, and mutation safety. No `sorry`/`admit`/custom
+axioms; transitive uses of `propext` / `Classical.choice` / `Quot.sound` audited.
 
 ## Executable system
 
 Restricted ops (exact Int/Rat, equality, composition). Local ValidState cache.
-Independent `fresh_verify` oracle. Differential mutation tests (30×6 sequences).
-Nine adversarial categories all resisted under default defense-in-depth.
+Independent `fresh_verify` oracle. Differential mutation tests (not a refinement
+proof). Assumption-removal counterexamples show incomplete changes, prior-only
+invalidation, and forged authority break the guarantee. Nine adversarial
+categories resisted under default defense-in-depth.
 
 ## Performance
 
-On cheap synthetic Int ops up to ~20k nodes, incremental wall-clock was slower
-than fresh (~0.45–0.53×) because bookkeeping dominates trivial arithmetic.
-Reuse *counts* match theory (e.g. 19937/19999 reused on sparse scientific graphs).
-Speedups are expected only when local checks are expensive; we do not invent them.
+Cheap Int ops: incremental slower than fresh (~0.45–0.53×) — negative result kept.
+Expensive synthetic local checks (`DelayedRegistry`): trusted sparse leaf reuse
+~64–123× vs full recompute; root-heavy changes ~1× (performance failure when reuse
+is empty); defense recheck-on-reuse erases the speedup. Cost axes distinguished:
+cache validation, certificate rechecking, full mathematical recomputation.
 
 ## Limitations
 

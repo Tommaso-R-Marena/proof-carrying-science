@@ -19,6 +19,7 @@ full verification.
 | `ValidState` | well-formed acyclic graph + outputs + authoritative cache |
 | `ChangeSet` | node ids whose local definition/evidence changed |
 | `LocalCheck` | op → version → policy → deps → payload → output → Bool |
+| `FreshWitness` | prior FreshValid + cacheSound authority reconstruction |
 
 ## Three cache concepts
 
@@ -35,20 +36,33 @@ Lookup alone never establishes mathematical validity.
 
 ## Affected set
 
-`Affected g changes leaf` iff some `root ∈ changes` has `Downstream g root leaf`,
-where `Downstream` follows dependency edges from changed nodes to dependents.
+`Affected g' changes leaf` iff some `root ∈ changes` has `Downstream g' root leaf`
+on the **updated** graph. Prior-graph Downstream is incomplete when new dependency
+edges appear (`new_edge_requires_new_graph_invalidation`).
 
-## Incremental acceptance
+## ChangesComplete
 
-`IncrementalAccept` requires:
+Any definitional difference between same-id nodes of `g` and `g'` must be listed
+in `changes`. Combined with `idsCovered` (no brand-new ids without prior coverage),
+this seeds invalidation correctly.
 
-- `FreshValid` on the new graph/assignment/certificates;
-- reuse of cache entries only when `reusePermitted` (eligible ∧ authority);
-- affected nodes rechecked via local checks.
+## Incremental acceptance (premises only)
+
+`IncrementalAccept` is a Type carrying:
+
+- `prior : FreshWitness` — sound prior verification + authoritative cache;
+- `changesComplete` — complete accounting of definitional edits;
+- `idsCovered` — every updated-graph id existed previously;
+- `affectedRechecked` — every Affected node on `g'` locally checks;
+- `unaffectedReused` — every Unaffected node reuses an eligible ∧ authoritative entry.
+
+It does **not** contain a `FreshValid g'` field.
 
 ## Central theorem
 
-`incremental_implies_fresh`: IncrementalAccept ⇒ FreshValid.
+`incremental_implies_fresh`: the premises above imply `FreshValid` on `g'`.
+Proof cases on Affected vs Unaffected; reuse uses `reuse_entry_checks` from
+`FreshWitness.cacheSound`.
 
 Stronger behavioral equivalence of runtimes is **not** claimed; see
 `REFINEMENT_ANALYSIS.md`.

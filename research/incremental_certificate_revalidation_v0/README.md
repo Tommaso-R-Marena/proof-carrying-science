@@ -8,11 +8,12 @@ computation-DAG certificates. Exclusive namespace — not production-integrated.
 A Lean 4 model (`PCSIncremental`) plus an independent Python verifier that:
 
 1. Fully verifies a finite DAG under restricted synthetic ops (exact Int/Rat).
-2. Records an authoritative local `ValidState` cache.
-3. Applies a precise change set, invalidates the downstream Affected closure.
-4. Reuses only **eligible ∧ prior-accepted** certificates.
-5. Differs against an independent fresh-recomputation reference.
-6. Resists cache forgery / policy / version / context attacks in a test suite.
+2. Records an authoritative local `ValidState` cache (`FreshWitness` in Lean).
+3. Applies a complete change set; invalidates Affected on the **updated** graph.
+4. Reuses only **eligible ∧ prior-accepted** certificates; rechecks Affected nodes.
+5. Proves `IncrementalAccept` premises ⇒ `FreshValid` (does not assume fresh validity).
+6. Differs against an independent fresh oracle (differential testing ≠ refinement).
+7. Assumption-removal counterexamples + adversarial suite; expensive-check speedups.
 
 ## What this is not
 
@@ -31,6 +32,7 @@ python -m pytest -q research/incremental_certificate_revalidation_v0/tests
 python research/incremental_certificate_revalidation_v0/scripts/run_demo.py
 python research/incremental_certificate_revalidation_v0/scripts/run_adversarial.py
 python research/incremental_certificate_revalidation_v0/scripts/run_benchmarks.py
+python -m benchmarks.expensive_suite   # from this package with PYTHONPATH set
 ```
 
 Pinned Lean: **4.28.0** (repository `lean-toolchain`).

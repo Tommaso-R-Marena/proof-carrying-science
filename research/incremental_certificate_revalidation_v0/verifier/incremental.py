@@ -23,6 +23,8 @@ from model.graph import (
     Value,
     WellFormedError,
     CycleError,
+    changes_complete,
+    missing_definitional_changes,
     obligation_of,
     reject_duplicate_keys,
 )
@@ -148,11 +150,17 @@ class IncrementalVerifier:
         *,
         recheck_on_reuse: bool = True,
         record_trace: bool = True,
+        require_changes_complete: bool = True,
+        invalidation_graph: str = "new",
     ) -> IncrementalReport:
         """
         Apply changes relative to prior ValidState.
-        Affected nodes are rechecked; unaffected may reuse eligible+authoritative
-        cache entries. Never grants authority from lookup alone.
+
+        Invalidation uses the **updated** graph by default (`invalidation_graph="new"`),
+        matching Lean `Affected g' changes` under `ChangesComplete`. The unsound
+        mode `invalidation_graph="prior"` is retained only for counterexample tests.
+
+        `require_changes_complete` enforces Lean `ChangesComplete` (fail-closed).
         """
         if self.valid_state is None:
             raise ValueError("no prior ValidState; call initial_verify first")
@@ -169,9 +177,26 @@ class IncrementalVerifier:
             report.rejected = list(new_graph.ids())
             return report
 
-        # Affected closure uses dependency topology of the *new* graph
-        # (Lean Affected is topology-based; changes are roots).
-        affected = new_graph.affected_closure(changes)
+        prior_graph = self.valid_state.graph
+        if require_changes_complete:
+            missing = missing_definitional_changes(prior_graph, new_graph, changes)
+            if missing:
+                report.error = f"ChangesComplete violated; missing seeds {missing}"
+                report.rejected = list(missing)
+                return report
+
+        # Lean soundness uses Downstream on g' (updated graph).
+        if invalidation_graph == "new":
+            affected = new_graph.affected_closure(changes)
+        elif invalidation_graph == "prior":
+            # UNSOUND when new edges appear; used only by negative tests.
+            seeds = [c for c in changes if c in set(prior_graph.ids())]
+            affected = prior_graph.affected_closure(seeds) if seeds else set()
+            # Nodes newly present must still be treated as affected.
+            affected |= {n.id for n in new_graph.nodes if n.id not in set(prior_graph.ids())}
+        else:
+            raise ValueError(f"unknown invalidation_graph={invalidation_graph!r}")
+
         all_ids = set(new_graph.ids())
         unaffected = all_ids - affected
         report.affected = sorted(affected)

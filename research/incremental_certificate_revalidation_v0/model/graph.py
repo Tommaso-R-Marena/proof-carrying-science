@@ -212,6 +212,7 @@ class Graph:
         return adj
 
     def affected_closure(self, changes: Sequence[NodeId]) -> Set[NodeId]:
+        """Downstream closure on *this* graph (Lean `Affected` for the same graph)."""
         index = self.by_id()
         for c in changes:
             if c not in index:
@@ -242,6 +243,35 @@ class Graph:
     @staticmethod
     def from_json(d: dict) -> "Graph":
         return Graph(nodes=[Node.from_json(n) for n in d["nodes"]])
+
+
+def same_defn(a: Node, b: Node) -> bool:
+    return (
+        a.op == b.op
+        and a.deps == b.deps
+        and a.policy == b.policy
+        and a.version == b.version
+        and a.evidence == b.evidence
+    )
+
+
+def missing_definitional_changes(prior: Graph, new: Graph, changes: Sequence[NodeId]) -> List[NodeId]:
+    """Lean `ChangesComplete` witness: definitional diffs not listed in `changes`."""
+    changed = set(changes)
+    prior_by = prior.by_id()
+    missing: List[NodeId] = []
+    for n in new.nodes:
+        if n.id not in prior_by:
+            if n.id not in changed:
+                missing.append(n.id)
+            continue
+        if not same_defn(prior_by[n.id], n) and n.id not in changed:
+            missing.append(n.id)
+    return missing
+
+
+def changes_complete(prior: Graph, new: Graph, changes: Sequence[NodeId]) -> bool:
+    return not missing_definitional_changes(prior, new, changes)
 
 
 def obligation_of(n: Node, dep_outputs: Sequence[Value]) -> ObligationKey:

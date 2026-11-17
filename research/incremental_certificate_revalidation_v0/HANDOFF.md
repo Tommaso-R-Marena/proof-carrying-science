@@ -13,19 +13,24 @@
 
 - [x] Overlap audit vs PRs #199–#216 and main research (checked-reuse, workflow, epistemic, intake Incremental.lean)
 - [x] Isolated worktree + Lean `PCSIncremental` library (builds; no sorry/admit)
-- [x] Theorems A–J core subset + `affected_least` + counterexamples + correspondence gap doc
-- [x] Python verifier + fresh reference + adversarial suite (9 attacks resisted)
-- [x] Differential mutation tests (12 pytest tests passing)
-- [x] Benchmarks to ~20k-node synthetic scientific graphs (honest slowdown recorded)
+- [x] Substantive `IncrementalAccept` (premises only) + `incremental_implies_fresh`
+- [x] New-graph invalidation aligned Lean ↔ Python; prior mode retained for negatives
+- [x] Assumption-removal counterexamples (forgery / prior Affected / ChangesComplete)
+- [x] Expensive-check benchmarks: trusted reuse ~60–90× vs fresh on sparse leaf edits
+- [x] Cheap-ops negative performance result preserved
+- [x] Theorems A–J + correspondence gap doc (differential ≠ refinement)
+- [x] Python verifier + fresh reference + adversarial suite
 - [x] Docs + manuscript draft
 - [x] Draft PR #217 opened (clearance required before non-draft)
 
 ## Proven theorems (Lean)
 
-`incremental_implies_fresh`, invalidation soundness/completeness, `affected_least`,
-policy/version/op/evidence/dep eligibility breaks, non-escalation, compositional
-fresh, mutation safety, demo forged/policy/dep counterexamples,
-`executableAcceptImpliesLeanFresh`. Axioms: none or `propext` only.
+`incremental_implies_fresh` (derives FreshValid; does not assume it),
+`reuse_entry_checks`, invalidation soundness/completeness, `affected_least`,
+`new_edge_requires_new_graph_invalidation`, policy/version/op/evidence/dep
+eligibility breaks, non-escalation, compositional fresh, mutation safety,
+demo forged/policy/dep counterexamples, `executableAcceptImpliesLeanFresh`.
+Axioms: none, or `propext` / `Classical.choice` / `Quot.sound` from `by_cases`.
 
 ## Implemented but unproved
 
@@ -36,14 +41,15 @@ fresh, mutation safety, demo forged/policy/dep counterexamples,
 
 ## Tests
 
-- `pytest` 12 passed
-- Adversarial: all defenses held
+- `pytest` under `tests/` (core, differential, adversarial, assumption counterexamples)
+- Adversarial: all defenses held under default posture
 - Demo: agree with fresh; forgery rejected under defense-in-depth
 
 ## Performance
 
-Incremental slower than fresh for cheap Int ops (~0.45–0.53×). Reuse counts high on
-sparse changes. See `docs/PERFORMANCE_REPORT.md`.
+- Cheap Int ops: incremental slower (~0.45–0.53×) — negative result kept.
+- Expensive synthetic checks: trusted sparse reuse ~64–123×; root-heavy ~1× failure;
+  defense recheck-on-reuse ~1×. See `docs/PERFORMANCE_REPORT.md`.
 
 ## Overlap concerns
 
@@ -52,8 +58,7 @@ Do not edit other research dirs.
 
 ## Next highest-value objectives
 
-1. Prove stronger bidirectional equivalence under reconstructed authoritative caches.
-2. Lean-extracted or decide-based checker for a thin executable fragment.
-3. Benchmarks where local_check is expensive (Lean kernel).
-4. Frontier scheduling to avoid full topo walks (with proof obligations).
-5. Independent human review of theorem statements and trust model.
+1. Prove Python algorithm establishes `IncrementalAccept` (or extract decide-checker).
+2. Frontier scheduling to avoid full topo walks (with proof obligations).
+3. Real Lean-kernel local-check timings (beyond synthetic delay).
+4. Independent human review of theorem statements and trust model.

@@ -1,20 +1,20 @@
-lean=Lean (version 4.28.0, x86_64-unknown-linux-gnu, commit 7e01a1bf5c70fc6167d49c345d3bf80596e9a79b, Release)
-lake=Lake version 5.0.0-src+7e01a1b (Lean version 4.28.0)
-cwd=/home/ubuntu/worktrees/pcs-incremental-revalidation-v0/research/incremental_certificate_revalidation_v0/formal
 ℹ [8/12] Built PCSIncremental.Soundness (237ms)
-info: PCSIncremental/Soundness.lean:167:0: 'PCSIncremental.incremental_implies_fresh' does not depend on any axioms
-info: PCSIncremental/Soundness.lean:168:0: 'PCSIncremental.invalidation_soundness' does not depend on any axioms
-info: PCSIncremental/Soundness.lean:169:0: 'PCSIncremental.non_escalation' depends on axioms: [propext]
-info: PCSIncremental/Soundness.lean:170:0: 'PCSIncremental.policy_sensitivity' does not depend on any axioms
-info: PCSIncremental/Soundness.lean:171:0: 'PCSIncremental.version_sensitivity' does not depend on any axioms
-info: PCSIncremental/Soundness.lean:172:0: 'PCSIncremental.safe_reuse_preserves_obligation' does not depend on any axioms
-info: PCSIncremental/Soundness.lean:173:0: 'PCSIncremental.compositional_fresh' does not depend on any axioms
-info: PCSIncremental/Soundness.lean:174:0: 'PCSIncremental.mutation_safety_no_forgery' depends on axioms: [propext]
-info: PCSIncremental/Soundness.lean:176:0: 'PCSIncremental.affected_least' does not depend on any axioms
-ℹ [9/12] Replayed PCSIncremental.Correspondence
-info: PCSIncremental/Correspondence.lean:62:0: 'PCSIncremental.executableAcceptImpliesLeanFresh' does not depend on any axioms
-ℹ [10/12] Replayed PCSIncremental.Counterexamples
+info: PCSIncremental/Soundness.lean:208:0: 'PCSIncremental.incremental_implies_fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: PCSIncremental/Soundness.lean:209:0: 'PCSIncremental.reuse_entry_checks' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:210:0: 'PCSIncremental.invalidation_soundness' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:211:0: 'PCSIncremental.non_escalation' depends on axioms: [propext]
+info: PCSIncremental/Soundness.lean:212:0: 'PCSIncremental.policy_sensitivity' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:213:0: 'PCSIncremental.version_sensitivity' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:214:0: 'PCSIncremental.safe_reuse_preserves_obligation' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:215:0: 'PCSIncremental.compositional_fresh' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:216:0: 'PCSIncremental.mutation_safety_no_forgery' depends on axioms: [propext]
+info: PCSIncremental/Soundness.lean:217:0: 'PCSIncremental.affected_least' does not depend on any axioms
+info: PCSIncremental/Soundness.lean:218:0: 'PCSIncremental.new_edge_requires_new_graph_invalidation' does not depend on any axioms
+ℹ [9/12] Built PCSIncremental.Counterexamples (192ms)
 info: PCSIncremental/Counterexamples.lean:65:0: 'PCSIncremental.demo_forged_rejected' depends on axioms: [propext]
 info: PCSIncremental/Counterexamples.lean:66:0: 'PCSIncremental.demo_policy_swap_rejected' does not depend on any axioms
 info: PCSIncremental/Counterexamples.lean:67:0: 'PCSIncremental.lookup_not_validity' depends on axioms: [propext]
+ℹ [10/12] Built PCSIncremental.Correspondence (292ms)
+info: PCSIncremental/Correspondence.lean:60:0: 'PCSIncremental.executableAcceptImpliesLeanFresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [11/12] Built PCSIncremental (146ms)
 Build completed successfully (12 jobs).

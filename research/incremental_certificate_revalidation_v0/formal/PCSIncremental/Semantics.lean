@@ -3,7 +3,13 @@ import PCSIncremental.Cache
 
 /-!
 # Local checkers, fresh verification, and incremental acceptance
+
+`IncrementalAccept` does **not** assume `FreshValid` on the updated graph.
+Fresh validity is a theorem (`incremental_implies_fresh`) derived from prior
+soundness, complete change accounting, new-graph invalidation, and per-node
+recheck / reuse premises.
 -/
+
 namespace PCSIncremental
 
 /-- A local verifier predicate: operation, version, policy, dependency values,
@@ -28,20 +34,16 @@ def FreshValid (check : LocalCheck) (g : Graph) (σ : Assignment)
     (certs : NodeId → Certificate) : Prop :=
   ∀ n ∈ g.nodes, nodeChecks check n σ (certs n.id)
 
-/-- Incremental decision for one node. -/
-inductive NodeDecision where
-  | reused (e : CacheEntry)
-  | rechecked (c : Certificate)
-  | rejected
-  deriving Repr, DecidableEq
+/-- Definitional fields that must be stable for safe reuse. -/
+def sameDefn (n m : Node) : Prop :=
+  n.op = m.op ∧ n.deps = m.deps ∧ n.policy = m.policy ∧
+  n.version = m.version ∧ n.evidence = m.evidence
 
-/-- Incremental verifier state after applying changes. -/
-structure IncrementalResult where
-  accepted : Bool
-  outputs : Assignment
-  reused : List NodeId
-  rechecked : List NodeId
-  rejected : List NodeId
+/-- Complete change accounting: any definitional difference is listed in `changes`.
+Invalidation then uses the **updated** graph `g'` (new dependency edges). -/
+def ChangesComplete (g g' : Graph) (changes : ChangeSet) : Prop :=
+  ∀ n' ∈ g'.nodes, ∀ n ∈ g.nodes,
+    n.id = n'.id → ¬ sameDefn n n' → n'.id ∈ changes
 
 /-- Hypothesis recording that a ValidState was obtained by fresh verification. -/
 structure FreshWitness (check : LocalCheck) (vs : ValidState) where
@@ -56,33 +58,30 @@ structure FreshWitness (check : LocalCheck) (vs : ValidState) where
           e.cert.output = vs.outputs n.id ∧
           nodeChecks check n vs.outputs e.cert
 
-/-- Apply a node-level definition change: replace nodes whose ids are in `changes`
-with updated nodes from `g'`, requiring ids to match. -/
-def sameTopologyIds (g g' : Graph) : Prop :=
-  g.ids = g'.ids
-
-/-- Incremental acceptance predicate (abstract):
-unaffected nodes may be reused only with `reusePermitted`; affected nodes must
-pass a fresh local check; the global assignment must be FreshValid. -/
+/-- Incremental acceptance — premises only; does **not** include `FreshValid g'`.
+Invalidation topology is `g'` (updated graph). `ChangesComplete` seeds definitional edits.
+This is a Type (carries `FreshWitness`), not a Prop. -/
 structure IncrementalAccept (check : LocalCheck) (vs : ValidState)
     (g' : Graph) (changes : ChangeSet) (σ' : Assignment)
-    (certs' : NodeId → Certificate) (cache' : Cache) : Prop where
-  fresh' : FreshValid check g' σ' certs'
-  /-- Reuse discipline: if a node is unaffected and we claim reuse from cache',
-  the entry must be reuse-permitted for the current obligation. -/
-  reuseDiscipline :
-    ∀ n ∈ g'.nodes,
-      Unaffected vs.graph changes n.id →
-      (∃ e ∈ cache'.entries,
-        e.key = obligationOf n (depValues n σ') ∧
-        e.cert = certs' n.id) →
-      ∃ e ∈ cache'.entries,
-        reusePermitted e (obligationOf n (depValues n σ')) ∧
-        e.cert = certs' n.id
-  /-- Affected nodes are witnessed by the new certificates under σ'. -/
+    (certs' : NodeId → Certificate) where
+  /-- Prior state was freshly verified with a sound authoritative cache. -/
+  prior : FreshWitness check vs
+  /-- Definitional edits are completely listed. -/
+  changesComplete : ChangesComplete vs.graph g' changes
+  /-- Every updated-graph node id existed in the prior graph. -/
+  idsCovered : ∀ n' ∈ g'.nodes, ∃ n ∈ vs.graph.nodes, n.id = n'.id
+  /-- Affected nodes (new-graph Downstream from changes) are locally rechecked. -/
   affectedRechecked :
     ∀ n ∈ g'.nodes,
-      Affected vs.graph changes n.id →
+      Affected g' changes n.id →
       nodeChecks check n σ' (certs' n.id)
+  /-- Unaffected nodes reuse an eligible, authoritative prior-cache entry. -/
+  unaffectedReused :
+    ∀ n ∈ g'.nodes,
+      Unaffected g' changes n.id →
+        ∃ e ∈ vs.cache.entries,
+          reusePermitted e (obligationOf n (depValues n σ')) ∧
+          certs' n.id = e.cert ∧
+          σ' n.id = e.cert.output
 
 end PCSIncremental

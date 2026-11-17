@@ -15,6 +15,9 @@ from .graph import (
     obligation_of,
     eligible,
     reject_duplicate_keys,
+    same_defn,
+    changes_complete,
+    missing_definitional_changes,
 )
 from .ops import (
     OpRegistry,
@@ -48,6 +51,9 @@ __all__ = [
     "obligation_of",
     "eligible",
     "reject_duplicate_keys",
+    "same_defn",
+    "changes_complete",
+    "missing_definitional_changes",
     "OpRegistry",
     "default_registry",
     "LocalCheck",

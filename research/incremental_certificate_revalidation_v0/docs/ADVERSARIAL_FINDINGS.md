@@ -28,6 +28,22 @@ local checks on reuse (`recheck_on_reuse=True` by default).
 4. Concurrency/crash atomicity of cache persistence is not implemented (in-memory
    research model only).
 
+## Assumption-removal counterexamples (independent of attack suite)
+
+`tests/test_assumption_counterexamples.py` demonstrates that removing essential
+`IncrementalAccept` premises breaks the guarantee:
+
+| Removed premise | Observable failure |
+|---|---|
+| `ChangesComplete` (incomplete seeds) | Fail-closed reject under default; with forgery + no reuse-recheck → stale accept |
+| New-graph invalidation (use prior Affected) | Set incompleteness for new edges; with forgery → stale accept |
+| Authority (`prior_accepted=False`) | Reuse denied; falls back to recheck |
+| Sound path (complete + new-graph) | Agrees with fresh |
+
+These are intentional negative results showing necessity of the formal premises,
+not product defects under default defenses.
+
 ## Regression
 
 `tests/test_adversarial.py` fails the build if any attack succeeds.
+`tests/test_assumption_counterexamples.py` encodes the negative findings above.
