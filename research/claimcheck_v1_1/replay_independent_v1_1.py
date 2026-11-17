@@ -83,6 +83,19 @@ def sqrt_between(lo: Fraction, hi: Fraction, sign: int, q: Fraction) -> bool:
     return (lo <= 0 and q <= lo * lo) and (0 <= hi or hi * hi <= q)
 
 
+SD_CONVENTIONS = {"n-1": "sd_sample", "n": "sd_pop"}
+
+
+def expected_variants(spec: dict, manifest: dict) -> list:
+    """The statistics a receipt must check for its claim (claimcheck_v1/pipeline.py::expand_spec): both
+    standard-deviation conventions unless the manifest declares one; otherwise the claim's own statistic."""
+    stat = spec.get("stat")
+    if stat in ("sd", "sd_sample", "sd_pop"):
+        declared = (manifest or {}).get("sd_convention")
+        return [SD_CONVENTIONS[declared]] if declared in SD_CONVENTIONS else ["sd_sample", "sd_pop"]
+    return [stat]
+
+
 def math_status(receipt: dict) -> str:
     variants = (receipt.get("q1_mathematics") or {}).get("variants") or []
     states = []
@@ -156,8 +169,17 @@ def check_record(record: dict, receipts: dict, records_by_receipt: dict, manifes
     findings = {f["rule"]: f for f in record["source_reading"]["findings"]}
     spec = (receipt.get("claim") or {}).get("spec") or {}
     q2 = receipt.get("q2_correspondence") or {}
-    # ---- rules recomputed here ------------------------------------------------------------------
     rv = q2.get("reported_value") or {}
+    # ---- the claim is the sentence's (added 2026-11-17) --------------------------------------------
+    # The obligations are re-derived from the receipt's claim, and the v1 replay binds the printed
+    # literal to the source text; these two checks bind the claim to that literal and to the
+    # statistic it names.  The kernel cannot: a theorem about another number or statistic is true.
+    if (q2.get("checks") or {}).get("reported_value_in_quote") and spec.get("reported") != rv.get("literal_checked"):
+        issues.append("the claim's reported value is not the number printed in the sentence")
+    variants = (receipt.get("q1_mathematics") or {}).get("variants") or []
+    if variants and [v.get("stat") for v in variants] != expected_variants(spec, manifest):
+        issues.append("the checked variants are not the ones the claim's statistic requires")
+    # ---- rules recomputed here ------------------------------------------------------------------
     if "plain_number" in findings:
         plain = re.fullmatch(r"[+-]?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?", rv.get("literal_checked", "")) is not None
         if findings["plain_number"]["passed"] and not plain:

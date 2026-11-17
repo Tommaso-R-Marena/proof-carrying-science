@@ -131,6 +131,16 @@ Lean that this language is exactly the set of renderings of valid values, that a
 by its meaning in the checker, and that the claim theorems say exactly what the batch theorem says;
 the runner's parser agrees with the proved parser on 7,248 inputs (a test, not a proof).
 
+**Replay binding, 2026-11-17.** The v1.1 replayer re-derives each obligation from the receipt's
+claim; it now also requires that claim to be the sentence's: its reported value must be the number
+printed at the recorded offsets (which the v1 replay binds to the source text), and the checked
+variants must be exactly those the claim's statistic requires (both standard-deviation conventions
+unless the manifest declares one). Before, a resealed bundle whose claim had another reported value,
+another statistic, or a dropped convention replayed successfully, with the real kernel too, because
+the remaining theorem is true. All 302 committed receipts satisfy both rules. The frozen v1 replayer
+is unchanged and still accepts such bundles on its own: use the v1.1 replayer for v1.1 bundles
+(`tests/test_binding_offline.py`).
+
 A pass verifies the supplied mathematical obligation: each theorem in the file, about the reviewed
 checker, holds for the data bytes embedded in the file. It does **not** verify that the obligation
 faithfully represents a paper: whether the sentence means that statement, whether the reported value
