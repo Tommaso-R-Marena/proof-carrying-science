@@ -7,3 +7,6 @@ import ScientificReasoning.Retraction
 import ScientificReasoning.Certificates
 import ScientificReasoning.CheckCertificate
 import ScientificReasoning.Belnap
+import ScientificReasoning.Completeness
+import ScientificReasoning.PythonCheckerModel
+import ScientificReasoning.Equivalence
