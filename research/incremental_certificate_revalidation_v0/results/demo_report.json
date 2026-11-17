@@ -1,0 +1,348 @@
+{
+  "after_change": {
+    "accepted": true,
+    "affected": [
+      0,
+      2,
+      3
+    ],
+    "agrees_with_fresh": true,
+    "changes": [
+      0
+    ],
+    "error": null,
+    "fresh_accepted": true,
+    "outputs": {
+      "0": [
+        "int",
+        5
+      ],
+      "1": [
+        "int",
+        3
+      ],
+      "2": [
+        "int",
+        8
+      ],
+      "3": [
+        "int",
+        24
+      ]
+    },
+    "rechecked": [
+      0,
+      2,
+      3
+    ],
+    "rejected": [],
+    "reused": [
+      1
+    ],
+    "trace": [
+      {
+        "detail": {
+          "ok": true
+        },
+        "kind": "recheck",
+        "node_id": 0
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 1
+        },
+        "kind": "lookup",
+        "node_id": 1
+      },
+      {
+        "detail": {
+          "key": [
+            1,
+            1,
+            1,
+            1,
+            3
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 1
+      },
+      {
+        "detail": {
+          "ok": true
+        },
+        "kind": "recheck",
+        "node_id": 2
+      },
+      {
+        "detail": {
+          "ok": true
+        },
+        "kind": "recheck",
+        "node_id": 3
+      }
+    ],
+    "unaffected": [
+      1
+    ]
+  },
+  "agree_with_fresh": true,
+  "forgery_forged_authority": {
+    "accepted": false,
+    "affected": [],
+    "agrees_with_fresh": null,
+    "changes": [],
+    "error": "reused cert failed local check at 3",
+    "fresh_accepted": null,
+    "outputs": {
+      "0": [
+        "int",
+        2
+      ],
+      "1": [
+        "int",
+        3
+      ],
+      "2": [
+        "int",
+        5
+      ]
+    },
+    "rechecked": [],
+    "rejected": [
+      3
+    ],
+    "reused": [
+      0,
+      1,
+      2
+    ],
+    "trace": [
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 0
+        },
+        "kind": "lookup",
+        "node_id": 0
+      },
+      {
+        "detail": {
+          "key": [
+            0,
+            1,
+            1,
+            1,
+            2
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 0
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 1
+        },
+        "kind": "lookup",
+        "node_id": 1
+      },
+      {
+        "detail": {
+          "key": [
+            1,
+            1,
+            1,
+            1,
+            3
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 1
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 2
+        },
+        "kind": "lookup",
+        "node_id": 2
+      },
+      {
+        "detail": {
+          "key": [
+            2,
+            2,
+            1,
+            1,
+            0
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 2
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 3
+        },
+        "kind": "lookup",
+        "node_id": 3
+      },
+      {
+        "detail": {},
+        "kind": "reuse_check_failed",
+        "node_id": 3
+      }
+    ],
+    "unaffected": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "forgery_no_authority": {
+    "accepted": true,
+    "affected": [],
+    "agrees_with_fresh": true,
+    "changes": [],
+    "error": null,
+    "fresh_accepted": true,
+    "outputs": {
+      "0": [
+        "int",
+        2
+      ],
+      "1": [
+        "int",
+        3
+      ],
+      "2": [
+        "int",
+        5
+      ],
+      "3": [
+        "int",
+        15
+      ]
+    },
+    "rechecked": [
+      3
+    ],
+    "rejected": [],
+    "reused": [
+      0,
+      1,
+      2
+    ],
+    "trace": [
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 0
+        },
+        "kind": "lookup",
+        "node_id": 0
+      },
+      {
+        "detail": {
+          "key": [
+            0,
+            1,
+            1,
+            1,
+            2
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 0
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 1
+        },
+        "kind": "lookup",
+        "node_id": 1
+      },
+      {
+        "detail": {
+          "key": [
+            1,
+            1,
+            1,
+            1,
+            3
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 1
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 2
+        },
+        "kind": "lookup",
+        "node_id": 2
+      },
+      {
+        "detail": {
+          "key": [
+            2,
+            2,
+            1,
+            1,
+            0
+          ]
+        },
+        "kind": "reuse",
+        "node_id": 2
+      },
+      {
+        "detail": {
+          "hit": true,
+          "key_id": 3
+        },
+        "kind": "lookup",
+        "node_id": 3
+      },
+      {
+        "detail": {
+          "reason": "no_authority"
+        },
+        "kind": "reuse_denied",
+        "node_id": 3
+      },
+      {
+        "detail": {
+          "ok": true
+        },
+        "kind": "recheck",
+        "node_id": 3
+      }
+    ],
+    "unaffected": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "initial_outputs": {
+    "0": 2,
+    "1": 3,
+    "2": 5,
+    "3": 15
+  },
+  "summary": {
+    "agrees_with_fresh": true,
+    "forgery_forged_authority_rejected": true,
+    "forgery_no_authority_rechecked": true,
+    "initial_accepted": true,
+    "recheck_observed": true,
+    "reuse_observed": true
+  }
+}

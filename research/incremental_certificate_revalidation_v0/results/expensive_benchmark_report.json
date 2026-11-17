@@ -1,0 +1,64 @@
+{
+  "all_agree": true,
+  "any_trusted_speedup": true,
+  "assumption": "Each local_check_node sleeps delay_ms to model expensive proof checking. Trusted reuse skips local_check on reuse; defense mode rechecks every reuse.",
+  "not_a_refinement_claim": true,
+  "rows": [
+    {
+      "agree": true,
+      "changes": 1,
+      "delay_ms_per_check": 2.0,
+      "fresh_full_recompute_ms": 171.23543199977576,
+      "incremental_defense_recheck_ms": 173.3468659999744,
+      "incremental_trusted_reuse_ms": 2.6554500000202097,
+      "name": "chain_80_leaf",
+      "nodes": 80,
+      "rechecked": 1,
+      "reused": 79,
+      "speedup_defend_vs_fresh": 0.9878196009600834,
+      "speedup_trusted_vs_fresh": 64.48452503284662
+    },
+    {
+      "agree": true,
+      "changes": 1,
+      "delay_ms_per_check": 2.0,
+      "fresh_full_recompute_ms": 171.18916499975967,
+      "incremental_defense_recheck_ms": 171.5049290000934,
+      "incremental_trusted_reuse_ms": 172.77693300002284,
+      "name": "chain_80_root",
+      "nodes": 80,
+      "rechecked": 80,
+      "reused": 0,
+      "speedup_defend_vs_fresh": 0.9981588634089137,
+      "speedup_trusted_vs_fresh": 0.9908103010471718
+    },
+    {
+      "agree": true,
+      "changes": 1,
+      "delay_ms_per_check": 2.0,
+      "fresh_full_recompute_ms": 426.0784009998133,
+      "incremental_defense_recheck_ms": 429.7868069998003,
+      "incremental_trusted_reuse_ms": 3.4498899999562127,
+      "name": "chain_200_leaf",
+      "nodes": 200,
+      "rechecked": 1,
+      "reused": 199,
+      "speedup_defend_vs_fresh": 0.9913715220207103,
+      "speedup_trusted_vs_fresh": 123.5049236367598
+    },
+    {
+      "agree": true,
+      "changes": 1,
+      "delay_ms_per_check": 2.0,
+      "fresh_full_recompute_ms": 427.9201489998741,
+      "incremental_defense_recheck_ms": 429.4236710002224,
+      "incremental_trusted_reuse_ms": 214.39400899998873,
+      "name": "chain_200_mid",
+      "nodes": 200,
+      "rechecked": 100,
+      "reused": 100,
+      "speedup_defend_vs_fresh": 0.996498744475715,
+      "speedup_trusted_vs_fresh": 1.9959519904303695
+    }
+  ]
+}

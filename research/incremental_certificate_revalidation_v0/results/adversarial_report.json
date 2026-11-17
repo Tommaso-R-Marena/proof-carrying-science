@@ -1,0 +1,72 @@
+{
+  "all_defenses_held": true,
+  "attacks": [
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: accepted=False, out0=None, err=local check failed for node 0",
+      "name": "input_substitution",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: accepted=False, out2=None",
+      "name": "dependency_manipulation",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: accepted=False, out2=None",
+      "name": "op_substitution",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: accepted=True, out3=15, reused=[0, 1, 2]",
+      "name": "policy_substitution",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: accepted=False, err=local check failed for node 2",
+      "name": "version_mismatch",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: A out3=15 rechecked=[3]; B accepted=False out3=None",
+      "name": "cache_forgery",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: duplicate JSON key: evidence",
+      "name": "serialization_duplicate_keys",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: out0=5, reused=[1], rechecked=[0, 2, 3]",
+      "name": "rollback",
+      "verifier_resisted": true
+    },
+    {
+      "attack_succeeded": false,
+      "counterexample": null,
+      "detail": "resisted: accepted=False, out2=None, err=local check failed for node 2",
+      "name": "proof_context_misuse",
+      "verifier_resisted": true
+    }
+  ],
+  "counterexamples": [],
+  "n_attacks": 9,
+  "n_resisted": 9,
+  "n_succeeded": 0
+}
