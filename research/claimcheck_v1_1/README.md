@@ -111,10 +111,22 @@ python claimcheck_kernel_runner.py claimcheck-proof.lean --out kernel-run.json
 ```
 
 It refuses the file, without starting Lean, unless the file starts with the reviewed checker and the
-rest is exactly in the form the generator writes: one data numeral, claims built from literals, one
-batch theorem, and one fixed-form theorem per claim, with the generator's one spelling of every
-value. Then it runs Lean 4.28.0 and reports what the kernel accepted (receipt schema
-`pcs-claimcheck-kernel-run-v2`). On the research branch, `ClaimCheckAssurance/Claims.lean` proves in
+rest is in the canonical form of the generator's grammar: one data numeral, claims built from
+literals, one batch theorem, and one fixed-form theorem per claim, with one spelling of every value.
+Then it runs Lean 4.28.0 and reports what the kernel accepted (receipt schema
+`pcs-claimcheck-kernel-run-v2`). The grammar admits claim settings that the web page never writes
+(other missing-value tokens, any positive scale, other spellings of the reported value); with them,
+a file can make either verdict true for the same data and the same printed number. So the receipt
+lists, for every theorem, the claim's settings (column, filter, statistic, missing-value tokens,
+scale, reported value) and flags the settings the page never writes
+(`settings_the_page_never_writes`, `all_settings_as_the_page_writes`); read them before the verdict.
+
+Which `lean` runs: the one given with `--lean` (made absolute once), otherwise the first `lean` in an
+absolute `PATH` entry. Empty and relative entries are skipped, and a `lean` in the current directory
+or next to the proof file is refused unless given explicitly, so a file planted beside a download
+cannot run. The receipt records the executable's path and SHA-256. Any error of the runner itself is
+a refusal with a report; `--out` is replaced atomically; `--max-memory-mb` limits Lean's memory on
+POSIX (a 33 KB benchmark file needs about 3.2 GB). On the research branch, `ClaimCheckAssurance/Claims.lean` proves in
 Lean that this language is exactly the set of renderings of valid values, that a text is determined
 by its meaning in the checker, and that the claim theorems say exactly what the batch theorem says;
 the runner's parser agrees with the proved parser on 7,248 inputs (a test, not a proof).
