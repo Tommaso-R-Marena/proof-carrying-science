@@ -11,6 +11,9 @@
    UNKNOWN, never a positive result.
 4. The stand-alone kernel runner accepts a real proof file; rejects a forged outcome (Lean refuses
    it); and refuses a forged generated part that defines its own `run` before Lean starts.
+5. Hardening after the 2026-11-17 security review: the receipt lists every claim's settings; with
+   a scale the page never writes, the kernel accepts exactly one of the two verdicts and the receipt
+   flags the scale; a too-small --max-memory-mb is refused; the receipt records which `lean` ran.
 """
 from __future__ import annotations
 
@@ -198,7 +201,35 @@ def runner_cases(good: Path, work: Path) -> dict:
     standin.write_text(f"#!{sys.executable}\nimport pathlib\npathlib.Path({str(marker)!r}).write_text('x')\nprint('Lean (version 4.28.0, stand-in)')\n")
     standin.chmod(0o755)
     run(shadow, "--lean", str(standin))
+    # a scale the page never writes can force either verdict: the kernel accepts the true one, and the receipt flags it
+    from .claimcheck_kernel_runner import parse_tail_claims
+    head_, tail_ = text.split(MARKER)
+    _, _, outcomes = parse_tail_claims(tail_)
+    i = next(k for k, o in enumerate(outcomes) if o.startswith(".checked"))
+    cut = [k for k in range(len(tail_)) if tail_.startswith("scale := ", k)][i]
+    end = tail_.index(",\n", cut)
+    scaled = tail_[:cut] + "scale := ((4571 : Rat) / 4247)" + tail_[end:]
+    flip = outcomes[i].replace(".consistent", ".inconsistent") if ".consistent" in outcomes[i] else outcomes[i].replace(".inconsistent", ".consistent")
+    forced = []
+    for outcome in (outcomes[i], flip):
+        batch = scaled.index("theorem pcs_batch")
+        b = scaled.index(outcomes[i], batch)
+        t = scaled[:b] + outcome + scaled[b + len(outcomes[i]):]
+        line = f"theorem pcs_claim_{i} : run pcs_src pcs_c{i} = "
+        c = t.index(line) + len(line)
+        t = t[:c] + outcome + t[c + len(outcomes[i]):]
+        path = work / f"forced-scale-{len(forced)}.lean"
+        path.write_text(head_ + MARKER + t, encoding="utf-8")
+        forced.append(run(path))
+    accepted = [r for r in forced if r["accepted"]]
     return {"real_proof_file_accepted": real["accepted"], "theorems": len(real["theorems"]),
+            "real_receipt_lists_settings_without_flags": real.get("all_settings_as_the_page_writes") is True
+                                                         and all("statement" in t for t in real.get("theorems", [])),
+            "forced_scale_exactly_one_verdict_accepted": len(accepted) == 1,
+            "forced_scale_receipt_flags_the_scale": bool(accepted) and accepted[0]["all_settings_as_the_page_writes"] is False
+                                                    and any("scale" in n for n in accepted[0]["theorems"][i]["settings_the_page_never_writes"]),
+            "memory_cap_too_small_refused": run(proof, "--max-memory-mb", "256")["accepted"] is False,
+            "lean_executable_recorded": bool(real.get("lean_executable")) and len(real.get("lean_executable_sha256", "")) == 64,
             "real_receipt_schema": real.get("schema"), "data_sha256_matches": real.get("data_sha256") == sha256_hex(DATA),
             "forged_outcome_accepted": run(forged)["accepted"],
             "shadowed_run_accepted": shadow_report["accepted"], "shadowed_run_why_not": shadow_report.get("why_not"),
@@ -237,7 +268,12 @@ def main(argv=None) -> int:
               and not report["kernel_runner"]["forged_outcome_accepted"]
               and not report["kernel_runner"]["shadowed_run_accepted"]
               and not report["kernel_runner"]["lean_started_for_shadowed_run"]
-              and report["kernel_runner"]["real_receipt_schema"] == "pcs-claimcheck-kernel-run-v2")
+              and report["kernel_runner"]["real_receipt_schema"] == "pcs-claimcheck-kernel-run-v2"
+              and report["kernel_runner"]["real_receipt_lists_settings_without_flags"]
+              and report["kernel_runner"]["forced_scale_exactly_one_verdict_accepted"]
+              and report["kernel_runner"]["forced_scale_receipt_flags_the_scale"]
+              and report["kernel_runner"]["memory_cap_too_small_refused"]
+              and report["kernel_runner"]["lean_executable_recorded"])
     report["passed"] = passed
     text = json.dumps(report, indent=1, ensure_ascii=False)
     if args.out:

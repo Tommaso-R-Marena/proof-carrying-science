@@ -70,8 +70,9 @@ def export(site: Path) -> dict:
     assert sha256_hex(RUNNER.read_bytes()) not in {w["sha256"] for w in WITHDRAWN_RUNNERS}
     catalog["v1_1"] = {"policy_id": POLICY_ID,
                        "kernel_runner": {"path": "claim-check/claimcheck_kernel_runner.py", "sha256": sha256_hex(RUNNER.read_bytes()),
-                                         "accepts": "only proof files whose generated part is exactly in the generator's form; "
-                                                    "anything else is refused before Lean is started"},
+                                         "accepts": "only proof files whose generated part is in the canonical form of the generator's "
+                                                    "grammar; anything else is refused before Lean is started. The grammar admits claim "
+                                                    "settings the page never writes; the receipt lists each claim's settings and flags those"},
                        "kernel_run_schema": KERNEL_RUN_SCHEMA, "withdrawn_runners": WITHDRAWN_RUNNERS, "kernel_run_meaning": RUN_MEANING,
                        "recorded_example_verdicts": dict(sorted(totals.items())),
                        "development_note": DEV_NOTE, "prospective_evaluation": "specified, not approved, not run"}

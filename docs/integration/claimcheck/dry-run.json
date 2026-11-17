@@ -1,16 +1,99 @@
 {
- "what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. Not an approval.",
- "generated_from_commit": "39ce953cd068fd332b739b65f55460a75e67d422",
+ "what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. No tag with a real name was created. Not an approval.",
+ "generated_from_commit": "f65eebcb9e956c72908c2006ba8437cd2139755c",
  "valid_only_for_that_commit": true,
+ "evidence_committed_in_this_tree": {
+  "describes_commit": "39ce953cd068fd332b739b65f55460a75e67d422",
+  "files_changed_since_then": [
+   "docs/integration/claimcheck/ADMISSION_AUDIT.json",
+   "docs/integration/claimcheck/ADMISSION_AUDIT.md",
+   "docs/integration/claimcheck/ADMISSION_CENSUS.json",
+   "docs/integration/claimcheck/ADMISSION_PROPOSAL.md",
+   "docs/integration/claimcheck/THIRD_PARTY_ATTRIBUTION.md",
+   "docs/integration/claimcheck/dry-run.json",
+   "docs/integration/claimcheck/proposed-control-changes.patch",
+   "research/claimcheck_v1_1/OWNER_DECISIONS.md",
+   "research/claimcheck_v1_1/README.md",
+   "research/claimcheck_v1_1/governance/audit_admission.py",
+   "research/claimcheck_v1_1/governance/prepare_core_admission.py"
+  ],
+  "only_evidence_files_changed": false
+ },
+ "gate_on_the_protected_v22_commit": {
+  "exit": 0,
+  "passed": true,
+  "error": null,
+  "prs_checked": 72,
+  "source_bindings_checked": 4781
+ },
  "existing_files_changed_or_removed": [],
- "files_added": 1982,
- "gate_on_main_today": "passes (V22; 72 PRs, 8042 files) \u2014 checked separately on a worktree of origin/main",
+ "files_added": 1983,
+ "added_files_outside_the_admitted_roots": [],
+ "proposed_retained_source_commit": {
+  "commit": "5c4137491d3b19d7b4b6ab8cf8589d8fa1e813ba",
+  "tree": "78bb5b8af13103c9759bfbb39d9ad0a979c8c0e9",
+  "parents": [
+   "f65eebcb9e956c72908c2006ba8437cd2139755c",
+   "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
+  ],
+  "proposed_tag": "pcs-source-intake/core-claimcheck-v1-20261114",
+  "reproducible_with": "git commit-tree <tree> -p <source commit> -p <previous intake> with the fixed identity and date in this script",
+  "tag_created": false
+ },
+ "proposal": {
+  "control_commit_files": {
+   "docs/integration/2026-11-14/RECONCILIATION_V23.json": {
+    "sha256": "8a79dda6858a89ec8081fc48cd0cc221bd25ba0856eb966c1f5cc85c98aa63a8",
+    "bytes": 4703608
+   },
+   "research/integration_v2/reconcile.py": {
+    "sha256": "c63c12cc13509b4ee44c50cb277521639043dec846d114553c56ee94f373d23c",
+    "bytes": 20113
+   },
+   "research/integration_v2/test_reconcile.py": {
+    "sha256": "f302b4cfe1820428e22861886082ea184dd7b36426b80fb178818c5695015d54",
+    "bytes": 22616
+   },
+   "scripts/check_reconciled_prs.py": {
+    "sha256": "43f5ffb7249ca235cac6b609c021c08ae4702e0cb59e2be4330e93648ca1650b",
+    "bytes": 6930
+   }
+  },
+  "successor_manifest": {
+   "path": "docs/integration/2026-11-14/RECONCILIATION_V23.json",
+   "sha256": "8a79dda6858a89ec8081fc48cd0cc221bd25ba0856eb966c1f5cc85c98aa63a8",
+   "snapshot_entries": 10026
+  },
+  "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"
+ },
+ "dry_run_tested_the_proposal": {
+  "only_the_tag_name_and_its_consequent_digests_differ": true,
+  "per_file": {
+   "scripts/check_reconciled_prs.py": true,
+   "docs/integration/2026-11-14/RECONCILIATION_V23.json": true,
+   "research/integration_v2/reconcile.py": true,
+   "research/integration_v2/test_reconcile.py": true
+  }
+ },
  "gate_with_successor": {
   "exit": 0,
   "passed": true,
   "error": null,
-  "whole_tree_files_checked": 10025,
-  "prs_checked": 72
+  "prs_checked": 72,
+  "source_bindings_checked": 4781
+ },
+ "retained_source_gate_with_successor": {
+  "exit": 0,
+  "passed": true,
+  "error": null
+ },
+ "gate_tests_on_the_successor": {
+  "exit": 0,
+  "last_line": "75 passed in 6.88s"
+ },
+ "retained_source_gate_tests_on_the_successor": {
+  "exit": 0,
+  "last_line": "OK"
  },
  "negative_controls": {
   "an_unlisted_file_is_added": {
@@ -25,42 +108,39 @@
    "rejected": true,
    "error": "reconciliation manifest differs from fixed reviewed digest"
   },
+  "the_predecessor_manifest_is_edited": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: docs/integration/2026-11-05/RECONCILIATION_V22.json"
+  },
+  "a_frozen_benchmark_result_is_edited": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: research/claimcheck_v1/benchmark/results/heldout/summary.json"
+  },
   "an_existing_production_file_is_edited": {
    "rejected": true,
    "error": "combined source bytes or mode differ: pcs/__init__.py"
   },
+  "a_gate_control_file_is_edited_after_the_control_commit": {
+   "rejected": true,
+   "error": "committed source required; staged/working changes remain"
+  },
+  "the_retained_source_entry_is_retargeted_and_committed": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: scripts/check_reconciled_prs.py"
+  },
   "the_tag_points_elsewhere": {
    "rejected": true,
-   "error": [
-    "AssertionError: Retained source tag differs"
-   ]
+   "error": "AssertionError: Retained source tag differs"
   }
  },
- "proposed_retained_source_commit": {
-  "commit": "35c3b53ee53580969584316f0f3e140f25949179",
-  "tree": "d4b74c1d66ec8c6677b0acc8b1d3e54d625a900e",
-  "parents": [
-   "39ce953cd068fd332b739b65f55460a75e67d422",
-   "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
+ "patch": {
+  "file": "proposed-control-changes.patch",
+  "files": [
+   "research/integration_v2/reconcile.py",
+   "research/integration_v2/test_reconcile.py",
+   "scripts/check_reconciled_prs.py"
   ],
-  "reproducible_with": "git commit-tree <tree> -p <source commit> -p <previous intake> with the fixed identity and date in this script",
-  "proposed_tag": "pcs-source-intake/core-claimcheck-v1-20261114"
- },
- "retained_source_gate_with_successor": {
-  "passed": true,
-  "detail": null
- },
- "successor_manifest": {
-  "path": "docs/integration/2026-11-14/RECONCILIATION_V23.json",
-  "sha256": "ebc45fff0d95edac66b7bcf2073b545acc5ae7ec6ce0a489fd2079acf155b156",
-  "bytes": 4703307,
-  "snapshot_entries": 10025,
-  "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"
- },
- "existing_control_tests_on_the_successor": {
-  "exit": 1,
-  "last_line": "/usr/local/bin/python: No module named pytest",
-  "note": "These tests are control files and pin V22 details; they need a reviewed update together with the successor."
+  "not_in_the_patch": "docs/integration/2026-11-14/RECONCILIATION_V23.json (4.7 MB, regenerated by this script; its digest is above)"
  },
  "all_as_expected": true
 }
