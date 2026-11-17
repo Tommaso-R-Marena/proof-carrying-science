@@ -4,9 +4,9 @@
 
 - **Branch:** `research/pcs-incremental-revalidation-v0`
 - **Draft PR:** https://github.com/Tommaso-R-Marena/proof-carrying-science/pull/217
-- **Current commit:** `b4810c7dbdc5ce1274a6c0926024b67d195072f9`
+- **Current commit:** `898c7a9607dbc57130b9edc59c9a9b543b3aae5b`
 - **Worktree:** `/home/ubuntu/worktrees/pcs-incremental-revalidation-v0`
-- **Base main:** `bc78660b5fac857fce3873eb6cda0445d1903da1`
+- **Base main:** `898c7a9607dbc57130b9edc59c9a9b543b3aae5b`
 - **Exclusive path:** `research/incremental_certificate_revalidation_v0/` only
 
 Update this file’s commit SHA after each push.
