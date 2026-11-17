@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pcs-pccr-causal-claim-v1",
+  "title": "Proof-Carrying Causal Claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "treatment",
+    "outcome",
+    "asserts_identifiable",
+    "adjustment_set"
+  ],
+  "properties": {
+    "treatment": { "type": "string", "minLength": 1 },
+    "outcome": { "type": "string", "minLength": 1 },
+    "asserts_identifiable": { "type": "boolean" },
+    "adjustment_set": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "claimed_p_do": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^-?[0-9]+/[1-9][0-9]*$" }
+      ]
+    },
+    "asserts_association_equals_effect": {
+      "anyOf": [{ "type": "boolean" }, { "type": "null" }]
+    }
+  }
+}
