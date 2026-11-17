@@ -1,7 +1,7 @@
 {
  "by_directory": {
   ".github/workflows": 1,
-  "docs/integration": 7,
+  "docs/integration": 12,
   "research/claimcheck_v1/AUDIT_OF_EXISTING_WORK.md": 1,
   "research/claimcheck_v1/README.md": 1,
   "research/claimcheck_v1/REPORT.md": 1,
@@ -34,14 +34,14 @@
   "research/claimcheck_v1_1/claimcheck_kernel_runner.py": 1,
   "research/claimcheck_v1_1/dev": 10,
   "research/claimcheck_v1_1/export_site_v11.py": 1,
-  "research/claimcheck_v1_1/governance": 3,
+  "research/claimcheck_v1_1/governance": 4,
   "research/claimcheck_v1_1/perf": 3,
   "research/claimcheck_v1_1/policy.py": 1,
-  "research/claimcheck_v1_1/prospective": 13,
+  "research/claimcheck_v1_1/prospective": 16,
   "research/claimcheck_v1_1/replay_independent_v1_1.py": 1,
   "research/claimcheck_v1_1/runner_negative_controls.py": 1,
   "research/claimcheck_v1_1/space.py": 1,
-  "research/claimcheck_v1_1/tests": 7,
+  "research/claimcheck_v1_1/tests": 10,
   "research/claimcheck_v1_1/usability": 5,
   "research/claimcheck_v1_1/verify.py": 1
  },
@@ -49,23 +49,35 @@
  "files": {
   ".github/workflows/pcs-claimcheck-v1.yml": {
    "mode": "100644",
-   "sha256": "912a73a1059ea2bc5cfa780278dcd2e829120a5500181306335eb6ee4b26a098"
+   "sha256": "c28f8bf67b0f6ea84fafb461a0eef4d46a8e24b0842bfadc10505e39b29b1b00"
   },
   "docs/integration/claimcheck/ADMISSION_AUDIT.json": {
    "mode": "100644",
-   "sha256": "6c6db569cefed0ead3bcd0322a8c7244689044305425e5701ead8b84f3c68464"
+   "sha256": "98914d53e007b25143d372f8bc924906321656a73c6552f872c03c0beb87df87"
   },
   "docs/integration/claimcheck/ADMISSION_AUDIT.md": {
    "mode": "100644",
-   "sha256": "9b50f2f38514882a90ad7da8a05e9063366479672f1e0aa691d36090776796bf"
+   "sha256": "32cd7ed5fb4788bc10feac4794a3c64115045b37930580f06608fc819700fdbc"
   },
   "docs/integration/claimcheck/ADMISSION_CENSUS.json": {
    "mode": "100644",
-   "sha256": "319975dd834b21a2d88ab72183b363460064523b4bc355488268b9edb62a04c4"
+   "sha256": "4ffc5f3c267db03a626dcef1e61234a2f7b5f0b5457e93ebfc8eaa381c50d047"
   },
   "docs/integration/claimcheck/ADMISSION_PROPOSAL.md": {
    "mode": "100644",
-   "sha256": "83b77b37a15cb3dc4c91cc60764a86bf0aca9b0784c4580b99680db5a603c0a9"
+   "sha256": "e73923a541e1e5a8395726a07965c92c436d81cb72b0b27bb2d3aff8280aa7cc"
+  },
+  "docs/integration/claimcheck/OWNER_AUTHORIZATION.md": {
+   "mode": "100644",
+   "sha256": "b976faa978e379ba6d090615e2b080f4a0cf87871132dbb198f2318ddf763b10"
+  },
+  "docs/integration/claimcheck/REQUIRED_CHECKS.md": {
+   "mode": "100644",
+   "sha256": "dc2f75b199e036c21a105ff4e282dcdce4c43094d1b964f8cfce2e747d0891f8"
+  },
+  "docs/integration/claimcheck/SECURITY_REVIEW_C3_D4.md": {
+   "mode": "100644",
+   "sha256": "15b07177848be6330cc99b89c43eb005263b0088ed6c7853c6e891aa5aca44fa"
   },
   "docs/integration/claimcheck/THIRD_PARTY_ATTRIBUTION.md": {
    "mode": "100644",
@@ -73,11 +85,19 @@
   },
   "docs/integration/claimcheck/dry-run.json": {
    "mode": "100644",
-   "sha256": "324c0f9176d9c60b2f7f06e70f24cc1f9ac73f5a057d68e1baed2b279df1cc49"
+   "sha256": "f9ce5f8bfc7df6db651983c8c7474550dea7752c9874d1f5495889ceb5716d18"
   },
   "docs/integration/claimcheck/proposed-control-changes.patch": {
    "mode": "100644",
-   "sha256": "cbfdc86f4fa8136326b924f01addc1b75ed0f9a88354aa0d068ec14ab413df46"
+   "sha256": "09c5234a503f78bc5281fe22ca82ce487948aab51ff861587dd524acf6428204"
+  },
+  "docs/integration/claimcheck/security/runner-v1-to-v2-2026-11-16.diff": {
+   "mode": "100644",
+   "sha256": "1ad82b462081242c3736aab8b0e29d1eaf3edb5df12019d7fdcfdb7ed0d875ac"
+  },
+  "docs/integration/claimcheck/security/runner-v2-hardening-2026-11-17.diff": {
+   "mode": "100644",
+   "sha256": "2b9952d838ee9d412450da3525398bf16e39d31e002f0df4bec76bbe1eae8cf1"
   },
   "research/claimcheck_v1/AUDIT_OF_EXISTING_WORK.md": {
    "mode": "100644",
@@ -7681,15 +7701,15 @@
   },
   "research/claimcheck_v1_1/OWNER_DECISIONS.md": {
    "mode": "100644",
-   "sha256": "6ab6c658d1281bbfd937dcc6426d86a25bd4d92a7206ba4efd2eb3cb8c90381e"
+   "sha256": "d307e6395861133c590524f2ff1f756995e9dd76fd547f8f3896f66164e8e020"
   },
   "research/claimcheck_v1_1/README.md": {
    "mode": "100644",
-   "sha256": "d45b02743d6fcab47f49e15acc5e4a7beecb71c7b7f0da3a117b3c3b2b4a45f9"
+   "sha256": "93bf820995199164fbdda150c0b8c3d4f1f3978eee7e94877461989d3155ac9a"
   },
   "research/claimcheck_v1_1/REPORT.md": {
    "mode": "100644",
-   "sha256": "c054fad0d233aca2d17fb2cda4cb2678843152b4f8dc23360d1cd049d945349c"
+   "sha256": "4de597353f2a85575bab11f3fa5d6e5143633797606204bf6d76c305ea5af06c"
   },
   "research/claimcheck_v1_1/__init__.py": {
    "mode": "100644",
@@ -7785,11 +7805,11 @@
   },
   "research/claimcheck_v1_1/check_live_v11.py": {
    "mode": "100644",
-   "sha256": "cb2824aedb672244246d553f6829f7b6286366d6d61a5357f47f3b4e6e1e2796"
+   "sha256": "8a818509815f4ca9f9ce5eae65456dd7b3f2d50b87cbac138bb7590d741c7518"
   },
   "research/claimcheck_v1_1/claimcheck_kernel_runner.py": {
    "mode": "100644",
-   "sha256": "459155f30329462ee598e7327c676b5826c4954384064084506323a874f1f158"
+   "sha256": "831bbababd2f48e5b9f62fa33433fe7edfbc8ee1f2271e3e7700b883745f75e9"
   },
   "research/claimcheck_v1_1/dev/__init__.py": {
    "mode": "100644",
@@ -7829,11 +7849,11 @@
   },
   "research/claimcheck_v1_1/dev/results/live_checks.json": {
    "mode": "100644",
-   "sha256": "3bba31b3a895b478b66c18d2c9ef1ec4b9462d6eb9bb4db81c622fa1bdbde50c"
+   "sha256": "f8914b3593e6ffe8796f47b2ebfc6cfb77e50e3f2932daeef25e7f995bb3a27b"
   },
   "research/claimcheck_v1_1/export_site_v11.py": {
    "mode": "100644",
-   "sha256": "a7d2b3997f539c31ce426363cc2567b460f895aff1e2485c04a48a7d361cfa81"
+   "sha256": "aaf4f828bd132cffbfa340cdd5e33a00aec96eb9a4165792d0f89eb20b85cbba"
   },
   "research/claimcheck_v1_1/governance/__init__.py": {
    "mode": "100644",
@@ -7841,11 +7861,15 @@
   },
   "research/claimcheck_v1_1/governance/audit_admission.py": {
    "mode": "100644",
-   "sha256": "3ca3484bb26abc89c5463c9dc7d15ab54cf585d4b5fd41b2334cdff1a9c64e27"
+   "sha256": "1e3859a90ec0d9b510efff0a898868a87b30c8c2b0bbf26ff0e9c2d6f11a4d98"
   },
   "research/claimcheck_v1_1/governance/prepare_core_admission.py": {
    "mode": "100644",
    "sha256": "f6d195a3ee148a62b33db32de2ca412e13105238c5b00c386b9816944b77329f"
+  },
+  "research/claimcheck_v1_1/governance/test_required_check.py": {
+   "mode": "100644",
+   "sha256": "0cb775af8965fe1ffb2839659dc5e3896aa87a2f79f070687ea0bd75174828fc"
   },
   "research/claimcheck_v1_1/perf/__init__.py": {
    "mode": "100644",
@@ -7866,6 +7890,14 @@
   "research/claimcheck_v1_1/prospective/AMENDMENTS_DRAFT_2.md": {
    "mode": "100644",
    "sha256": "8a24e78adecaf637f3b34717ab738f80dabaa8d50997bfd9dde34b967c2de995"
+  },
+  "research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md": {
+   "mode": "100644",
+   "sha256": "da9c6bfeb57a205af9fda1601c24ad3601255afa5330e1e634ddfbc6f94597e4"
+  },
+  "research/claimcheck_v1_1/prospective/DECISION_SUPPORT.json": {
+   "mode": "100644",
+   "sha256": "58f4012be6ef803b1c3a8343ab56d99c51ee9ddd8fe1a3f4762501d2973c03ac"
   },
   "research/claimcheck_v1_1/prospective/DEMONSTRATION_ON_DEVELOPMENT_DATA.json": {
    "mode": "100644",
@@ -7899,6 +7931,10 @@
    "mode": "100644",
    "sha256": "fd48cb606ebcbeb22bb2bc64fadde12234383baa4ac1a2b3d70e6bedb4e9c290"
   },
+  "research/claimcheck_v1_1/prospective/decision_support.py": {
+   "mode": "100644",
+   "sha256": "9941bf6d66cff1e8515b451d26604151348b20440533f7d7b6594bbb48da0c4b"
+  },
   "research/claimcheck_v1_1/prospective/design_120.py": {
    "mode": "100644",
    "sha256": "5fc952756c55dad22b42f0668508a80dfaa3d3c92d4c178eed673987864b70de"
@@ -7917,7 +7953,7 @@
   },
   "research/claimcheck_v1_1/replay_independent_v1_1.py": {
    "mode": "100644",
-   "sha256": "0e483e983a6af2fcb798ad9bb855a2b1f521b04764d42bd171a33f7d7f1c3453"
+   "sha256": "df8ce18c663367ee65cc452ed7806fb02c3887dcafc99225461634714d922319"
   },
   "research/claimcheck_v1_1/runner_negative_controls.py": {
    "mode": "100644",
@@ -7931,6 +7967,14 @@
    "mode": "100644",
    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
+  "research/claimcheck_v1_1/tests/test_binding_offline.py": {
+   "mode": "100644",
+   "sha256": "a11f618667e1b86a6f95813f07db9727b152609970cc95e6313d6fabcd02b374"
+  },
+  "research/claimcheck_v1_1/tests/test_decision_support.py": {
+   "mode": "100644",
+   "sha256": "474e64894786ee938520959db522118aaba44d604d0af85b5497a6a3152d9e94"
+  },
   "research/claimcheck_v1_1/tests/test_design_120.py": {
    "mode": "100644",
    "sha256": "5a14527203d9d95d3246bde26bd4f374090aa65f15b54a7dd46655082db67d7a"
@@ -7938,6 +7982,10 @@
   "research/claimcheck_v1_1/tests/test_prospective_stats.py": {
    "mode": "100644",
    "sha256": "e250d4f6897f2292d777565485d13daf5fc448b81505429fc292c4fbb0ae4442"
+  },
+  "research/claimcheck_v1_1/tests/test_runner_hardening.py": {
+   "mode": "100644",
+   "sha256": "57a1d4567110a5218d33c942a4c824d635950adf11620ce45ea7228ee04c84b0"
   },
   "research/claimcheck_v1_1/tests/test_runner_strict.py": {
    "mode": "100644",
@@ -7980,6 +8028,6 @@
    "sha256": "2a5e4a8a29531b4281f571f0737837a8cda4b40dfdbc5c2fae6a7c54b1295988"
   }
  },
- "generated_from_commit": "f65eebcb9e956c72908c2006ba8437cd2139755c",
+ "generated_from_commit": "95d3045e3db10c78a40d4c04ea9428b534633147",
  "note": "Every file this branch adds to the tree pinned by RECONCILIATION_V22, with its identity at the commit above. No existing file is changed or removed."
 }

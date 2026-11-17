@@ -27,9 +27,9 @@ its one reviewed test repair).
 | Added | Files | What |
 | --- | ---: | --- |
 | `research/claimcheck_v1/**` | 1,900 | frozen v1 software, Lean checker and Mathlib meaning theorems, benchmark documents (open-licence article text and data), receipts, bundles |
-| `research/claimcheck_v1_1/**` | 75 | v1.1 policy layer and strict runner, tools, development results, draft protocol, prepared adjudication and usability materials, these governance scripts |
+| `research/claimcheck_v1_1/**` | 82 | v1.1 policy layer and the hardened runner, the v1.1 replayer, tools, tests, development results, draft protocol and the prospective decision package, prepared adjudication and usability materials, these governance scripts |
 | `.github/workflows/pcs-claimcheck-v1.yml` | 1 | path-scoped research CI (read-only permissions) |
-| `docs/integration/claimcheck/**` | 7 | this proposal, the census, the dry-run record, the proposed control changes as a patch, the audit (narrative and record), the third-party attribution index |
+| `docs/integration/claimcheck/**` | 12 | this proposal, the census, the dry-run record, the proposed control changes as a patch, the audit (narrative and record), the third-party attribution index, the required-check recommendation, the runner's security-review package with its two source diffs, the owner authorization package |
 
 An audit of every added file finds nothing that blocks admission: no credential values or key
 formats, no generated or unnecessary files, no links, submodules or executables, every file given a
