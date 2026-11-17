@@ -1,7 +1,12 @@
 import ScientificReasoning.Retraction
 
 /-!
-# Certificate structure (abstract)
+# Certificate structure
+
+**Finding D:** `Certificate.valid` below is *abstract existence* of a Derives
+judgment for the final fields. It does **not** validate `steps`.
+Executable step validation lives in `CheckCertificate.lean` via
+`checkCertificate` / `checkCertificate_sound`.
 -/
 
 namespace ScientificReasoning
@@ -28,7 +33,7 @@ structure Certificate where
   conclusion : Formula
   deriving Repr, DecidableEq, Inhabited
 
-/-- Abstract validity: the final judgment is a Derives instance (kernel-level). -/
+/-- Abstract validity (existence) — NOT step-trace integrity. -/
 def Certificate.valid (c : Certificate) : Prop :=
   Derives c.context c.finalSupport c.finalAuthority c.conclusion
 
@@ -48,4 +53,3 @@ theorem valid_invalidated_by_support_member
 end ScientificReasoning
 
 #print axioms ScientificReasoning.valid_implies_sound
-#print axioms ScientificReasoning.valid_support_in_context

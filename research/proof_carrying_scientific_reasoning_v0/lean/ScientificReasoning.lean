@@ -5,3 +5,5 @@ import ScientificReasoning.Soundness
 import ScientificReasoning.Contradictions
 import ScientificReasoning.Retraction
 import ScientificReasoning.Certificates
+import ScientificReasoning.CheckCertificate
+import ScientificReasoning.Belnap

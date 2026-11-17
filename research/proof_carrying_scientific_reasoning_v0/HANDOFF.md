@@ -1,23 +1,31 @@
-# HANDOFF — Proof-Carrying Scientific Reasoning v0
+# HANDOFF — Phase II
 
 - **Branch:** `research/proof_carrying_scientific_reasoning_v0`
-- **Base:** `bc78660b` (`BASE_COMMIT.txt`)
+- **Phase II start head:** `518aa068`
 - **Exclusive path:** `research/proof_carrying_scientific_reasoning_v0/`
-- **Lean:** 4.28.0; `cd lean && lake build`
-- **Tests:** `bash scripts/check_all.sh`
+- **PR:** #218 draft
 
-## Done (Milestone I–V subset)
+## Phase II completed
 
-- Recon + isolation scope
-- Formal spec + Lean core (soundness, authority, non-explosion, retraction, certificates)
-- Python reference + independent checker
-- Adversarial tests + PK/PD + conflicting-studies case notes
-- Prior art / novelty matrix (honest: composition, not foundational breakthrough)
+1. Reproduced Findings A–G; frozen JSON under `results/security_findings_v1/` (do not edit).  
+2. Schema v1 + `independent_checker/check_certificate_v1.py` (reconstructs judgments; rejects A/B/C forgeries).  
+3. Lean `checkCertificate` + `checkCertificate_sound` (no sorryAx).  
+4. Commutative meet; `math_established=false` on Hyp; Belnap witness; authority audit; contradiction report.  
+5. Mutation suite, causal/PKPD cases, benchmarks, revised novelty (engineering, not foundational).
 
-## Next
+## Reproduce
 
-- Stronger certificate step-linking proofs in Lean
-- Finite-model exhaustive enumeration for tiny formula spaces
-- Additional case studies (proteomics synthetic; causal assumptions)
-- Benchmarks methodology + results
-- Draft PR CI census expected red — do not weaken
+```bash
+bash scripts/check_all.sh
+```
+
+## Next (if continuing)
+
+- Prove Derives ⇒ Entails4 for the supported fragment.  
+- Exhaustive finite-model correspondence tables.  
+- External attestation design for `math_established` (do not fake it).  
+- More scientific stress cases.
+
+## CI note
+
+Sealed census may fail — do not weaken.

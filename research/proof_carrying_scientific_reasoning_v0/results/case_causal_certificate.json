@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "premises": [
+    {
+      "id": 0,
+      "formula": [
+        "atom",
+        0
+      ],
+      "declared_authority": "empiricalAsserted"
+    },
+    {
+      "id": 1,
+      "formula": [
+        "atom",
+        1
+      ],
+      "declared_authority": "assumption"
+    },
+    {
+      "id": 2,
+      "formula": [
+        "atom",
+        2
+      ],
+      "declared_authority": "assumption"
+    }
+  ],
+  "steps": [
+    {
+      "id": 0,
+      "rule": "hyp",
+      "premise_id": 0
+    },
+    {
+      "id": 1,
+      "rule": "hyp",
+      "premise_id": 1
+    },
+    {
+      "id": 2,
+      "rule": "hyp",
+      "premise_id": 2
+    },
+    {
+      "id": 3,
+      "rule": "andI",
+      "left": 0,
+      "right": 1
+    },
+    {
+      "id": 4,
+      "rule": "andI",
+      "left": 3,
+      "right": 2
+    }
+  ],
+  "conclusion_step": 4
+}
