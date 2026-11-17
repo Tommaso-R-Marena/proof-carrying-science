@@ -1,21 +1,38 @@
 {
  "what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. No tag with a real name was created. Not an approval.",
- "generated_from_commit": "f65eebcb9e956c72908c2006ba8437cd2139755c",
+ "generated_from_commit": "95d3045e3db10c78a40d4c04ea9428b534633147",
  "valid_only_for_that_commit": true,
  "evidence_committed_in_this_tree": {
-  "describes_commit": "39ce953cd068fd332b739b65f55460a75e67d422",
+  "describes_commit": "f65eebcb9e956c72908c2006ba8437cd2139755c",
   "files_changed_since_then": [
+   ".github/workflows/pcs-claimcheck-v1.yml",
    "docs/integration/claimcheck/ADMISSION_AUDIT.json",
    "docs/integration/claimcheck/ADMISSION_AUDIT.md",
    "docs/integration/claimcheck/ADMISSION_CENSUS.json",
    "docs/integration/claimcheck/ADMISSION_PROPOSAL.md",
-   "docs/integration/claimcheck/THIRD_PARTY_ATTRIBUTION.md",
+   "docs/integration/claimcheck/OWNER_AUTHORIZATION.md",
+   "docs/integration/claimcheck/REQUIRED_CHECKS.md",
+   "docs/integration/claimcheck/SECURITY_REVIEW_C3_D4.md",
    "docs/integration/claimcheck/dry-run.json",
    "docs/integration/claimcheck/proposed-control-changes.patch",
+   "docs/integration/claimcheck/security/runner-v1-to-v2-2026-11-16.diff",
+   "docs/integration/claimcheck/security/runner-v2-hardening-2026-11-17.diff",
    "research/claimcheck_v1_1/OWNER_DECISIONS.md",
    "research/claimcheck_v1_1/README.md",
+   "research/claimcheck_v1_1/REPORT.md",
+   "research/claimcheck_v1_1/check_live_v11.py",
+   "research/claimcheck_v1_1/claimcheck_kernel_runner.py",
+   "research/claimcheck_v1_1/dev/results/live_checks.json",
+   "research/claimcheck_v1_1/export_site_v11.py",
    "research/claimcheck_v1_1/governance/audit_admission.py",
-   "research/claimcheck_v1_1/governance/prepare_core_admission.py"
+   "research/claimcheck_v1_1/governance/test_required_check.py",
+   "research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md",
+   "research/claimcheck_v1_1/prospective/DECISION_SUPPORT.json",
+   "research/claimcheck_v1_1/prospective/decision_support.py",
+   "research/claimcheck_v1_1/replay_independent_v1_1.py",
+   "research/claimcheck_v1_1/tests/test_binding_offline.py",
+   "research/claimcheck_v1_1/tests/test_decision_support.py",
+   "research/claimcheck_v1_1/tests/test_runner_hardening.py"
   ],
   "only_evidence_files_changed": false
  },
@@ -27,13 +44,13 @@
   "source_bindings_checked": 4781
  },
  "existing_files_changed_or_removed": [],
- "files_added": 1983,
+ "files_added": 1995,
  "added_files_outside_the_admitted_roots": [],
  "proposed_retained_source_commit": {
-  "commit": "5c4137491d3b19d7b4b6ab8cf8589d8fa1e813ba",
-  "tree": "78bb5b8af13103c9759bfbb39d9ad0a979c8c0e9",
+  "commit": "c9bb79816d17aa91545d59dabec179a4d90f6f53",
+  "tree": "fc5517e3dae493a58f04148314033976b5b51baa",
   "parents": [
-   "f65eebcb9e956c72908c2006ba8437cd2139755c",
+   "95d3045e3db10c78a40d4c04ea9428b534633147",
    "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
   ],
   "proposed_tag": "pcs-source-intake/core-claimcheck-v1-20261114",
@@ -43,11 +60,11 @@
  "proposal": {
   "control_commit_files": {
    "docs/integration/2026-11-14/RECONCILIATION_V23.json": {
-    "sha256": "8a79dda6858a89ec8081fc48cd0cc221bd25ba0856eb966c1f5cc85c98aa63a8",
-    "bytes": 4703608
+    "sha256": "1c060091c1ab14db073b020d6d84ef861fb20256f776a9ee61a870cd954bfd0d",
+    "bytes": 4705776
    },
    "research/integration_v2/reconcile.py": {
-    "sha256": "c63c12cc13509b4ee44c50cb277521639043dec846d114553c56ee94f373d23c",
+    "sha256": "9f6f33a93f7383c3e5e59e802936c2e5542380b0bdac59153700681af114b523",
     "bytes": 20113
    },
    "research/integration_v2/test_reconcile.py": {
@@ -55,14 +72,14 @@
     "bytes": 22616
    },
    "scripts/check_reconciled_prs.py": {
-    "sha256": "43f5ffb7249ca235cac6b609c021c08ae4702e0cb59e2be4330e93648ca1650b",
+    "sha256": "35225131911bebad66ccfc70f4b64ca4ffc993b35c6b3436106d50110a100272",
     "bytes": 6930
    }
   },
   "successor_manifest": {
    "path": "docs/integration/2026-11-14/RECONCILIATION_V23.json",
-   "sha256": "8a79dda6858a89ec8081fc48cd0cc221bd25ba0856eb966c1f5cc85c98aa63a8",
-   "snapshot_entries": 10026
+   "sha256": "1c060091c1ab14db073b020d6d84ef861fb20256f776a9ee61a870cd954bfd0d",
+   "snapshot_entries": 10038
   },
   "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"
  },
@@ -89,7 +106,7 @@
  },
  "gate_tests_on_the_successor": {
   "exit": 0,
-  "last_line": "75 passed in 6.88s"
+  "last_line": "75 passed in 8.51s"
  },
  "retained_source_gate_tests_on_the_successor": {
   "exit": 0,
