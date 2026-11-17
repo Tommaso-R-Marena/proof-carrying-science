@@ -13,13 +13,18 @@ quotes, backslashes and non-ASCII characters; the same tails with a non-canonica
 (a quoted string as numbers, a fraction not in lowest terms, -0, leading zeros, a byte above 255, a
 square-root sign of 2, a negative radicand, an unknown reason, an empty byte list); every truncation
 and many single-character deletions, insertions and substitutions of small tails; byte-level
-mutations that break UTF-8; and the forgeries of the runner finding.  Agreement on these inputs is
-evidence that the Python parser computes the proved function; it is a test, not a proof.
+mutations that break UTF-8; the forgeries of the runner finding; boundaries the random generator
+does not reach (65,536 and 65,537 data bytes, 256 and 257 claims, hand-written byte lists, empty,
+all-safe and 5,000-character strings, every statistic with every comparison and nested share
+filters, extreme rationals, square roots of sign -1, 0 and 1, every undefined reason), which both
+parsers must accept (`edge-accept`) or both refuse (`edge-reject`); and every token of three tails
+deleted, doubled or replaced by a near miss.  Agreement on these inputs is evidence that the Python
+parser computes the proved function; it is a test, not a proof.
 
 Run (needs Lean 4.28.0 on PATH and `formal/build.sh` run first):
   python3 research/claimcheck_assurance_v1/conformance/test_claims_refinement.py [--out FILE]
 """
-import argparse, json, os, random, resource, struct, subprocess, sys, tempfile
+import argparse, json, os, random, re, resource, struct, subprocess, sys, tempfile, time
 from fractions import Fraction
 from pathlib import Path
 
@@ -99,6 +104,96 @@ def generated(rng):
     return text[len(MARKER.decode("utf-8")):]          # the generated part is what follows the marker
 
 
+SAFE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,:;()[]%/+-#=<>&*!?@^|~"
+STATS = PLAIN_STATS + ["share", "pearson", "ols_slope", "ols_intercept"]
+CMPS = ["eq", "ne", "lt", "le", "gt", "ge"]
+
+
+def part(data, items):
+    """The generated part (after the marker) that the real generator writes."""
+    text = batch_tail(data, items)
+    marker = MARKER.decode("utf-8")
+    assert text.startswith(marker)
+    return text[len(marker):]
+
+
+def edge_vectors(rng):
+    """Boundaries the random generator does not reach.  `edge-accept` vectors must be accepted by both
+    parsers, `edge-reject` vectors refused by both; the comparison itself is the test."""
+    undef = Outcome(defined=False, reason="csvMalformed")
+    plain = lambda **kw: (ClaimSpec(**({"stat": "mean", "reported": "1", "column": "a"} | kw)), ("", "NA"), Fraction(1), undef)
+    acc, rej = [], []
+    big = bytes(rng.randrange(256) for _ in range(65536))
+    acc.append(part(big, [plain()]))                       # data of exactly the cap (65,536 bytes)
+    rej.append(part(big + b"\x00", [plain()]))             # one byte over: the generator writes it; both must refuse
+    acc += [part(b"", [plain()]), part(b"\x00", [plain()]), part(bytes(range(256)), [plain()])]
+    acc.append(part(b"a\n1\n", [plain() for _ in range(256)]))   # exactly 256 claims
+    rej.append(part(b"a\n1\n", [plain() for _ in range(257)]))   # one claim over
+    long_safe = "".join(rng.choice(SAFE_CHARS) for _ in range(5000))
+    for kw in ({"column": ""}, {"column": SAFE_CHARS, "reported": SAFE_CHARS}, {"column": long_safe},
+               {"column": "é" * 1000}, {"column": "\\", "reported": '"'}, {"column": "\x7f", "reported": "\x00"},
+               {"column": None, "stat": "count"}, {"column": "x", "reported": "-0.000000000000000000001"}):
+        acc.append(part(b"a\n1\n", [plain(**kw)]))
+    # every statistic, every comparison, nested share filters
+    conds = [Cond("num", "c" + k, v, k) for k, v in zip(CMPS, ["0", "-1.5", "1e3", "123456789012345678901234567890.25", "-0.001", "7"])]
+    conds += [Cond("text_eq", "g", "A"), Cond("text_ne", "", ""), Cond("text_eq", "é", '"')]
+    for st in STATS:
+        spec = ClaimSpec(stat=st, reported="2.5", column=None if st in ("count", "share") else "y",
+                         x_column="x" if st in ("pearson", "ols_slope", "ols_intercept") else None,
+                         filter=tuple(conds), sub_filter=tuple(conds) if st == "share" else ())
+        acc.append(part(b"x,y\n1,2\n", [(spec, ("", "NA", "–"), Fraction(1), undef)]))
+    # scales and outcomes at the extremes
+    big_q = [Fraction(0), Fraction(-7, 3), Fraction(10**40 + 1, 10**40), Fraction(-(10**50), 10**25 + 3), Fraction(1, 10**30)]
+    outs = [Outcome(defined=False, reason=r) for r in REASONS]
+    for q in big_q:
+        outs.append(Outcome(defined=True, verdict="consistent", value_kind="rat", value=q, used=0, missing=0))
+    for sign in (-1, 0, 1):
+        for rad in (Fraction(0), Fraction(1, 3), Fraction(10**40, 7)):
+            outs.append(Outcome(defined=True, verdict="inconsistent", value_kind="sqrt", value=rad, sign=sign,
+                                used=10**12, missing=999999))
+    for q in big_q:
+        acc.append(part(b"a\n1\n", [(ClaimSpec(stat="mean", reported="1", column="a"), (), q, o) for o in outs]))
+    # byte lists written by hand: canonical ones accepted, non-canonical ones refused
+    base = part(b"a\n1\n", [plain(column="X")])
+    assert 'some (b "X")' in base
+    for lst in ("[0, 127, 128, 255]", "[128]", "[0]", "[255, 255]"):
+        acc.append(base.replace('some (b "X")', f"some ({lst})", 1))
+    for lst in ("[256]", "[0, 256]", "[007]", "[00]", "[]", "[88]", "[88, 89]", "[0,127]", "[ 0]", "[-1]"):
+        rej.append(base.replace('some (b "X")', f"some ({lst})", 1))
+    return [("edge-accept", t.encode("utf-8")) for t in acc] + [("edge-reject", t.encode("utf-8")) for t in rej]
+
+
+TOKEN = re.compile(r'b "[^"]*"|-?[0-9]+|[A-Za-z_][A-Za-z0-9_]*|\s+|.', re.S)
+NEAR = {"(": "[", ")": "]", "[": "(", "]": ")", ",": ";", ":": "=", "=": ":", ".": ",", "⟨": "(", "⟩": ")", "{": "(", "}": ")",
+        "/": "%", "+": "-", "-": "+"}
+
+
+def token_mutations(tails):
+    """Every single token of each tail deleted, duplicated, or replaced by a near miss."""
+    out = []
+    for t in tails:
+        toks = TOKEN.findall(t)
+        assert "".join(toks) == t
+        for i, tok in enumerate(toks):
+            variants = ["", tok + tok]
+            if tok.startswith('b "'):
+                body = tok[3:-1]
+                variants += ['b ""', f'b "{body}x"', "[" + ", ".join(str(b) for b in body.encode()) + "]" if body else "[]"]
+            elif re.fullmatch(r"-?[0-9]+", tok):
+                n = int(tok)
+                variants += [str(n + 1), "0" + tok.lstrip("-"), str(-n) if n else "-0"]
+            elif re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", tok):
+                variants += [tok.swapcase(), tok + "x", tok[:-1] if len(tok) > 1 else "x"]
+            elif tok.isspace():
+                variants += [tok + " ", "\n" if tok == " " else " "]
+            else:
+                variants.append(NEAR.get(tok, "?"))
+            for v in variants:
+                if v != tok:
+                    out.append(("token", ("".join(toks[:i]) + v + "".join(toks[i + 1:])).encode("utf-8")))
+    return out
+
+
 NONCANONICAL = [
     ('some (b "c")', "some ([99])"), ("((1 : Rat) / 1)", "((2 : Rat) / 2)"), ("((0 : Rat) / 1)", "((-0 : Rat) / 1)"),
     ("((1 : Rat) / 1)", "((01 : Rat) / 1)"), ("[226, 128, 147]", "[226, 128, 403]"), ("[226, 128, 147]", "[226, 128, 0147]"),
@@ -139,6 +234,9 @@ def vectors(rng):
     for extra in ("def helper : Nat := 0\n\n", "namespace X\n", "set_option maxRecDepth 1 in\n", "-- note\n"):
         out.append(("forgery", g.replace("def pcs_c0", extra + "def pcs_c0", 1).encode("utf-8")))
     out.append(("forgery", (g + "theorem extra : True := trivial\n").encode("utf-8")))
+    out += edge_vectors(rng)
+    shareful = [x for x in gen if ".share [" in x and "(.sqrt" in x][:1] + [x for x in gen if ".num (" in x][:1] + small[:1]
+    out += token_mutations(shareful)
     return out
 
 
@@ -158,8 +256,10 @@ def main(argv=None):
         inp, outp = Path(tmp) / "vectors.bin", Path(tmp) / "lean.txt"
         inp.write_bytes(b"".join(struct.pack(">I", len(v)) + v for _, v in vec))
         env = dict(os.environ, LEAN_PATH=str(build))
+        started = time.monotonic()
         subprocess.run(["lean", "--run", str(HERE / "ClaimsRefinement.lean"), str(inp), str(outp)], check=True, env=env,
                        preexec_fn=unlimited_stack, timeout=3600)
+        lean_seconds = time.monotonic() - started
         lean_lines = outp.read_text(encoding="utf-8").splitlines()
     assert len(lean_lines) == len(vec), (len(lean_lines), len(vec))
     report = {"vectors": len(vec), "by_kind": {}, "disagreements": []}
@@ -171,6 +271,8 @@ def main(argv=None):
         if py != lean_line:
             report["disagreements"].append({"kind": kind, "lean": lean_line[:200], "python": py[:200],
                                             "vector": v[:300].decode("utf-8", "replace")})
+    report["lean_interpreter_seconds"] = round(lean_seconds, 1)
+    report["largest_vector_bytes"] = max(len(v) for _, v in vec)
     report["passed"] = not report["disagreements"]
     text = json.dumps(report, indent=1, ensure_ascii=False)
     if args.out:
@@ -180,6 +282,8 @@ def main(argv=None):
     assert report["by_kind"]["committed"]["accepted"] == report["by_kind"]["committed"]["vectors"] >= 84
     assert report["by_kind"]["generated"]["accepted"] == report["by_kind"]["generated"]["vectors"]
     assert report["by_kind"]["forgery"]["accepted"] == 0
+    assert report["by_kind"]["edge-accept"]["accepted"] == report["by_kind"]["edge-accept"]["vectors"], "an edge vector meant to be canonical was refused"
+    assert report["by_kind"]["edge-reject"]["accepted"] == 0, "an edge vector meant to be refused was accepted"
 
 
 if __name__ == "__main__":

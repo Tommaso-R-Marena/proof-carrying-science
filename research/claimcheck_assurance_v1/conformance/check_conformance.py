@@ -13,11 +13,30 @@ and compares every result with the Lean tables:
   C. exhaustive gates: all 512 mismatch-gate states and all 64 match-gate states, each gate driven
      through the code path that computes it or through the helper that reports it.
 
-In B and C the helpers that examine text and data (`_basic_findings`, `_analyse`, `_alternatives`)
-are replaced by stubs returning the wanted finding: what is compared is the decision logic, not how
-findings are computed.  Run: python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
+  D. exhaustive mathematical status: all 84 variant patterns of the Lean table (one to three
+     variants, each a match, a mismatch, an undefined statistic or not accepted by the kernel), each
+     through the real `pipeline._complete` and `policy.math_status`, with every concrete way the
+     pipeline holds a variant of that kind (rational or square-root value, which undefined reason,
+     what was predicted for a variant the kernel did not accept, no Lean record or a refusal), the
+     binding gate passed or failed, conventions named or not: 24,696 receipts;
+  E. exhaustive verdict function: `outward m f corM corD` at every point of its finite domain
+     (5 statuses × 2^16 findings × corM × corD = 1,310,720 points), printed by Lean at test time
+     (`ExportOutward.lean`).  Every point that a Python input can reach (983,040; the other 327,680
+     have a count whose dispersion wording fails, which no input produces: a count is not a
+     dispersion statistic) is driven through `_numeric_evidence` (for a decided match, as
+     `assess_document` does) and `_decide`, and must give Lean's verdict.  The facts the code computes
+     from the receipt, the sentence and the predicted values (status, not-a-count, rounding,
+     dispersion wording, out-of-grammar wording, printed sample size) are computed by the real code
+     from a constructed input and checked to have the intended value; the rest come from stubs.
+
+In B, C and E the helpers that examine text and data (`_basic_findings`, `_analyse`, `_alternatives`)
+are replaced by stubs returning the wanted finding, and in E the sibling relation is an input: what
+is compared is the decision logic, not how findings or siblings are computed.  Agreement on a finite
+abstraction is evidence about the code, not a proof about Python.
+Run (Lean 4.28.0 on PATH, after formal/build.sh):
+python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
 """
-import itertools, json, sys
+import hashlib, itertools, json, os, random, subprocess, sys, time
 from fractions import Fraction
 from pathlib import Path
 from types import SimpleNamespace
@@ -25,6 +44,9 @@ from types import SimpleNamespace
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 sys.path.insert(0, str(ROOT))
+from research.claimcheck_v1 import pipeline  # noqa: E402
+from research.claimcheck_v1.oracle import Outcome  # noqa: E402
+from research.claimcheck_v1.spec import ClaimSpec  # noqa: E402
 from research.claimcheck_v1_1 import policy  # noqa: E402
 from research.claimcheck_v1_1.dev.common import context, documents  # noqa: E402
 
@@ -215,7 +237,260 @@ def part_c():
     return {"mismatch_gate_states_checked": n, "mismatch_gate_states_unreachable_in_code": len(MISMATCH) - n, "match_gate_states_checked": m}
 
 
+# ---- D. the mathematical status, every variant pattern, through the real pipeline ----------------
+# What the untrusted oracle predicted, i.e. the outcome the kernel was asked to confirm.
+PREDICTED = {
+    "consistent": [Outcome(True, "consistent", "rat", Fraction(10), None, 5, 0), Outcome(True, "consistent", "sqrt", Fraction(100), 1, 5, 0)],
+    "inconsistent": [Outcome(True, "inconsistent", "rat", Fraction(50), None, 5, 0), Outcome(True, "inconsistent", "sqrt", Fraction(2500), -1, 5, 0)],
+    "undefined": [Outcome(False, reason="emptySelection"), Outcome(False, reason="degenerate")],
+}
+ACCEPTED = {"kernel_accepted": True, "toolchain": "Lean (version 4.28.0)"}
+NOT_ACCEPTED = [None, {"kernel_accepted": False, "detail": "the kernel did not accept the theorem"}]
+
+
+def held_as(kind):
+    """Every way the pipeline holds a variant of one abstract kind: (predicted outcome, Lean record)."""
+    if kind == "none":  # the kernel accepted nothing, whatever was predicted; no record, or a refusal
+        return [(o, lean) for os_ in PREDICTED.values() for o in os_ for lean in NOT_ACCEPTED]
+    return [(o, ACCEPTED) for o in PREDICTED[{"match": "consistent", "mismatch": "inconsistent", "undefined": "undefined"}[kind]]]
+
+
+def part_d():
+    n, patterns, statuses = 0, set(), {}
+    for length in (1, 2, 3):
+        for pattern in itertools.product(("match", "mismatch", "undefined", "none"), repeat=length):
+            want = MATH[pattern]
+            for held in itertools.product(*(held_as(k) for k in pattern)):
+                for bound_ok, named in itertools.product(B2, B2):
+                    variants = [[ClaimSpec(("sd_sample", "sd_pop", "sd_sample")[j], "10", column="x"), f"convention {j}" if named else None, o, lean]
+                                for j, (o, lean) in enumerate(held)]
+                    receipt = {"claim": {"reading": "a reading"}, "data": {"name": "d.csv", "sha256": "0" * 64}}
+                    r = pipeline._complete(pipeline._Pending(receipt, None, SimpleNamespace(ok=bound_ok, failures=["a gate failed"]), variants, [], Fraction(1)))
+                    got = policy.math_status(r)
+                    assert got == want, (pattern, [(o, lean) for o, lean in held], bound_ok, named, got, want)
+                    assert kinds(r) == pattern  # the abstraction part A applies to committed receipts
+                    # what part E assumes of a receipt: a decided result is the kernel's status, with the same polarity
+                    if r["result"] in ("PROVED", "REFUTED"):
+                        assert r["result"] == r["q1_mathematics"]["status"] and bound_ok
+                    statuses[got] = statuses.get(got, 0) + 1
+                    n += 1
+            patterns.add(pattern)
+    assert patterns == set(MATH)
+    return {"variant_patterns": len(patterns), "receipts_through__complete": n, "by_status": dict(sorted(statuses.items()))}
+
+
+# ---- E. the verdict function at every point of its finite domain ---------------------------------
+FIELDS = ("hasWindow", "quoteOk", "grounded", "identOk", "basicOk", "boundedBound", "noCompeting", "lowRate", "pinnedOk",
+          "notCount", "boundedAll", "noEligible", "beyondRounding", "dispersionNamed", "inGrammar", "sampleSizeOk")  # bits 0-15
+MATHS = ("MATCH_PROVED", "MISMATCH_PROVED", "CONDITIONAL_ON_CONVENTION", "UNDEFINED_PROVED", "NOT_ESTABLISHED")
+VERDICT = {"U": "UNKNOWN", "R": "REQUIRE_HUMAN_REVIEW", "C": "CONFIRMATION", "D": "DISCREPANCY_FOR_REVIEW"}
+
+
+def lean_outward():
+    build = HERE.parent / "formal" / ".build"
+    assert (build / "ClaimCheckAssurance" / "Authority.olean").exists(), "run formal/build.sh first"
+    started = time.monotonic()
+    out = subprocess.run(["lean", "--run", str(HERE / "ExportOutward.lean")], env=dict(os.environ, LEAN_PATH=str(build)),
+                         capture_output=True, text=True, check=True).stdout
+    seconds = time.monotonic() - started
+    table = dict(line.split(" ") for line in out.splitlines())
+    assert tuple(table) == MATHS and all(len(v) == 1 << 18 and set(v) <= set(VERDICT) for v in table.values())
+    return table, seconds, hashlib.sha256(out.encode()).hexdigest()
+
+
+def rv(kind, value, verdict="inconsistent"):
+    """A q1 variant entry as `_complete` writes it, with a defined predicted value (radicand for kind sqrt)."""
+    po = {"defined": True, "verdict": verdict, "rows_used": 5, "rows_skipped_as_missing": 0,
+          "value_kind": "rational" if kind == "rat" else "signed_square_root",
+          "exact": {"numerator": str(value.numerator), "denominator": str(value.denominator)}}
+    if kind == "sqrt":
+        po["sign"] = 1
+    return {"stat": "mean", "assumption": None, "predicted_outcome": po, "lean": ACCEPTED,
+            "status": "PROVED" if verdict == "consistent" else "REFUTED"}
+
+
+# printed "10": within one unit of the last digit (10.6, rational or √112.36) or not (50)
+NEAR = [[rv("rat", Fraction(53, 5))], [rv("sqrt", Fraction(2809, 25))], [rv("rat", Fraction(50)), rv("sqrt", Fraction(2809, 25))]]
+APART = [[rv("rat", Fraction(50))], [rv("sqrt", Fraction(2500))], [rv("rat", Fraction(50)), rv("sqrt", Fraction(2500))]]
+DISPERSION = {"sd": ("sd_sample", "sd_pop", "sd"), "sem": ("sem",)}
+NAMED = {"sd": ("standard deviation", "SD", "s.d."), "sem": ("standard error", "SEM", "s.e.m.")}
+OTHER_STATS = ("mean", "median", "min", "max")
+ODD = (", adjusted", ", geometric", ", log-transformed", " (IQR 4)", ", bootstrapped")
+QUOTE_FAILS = ((False, False), (True, False), (False, True))
+PIN_FAILS = [c for c in itertools.product(B2, B2, B2) if any(c)]  # (truncated, rate above the limit, a competitor)
+ALT = SimpleNamespace(stat="median", column="y", x_column=None, filter=())
+SIB_E = SimpleNamespace(literal="7", spec=ClaimSpec("mean", "7", column="x"), oracle_only=False, receipt={"receipt_sha256": "0" * 64}, scope_rows=(1,))
+BOUND = lambda rd: True  # noqa: E731 -- what the stubbed `_bound_to` returns; the stubbed `_analyse` recognises it
+CUR = SimpleNamespace()
+
+
+def an(kind, truncated, rate_ok):
+    reproduced = 0 if rate_ok else 100
+    return SimpleNamespace(kind=kind, truncated=truncated, rate=Fraction(reproduced + 1, 101), eligible_readings=3, decoys=100,
+                           decoys_reproduced=reproduced, examples=[], matching=[])
+
+
+def e_stubs():
+    saved = {k: getattr(policy, k) for k in ("_basic_findings", "_analyse", "_alternatives", "_bound_to")}
+
+    def analyse(ctx, it, restrict=None):
+        if restrict is None:  # the mismatch rules: every eligible reading of the sentence
+            return an("all", not CUR.boundedAll, True)
+        if restrict is BOUND:  # the match rules: readings worded at this number
+            return an("bound", not CUR.boundedBound, CUR.lowRate)
+        return an("pin", CUR.pin[0], not CUR.pin[1])  # readings pinned by a confirmed sibling
+    policy._basic_findings = lambda ctx, it: (CUR.basicOk, [{"rule": "eligible_reading", "passed": CUR.basicOk, "detail": "stub"}])
+    policy._analyse = analyse
+    policy._alternatives = lambda it, a, competing_only=False: [ALT] if {"bound": not CUR.noCompeting, "all": not CUR.noEligible, "pin": CUR.pin[2]}[a.kind] else []
+    policy._bound_to = lambda ctx, it: BOUND
+    return saved
+
+
+def concretise(m, f, rng, used):
+    """One Python input at the abstract point (m, f): receipt, item and context."""
+    def pick(name, options):
+        k = rng.randrange(len(options))
+        used[name] = used.get(name, set()) | {k}
+        return options[k]
+    if not f["notCount"]:
+        stat, phrase = "count", "the value"
+    elif not f["dispersionNamed"]:
+        stat, phrase = pick("dispersion_unnamed", [s for fam in DISPERSION.values() for s in fam]), "the value"
+    else:
+        fam = pick("named_or_not", ("none", "sd", "sem"))
+        stat, phrase = ((pick("other_stat", OTHER_STATS), "the value") if fam == "none" else
+                        (pick("dispersion_named_" + fam, DISPERSION[fam]), "the " + pick("naming_" + fam, NAMED[fam])))
+    window = phrase + " was 10" + ("" if f["inGrammar"] else pick("odd", ODD)) + (
+        pick("n_agrees", ("", " (n = 5)")) if f["sampleSizeOk"] else pick("n_differs", (" (n = 7)", " (N = 12)"))) + " in all"
+    quote = (True, True) if f["quoteOk"] else pick("quote_fails", QUOTE_FAILS)
+    q1 = {"status": {"MATCH_PROVED": "PROVED", "MISMATCH_PROVED": "REFUTED"}.get(m, "UNKNOWN"),
+          "variants": pick("beyond", APART) if f["beyondRounding"] else pick("near", NEAR)}
+    reason = {"CONDITIONAL_ON_CONVENTION": "ambiguous_convention", "UNDEFINED_PROVED": "statistic_undefined",
+              "NOT_ESTABLISHED": "not_kernel_checked"}.get(m, "checked" if f["grounded"] else "binding_not_grounded")
+    if m == "CONDITIONAL_ON_CONVENTION":
+        q1["conditional"] = {"proved_if": "standard deviation uses denominator n − 1", "refuted_if": "standard deviation uses denominator n"}
+    if m == "NOT_ESTABLISHED" and pick("no_q1_variants", B2):
+        q1 = {"status": "UNKNOWN", "why": "No arithmetic was checked."}
+    result = ("UNKNOWN" if not f["grounded"] else {"MATCH_PROVED": "PROVED", "MISMATCH_PROVED": "REFUTED"}.get(m)
+              or pick("decided_without_status", ("PROVED", "REFUTED")))
+    receipt = {"q1_mathematics": q1, "reason": reason, "result": result,
+               "q2_correspondence": {"checks": {"quote_in_source": quote[0], "reported_value_in_quote": quote[1]},
+                                     "failures": [] if f["quoteOk"] else ["The quote is not in the source."]}}
+    spec = ClaimSpec(stat, "10", column="x")
+    it = None
+    if f["hasWindow"] or pick("no_window_as", ("no item", "no sentence")) == "no sentence":
+        it = policy.Item(receipt, spec, result, policy.math_status(receipt))
+        if f["hasWindow"]:
+            it.w0, it.w1, it.token_start, it.token_end, it.literal = 0, len(window), window.index("10"), window.index("10") + 2, "10"
+            it.quote, it.quote_start = window, 0
+        it.ident, it.scope_rows = ((policy.family(stat), "x", None, (0, 1, 2, 3, 4)), (0, 1, 2, 3, 4)) if f["identOk"] else (None, None)
+    ctx = SimpleNamespace(source=window, data_unit=lambda spec: None, manifest={})
+    return receipt, it, ctx
+
+
+# Which abstract fact each finding the code reports stands for, in the match and in the mismatch rules.
+MATCH_RULES = {"eligible_reading": "basicOk", "bounded_reading_space": "boundedBound", "no_competing_reading_reproduces_the_number": "noCompeting",
+               "low_chance_of_coincidence": "lowRate", "supported_by_another_number_in_the_sentence": "pinnedOk"}
+MISMATCH_RULES = {"not_a_count": "notCount", "eligible_reading": "basicOk", "bounded_reading_space": "boundedAll",
+                  "no_eligible_reading_reproduces_the_number": "noEligible", "beyond_rounding_convention": "beyondRounding",
+                  "dispersion_statistic_named_explicitly": "dispersionNamed", "no_out_of_grammar_wording": "inGrammar",
+                  "printed_sample_size_agrees": "sampleSizeOk", "supported_by_another_number_in_the_sentence": "corD"}
+
+
+def outside_the_input_condition():
+    """Recorded, not asserted: receipts whose decided result contradicts the kernel's status.
+
+    `_decide` chooses the match or the mismatch rules by `receipt["result"]`, the model by the
+    mathematical status.  They coincide on every receipt v1 writes (`_finish` sets the result to the
+    status; part D checks `_complete`), which is the input condition of part E.  A receipt edited to
+    break it is outside the model; this shows what the code then does.
+    """
+    seen = {}
+    saved = e_stubs()
+    try:
+        for m, result in (("MATCH_PROVED", "REFUTED"), ("MISMATCH_PROVED", "PROVED")):
+            f = dict.fromkeys(FIELDS, True)
+            receipt, it, ctx = concretise(m, f, random.Random(0), {})
+            receipt["result"] = it.v1_result = result
+            CUR.basicOk = CUR.boundedBound = CUR.noCompeting = CUR.lowRate = CUR.boundedAll = CUR.noEligible = True
+            CUR.pin = (False, False, False)
+            if result == "PROVED":
+                it.strong_match, it.findings = policy._numeric_evidence(ctx, it, policy.TAU)
+            res = REAL_DECIDE(ctx, receipt, it, lambda item, same_column: [SIB_E], policy.TAU)
+            seen[f"status {m}, result {result}, all findings pass, siblings"] = res["verdict"]
+    finally:
+        restore(saved)
+    return seen
+
+
+def part_e():
+    table, lean_seconds, digest = lean_outward()
+    rng, used = random.Random(20261116), {}
+    started = time.monotonic()
+    counts = {"points": 0, "unreachable_count_with_dispersion_wording_failed": 0, "checked": 0,
+              "checked_with_a_receipt_v1_does_not_write": 0, "by_verdict": {}}
+    findings_checked = {"match": 0, "mismatch": 0}
+    saved = e_stubs()
+    try:
+        for m in MATHS:
+            codes = table[m]
+            for i in range(1 << 18):
+                counts["points"] += 1
+                f = {name: bool(i >> k & 1) for k, name in enumerate(FIELDS)}
+                cor_m, cor_d = bool(i >> 16 & 1), bool(i >> 17 & 1)
+                if not f["notCount"] and not f["dispersionNamed"]:
+                    counts["unreachable_count_with_dispersion_wording_failed"] += 1
+                    continue
+                receipt, it, ctx = concretise(m, f, rng, used)
+                CUR.basicOk, CUR.boundedBound, CUR.noCompeting, CUR.lowRate = f["basicOk"], f["boundedBound"], f["noCompeting"], f["lowRate"]
+                CUR.boundedAll, CUR.noEligible = f["boundedAll"], f["noEligible"]
+                if f["pinnedOk"]:
+                    CUR.pin = (False, False, False)
+                else:
+                    k = rng.randrange(len(PIN_FAILS))
+                    used["pin_fails"] = used.get("pin_fails", set()) | {k}
+                    CUR.pin = PIN_FAILS[k]
+                # as `assess_document` does: the match rules are evaluated for a decided match (it is in `decided`)
+                decided = it is not None and it.w0 is not None and it.v1_result in ("PROVED", "REFUTED") and it.ident is not None
+                if decided and it.v1_result == "PROVED":
+                    it.strong_match, it.findings = policy._numeric_evidence(ctx, it, policy.TAU)
+                    assert it.strong_match == (f["basicOk"] and f["boundedBound"] and f["noCompeting"] and f["lowRate"])  # Findings.matchGates
+                res = REAL_DECIDE(ctx, receipt, it, lambda item, same_column: [SIB_E] if (cor_d if same_column else cor_m) else [], policy.TAU)
+                want = VERDICT[codes[i]]
+                assert res["mathematical_status"] == m, (m, i, res["mathematical_status"])
+                assert res["verdict"] == want, (m, {k: v for k, v in f.items()}, cor_m, cor_d, receipt, res["verdict"], want)
+                # every finding the code reports has the value of the abstract fact it stands for
+                facts, rules = dict(f, corD=cor_d), MATCH_RULES if receipt["result"] == "PROVED" else MISMATCH_RULES
+                for fd in res["findings"]:
+                    assert fd["passed"] == facts[rules[fd["rule"]]], (m, fd["rule"], f, cor_m, cor_d)
+                if res["findings"] and receipt["result"] == "REFUTED":  # the mismatch rules ran: all of them are reported
+                    reported = {fd["rule"] for fd in res["findings"]}
+                    dispersion = policy.family(it.spec.stat) in policy.EXPLICIT_DISPERSION or it.spec.stat == "sem"
+                    assert reported == set(MISMATCH_RULES) - (set() if dispersion else {"dispersion_statistic_named_explicitly"}), reported
+                    assert dispersion or f["dispersionNamed"]  # a statistic without the rule counts as named (the model's convention)
+                    findings_checked["mismatch"] += 1
+                elif res["findings"]:
+                    findings_checked["match"] += 1
+                if f["grounded"] and (m not in ("MATCH_PROVED", "MISMATCH_PROVED") or not f["quoteOk"]):
+                    counts["checked_with_a_receipt_v1_does_not_write"] += 1
+                counts["checked"] += 1
+                counts["by_verdict"][res["verdict"]] = counts["by_verdict"].get(res["verdict"], 0) + 1
+    finally:
+        restore(saved)
+    alternatives = {"dispersion_unnamed": 4, "named_or_not": 3, "other_stat": 4, "dispersion_named_sd": 3, "dispersion_named_sem": 1,
+                    "naming_sd": 3, "naming_sem": 3, "odd": len(ODD), "n_agrees": 2, "n_differs": 2, "quote_fails": 3, "beyond": 3, "near": 3,
+                    "no_q1_variants": 2, "decided_without_status": 2, "no_window_as": 2, "pin_fails": len(PIN_FAILS)}
+    assert all(len(used.get(k, ())) == v for k, v in alternatives.items()), {k: sorted(used.get(k, ())) for k in alternatives}
+    counts["by_verdict"] = dict(sorted(counts["by_verdict"].items()))
+    counts.update({"lean_table_sha256": digest, "lean_seconds": round(lean_seconds, 1), "python_seconds": round(time.monotonic() - started, 1),
+                   "concrete_alternatives_used": sum(alternatives.values()), "points_whose_reported_findings_were_checked": findings_checked,
+                   "outside_the_input_condition_recorded_not_checked": outside_the_input_condition()})
+    assert counts["points"] == 5 << 18 and counts["checked"] + counts["unreachable_count_with_dispersion_wording_failed"] == counts["points"]
+    return counts
+
+
 if __name__ == "__main__":
-    report = {"lean_tables": {k: len(v) for k, v in T.items()}, "A_real_receipts": part_a(), "B_decision_table": part_b(), "C_gates": part_c(), "passed": True}
+    report = {"lean_tables": {k: len(v) for k, v in T.items()}, "A_real_receipts": part_a(), "B_decision_table": part_b(), "C_gates": part_c(),
+              "D_mathematical_status": part_d(), "E_verdict_function": part_e(), "passed": True}
     (HERE / "conformance_report.json").write_text(json.dumps(report, indent=1) + "\n")
     print(json.dumps(report, indent=1))
