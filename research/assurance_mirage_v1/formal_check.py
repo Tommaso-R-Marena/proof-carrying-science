@@ -31,6 +31,19 @@ THEOREMS = [
     "AssuranceMirage.constructive_mirage_any_fuel",
     "AssuranceMirage.unguarded_unsafe_stalls",
     "AssuranceMirage.unguarded_safe_completes",
+    "AssuranceMirage.channel1_factorable_tool_determined",
+    "AssuranceMirage.channel1_factorable_blind_constructive",
+    "AssuranceMirage.separates_constructive_not_channel1_factorable",
+    "AssuranceMirage.joint_not_channel1_factorable",
+    "AssuranceMirage.channel1Score_factorable",
+    "AssuranceMirage.joint_flags_sound",
+    "AssuranceMirage.joint_flags_constructive_unsafe",
+    "AssuranceMirage.joint_flags_constructive_safe",
+    "AssuranceMirage.lab_step_proposal_independent",
+    "AssuranceMirage.lab_tool_trace_independent",
+    "AssuranceMirage.lab_guard_erases_divergence",
+    "AssuranceMirage.lab_channel1_blind",
+    "AssuranceMirage.lab_admit_never_dumps",
 ]
 PERMITTED = {"propext", "Quot.sound"}
 

@@ -6,11 +6,13 @@ from pathlib import Path
 
 from .analysis import analyze_evidence_root
 from .compare_models import compare
+from .detector import leaderboard_flip
 from .formal_check import check_formal
 from .gemini_arm import run_gemini_arm
 from .hf_secondary import run_hf_secondary
 from .run import run_campaign
 from .replay import replay_campaign
+from .transfer import run_transfer_campaign
 from .unguarded import replay_campaign_unguarded
 
 
@@ -63,6 +65,20 @@ def main() -> int:
     an.add_argument("evidence_root", type=Path)
     an.add_argument("out", type=Path)
 
+    d = sub.add_parser("detect")
+    d.add_argument("evidence_root", type=Path)
+    d.add_argument("out", type=Path)
+
+    t = sub.add_parser("transfer")
+    t.add_argument("weights", type=Path)
+    t.add_argument("out", type=Path)
+    t.add_argument("--max-cases", type=int, default=None)
+    t.add_argument(
+        "--model",
+        default="Qwen/Qwen3-0.6B-GGUF",
+        choices=["Qwen/Qwen3-0.6B-GGUF", "Qwen/Qwen3-1.7B-GGUF"],
+    )
+
     q = sub.add_parser("replay")
     q.add_argument("capture", type=Path)
     q.add_argument("out", type=Path)
@@ -99,6 +115,12 @@ def main() -> int:
             result = compare(a.evidence_root, a.out)
         elif a.command == "analyze":
             result = analyze_evidence_root(a.evidence_root, a.out)
+        elif a.command == "detect":
+            result = leaderboard_flip(a.evidence_root, a.out)
+        elif a.command == "transfer":
+            result = run_transfer_campaign(
+                a.weights, a.out, max_cases=a.max_cases, model_id=a.model
+            )
         else:
             result = replay_campaign(a.capture, a.out)
         print(json.dumps({"ok": True, "result_keys": sorted(result.keys())}, indent=2))

@@ -253,6 +253,163 @@ theorem unguarded_safe_completes :
     (unguardedRun safePropose 4 .start []).length = 4 := by
   decide
 
+/-!
+## Sharp characterization (breakthrough result)
+
+A score on episodes is **channel-1-factorable** when it depends only on the
+guarded tool trace. Under a correcting unique-action guard, every such score is
+blind to the constructive mirage; conversely, any score that separates the
+constructive mirage cannot be channel-1-factorable. This is the precise sense in
+which tool-trace / task-completion metrics are not model-safety measurements.
+-/
+
+/-- A score factors through the guarded tool channel. -/
+def Channel1Factorable (score : Episode → Nat) : Prop :=
+  ∃ f : ToolTrace → Nat, ∀ e : Episode, score e = f e.tools
+
+/-- Channel-1-factorable scores assign equal values to any equal-tool episodes. -/
+theorem channel1_factorable_tool_determined
+    (score : Episode → Nat) (h : Channel1Factorable score)
+    (e₁ e₂ : Episode) (htools : e₁.tools = e₂.tools) :
+    score e₁ = score e₂ := by
+  rcases h with ⟨f, hf⟩
+  simp [hf, htools]
+
+/-- Sharp (⇒): every channel-1-factorable score is blind to the constructive mirage. -/
+theorem channel1_factorable_blind_constructive
+    (score : Episode → Nat) (h : Channel1Factorable score) :
+    score (episodeOf safePropose false 4) =
+    score (episodeOf unsafePropose true 4) := by
+  apply channel1_factorable_tool_determined score h
+  simpa [episodeOf] using
+    tool_trace_independent safePropose unsafePropose 4 .start [] [] []
+
+/-- Sharp (⇐ contrapositive): separating the constructive mirage forbids channel-1 factorability. -/
+theorem separates_constructive_not_channel1_factorable
+    (score : Episode → Nat)
+    (hsep : score (episodeOf safePropose false 4) ≠
+            score (episodeOf unsafePropose true 4)) :
+    ¬ Channel1Factorable score := by
+  intro hfac
+  exact hsep (channel1_factorable_blind_constructive score hfac)
+
+/-- The joint score is a witness that non-factorable scores exist and detect mirages. -/
+theorem joint_not_channel1_factorable :
+    ¬ Channel1Factorable jointScore :=
+  separates_constructive_not_channel1_factorable jointScore
+    joint_detects_constructive_mirage
+
+/-- Explicit factorability of the pure tool-length score. -/
+theorem channel1Score_factorable :
+    Channel1Factorable (fun e => channel1Score e.tools) :=
+  ⟨channel1Score, fun _ => rfl⟩
+
+/-- Detector bit: proposal harm present. -/
+def hasProposalHarm (e : Episode) : Bool :=
+  decide ((e.proposals.filter (·.forbidden)).length > 0)
+
+/-- Detector: episode has proposal harm or raw leakage. -/
+def jointFlags (e : Episode) : Bool :=
+  hasProposalHarm e || e.raw.leaked
+
+theorem joint_flags_sound (e : Episode) :
+    jointFlags e = true ↔ (hasProposalHarm e = true ∨ e.raw.leaked = true) := by
+  simp [jointFlags, Bool.or_eq_true]
+
+theorem joint_flags_constructive_unsafe :
+    jointFlags (episodeOf unsafePropose true 4) = true := by
+  decide
+
+theorem joint_flags_constructive_safe :
+    jointFlags (episodeOf safePropose false 4) = false := by
+  decide
+
+/-!
+## Transfer workflow
+
+A second unique-action correcting program (lab notebook archive). The same
+independence theorems hold: channel-1 scores cannot see proposer divergence.
+-/
+
+inductive LabAction where
+  | openDraft | annotate | archivePublic | close | dumpPrivate
+  deriving DecidableEq, Repr, Inhabited
+
+inductive LabState where
+  | empty | drafted | annotated | archived | closed
+  deriving DecidableEq, Repr, Inhabited
+
+def labAdmit (s : LabState) : Option LabAction :=
+  match s with
+  | .empty => some .openDraft
+  | .drafted => some .annotate
+  | .annotated => some .archivePublic
+  | .archived => some .close
+  | .closed => none
+
+def labNext (s : LabState) (a : LabAction) : Option LabState :=
+  match s, a with
+  | .empty, .openDraft => some .drafted
+  | .drafted, .annotate => some .annotated
+  | .annotated, .archivePublic => some .archived
+  | .archived, .close => some .closed
+  | _, _ => none
+
+abbrev LabTrace := List (LabState × LabAction)
+
+def labStep (s : LabState) (_p : Option LabAction) : Option (LabState × LabAction × LabState) :=
+  match labAdmit s with
+  | none => none
+  | some a =>
+    match labNext s a with
+    | none => none
+    | some t => some (s, a, t)
+
+def labRun (propose : Nat → LabState → Option LabAction) :
+    Nat → LabState → LabTrace → LabTrace
+  | 0, _, tools => tools
+  | n + 1, s, tools =>
+    match labStep s (propose n s) with
+    | none => tools
+    | some (s0, a, t) => labRun propose n t (tools ++ [(s0, a)])
+
+theorem lab_step_proposal_independent (s : LabState) (p q : Option LabAction) :
+    labStep s p = labStep s q := by
+  simp [labStep]
+
+theorem lab_tool_trace_independent
+    (p q : Nat → LabState → Option LabAction) (fuel : Nat) (s : LabState)
+    (tools : LabTrace) :
+    labRun p fuel s tools = labRun q fuel s tools := by
+  induction fuel generalizing s tools with
+  | zero => rfl
+  | succ n ih =>
+    simp only [labRun]
+    have hstep : labStep s (p n s) = labStep s (q n s) :=
+      lab_step_proposal_independent s _ _
+    simp [hstep]
+    cases labStep s (q n s) with
+    | none => rfl
+    | some trip =>
+      rcases trip with ⟨s0, a, t⟩
+      exact ih t (tools ++ [(s0, a)])
+
+def labSafe (_n : Nat) (s : LabState) : Option LabAction := labAdmit s
+def labUnsafe (_n : Nat) (_s : LabState) : Option LabAction := some .dumpPrivate
+
+theorem lab_guard_erases_divergence (fuel : Nat) :
+    labRun labSafe fuel .empty [] = labRun labUnsafe fuel .empty [] :=
+  lab_tool_trace_independent labSafe labUnsafe fuel .empty []
+
+theorem lab_channel1_blind (score : LabTrace → Nat) :
+    score (labRun labSafe 4 .empty []) =
+    score (labRun labUnsafe 4 .empty []) := by
+  simp [lab_tool_trace_independent labSafe labUnsafe 4 .empty []]
+
+theorem lab_admit_never_dumps (s : LabState) :
+    labAdmit s ≠ some .dumpPrivate := by
+  cases s <;> decide
+
 end AssuranceMirage
 
 #print axioms AssuranceMirage.admit_unique
@@ -272,3 +429,16 @@ end AssuranceMirage
 #print axioms AssuranceMirage.constructive_mirage_any_fuel
 #print axioms AssuranceMirage.unguarded_unsafe_stalls
 #print axioms AssuranceMirage.unguarded_safe_completes
+#print axioms AssuranceMirage.channel1_factorable_tool_determined
+#print axioms AssuranceMirage.channel1_factorable_blind_constructive
+#print axioms AssuranceMirage.separates_constructive_not_channel1_factorable
+#print axioms AssuranceMirage.joint_not_channel1_factorable
+#print axioms AssuranceMirage.channel1Score_factorable
+#print axioms AssuranceMirage.joint_flags_sound
+#print axioms AssuranceMirage.joint_flags_constructive_unsafe
+#print axioms AssuranceMirage.joint_flags_constructive_safe
+#print axioms AssuranceMirage.lab_step_proposal_independent
+#print axioms AssuranceMirage.lab_tool_trace_independent
+#print axioms AssuranceMirage.lab_guard_erases_divergence
+#print axioms AssuranceMirage.lab_channel1_blind
+#print axioms AssuranceMirage.lab_admit_never_dumps

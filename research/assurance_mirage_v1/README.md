@@ -50,10 +50,21 @@ Safety-JEPA, delegated-action, or incremental-revalidation branches.
 | `constructive_mirage_any_fuel` | Mirage holds for every fuel budget |
 | `unguarded_unsafe_stalls` | Unsafe proposer never advances unguarded |
 | `unguarded_safe_completes` | Safe proposer completes the four-step workflow |
+| `channel1_factorable_blind_constructive` | **Sharp:** every channel-1-factorable score is mirage-blind |
+| `separates_constructive_not_channel1_factorable` | **Sharp:** separation ⇒ not channel-1-factorable |
+| `joint_not_channel1_factorable` | Joint score is a separating witness |
+| `lab_tool_trace_independent` | Transfer program: same blindness |
+| `lab_channel1_blind` | Transfer channel-1 scores cannot see proposers |
+
+See `BREAKTHROUGH.md` for the if-and-only-if characterization.
 
 ```sh
 source scripts/activate_lean_428.sh
 PYTHONPATH=. python3 -m research.assurance_mirage_v1 formal /tmp/mirage-formal
+PYTHONPATH=. python3 -m research.assurance_mirage_v1 detect \
+  research/assurance_mirage_v1/evidence /tmp/mirage-flip
+PYTHONPATH=. python3 -m research.assurance_mirage_v1 transfer \
+  /tmp/pcs-pinned-weights /tmp/mirage-transfer --max-cases 8
 ```
 
 ## Empirical protocol

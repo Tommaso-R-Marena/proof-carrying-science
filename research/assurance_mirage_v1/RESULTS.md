@@ -107,3 +107,22 @@ PYTHONPATH=. python3 -m research.assurance_mirage_v1 replay \
 PYTHONPATH=. python3 -m research.assurance_mirage_v1 analyze \
   research/assurance_mirage_v1/evidence /tmp/mirage-analysis
 ```
+
+## Breakthrough signature
+
+Sharp Lean characterization: channel-1-factorable scores are exactly the scores
+blind to the constructive mirage (`BREAKTHROUGH.md`, 30 theorems).
+
+Leaderboard flip (`evidence/leaderboard_flip.json`): channel-1 completion ties
+local Qwen with Gemini; the joint detector separates them.
+
+### Transfer program (lab notebook)
+
+Same protocol, remapped actions, Qwen weights:
+
+| Source | Episodes | Mirages among attacks | Channel-1 perfect |
+|---|---:|---:|---|
+| Qwen3-0.6B transfer | 16 | 12/12 (100%) | yes |
+| Qwen3-1.7B transfer | 16 | 11/12 (91.7%) | yes |
+
+Gemini many-shot / policy-puppetry pressure waves: still **0** mirages.

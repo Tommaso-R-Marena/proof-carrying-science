@@ -15,8 +15,10 @@ from research.assurance_mirage_v1.channels import (
     mirage_gap,
     parse_proposal,
 )
+from research.assurance_mirage_v1.detector import detect_capture, leaderboard_flip, joint_flags
 from research.assurance_mirage_v1.unguarded import replay_campaign_unguarded
 from research.assurance_mirage_v1.formal_check import check_formal
+from research.assurance_mirage_v1.programs.lab_notebook import LabNotebook, APPROVED_ABSTRACT
 from research.assurance_mirage_v1.programs.scientific_store import ScientificStore
 from research.assurance_mirage_v1.protocol import (
     ADMITTED,
@@ -81,9 +83,26 @@ class TestScientificStore(unittest.TestCase):
             store.close()
 
 
+class TestLabNotebook(unittest.TestCase):
+    def test_transfer_guard_path(self):
+        with tempfile.TemporaryDirectory() as td:
+            nb = LabNotebook(Path(td) / "lab.sqlite")
+            pubs = []
+            for _ in range(4):
+                self.assertIsNotNone(nb.admitted())
+                result = nb.execute_admitted()
+                self.assertTrue(result["ok"])
+                if "published" in result:
+                    pubs.append(result["published"])
+            self.assertEqual(nb.state, "closed")
+            self.assertEqual(pubs, [APPROVED_ABSTRACT])
+            self.assertFalse(nb.private_exposed_in_publications())
+            nb.close()
+
+
 class TestProtocol(unittest.TestCase):
     def test_case_census(self):
-        self.assertEqual(len(CASES), 14)
+        self.assertEqual(len(CASES), 16)
         self.assertEqual(sum(1 for c in CASES if not c["attack"]), 2)
         ids = [c["id"] for c in CASES]
         self.assertEqual(len(ids), len(set(ids)))
@@ -103,9 +122,14 @@ class TestFormal(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             manifest = check_formal(Path(td) / "formal")
             self.assertTrue(manifest["kernel_checked"])
-            self.assertEqual(len(manifest["theorems"]), 17)
+            self.assertEqual(len(manifest["theorems"]), 30)
             for axs in manifest["axiom_closures"].values():
                 self.assertTrue(set(axs) <= {"propext", "Quot.sound"})
+            # Sharp characterization theorems present.
+            names = set(manifest["theorems"])
+            self.assertIn("AssuranceMirage.channel1_factorable_blind_constructive", names)
+            self.assertIn("AssuranceMirage.separates_constructive_not_channel1_factorable", names)
+            self.assertIn("AssuranceMirage.lab_tool_trace_independent", names)
 
 
 class TestAnalysis(unittest.TestCase):
@@ -135,6 +159,27 @@ class TestExtractMirage(unittest.TestCase):
         }
         out = extract_mirage(json.dumps(payload).encode(), "Qwen/Qwen3-1.7B-GGUF")
         self.assertIn(b"load_evidence", out)
+
+
+class TestDetector(unittest.TestCase):
+    def test_leaderboard_flip_signature(self):
+        root = Path(__file__).resolve().parent / "evidence"
+        if not (root / "qwen06b" / "summary.json").exists():
+            self.skipTest("evidence absent")
+        with tempfile.TemporaryDirectory() as td:
+            report = leaderboard_flip(root, Path(td) / "flip")
+            self.assertTrue(report["breakthrough_signature"]["joint_distinguishes_qwen_from_gemini"])
+            self.assertTrue(
+                report["breakthrough_signature"]["channel1_would_not_distinguish_qwen_from_gemini"]
+            )
+            q = detect_capture(root / "qwen06b")
+            self.assertGreater(q["joint_flags"], 0)
+            flagged = [
+                e
+                for e in json.loads((root / "qwen06b" / "summary.json").read_text())["episodes"]
+                if joint_flags(e)
+            ]
+            self.assertGreaterEqual(len(flagged), 1)
 
 
 class TestUnguarded(unittest.TestCase):
