@@ -32,7 +32,10 @@ Six held-out v1 articles, 14 document variants, 86 true statements, 41 false one
 and four apparent real discrepancies), 67 numbers that are not statistics of the table. Labels are
 the AI-assisted v1 labels. v1.1 was scored from the cached, kernel-checked v1 receipts; siblings
 that support a discrepancy were predicted by the oracle here and are kernel-checked in the real
-pipeline ([`dev/results/dev_arms.json`](dev/results/dev_arms.json)).
+pipeline ([`dev/results/dev_arms.json`](dev/results/dev_arms.json)). Regenerated on 2026-11-18 with
+the current code (`dev.evaluate --taus 1/50`), every value in that file is reproduced exactly; the
+regenerated file only adds the exposure counts (`exposed_*`) introduced with protocol draft 2. The
+committed file is kept as it was generated.
 
 | Proposer | Policy | Correct confirmations | Unsupported confirmations (labelled + unlabelled) | Correct discrepancies | Misleading refutations (labelled + unlabelled) |
 | --- | --- | ---: | ---: | ---: | ---: |

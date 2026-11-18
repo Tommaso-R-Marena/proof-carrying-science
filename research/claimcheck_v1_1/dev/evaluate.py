@@ -4,7 +4,10 @@
 
 1. Re-scores every v1 arm (rules, search, Gemini, Nemotron) under v1.1 from the cached, kernel-
    checked v1 receipts.  No Lean, no network.  Sibling corroboration uses oracle-predicted siblings
-   (marked); the verification pipeline kernel-checks them instead.
+   (marked); the verification pipeline kernel-checks them instead.  Documents without cached kernel
+   receipts are scored from oracle-predicted receipts (listed in the output), which the policy
+   accepts only with the development switch ``oracle_receipts=True`` passed below; without it they
+   would silently decide nothing (``tests/test_oracle_opt_in.py``).
 2. Reports coverage lost, and false confirmations and false accusations separately.
 """
 from __future__ import annotations
@@ -115,7 +118,7 @@ def run(taus: list[Fraction]) -> dict:
                     oracle_only.add(doc.key)
                 table["v1"].setdefault(arm, Counter()).update(classes(doc, v1_outcomes(doc, receipts)))
                 for t in taus:
-                    decisions = assess_document(ctx, receipts, tau=t, oracle_siblings=True)
+                    decisions = assess_document(ctx, receipts, tau=t, oracle_siblings=True, oracle_receipts=True)
                     key = f"v1.1 tau={t}"
                     table[key].setdefault(arm, Counter()).update(classes(doc, token_outcomes_v11(doc, receipts, decisions)))
                     verdict_counts[key].setdefault(arm, Counter()).update(d["verdict"] for d in decisions)
