@@ -1,13 +1,21 @@
 """Hardened independent certificate checker (schema v1).
 
 Does not import scientific_reasoning.evaluator.
+Uses shared `meet_tables` (RANK/TIE) so meet cannot drift from the library.
 Reconstructs every judgment from rules + citations; does not trust claimed outputs.
 """
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict, List, Set
+
+# Shared meet tables (single source of truth with python/scientific_reasoning).
+_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(_ROOT / "python"))
+from scientific_reasoning.meet_tables import RANK, TIE_ORDER, meet_str  # noqa: E402
 
 SCHEMA_VERSION = 1
 MAX_PREMISES = 256
@@ -15,24 +23,6 @@ MAX_STEPS = 1024
 MAX_DEPTH = 64
 MAX_PROPID = 2_147_483_647
 MAX_JSON_BYTES = 1_000_000
-
-RANK = {
-    "disputed": 0,
-    "hypothesis": 1,
-    "empiricalAsserted": 2,
-    "assumption": 2,
-    "derived": 3,
-    "mathVerified": 4,
-}
-
-TIE_ORDER = {
-    "disputed": 0,
-    "hypothesis": 1,
-    "assumption": 2,
-    "empiricalAsserted": 3,
-    "derived": 4,
-    "mathVerified": 5,
-}
 
 ALLOWED_TOP = {
     "schema_version",
@@ -67,13 +57,10 @@ class CheckError(Exception):
 
 
 def meet(a: str, b: str) -> str:
-    if a not in RANK or b not in RANK:
-        raise CheckError("bad authority in meet")
-    if RANK[a] < RANK[b]:
-        return a
-    if RANK[b] < RANK[a]:
-        return b
-    return a if TIE_ORDER[a] <= TIE_ORDER[b] else b
+    try:
+        return meet_str(a, b)
+    except ValueError as e:
+        raise CheckError("bad authority in meet") from e
 
 
 @dataclass

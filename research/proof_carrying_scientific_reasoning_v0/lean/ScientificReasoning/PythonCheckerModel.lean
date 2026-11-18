@@ -1,75 +1,73 @@
-import ScientificReasoning.CheckCertificate
+import ScientificReasoning.Surface
 
 /-!
 # Lean model of the Python schema-v1 checker
 
-This module names the *structured* algorithm implemented by
-`independent_checker/check_certificate_v1.py` (unique ids, LTR step
-reconstruction, conclusion index) as Lean definitions.
+`checkCertificatePy` is the **surface** checker (`checkSurface`), matching
+`independent_checker/check_certificate_v1.check` after JSON parse:
 
-**Important honesty:** `checkCertificatePy` is currently definitional
-(`:= checkCertificate`). That is intentional: the Python LTR core was written
-to match Lean `checkStep`/`checkStepsLTR`. The JSON *surface* (schema version,
-unknown keys, `step.id == index`, claimed-field checks) is **not** modelled
-here — see `verification/EQUIVALENCE_BREAKS.md`.
+- schema version, size bounds, unique premise ids, step id = index
+- LTR reconstruction (`checkStepsLTR`)
+- claimed field checks + reject `math_established = true`
 
-**Claim boundary:** algorithm-level Lean check ≠ CPython/`json.loads` proof.
+**Irreducible boundary:** `json.loads` / CPython / OS I/O are not modelled.
 
-See `verification/PYTHON_LEAN_EQUIVALENCE.md`.
+For core-only certificates, `checkSurface_iff_checkCertificate` relates surface
+acceptance to `checkCertificate` under size bounds.
 -/
 
 namespace ScientificReasoning.PythonModel
 
 open ScientificReasoning
 
-/-- Python `meet` (rank-min + tie-break) — identical to `Authority.meet`. -/
-def meetPy (a b : Authority) : Authority := Authority.meet a b
+/-- Python-model entrypoint = Lean surface checker. -/
+def checkCertificatePy (c : SurfaceCertificate) : Option VerifiedJudgment :=
+  checkSurface c
 
-theorem meetPy_eq : meetPy = Authority.meet := rfl
+theorem checkCertificatePy_eq_surface :
+    checkCertificatePy = checkSurface := rfl
 
-/-- Python step reconstruction (same cases as `checkStep`). -/
-def checkStepPy (ps : List Premise) (prior : List VerifiedJudgment) (st : StepSpec) :
-    Option VerifiedJudgment :=
-  checkStep ps prior st
-
-theorem checkStepPy_eq : checkStepPy = checkStep := rfl
-
-/-- Python left-to-right accumulation over steps. -/
-def checkStepsPy (ps : List Premise) (steps : List StepSpec) : Option (List VerifiedJudgment) :=
-  checkStepsLTR ps steps
-
-theorem checkStepsPy_eq : checkStepsPy = checkStepsLTR := rfl
-
-/-- Full Python structured checker (unique premise ids + steps + conclusion). -/
-def checkCertificatePy (c : StructuredCertificate) : Option VerifiedJudgment :=
-  checkCertificate c
-
-/-- Definitional equivalence: the Python-model entrypoint *is* the Lean checker. -/
-theorem checkCertificatePy_eq_lean :
-    checkCertificatePy = checkCertificate := rfl
-
-/-- Acceptance by the Python-model algorithm yields a formal derivation. -/
 theorem checkCertificatePy_sound
-    (c : StructuredCertificate) (j : VerifiedJudgment)
+    (c : SurfaceCertificate) (j : VerifiedJudgment)
     (h : checkCertificatePy c = some j) :
-    Derives c.toContext j.support j.assurance.declared j.formula :=
-  checkCertificate_sound c j (by simpa [checkCertificatePy] using h)
+    Derives c.erase.toContext j.support j.assurance.declared j.formula :=
+  checkSurface_sound c j h
 
-/-- Python-model acceptance never sets mathEstablished. -/
+theorem checkCertificatePy_entails4
+    (c : SurfaceCertificate) (j : VerifiedJudgment)
+    (h : checkCertificatePy c = some j) :
+    Belnap.Entails4 c.erase.toContext j.formula :=
+  checkSurface_entails4 c j h
+
 theorem checkCertificatePy_mathEstablished_false
-    (c : StructuredCertificate) (j : VerifiedJudgment)
+    (c : SurfaceCertificate) (j : VerifiedJudgment)
     (h : checkCertificatePy c = some j) :
     j.assurance.mathEstablished = false :=
-  checkCertificate_mathEstablished_false c j (by simpa [checkCertificatePy] using h)
+  checkSurface_mathEstablished_false c j h
 
-/-- Python-model acceptance implies unique premise ids. -/
 theorem checkCertificatePy_unique_ids
-    (c : StructuredCertificate) (j : VerifiedJudgment)
+    (c : SurfaceCertificate) (j : VerifiedJudgment)
     (h : checkCertificatePy c = some j) :
     uniquePremiseIds c.premises = true :=
-  checkCertificate_requires_unique_ids c j (by simpa [checkCertificatePy] using h)
+  checkSurface_requires_unique_ids c j h
+
+theorem checkCertificatePy_implies_core
+    (c : SurfaceCertificate) (j : VerifiedJudgment)
+    (h : checkCertificatePy c = some j) :
+    checkCertificate c.erase = some j :=
+  checkSurface_implies_checkCertificate c j h
+
+/-- Core ↔ surface for canonical embeddings (bounded, non-empty). -/
+theorem checkCertificatePy_iff_core
+    (c : StructuredCertificate) (j : VerifiedJudgment)
+    (hne : c.steps ≠ [])
+    (hprem : c.premises.length ≤ maxPremises)
+    (hsteps : c.steps.length ≤ maxSteps) :
+    checkCertificatePy c.toSurface = some j ↔ checkCertificate c = some j :=
+  checkSurface_iff_checkCertificate c j hne hprem hsteps
 
 end ScientificReasoning.PythonModel
 
-#print axioms ScientificReasoning.PythonModel.checkCertificatePy_eq_lean
+#print axioms ScientificReasoning.PythonModel.checkCertificatePy_eq_surface
 #print axioms ScientificReasoning.PythonModel.checkCertificatePy_sound
+#print axioms ScientificReasoning.PythonModel.checkCertificatePy_iff_core

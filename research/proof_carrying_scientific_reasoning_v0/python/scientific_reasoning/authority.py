@@ -1,25 +1,10 @@
 from __future__ import annotations
 
+from .meet_tables import RANK as _RANK_STR, TIE_ORDER as _TIE_STR, meet_str
 from .syntax import Authority
 
-_RANK = {
-    Authority.disputed: 0,
-    Authority.hypothesis: 1,
-    Authority.empiricalAsserted: 2,
-    Authority.assumption: 2,
-    Authority.derived: 3,
-    Authority.mathVerified: 4,
-}
-
-# Finding G: commutative tie-break when ranks equal
-_TIE = {
-    Authority.disputed: 0,
-    Authority.hypothesis: 1,
-    Authority.assumption: 2,
-    Authority.empiricalAsserted: 3,
-    Authority.derived: 4,
-    Authority.mathVerified: 5,
-}
+_RANK = {Authority[k]: v for k, v in _RANK_STR.items()}
+_TIE = {Authority[k]: v for k, v in _TIE_STR.items()}
 
 
 def rank(a: Authority) -> int:
@@ -27,8 +12,4 @@ def rank(a: Authority) -> int:
 
 
 def meet(a: Authority, b: Authority) -> Authority:
-    if rank(a) < rank(b):
-        return a
-    if rank(b) < rank(a):
-        return b
-    return a if _TIE[a] <= _TIE[b] else b
+    return Authority(meet_str(a.value, b.value))

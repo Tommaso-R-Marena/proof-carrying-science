@@ -22,6 +22,10 @@ Lean **4.28.0**. No `sorry` / `admit` / custom axioms.
 | **`demoΓ_classically_unsatisfiable` / `classical_entails_atom99_demoΓ`** | Contradictions | Classical Entails explodes on demoΓ | propext |
 | **`not_entails4_atom99_demoΓ`** | Belnap | Entails4 does **not** explode on demoΓ | propext |
 | **`traceValid_implies_derives` / `traceValid_implies_entails4`** | CheckCertificate / Belnap | Finding D: executable trace validity | propext |
+| **`checkSurface` / `checkSurface_iff_checkCertificate`** | Surface | Surface WF+claims ↔ core (bounded) | propext, Quot.sound |
+| **`checkCertificatePy_eq_surface`** | PythonCheckerModel | Python model = `checkSurface` | none (rfl) |
+| **`hyp_mathVerified_not_established`** | Surface | Finding F (Hyp): declared ≠ established | propext |
+| **`meet_truth_table`** | Authority | Exhaustive meet lock | none |
 
 See `PYTHON_LEAN_EQUIVALENCE.md` and `EQUIVALENCE_BREAKS.md`.
 

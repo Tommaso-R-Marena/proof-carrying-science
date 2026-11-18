@@ -51,6 +51,25 @@ theorem meet_rank_le (a b : Authority) :
     (Authority.meet a b).rank ≤ min a.rank b.rank :=
   Nat.le_min.2 ⟨meet_le_left a b, meet_le_right a b⟩
 
+/-- Exhaustive 6×6 meet table (locks Finding G / Python meet_tables). -/
+theorem meet_truth_table :
+    (∀ b, Authority.meet .disputed b = .disputed) ∧
+    (Authority.meet .hypothesis .disputed = .disputed) ∧
+    (Authority.meet .hypothesis .hypothesis = .hypothesis) ∧
+    (Authority.meet .hypothesis .empiricalAsserted = .hypothesis) ∧
+    (Authority.meet .hypothesis .assumption = .hypothesis) ∧
+    (Authority.meet .hypothesis .derived = .hypothesis) ∧
+    (Authority.meet .hypothesis .mathVerified = .hypothesis) ∧
+    (Authority.meet .assumption .empiricalAsserted = .assumption) ∧
+    (Authority.meet .empiricalAsserted .assumption = .assumption) ∧
+    (Authority.meet .empiricalAsserted .mathVerified = .empiricalAsserted) ∧
+    (Authority.meet .assumption .mathVerified = .assumption) ∧
+    (Authority.meet .derived .mathVerified = .derived) ∧
+    (Authority.meet .mathVerified .mathVerified = .mathVerified) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro b; cases b <;> decide
+  all_goals decide
+
 /-- Declared authority is untrusted; mathEstablished is never set by Hyp from labels. -/
 structure Assurance where
   declared : Authority
@@ -65,3 +84,7 @@ def Assurance.hypDeclared (a : Authority) : Assurance :=
   { declared := a, mathEstablished := false }
 
 end ScientificReasoning
+
+#print axioms ScientificReasoning.meet_comm
+#print axioms ScientificReasoning.meet_truth_table
+

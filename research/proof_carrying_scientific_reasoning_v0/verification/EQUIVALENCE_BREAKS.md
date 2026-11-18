@@ -1,27 +1,28 @@
-# Where Python ↔ Lean equivalence breaks (and what we did)
+# Where Python ↔ Lean equivalence breaks (closed vs irreducible)
 
-Living catalog for Phase IV+. Exclusive path only.
+Exclusive path only. Status after Phase IV++.
 
-## Fixed / kernel-separated
+## Closed (kernel-checked and/or single-source locked)
 
-| Break | Symptom | Fix |
-|---|---|---|
-| **Classical `Entails` explosion** | Inconsistent `demoΓ` classically entails atom 99 | Proved `classical_entails_atom99_demoΓ` **and** `¬ Entails4 demoΓ (atom 99)`. Do not advertise paraconsistency via classical `Entails`. |
-| **Finding D abstract `Certificate.valid`** | Steps ignored | Prefer `StructuredCertificate.traceValid` (`∃ j, checkCertificate = some j`) + `traceValid_implies_derives` / `traceValid_implies_entails4`. |
-| **Core LTR loop** | hyp/andI/andE reconstruction | Covered by `compile_ok`, `derives_iff_python_certificate`, differential harness. |
+| Break | Resolution |
+|---|---|
+| Classical `Entails` explosion | `classical_entails_atom99_demoΓ` vs `¬ Entails4 demoΓ (atom 99)` |
+| Finding D abstract `Certificate.valid` | `StructuredCertificate.traceValid` + surface/core soundness |
+| Core LTR loop | `compile_ok`, `derives_iff_core_certificate` |
+| **JSON-shaped surface WF** | Lean `checkSurface` / `checkCertificatePy`: schema, sizes, step ids, claims, math_established reject; `checkSurface_iff_checkCertificate` |
+| **`checkCertificatePy` was bare rfl** | Now `:= checkSurface` (full surface model) |
+| **Duplicate meet tables** | Single source `python/scientific_reasoning/meet_tables.py`; Lean `meet_truth_table` |
+| **Finding F (Hyp path)** | `hyp_mathVerified_not_established`: declared mathVerified ∧ ¬mathEstablished |
 
-## Still broken / trust-boundary (not claimed)
+## Irreducible trust boundary (not claimed)
 
-| Break | Where it fails | Status |
-|---|---|---|
-| **JSON surface ≠ Lean AST** | `check_certificate_v1.parse_certificate_json`, unknown keys, bool-as-int, size limits, `step.id == index` | Unproved. Lean starts at `StructuredCertificate`. Differential tests cover WF rejects on Python only. |
-| **`checkCertificatePy = checkCertificate` is rfl** | `PythonCheckerModel.lean` | Models the **structured algorithm**, not CPython/`json.loads`. Documented in `PYTHON_LEAN_EQUIVALENCE.md`. |
-| **Duplicate `meet` tables** | `v1.RANK/TIE` vs `authority._RANK/_TIE` | Independent checker must not import evaluator libs; **exhaustive cross-check test** must keep them locked. |
-| **Declared `mathVerified`** | Hyp copies declared authority; `math_established` forced false | Finding F — policy. Accept ≠ math attestation. |
-| **No JSON→`StructuredCertificate` decoder in Lean** | Production path is Python `check()` | Future: Lean decoder + `decode_ok → checkCertificate`. |
+| Boundary | Why it remains |
+|---|---|
+| **`json.loads` / CPython / OS I/O** | Bytes → AST is outside the Lean object language; surface model starts at the post-parse graph |
+| **External math attestation** | Labels never become `mathEstablished` without an out-of-band attestation channel (policy) |
 
 ## Test locks
 
-- `tests/test_equivalence_breaks.py` — classical vs Entails4 story in Python terms; meet lock; WF rejects; andE-on-atom reject.
-- `tests/test_python_lean_differential.py` — accept-path LTR ↔ v1.
-- `adversarial/test_mutations_v1.py` — forged citations / claim escalation.
+- `tests/test_equivalence_breaks.py` — meet lock, WF rejects, Finding F behavior
+- `tests/test_python_lean_differential.py` — LTR ↔ v1 accept path
+- `adversarial/test_mutations_v1.py` — forged citations

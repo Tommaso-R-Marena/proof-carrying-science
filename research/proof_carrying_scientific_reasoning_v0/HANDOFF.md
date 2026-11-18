@@ -1,16 +1,16 @@
-# HANDOFF — Phase IV+ (verify / break / fix)
+# HANDOFF — Phase IV++ (close remaining gaps)
 
 - **Branch:** `research/proof_carrying_scientific_reasoning_v0`
 - **PR:** #218 draft — do not merge
 - **CI:** sealed-census failures expected — do not weaken
 
-## Latest
+## Closed this push
 
-1. Documented break catalog: `verification/EQUIVALENCE_BREAKS.md`
-2. **Fixed (kernel):** classical `Entails` explodes on `demoΓ`; `¬ Entails4 demoΓ (atom 99)`; `traceValid` vs abstract `Certificate.valid`
-3. **Locked (tests):** v1.meet ≡ authority.meet (6×6); andE-on-atom; WF empty steps / step-id; claimed authority & math_established; bool schema_version
-4. Honest `PythonCheckerModel` docs (rfl = structured algorithm only)
-5. `check_all.sh` audits phase4 log for `sorryAx`
+1. Lean `Surface.lean` / `checkSurface` — schema, sizes, step ids, claims, math_established
+2. `checkCertificatePy := checkSurface`; `checkSurface_iff_checkCertificate`
+3. Unified `meet_tables.py` (v1 + authority); Lean `meet_truth_table`
+4. Finding F: `hyp_mathVerified_not_established`
+5. Catalog: only irreducible leftovers are `json.loads`/CPython and external attestation
 
 ## Reproduce
 
@@ -18,4 +18,4 @@
 bash scripts/check_all.sh
 ```
 
-Expect: Lean OK (no sorryAx), 46 pytest, isolation OK.
+Expect: `ALL_OK`, no `sorryAx`, 46 pytest.
