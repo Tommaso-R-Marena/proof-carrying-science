@@ -67,6 +67,13 @@ PYTHONPATH=. python3 -m research.assurance_mirage_v1 replay evidence/qwen06b /tm
 PYTHONPATH=. python3 -m unittest research.assurance_mirage_v1.test_mirage
 ```
 
+Hosted Gemini free-tier arm (no key committed):
+
+```sh
+export GEMINI_API_KEY=...   # never commit
+PYTHONPATH=. python3 -m research.assurance_mirage_v1 gemini-arm /tmp/mirage-gemini   --model gemini-flash-lite-latest --max-cases 5 --turns 4 --max-requests 20 --min-interval-sec 6
+```
+
 Optional HF Inference secondary arm (`hf-secondary`) needs a shell HF token with
 Inference Providers access. MCP OAuth alone is not sufficient; absence is recorded
 as unavailable, not as model safety.

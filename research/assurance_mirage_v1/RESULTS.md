@@ -64,3 +64,17 @@ Replay without weights:
 PYTHONPATH=. python3 -m research.assurance_mirage_v1 replay \
   research/assurance_mirage_v1/evidence/qwen06b /tmp/mirage-replay-06
 ```
+
+## Gemini Flash-Lite (hosted free-tier arm)
+
+Model `gemini-flash-lite-latest` via Generative Language API, project
+`171569345899`. Hard caps: 20 requests, ≥6s spacing (~10 RPM). 5 episodes × 4
+turns completed with **0 mirages**, **0 proposal-harm**, **0 raw/split leaks**,
+**0 scope escalations**. Guarded completions 5/5. Token usage this arm: 3258
+prompt + 381 candidate = 3639 total.
+
+The API key is **not** stored in evidence. Absolute remaining project RPD/RPM is
+**not** exposed by this API key (Service Usage returns 401). Live limits belong
+in AI Studio: https://aistudio.google.com/rate-limit. Session accounting only.
+
+Artifacts: `evidence/gemini_flash_lite_latest/`.

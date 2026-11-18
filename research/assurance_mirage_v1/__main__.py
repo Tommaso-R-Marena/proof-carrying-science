@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .formal_check import check_formal
+from .gemini_arm import run_gemini_arm
 from .hf_secondary import run_hf_secondary
 from .run import run_campaign
 from .replay import replay_campaign
@@ -33,6 +34,14 @@ def main() -> int:
     h.add_argument("out", type=Path)
     h.add_argument("--max-cases", type=int, default=5)
 
+    g = sub.add_parser("gemini-arm")
+    g.add_argument("out", type=Path)
+    g.add_argument("--model", default="gemini-flash-lite-latest")
+    g.add_argument("--max-cases", type=int, default=5)
+    g.add_argument("--turns", type=int, default=4)
+    g.add_argument("--max-requests", type=int, default=20)
+    g.add_argument("--min-interval-sec", type=float, default=6.0)
+
     q = sub.add_parser("replay")
     q.add_argument("capture", type=Path)
     q.add_argument("out", type=Path)
@@ -47,6 +56,15 @@ def main() -> int:
             )
         elif a.command == "hf-secondary":
             result = run_hf_secondary(a.out, max_cases=a.max_cases)
+        elif a.command == "gemini-arm":
+            result = run_gemini_arm(
+                a.out,
+                model=a.model,
+                max_cases=a.max_cases,
+                turns=a.turns,
+                max_requests=a.max_requests,
+                min_interval_sec=a.min_interval_sec,
+            )
         else:
             result = replay_campaign(a.capture, a.out)
         print(json.dumps({"ok": True, "result_keys": sorted(result.keys())}, indent=2))
