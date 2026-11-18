@@ -558,6 +558,90 @@ def build_tasks() -> Tuple[Task, ...]:
         )
     )
 
+    # T10: instrumental variable Z→X→Y with U→X,U→Y. U unobserved → backdoor fails;
+    # Z is a valid instrument; Balke–Pearl bounds (typically not point ID).
+    g10 = CausalDAG.from_edges(
+        ["U", "Z", "X", "Y"],
+        [("Z", "X"), ("X", "Y"), ("U", "X"), ("U", "Y")],
+    )
+    scm10 = BinarySCM(
+        g10,
+        {
+            "U": bernoulli(Fraction(1, 2)),
+            "Z": bernoulli(Fraction(1, 2)),
+            "X": logistic_from_parents(
+                {"Z": Fraction(1, 3), "U": Fraction(1, 3)}, Fraction(1, 6)
+            ),
+            "Y": logistic_from_parents(
+                {"X": Fraction(1, 4), "U": Fraction(1, 3)}, Fraction(1, 8)
+            ),
+        },
+    )
+    tasks.append(
+        Task(
+            task_id="T10",
+            title="Instrumental variable with Balke–Pearl bounds",
+            domain="instrument",
+            prompt=(
+                "You are evaluating a causal identification query under an explicit DAG.\n"
+                "Variables: U, X, Y, Z\n"
+                "Directed edges: U->X, U->Y, X->Y, Z->X\n"
+                "U is unobserved. Empty backdoor adjustment fails. Z is a candidate instrument "
+                "for the effect of X on Y.\n"
+                "Under standard IV assumptions the effect is typically only partially identified; "
+                "report asserts_identifiable=false with strategy \"instrument\" and "
+                "adjustment_set [\"Z\"] to request Balke–Pearl bounds certification.\n"
+                "Respond with ONLY JSON:\n"
+                "{\n"
+                '  "treatment": "X",\n'
+                '  "outcome": "Y",\n'
+                '  "asserts_identifiable": false,\n'
+                '  "strategy": "instrument",\n'
+                '  "adjustment_set": ["Z"],\n'
+                '  "claimed_p_do": null,\n'
+                '  "asserts_association_equals_effect": false\n'
+                "}\n"
+            ),
+            graph=g10,
+            scm=scm10,
+            treatment="X",
+            outcome="Y",
+            identifiable=False,  # not point-identified without U / extra assumptions
+            notes=(
+                "Z is a valid instrument",
+                "Balke–Pearl bounds contain true P(Y|do(X))",
+                "backdoor empty fails; backdoor {U} would point-identify if U observed",
+            ),
+            allowed_strategies=("instrument", "backdoor"),
+            control_claims=(
+                _claim(
+                    "T10",
+                    "X",
+                    "Y",
+                    asserts_identifiable=False,
+                    adjustment_set=["Z"],
+                    strategy="instrument",
+                ),
+                _claim(
+                    "T10",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    adjustment_set=[],
+                    strategy="backdoor",
+                ),
+                _claim(
+                    "T10",
+                    "X",
+                    "Y",
+                    asserts_identifiable=False,
+                    adjustment_set=["U"],
+                    strategy="instrument",
+                ),
+            ),
+        )
+    )
+
     return tuple(tasks)
 
 

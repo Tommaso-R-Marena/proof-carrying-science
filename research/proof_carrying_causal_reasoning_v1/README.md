@@ -46,9 +46,11 @@ Lean (optional, after `source scripts/activate_lean_428.sh`):
 cd research/proof_carrying_causal_reasoning_v1/lean && lake build
 ```
 
-Lean now includes inductive confounder/collider/mediation proofs, an abstract
-non-identifiability theorem, and an exact-rational confounder SCM with
-`backdoor = do` plus correlation≠causation (see `RESULTS.md`).
+Lean now includes inductive confounder/collider/mediation/front-door/IV proofs,
+do-calculus Rule-2 context packs, an abstract non-identifiability theorem, and
+an exact-rational confounder SCM with `backdoor = do` plus correlation≠causation
+(see `RESULTS.md`). Certificates carry strategy-specific assumptions and
+`formal_bindings` naming the concrete Lean theorems for the suite graphs.
 
 ## Live local models (GGUF)
 
@@ -94,6 +96,7 @@ Results are local measurements, not an official leaderboard.
 | T07 | mechanisms-toy | fork into mediator + treatment |
 | T08 | spurious-correlation | association without causation |
 | T09 | frontdoor | latent confounder; identify via mediator M |
+| T10 | instrument | IV Z→X; Balke–Pearl bounds (partial ID) |
 | P01 | program-systems | request-routing feature flag → latency |
 | P02 | program-systems | CI flaky → pass |
 

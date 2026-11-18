@@ -86,7 +86,7 @@ program-grounded traps on this small battery under identical certificates.
 | Lean `Mutilate` | do(X) edge characterization on confounder graph |
 | Lean↔Python bridge | SCMConfounder closed forms `3/8`, `5/12`, ATE `1/8` agree |
 
-Unit tests: **25/25** pass.
+Unit tests: **25/25** pass (superseded by v1.3 count below).
 
 ## Gemini stress (rate-limited follow-up)
 
@@ -98,6 +98,25 @@ string into `claimed_p_do` instead of a rational or `null`; parser fail-closed
 as malformed (evidence: `evidence/gemini-3.1-flash-lite-t09/`). This is a
 retained negative finding, not a model ranking.
 
+## Instrumental variables + Balke–Pearl (v1.3)
+
+| Addition | Status |
+|----------|--------|
+| Python graphical IV checks (relevance / exclusion / exogeneity) | pass |
+| Exact rational Balke–Pearl response-type LP (sharp ATE bounds) | pass; ~5s suite |
+| Task T10 (Z→X→Y, U→X,U→Y; partial ID) | controls + oracle green |
+| `bounds_certified` verdict + strategy-specific assumptions | pass |
+| Certificate `formal_bindings` → Lean theorem names | pass |
+| Lean `InstrumentInd` | relevance, exclusion, do(X) exogeneity lite, U fails exclusion |
+| Lean `DoCalc` Rule-2 context pack | pass |
+| Point-ID regression (deterministic X:=Z collapses bounds) | pass |
+
+Unit tests: **35/35** pass.
+
+Gemini `gemini-3.5-flash-lite` on `{T10,T09,T06}`: **3/3** accepted
+(evidence: `evidence/gemini-3.5-flash-lite-iv-v3/`). T10 emitted
+`strategy=instrument` with `asserts_identifiable=false` → `bounds_certified`.
+
 ## Non-claims
 
 - Not production PCS authority
@@ -105,3 +124,7 @@ retained negative finding, not a model ranking.
 - API key material is absent from the repository and evidence files
 - Front-door Lean module certifies concrete graphical side-conditions, not
   full probabilistic soundness of the front-door functional in Lean
+- Instrument Lean module certifies concrete IV side-conditions, not sharp
+  Balke–Pearl polytope soundness in Lean; the LP lives in Python
+- `formal_bindings` name suite-instance theorems; they do not transfer to
+  arbitrary DAGs

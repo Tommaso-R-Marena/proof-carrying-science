@@ -5,6 +5,8 @@ import PcsPccr.ConfounderInd
 import PcsPccr.ColliderInd
 import PcsPccr.MediationInd
 import PcsPccr.FrontDoorInd
+import PcsPccr.InstrumentInd
+import PcsPccr.DoCalc
 import PcsPccr.NonIdent
 import PcsPccr.NonIdentSCM
 import PcsPccr.SCMConfounder

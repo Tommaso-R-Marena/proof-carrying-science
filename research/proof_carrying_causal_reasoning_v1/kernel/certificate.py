@@ -14,9 +14,18 @@ from dataclasses import dataclass
 from fractions import Fraction
 from typing import FrozenSet, List, Optional, Sequence, Tuple
 
-from .backdoor import verify_backdoor_set, find_minimal_backdoor_sets, ASSUMPTIONS
-from .frontdoor import verify_frontdoor_set
-from .dag import CausalDAG
+from .backdoor import (
+    verify_backdoor_set,
+    find_minimal_backdoor_sets,
+    ASSUMPTIONS as BACKDOOR_ASSUMPTIONS,
+)
+from .frontdoor import verify_frontdoor_set, ASSUMPTIONS as FRONTDOOR_ASSUMPTIONS
+from .instrument import (
+    verify_instrument,
+    balke_pearl_bounds,
+    ASSUMPTIONS as INSTRUMENT_ASSUMPTIONS,
+)
+from .dag import CausalDAG, GraphError
 from .scm import BinarySCM
 
 
@@ -29,10 +38,42 @@ ALLOWED_VERDICTS = (
     "malformed",
     "positivity_failure",
     "intervention_mismatch",
+    "bounds_certified",
 )
 
-ALLOWED_STRATEGIES = ("backdoor", "frontdoor")
+ALLOWED_STRATEGIES = ("backdoor", "frontdoor", "instrument")
 
+# Concrete Lean theorem names bound to suite graph instances (not general soundness).
+FORMAL_BINDINGS = {
+    "backdoor": (
+        "PcsPccr.ConfounderInd.Z_satisfies_backdoor",
+        "PcsPccr.DoCalc.confounder_pack_backdoor",
+        "PcsPccr.SCMConfounder.backdoor_matches_do_X1_Y1",
+    ),
+    "frontdoor": (
+        "PcsPccr.FrontDoorInd.m_frontdoor_intercepts",
+        "PcsPccr.FrontDoorInd.m_frontdoor_no_direct",
+        "PcsPccr.FrontDoorInd.m_frontdoor_U_not_to_M",
+    ),
+    "instrument": (
+        "PcsPccr.InstrumentInd.z_instrument_relevance",
+        "PcsPccr.InstrumentInd.exclusion_no_Z_Y",
+        "PcsPccr.InstrumentInd.Z_not_parent_Y_after_doX",
+        "PcsPccr.InstrumentInd.u_not_instrument_exclusion",
+    ),
+}
+
+
+def _assumptions_for(strategy: str) -> Tuple[str, ...]:
+    if strategy == "frontdoor":
+        return FRONTDOOR_ASSUMPTIONS
+    if strategy == "instrument":
+        return INSTRUMENT_ASSUMPTIONS
+    return BACKDOOR_ASSUMPTIONS
+
+
+# Backward-compatible alias used by older call sites / tests.
+ASSUMPTIONS = BACKDOOR_ASSUMPTIONS
 
 @dataclass(frozen=True, slots=True)
 class CausalClaim:
@@ -76,6 +117,9 @@ class CertificateVerdict:
     certificate_sha256: str
     epistemic_ceiling: str
     frontdoor: Optional[dict] = None
+    instrument: Optional[dict] = None
+    bounds: Optional[dict] = None
+    formal_bindings: Tuple[str, ...] = ()
 
     def to_dict(self) -> dict:
         return {
@@ -85,16 +129,18 @@ class CertificateVerdict:
             "reasons": list(self.reasons),
             "backdoor": self.backdoor,
             "frontdoor": self.frontdoor,
+            "instrument": self.instrument,
+            "bounds": self.bounds,
             "intervention": self.intervention,
             "ground_truth": self.ground_truth,
             "claim": self.claim,
             "assumptions": list(self.assumptions),
+            "formal_bindings": list(self.formal_bindings),
             "certificate_sha256": self.certificate_sha256,
             "epistemic_ceiling": self.epistemic_ceiling,
             "production_authority": False,
             "empirical_causation_established": False,
         }
-
 
 def parse_model_claim(task_id: str, text: str) -> CausalClaim:
     """Parse a JSON causal claim from model output; fail closed on malformation."""
@@ -160,16 +206,17 @@ def check_claim(
 ) -> CertificateVerdict:
     """Independently check a causal claim against graph (+ optional executable SCM)."""
     reasons: List[str] = []
+    empty = dict(
+        backdoor=None, frontdoor=None, instrument=None, bounds=None, intervention=None
+    )
     if not claim.treatment or not claim.outcome:
         return _verdict(
             claim,
             accepted=False,
             verdict="malformed",
             reasons=("could not parse structured causal claim JSON",),
-            backdoor=None,
-            frontdoor=None,
-            intervention=None,
             ground_truth={"identifiable": true_identifiable},
+            **empty,
         )
 
     if claim.treatment not in graph.nodes or claim.outcome not in graph.nodes:
@@ -178,10 +225,8 @@ def check_claim(
             accepted=False,
             verdict="invalid_claim",
             reasons=("treatment or outcome not in declared graph",),
-            backdoor=None,
-            frontdoor=None,
-            intervention=None,
             ground_truth={"identifiable": true_identifiable},
+            **empty,
         )
 
     strategy = claim.strategy or "backdoor"
@@ -194,11 +239,12 @@ def check_claim(
                 f"strategy {strategy!r} not allowed for this task "
                 f"(allowed: {list(allowed_strategies)})",
             ),
-            backdoor=None,
-            frontdoor=None,
-            intervention=None,
             ground_truth={"identifiable": true_identifiable},
+            **empty,
         )
+
+    if strategy == "instrument":
+        return _check_instrument(claim, graph, scm, true_identifiable=true_identifiable)
 
     bd = verify_backdoor_set(graph, claim.treatment, claim.outcome, claim.adjustment_set)
     fd = verify_frontdoor_set(graph, claim.treatment, claim.outcome, claim.adjustment_set)
@@ -244,6 +290,8 @@ def check_claim(
                     reasons=tuple(reasons),
                     backdoor=bd.to_dict(),
                     frontdoor=fd.to_dict(),
+                    instrument=None,
+                    bounds=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -262,6 +310,8 @@ def check_claim(
                     reasons=tuple(reasons),
                     backdoor=bd.to_dict(),
                     frontdoor=fd.to_dict(),
+                    instrument=None,
+                    bounds=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -283,6 +333,8 @@ def check_claim(
                     reasons=tuple(reasons) + tuple(analysis.notes),
                     backdoor=bd.to_dict(),
                     frontdoor=fd.to_dict(),
+                    instrument=None,
+                    bounds=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -299,13 +351,13 @@ def check_claim(
                 reasons=tuple(reasons) + crit_reasons,
                 backdoor=bd.to_dict(),
                 frontdoor=fd.to_dict(),
+                instrument=None,
+                bounds=None,
                 intervention=intervention_info,
                 ground_truth=gt,
             )
         if not id_ok:
-            reasons.append(
-                f"proposed set fails the {strategy} criterion"
-            )
+            reasons.append(f"proposed set fails the {strategy} criterion")
             return _verdict(
                 claim,
                 accepted=False,
@@ -313,6 +365,8 @@ def check_claim(
                 reasons=tuple(reasons) + crit_reasons,
                 backdoor=bd.to_dict(),
                 frontdoor=fd.to_dict(),
+                instrument=None,
+                bounds=None,
                 intervention=intervention_info,
                 ground_truth=gt,
             )
@@ -332,6 +386,8 @@ def check_claim(
                     reasons=tuple(reasons),
                     backdoor=bd.to_dict(),
                     frontdoor=fd.to_dict(),
+                    instrument=None,
+                    bounds=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -345,6 +401,8 @@ def check_claim(
             reasons=tuple(reasons),
             backdoor=bd.to_dict(),
             frontdoor=fd.to_dict(),
+            instrument=None,
+            bounds=None,
             intervention=intervention_info,
             ground_truth=gt,
         )
@@ -358,6 +416,8 @@ def check_claim(
             reasons=tuple(reasons),
             backdoor=bd.to_dict(),
             frontdoor=fd.to_dict(),
+            instrument=None,
+            bounds=None,
             intervention=intervention_info,
             ground_truth=gt,
         )
@@ -369,6 +429,148 @@ def check_claim(
         reasons=tuple(reasons) + crit_reasons,
         backdoor=bd.to_dict(),
         frontdoor=fd.to_dict(),
+        instrument=None,
+        bounds=None,
+        intervention=intervention_info,
+        ground_truth=gt,
+    )
+
+
+def _check_instrument(
+    claim: CausalClaim,
+    graph: CausalDAG,
+    scm: Optional[BinarySCM],
+    *,
+    true_identifiable: bool,
+) -> CertificateVerdict:
+    """Instrument strategy: graphical IV + Balke–Pearl bounds certificate."""
+    reasons: List[str] = []
+    if len(claim.adjustment_set) != 1:
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="invalid_claim",
+            reasons=("instrument strategy requires exactly one instrument in adjustment_set",),
+            backdoor=None,
+            frontdoor=None,
+            instrument=None,
+            bounds=None,
+            intervention=None,
+            ground_truth={"identifiable": true_identifiable, "strategy": "instrument"},
+        )
+    inst = next(iter(claim.adjustment_set))
+    iv = verify_instrument(graph, claim.treatment, claim.outcome, inst)
+    gt: dict = {
+        "identifiable": true_identifiable,
+        "strategy": "instrument",
+        "instrument_valid": iv.valid,
+    }
+    intervention_info = None
+    bounds_info = None
+    if scm is not None:
+        analysis = scm.analyze_effect(claim.treatment, claim.outcome)
+        intervention_info = analysis.to_dict()
+        true_p = scm.interventional_expectation(claim.outcome, {claim.treatment: 1})
+        true_ate = scm.ate(claim.treatment, claim.outcome)
+        gt["p_do_1"] = _frac(true_p)
+        gt["ate"] = _frac(true_ate)
+        if iv.valid:
+            try:
+                bp = balke_pearl_bounds(scm, claim.treatment, claim.outcome, inst)
+            except GraphError as exc:
+                return _verdict(
+                    claim,
+                    accepted=False,
+                    verdict="positivity_failure",
+                    reasons=(str(exc),),
+                    backdoor=None,
+                    frontdoor=None,
+                    instrument=iv.to_dict(),
+                    bounds=None,
+                    intervention=intervention_info,
+                    ground_truth=gt,
+                )
+            bounds_info = bp.to_dict()
+            gt["bounds"] = bounds_info
+            if not (bp.p_do_lower <= true_p <= bp.p_do_upper):
+                reasons.append(
+                    f"true P(Y|do(X=1))={_frac(true_p)} outside Balke–Pearl "
+                    f"[{_frac(bp.p_do_lower)}, {_frac(bp.p_do_upper)}]"
+                )
+                return _verdict(
+                    claim,
+                    accepted=False,
+                    verdict="intervention_mismatch",
+                    reasons=tuple(reasons),
+                    backdoor=None,
+                    frontdoor=None,
+                    instrument=iv.to_dict(),
+                    bounds=bounds_info,
+                    intervention=intervention_info,
+                    ground_truth=gt,
+                )
+
+    if not iv.valid:
+        reasons.append("proposed instrument fails graphical IV conditions")
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="invalid_claim",
+            reasons=tuple(reasons) + iv.reasons,
+            backdoor=None,
+            frontdoor=None,
+            instrument=iv.to_dict(),
+            bounds=bounds_info,
+            intervention=intervention_info,
+            ground_truth=gt,
+        )
+
+    # Point-identification claim only if bounds collapse.
+    if claim.asserts_identifiable:
+        point = bool(bounds_info and bounds_info.get("point_identified"))
+        if not point:
+            reasons.append(
+                "instrument does not point-identify under this law; "
+                "use asserts_identifiable=false to accept Balke–Pearl bounds"
+            )
+            return _verdict(
+                claim,
+                accepted=False,
+                verdict="not_identifiable",
+                reasons=tuple(reasons),
+                backdoor=None,
+                frontdoor=None,
+                instrument=iv.to_dict(),
+                bounds=bounds_info,
+                intervention=intervention_info,
+                ground_truth=gt,
+            )
+        reasons.append("instrument point-identified; bounds collapsed")
+        return _verdict(
+            claim,
+            accepted=True,
+            verdict="identified_under_assumptions",
+            reasons=tuple(reasons),
+            backdoor=None,
+            frontdoor=None,
+            instrument=iv.to_dict(),
+            bounds=bounds_info,
+            intervention=intervention_info,
+            ground_truth=gt,
+        )
+
+    reasons.append(
+        "instrument valid; Balke–Pearl bounds certified (partial identification)"
+    )
+    return _verdict(
+        claim,
+        accepted=True,
+        verdict="bounds_certified",
+        reasons=tuple(reasons) + iv.reasons,
+        backdoor=None,
+        frontdoor=None,
+        instrument=iv.to_dict(),
+        bounds=bounds_info,
         intervention=intervention_info,
         ground_truth=gt,
     )
@@ -382,10 +584,15 @@ def _verdict(
     reasons: Tuple[str, ...],
     backdoor: Optional[dict],
     frontdoor: Optional[dict],
+    instrument: Optional[dict],
+    bounds: Optional[dict],
     intervention: Optional[dict],
     ground_truth: dict,
 ) -> CertificateVerdict:
     assert verdict in ALLOWED_VERDICTS
+    strategy = claim.strategy or "backdoor"
+    assumptions = _assumptions_for(strategy)
+    bindings = FORMAL_BINDINGS.get(strategy, ())
     body = {
         "claim": claim.to_dict(),
         "accepted": accepted,
@@ -393,9 +600,12 @@ def _verdict(
         "reasons": list(reasons),
         "backdoor": backdoor,
         "frontdoor": frontdoor,
+        "instrument": instrument,
+        "bounds": bounds,
         "intervention": intervention,
         "ground_truth": ground_truth,
-        "assumptions": list(ASSUMPTIONS),
+        "assumptions": list(assumptions),
+        "formal_bindings": list(bindings),
         "epistemic_ceiling": "identified_under_assumptions_only",
     }
     digest = hashlib.sha256(
@@ -408,14 +618,16 @@ def _verdict(
         reasons=reasons,
         backdoor=backdoor,
         frontdoor=frontdoor,
+        instrument=instrument,
+        bounds=bounds,
         intervention=intervention,
         ground_truth=ground_truth,
         claim=claim.to_dict(),
-        assumptions=ASSUMPTIONS,
+        assumptions=assumptions,
         certificate_sha256=digest,
         epistemic_ceiling="identified_under_assumptions_only",
+        formal_bindings=bindings,
     )
-
 
 def _extract_json_object(text: str) -> Optional[dict]:
     text = text.strip()

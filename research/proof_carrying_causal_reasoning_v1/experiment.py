@@ -83,9 +83,15 @@ def _check_t06(task: Task, claim: CausalClaim) -> CertificateVerdict:
 
 
 def _revive(payload: dict) -> CertificateVerdict:
-    from research.proof_carrying_causal_reasoning_v1.kernel.certificate import CertificateVerdict
-    from research.proof_carrying_causal_reasoning_v1.kernel.backdoor import ASSUMPTIONS
+    from research.proof_carrying_causal_reasoning_v1.kernel.certificate import (
+        CertificateVerdict,
+        FORMAL_BINDINGS,
+        _assumptions_for,
+    )
 
+    strategy = (payload.get("claim") or {}).get("strategy") or "backdoor"
+    assumptions = _assumptions_for(strategy)
+    bindings = FORMAL_BINDINGS.get(strategy, ())
     body = {
         "claim": payload["claim"],
         "accepted": payload["accepted"],
@@ -93,9 +99,12 @@ def _revive(payload: dict) -> CertificateVerdict:
         "reasons": payload["reasons"],
         "backdoor": payload.get("backdoor"),
         "frontdoor": payload.get("frontdoor"),
+        "instrument": payload.get("instrument"),
+        "bounds": payload.get("bounds"),
         "intervention": payload.get("intervention"),
         "ground_truth": payload["ground_truth"],
-        "assumptions": list(ASSUMPTIONS),
+        "assumptions": list(assumptions),
+        "formal_bindings": list(bindings),
         "epistemic_ceiling": "identified_under_assumptions_only",
     }
     digest = hashlib.sha256(
@@ -108,14 +117,16 @@ def _revive(payload: dict) -> CertificateVerdict:
         reasons=tuple(payload["reasons"]),
         backdoor=payload.get("backdoor"),
         frontdoor=payload.get("frontdoor"),
+        instrument=payload.get("instrument"),
+        bounds=payload.get("bounds"),
         intervention=payload.get("intervention"),
         ground_truth=payload["ground_truth"],
         claim=payload["claim"],
-        assumptions=ASSUMPTIONS,
+        assumptions=assumptions,
         certificate_sha256=digest,
         epistemic_ceiling="identified_under_assumptions_only",
+        formal_bindings=bindings,
     )
-
 
 def run_controls(tasks: Optional[Sequence[Task]] = None) -> Dict[str, Any]:
     tasks = list(tasks) if tasks is not None else list(all_research_tasks())

@@ -27,6 +27,15 @@
     },
     "asserts_association_equals_effect": {
       "anyOf": [{ "type": "boolean" }, { "type": "null" }]
+    },
+    "strategy": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "string",
+          "enum": ["backdoor", "frontdoor", "instrument"]
+        }
+      ]
     }
   }
 }
