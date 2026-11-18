@@ -21,8 +21,15 @@ Exclusive path only.
 |---|---|
 | **Byte-string `json.loads` / CPython / OS I/O** | Produces the typed `JsonCertificate` AST; Lean checks everything afterward |
 
-## Test locks (74 pytest)
+## Depth enforcement
+
+- Spec `MAX_DEPTH=64` applies to **every reconstructed judgment**, not only premises.
+- Python `check_certificate_v1` calls `_formula_depth` after each step (closes andI left-spine bypass).
+- Lean `checkSurface` requires `judgmentsDepthOk`; core `checkCertificate` stays depth-unbounded (mathematical ND).
+- Surface ↔ core iff therefore needs an explicit depth hypothesis.
+
+## Test locks (77 pytest)
 
 - `test_exhaustive_checker.py` — 6×6 meet, all authorities, andI pairs, JSON/WF mutants, nested chains
-- `test_depth_and_parse.py` — depth 64/65, oversized/malformed JSON, authority alias
+- `test_depth_and_parse.py` — depth 64/65, andI spine 64/65, oversized/malformed JSON, v0 meet drift
 - `test_equivalence_breaks.py`, `test_python_lean_differential.py`, `test_security_findings_v1.py`, adversarial

@@ -25,7 +25,9 @@ Lean **4.28.0**. No `sorry` / `admit` / custom axioms.
 | **`checkSurface` / `checkSurface_iff_checkCertificate`** | Surface | Surface WF+claims ↔ core (bounded) | propext, Quot.sound |
 | **`checkCertificatePy_eq_surface`** | PythonCheckerModel | Python model = `checkSurface` | none (rfl) |
 | **`hyp_mathVerified_not_established`** | Surface | Finding F (Hyp): declared ≠ established | propext |
-| **`meet_truth_table`** | Authority | Exhaustive meet lock | none |
+| **`meet_exhaustive` / `meet_assoc` / `meet_idem`** | Authority | Full 6×6 + lattice laws | none |
+| **`checkSurface_rejects_deep_judgment`** | Surface | Depth WF at surface | propext |
+| **`checkJsonCert_rejects_unknown_{premise,step}_keys`** | JsonCert | Nested unknown-key reject | propext |
 | **`checkJsonCert_sound` / `checkJsonCert_implies_core`** | JsonCert | Post-parse JSON graph → Derives / core | propext, Quot.sound |
 | **`checkJsonCert_rejects_unknown_keys` / `_deep_formula`** | JsonCert | Surface decode rejects | propext |
 | **`no_math_established_without_attestation`** | JsonCert | Finding F at JSON layer | propext, Quot.sound |

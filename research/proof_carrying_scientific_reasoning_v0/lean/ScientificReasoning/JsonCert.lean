@@ -65,7 +65,13 @@ def JsonFormula.depth : JsonFormula → Nat
   | .not φ => φ.depth + 1
   | .and φ ψ => Nat.max φ.depth ψ.depth + 1
 
-def maxFormulaDepth : Nat := 64
+theorem JsonFormula.depth_eq_toFormula (φ : JsonFormula) :
+    φ.depth = φ.toFormula.depth := by
+  induction φ with
+  | atom i => rfl
+  | not φ ih => simp [JsonFormula.depth, JsonFormula.toFormula, Formula.depth, ih]
+  | and φ ψ ihφ ihψ =>
+      simp [JsonFormula.depth, JsonFormula.toFormula, Formula.depth, ihφ, ihψ]
 
 def Authority.toJsonAuth : Authority → JsonAuth
   | .disputed => .disputed
@@ -89,6 +95,7 @@ structure JsonPremise where
   id : Nat
   formula : JsonFormula
   declaredAuthority : JsonAuth
+  unknownKeys : List String := []
   deriving Repr, DecidableEq, Inhabited
 
 inductive JsonRule where
@@ -115,6 +122,7 @@ structure JsonStep where
   claimedSupport : Option (List Nat) := none
   claimedAuthority : Option JsonAuth := none
   claimedMathEstablished : Option Bool := none
+  unknownKeys : List String := []
   deriving Repr, DecidableEq, Inhabited
 
 structure JsonCertificate where
@@ -132,6 +140,14 @@ def formulasDepthOk : List JsonPremise → Bool
   | [] => true
   | p :: rest => decide (p.formula.depth ≤ maxFormulaDepth) && formulasDepthOk rest
 
+def premisesKeysOk : List JsonPremise → Bool
+  | [] => true
+  | p :: rest => decide (p.unknownKeys = []) && premisesKeysOk rest
+
+def stepsKeysOk : List JsonStep → Bool
+  | [] => true
+  | s :: rest => decide (s.unknownKeys = []) && stepsKeysOk rest
+
 def decodePremise (p : JsonPremise) : Premise :=
   { id := p.id
     formula := p.formula.toFormula
@@ -147,6 +163,8 @@ def decodeStep (s : JsonStep) : SurfaceStep :=
 
 def decodeJsonCert (c : JsonCertificate) : Option SurfaceCertificate :=
   if !(c.unknownTopKeys = []) then none
+  else if !(premisesKeysOk c.premises = true) then none
+  else if !(stepsKeysOk c.steps = true) then none
   else if !(formulasDepthOk c.premises = true) then none
   else
     some {
@@ -212,6 +230,51 @@ theorem checkJsonCert_rejects_unknown_keys
     simp [decodeJsonCert, hne]
   simp [checkJsonCert, this]
 
+theorem premisesKeysOk_false_of_mem
+    (ps : List JsonPremise) (p : JsonPremise)
+    (hp : p ∈ ps) (hne : p.unknownKeys ≠ []) :
+    premisesKeysOk ps = false := by
+  induction ps with
+  | nil => cases hp
+  | cons p0 rest ih =>
+      cases hp with
+      | head => simp [premisesKeysOk, hne]
+      | tail _ hp' =>
+          cases h0 : decide (p0.unknownKeys = []) with
+          | false => simp [premisesKeysOk, h0]
+          | true => simp [premisesKeysOk, h0, ih hp']
+
+theorem stepsKeysOk_false_of_mem
+    (ss : List JsonStep) (s : JsonStep)
+    (hs : s ∈ ss) (hne : s.unknownKeys ≠ []) :
+    stepsKeysOk ss = false := by
+  induction ss with
+  | nil => cases hs
+  | cons s0 rest ih =>
+      cases hs with
+      | head => simp [stepsKeysOk, hne]
+      | tail _ hs' =>
+          cases h0 : decide (s0.unknownKeys = []) with
+          | false => simp [stepsKeysOk, h0]
+          | true => simp [stepsKeysOk, h0, ih hs']
+
+theorem checkJsonCert_rejects_unknown_premise_keys
+    (c : JsonCertificate) (p : JsonPremise)
+    (hp : p ∈ c.premises) (hne : p.unknownKeys ≠ [])
+    (hunk : c.unknownTopKeys = []) :
+    checkJsonCert c = none := by
+  have hfo := premisesKeysOk_false_of_mem c.premises p hp hne
+  simp [checkJsonCert, decodeJsonCert, hunk, hfo]
+
+theorem checkJsonCert_rejects_unknown_step_keys
+    (c : JsonCertificate) (s : JsonStep)
+    (hs : s ∈ c.steps) (hne : s.unknownKeys ≠ [])
+    (hunk : c.unknownTopKeys = [])
+    (hpok : premisesKeysOk c.premises = true) :
+    checkJsonCert c = none := by
+  have hfo := stepsKeysOk_false_of_mem c.steps s hs hne
+  simp [checkJsonCert, decodeJsonCert, hunk, hpok, hfo]
+
 theorem formulasDepthOk_false_of_mem
     (ps : List JsonPremise) (p : JsonPremise)
     (hp : p ∈ ps) (hd : maxFormulaDepth < p.formula.depth) :
@@ -244,6 +307,8 @@ theorem no_math_established_without_attestation
 theorem decodeJsonCert_ok_of
     (c : JsonCertificate)
     (hunk : c.unknownTopKeys = [])
+    (hpok : premisesKeysOk c.premises = true)
+    (hsok : stepsKeysOk c.steps = true)
     (hdepth : formulasDepthOk c.premises = true) :
     decodeJsonCert c = some {
       schemaVersion := c.schemaVersion
@@ -254,7 +319,7 @@ theorem decodeJsonCert_ok_of
       claimedFinalSupport := c.claimedFinalSupport
       claimedFinalAuthority := c.claimedFinalAuthority.map (·.toAuthority)
     } := by
-  simp [decodeJsonCert, hunk, hdepth]
+  simp [decodeJsonCert, hunk, hpok, hsok, hdepth]
 
 /-- Semantic triangle at the JSON-object layer. -/
 theorem json_semantic_triangle
@@ -278,3 +343,5 @@ end ScientificReasoning
 #print axioms ScientificReasoning.JsonFormula.toFormula_toJsonFormula
 #print axioms ScientificReasoning.json_semantic_triangle
 #print axioms ScientificReasoning.JsonRule.toStepSpec_injective
+#print axioms ScientificReasoning.checkJsonCert_rejects_unknown_premise_keys
+#print axioms ScientificReasoning.checkJsonCert_rejects_unknown_step_keys

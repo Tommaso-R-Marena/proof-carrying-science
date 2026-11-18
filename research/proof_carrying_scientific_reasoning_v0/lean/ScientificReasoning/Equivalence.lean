@@ -73,7 +73,7 @@ theorem derives_iff_core_certificate
     simp [StructuredCertificate.toContext, hprem, hform, hsup, hauth] at hd
     exact hd
 
-/-- Surface acceptance for a bounded core witness of a derivation. -/
+/-- Surface acceptance for a bounded, depth-ok core witness of a derivation. -/
 theorem derives_python_complete
     (Γ : Context) (S : Support) (a : Authority) (φ : Formula)
     (h : Derives Γ S a φ)
@@ -84,6 +84,7 @@ theorem derives_python_complete
     (hb1 : c.premises.length ≤ maxPremises)
     (hb2 : c.steps.length ≤ maxSteps)
     (hchk : checkCertificate c = some j)
+    (hdepth : ∀ js, checkStepsLTR c.premises c.steps = some js → judgmentsDepthOk js = true)
     (hform : j.formula = φ) (hsup : j.support = S)
     (hauth : j.assurance.declared = a)
     (hmath : j.assurance.mathEstablished = false) :
@@ -92,7 +93,7 @@ theorem derives_python_complete
       j.formula = φ ∧ j.support = S ∧ j.assurance.declared = a ∧
       j.assurance.mathEstablished = false := by
   have hne' : c.steps ≠ [] := fun he => by simp [he] at hne
-  refine ⟨(checkCertificatePy_iff_core c j hne' hb1 hb2).2 hchk,
+  refine ⟨(checkCertificatePy_iff_core c j hne' hb1 hb2 hdepth).2 hchk,
     by simpa [StructuredCertificate.toSurface] using hprem,
     hform, hsup, hauth, hmath⟩
 
@@ -105,12 +106,13 @@ theorem derives_iff_python_certificate
     (hb1 : c.premises.length ≤ maxPremises)
     (hb2 : c.steps.length ≤ maxSteps)
     (hchk : checkCertificate c = some j)
+    (hdepth : ∀ js, checkStepsLTR c.premises c.steps = some js → judgmentsDepthOk js = true)
     (hform : j.formula = φ) (hsup : j.support = S)
     (hauth : j.assurance.declared = a) :
     checkCertificatePy c.toSurface = some j ∧
       Derives Γ S a φ := by
   have hne' : c.steps ≠ [] := fun he => by simp [he] at hne
-  refine ⟨(checkCertificatePy_iff_core c j hne' hb1 hb2).2 hchk, ?_⟩
+  refine ⟨(checkCertificatePy_iff_core c j hne' hb1 hb2 hdepth).2 hchk, ?_⟩
   have hd := checkCertificate_sound c j hchk
   simp [StructuredCertificate.toContext, hprem, hform, hsup, hauth] at hd
   exact hd

@@ -14,6 +14,25 @@ inductive Formula where
   | and : Formula → Formula → Formula
   deriving Repr, DecidableEq, Inhabited
 
+/-- Nesting depth (atom = 0); matches Python `_formula_depth` / JsonFormula.depth. -/
+def Formula.depth : Formula → Nat
+  | .atom _ => 0
+  | .not φ => φ.depth + 1
+  | .and φ ψ => Nat.max φ.depth ψ.depth + 1
+
+/-- Certificate schema bound (Python `MAX_DEPTH`). -/
+def maxFormulaDepth : Nat := 64
+
+theorem Formula.depth_atom (i : PropId) : (Formula.atom i).depth = 0 := rfl
+
+theorem Formula.depth_and_le_left (φ ψ : Formula) : φ.depth < (Formula.and φ ψ).depth := by
+  simp only [Formula.depth]
+  exact Nat.lt_succ_of_le (Nat.le_max_left _ _)
+
+theorem Formula.depth_and_le_right (φ ψ : Formula) : ψ.depth < (Formula.and φ ψ).depth := by
+  simp only [Formula.depth]
+  exact Nat.lt_succ_of_le (Nat.le_max_right _ _)
+
 /-- Epistemic / authority classification of a premise or derived claim. -/
 inductive Authority where
   | disputed

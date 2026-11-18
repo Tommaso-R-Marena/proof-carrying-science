@@ -1,0 +1,159 @@
+== Lean ==
+ℹ [3/17] Replayed ScientificReasoning.Authority
+info: ScientificReasoning/Authority.lean:116:0: 'ScientificReasoning.meet_comm' does not depend on any axioms
+info: ScientificReasoning/Authority.lean:117:0: 'ScientificReasoning.meet_exhaustive' does not depend on any axioms
+info: ScientificReasoning/Authority.lean:118:0: 'ScientificReasoning.meet_assoc' does not depend on any axioms
+info: ScientificReasoning/Authority.lean:119:0: 'ScientificReasoning.meet_idem' does not depend on any axioms
+ℹ [5/17] Replayed ScientificReasoning.Soundness
+info: ScientificReasoning/Soundness.lean:71:0: 'ScientificReasoning.derives_sound' depends on axioms: [propext]
+info: ScientificReasoning/Soundness.lean:72:0: 'ScientificReasoning.derives_support_in_context' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Soundness.lean:73:0: 'ScientificReasoning.andI_authority_meet' does not depend on any axioms
+info: ScientificReasoning/Soundness.lean:74:0: 'ScientificReasoning.no_escalation_by_meet' does not depend on any axioms
+info: ScientificReasoning/Soundness.lean:75:0: 'ScientificReasoning.meet_empirical_not_math' does not depend on any axioms
+ℹ [6/17] Replayed ScientificReasoning.Contradictions
+info: ScientificReasoning/Contradictions.lean:101:0: 'ScientificReasoning.derives_atoms_from_context' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Contradictions.lean:102:0: 'ScientificReasoning.no_ex_falso_unrelated_atom' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Contradictions.lean:103:0: 'ScientificReasoning.demo_locally_contradictory' depends on axioms: [propext]
+info: ScientificReasoning/Contradictions.lean:104:0: 'ScientificReasoning.demoΓ_classically_unsatisfiable' depends on axioms: [propext]
+info: ScientificReasoning/Contradictions.lean:105:0: 'ScientificReasoning.classical_entails_explodes_on_demoΓ' depends on axioms: [propext]
+ℹ [7/17] Replayed ScientificReasoning.Retraction
+info: ScientificReasoning/Retraction.lean:49:0: 'ScientificReasoning.retract_removes' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Retraction.lean:50:0: 'ScientificReasoning.hyp_invalidated_by_self' depends on axioms: [propext]
+info: ScientificReasoning/Retraction.lean:51:0: 'ScientificReasoning.andI_support_union_invalidation' depends on axioms: [propext]
+ℹ [8/17] Replayed ScientificReasoning.Certificates
+info: ScientificReasoning/Certificates.lean:55:0: 'ScientificReasoning.valid_implies_sound' depends on axioms: [propext]
+ℹ [9/17] Replayed ScientificReasoning.CheckCertificate
+info: ScientificReasoning/CheckCertificate.lean:346:0: 'ScientificReasoning.checkCertificate_sound' depends on axioms: [propext]
+info: ScientificReasoning/CheckCertificate.lean:347:0: 'ScientificReasoning.checkCertificate_mathEstablished_false' depends on axioms: [propext]
+info: ScientificReasoning/CheckCertificate.lean:348:0: 'ScientificReasoning.checkCertificate_requires_unique_ids' depends on axioms: [propext]
+info: ScientificReasoning/CheckCertificate.lean:349:0: 'ScientificReasoning.hyp_not_math_established' depends on axioms: [propext]
+info: ScientificReasoning/CheckCertificate.lean:350:0: 'ScientificReasoning.traceValid_implies_derives' depends on axioms: [propext]
+ℹ [10/17] Replayed ScientificReasoning.Belnap
+info: ScientificReasoning/Belnap.lean:214:0: 'ScientificReasoning.Belnap.and_truth_table' does not depend on any axioms
+info: ScientificReasoning/Belnap.lean:215:0: 'ScientificReasoning.Belnap.both_and_onlyFalse' does not depend on any axioms
+info: ScientificReasoning/Belnap.lean:216:0: 'ScientificReasoning.Belnap.derives_entails4' depends on axioms: [propext]
+info: ScientificReasoning/Belnap.lean:217:0: 'ScientificReasoning.Belnap.checkCertificate_entails4' depends on axioms: [propext]
+info: ScientificReasoning/Belnap.lean:218:0: 'ScientificReasoning.Belnap.designated_and' depends on axioms: [propext]
+info: ScientificReasoning/Belnap.lean:219:0: 'ScientificReasoning.Belnap.not_entails4_atom99_demoΓ' depends on axioms: [propext]
+info: ScientificReasoning/Belnap.lean:220:0: 'ScientificReasoning.Belnap.checkCertificate_entails4_not_classical_explosion' depends on axioms: [propext]
+info: ScientificReasoning/Belnap.lean:221:0: 'ScientificReasoning.Belnap.traceValid_implies_entails4' depends on axioms: [propext]
+⚠ [11/17] Replayed ScientificReasoning.Completeness
+warning: ScientificReasoning/Completeness.lean:24:40: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:73:2: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:99:12: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:101:12: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:122:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:142:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:491:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:544:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:569:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:587:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:612:16: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Completeness.lean:422:5: unused variable `hu`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ScientificReasoning/Completeness.lean:643:17: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+info: ScientificReasoning/Completeness.lean:680:0: 'ScientificReasoning.derives_iff_interpret' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Completeness.lean:681:0: 'ScientificReasoning.compile_ok' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Completeness.lean:682:0: 'ScientificReasoning.interpret_checkCertificate' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Completeness.lean:683:0: 'ScientificReasoning.derives_completeness' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Completeness.lean:684:0: 'ScientificReasoning.pythonLean_semantic_triangle' depends on axioms: [propext]
+⚠ [12/17] Replayed ScientificReasoning.Surface
+warning: ScientificReasoning/Surface.lean:274:55: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ScientificReasoning/Surface.lean:266:55: This simp argument is unused:
+  beq_self_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp [surfaceWF, StructuredCertificate.toSurface, stepIdsOk_encode, hu,
+                encodeSteps_length, hprem, hsteps, hne',̵ ̵b̵e̵q̵_̵s̵e̵l̵f̵_̵e̵q̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+info: ScientificReasoning/Surface.lean:314:0: 'ScientificReasoning.checkSurface_implies_checkCertificate' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Surface.lean:315:0: 'ScientificReasoning.checkSurface_sound' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Surface.lean:316:0: 'ScientificReasoning.checkSurface_iff_checkCertificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ScientificReasoning/Surface.lean:317:0: 'ScientificReasoning.checkSurface_rejects_deep_judgment' depends on axioms: [propext]
+info: ScientificReasoning/Surface.lean:318:0: 'ScientificReasoning.hyp_mathVerified_not_established' depends on axioms: [propext]
+info: ScientificReasoning/Surface.lean:319:0: 'ScientificReasoning.checkSurface_rejects_bad_schema' depends on axioms: [propext, Quot.sound]
+ℹ [13/17] Built ScientificReasoning.JsonCert (764ms)
+info: ScientificReasoning/JsonCert.lean:338:0: 'ScientificReasoning.checkJsonCert_sound' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/JsonCert.lean:339:0: 'ScientificReasoning.checkJsonCert_rejects_unknown_keys' depends on axioms: [propext]
+info: ScientificReasoning/JsonCert.lean:340:0: 'ScientificReasoning.checkJsonCert_rejects_deep_formula' depends on axioms: [propext]
+info: ScientificReasoning/JsonCert.lean:341:0: 'ScientificReasoning.no_math_established_without_attestation' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/JsonCert.lean:342:0: 'ScientificReasoning.Formula.toJsonFormula_toFormula' depends on axioms: [propext]
+info: ScientificReasoning/JsonCert.lean:343:0: 'ScientificReasoning.JsonFormula.toFormula_toJsonFormula' depends on axioms: [propext]
+info: ScientificReasoning/JsonCert.lean:344:0: 'ScientificReasoning.json_semantic_triangle' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/JsonCert.lean:345:0: 'ScientificReasoning.JsonRule.toStepSpec_injective' depends on axioms: [propext]
+info: ScientificReasoning/JsonCert.lean:346:0: 'ScientificReasoning.checkJsonCert_rejects_unknown_premise_keys' depends on axioms: [propext]
+info: ScientificReasoning/JsonCert.lean:347:0: 'ScientificReasoning.checkJsonCert_rejects_unknown_step_keys' depends on axioms: [propext]
+ℹ [14/17] Replayed ScientificReasoning.PythonCheckerModel
+info: ScientificReasoning/PythonCheckerModel.lean:81:0: 'ScientificReasoning.PythonModel.checkCertificatePy_eq_surface' depends on axioms: [propext]
+info: ScientificReasoning/PythonCheckerModel.lean:82:0: 'ScientificReasoning.PythonModel.checkCertificatePy_sound' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/PythonCheckerModel.lean:83:0: 'ScientificReasoning.PythonModel.checkCertificatePy_iff_core' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ScientificReasoning/PythonCheckerModel.lean:84:0: 'ScientificReasoning.PythonModel.checkCertificateJson_sound' depends on axioms: [propext, Quot.sound]
+⚠ [15/17] Replayed ScientificReasoning.Equivalence
+warning: ScientificReasoning/Equivalence.lean:79:5: unused variable `h`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ScientificReasoning/Equivalence.lean:80:5: unused variable `hu`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ScientificReasoning/Equivalence.lean:102:5: unused variable `hu`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+info: ScientificReasoning/Equivalence.lean:156:0: 'ScientificReasoning.Equivalence.python_accept_implies_derives' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Equivalence.lean:157:0: 'ScientificReasoning.Equivalence.derives_iff_core_certificate' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Equivalence.lean:158:0: 'ScientificReasoning.Equivalence.derives_completeness_steps_pos' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Equivalence.lean:159:0: 'ScientificReasoning.Equivalence.json_accept_implies_derives' depends on axioms: [propext, Quot.sound]
+info: ScientificReasoning/Equivalence.lean:160:0: 'ScientificReasoning.Equivalence.json_accept_implies_entails4' depends on axioms: [propext, Quot.sound]
+Build completed successfully (17 jobs).
+== axiom audit (no sorryAx) ==
+no sorryAx in lean build log
+== pytest ==
+........................................................................ [ 93%]
+.....                                                                    [100%]
+77 passed in 0.07s
+== case studies ==
+PKPD declared= empiricalAsserted math_established= False
+Causal certificate accepted as conditional derivation only.
+math_established= False declared= assumption
+proteomics declared= assumption math_established= False
+== benchmarks ==
+# Results
+
+| n | steps | sec/check |
+|---|---|---|
+| 2 | 3 | 0.000007 |
+| 8 | 15 | 0.000034 |
+| 32 | 63 | 0.000253 |
+| 64 | 127 | 0.000808 |
+
+Baseline: schema-v1 independent checker only; no external library comparison.
+== isolation ==
+ISOLATION_OK
+ALL_OK

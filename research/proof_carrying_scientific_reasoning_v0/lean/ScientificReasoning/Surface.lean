@@ -14,6 +14,25 @@ namespace ScientificReasoning
 def maxPremises : Nat := 256
 def maxSteps : Nat := 1024
 
+/-- Every reconstructed judgment must obey `maxFormulaDepth` (Python post-step check). -/
+def judgmentsDepthOk : List VerifiedJudgment → Bool
+  | [] => true
+  | j :: rest => decide (j.formula.depth ≤ maxFormulaDepth) && judgmentsDepthOk rest
+
+theorem judgmentsDepthOk_false_of_mem
+    (js : List VerifiedJudgment) (j : VerifiedJudgment)
+    (hj : j ∈ js) (hd : maxFormulaDepth < j.formula.depth) :
+    judgmentsDepthOk js = false := by
+  induction js with
+  | nil => cases hj
+  | cons j0 rest ih =>
+      cases hj with
+      | head => simp [judgmentsDepthOk, Nat.not_le.mpr hd]
+      | tail _ hj' =>
+          cases h0 : decide (j0.formula.depth ≤ maxFormulaDepth) with
+          | false => simp [judgmentsDepthOk, h0]
+          | true => simp [judgmentsDepthOk, h0, ih hj']
+
 structure SurfaceStep where
   id : Nat
   spec : StepSpec
@@ -76,7 +95,7 @@ def checkSurface (c : SurfaceCertificate) : Option VerifiedJudgment :=
     match checkStepsLTR c.premises (c.steps.map (·.spec)) with
     | none => none
     | some js =>
-        if claimsMatchSteps c.steps js then
+        if judgmentsDepthOk js && claimsMatchSteps c.steps js then
           match Nat.decLt c.conclusionStep js.length with
           | isFalse _ => none
           | isTrue hlt =>
@@ -89,33 +108,30 @@ theorem checkSurface_implies_checkCertificate
     (c : SurfaceCertificate) (j : VerifiedJudgment)
     (h : checkSurface c = some j) :
     checkCertificate c.erase = some j := by
-  simp [checkSurface] at h
-  cases hwf : surfaceWF c with
-  | false => simp [hwf] at h
-  | true =>
-      simp [hwf] at h
+  unfold checkSurface at h
+  split at h
+  · next hwf =>
       cases hs : checkStepsLTR c.premises (c.steps.map (·.spec)) with
       | none => simp [hs] at h
       | some js =>
-          simp [hs] at h
-          cases hc : claimsMatchSteps c.steps js with
-          | false => simp [hc] at h
-          | true =>
-              simp [hc] at h
+          simp only [hs] at h
+          split at h
+          · next hboth =>
               cases hlt : Nat.decLt c.conclusionStep js.length with
               | isFalse => simp [hlt] at h
               | isTrue ht =>
-                  simp [hlt] at h
-                  cases htop : claimsMatchTop c (js[c.conclusionStep]'ht) with
-                  | false => simp [htop] at h
-                  | true =>
-                      simp [htop] at h
+                  simp only [hlt] at h
+                  split at h
+                  · next htop =>
                       cases h
                       have hu : uniquePremiseIds c.premises = true := by
                         simp [surfaceWF, Bool.and_eq_true] at hwf
                         exact hwf.1.2
                       simp [checkCertificate, SurfaceCertificate.erase, decide_eq_true hu,
                         hs, hlt]
+                  · next => cases h
+          · next => cases h
+  · next => cases h
 
 theorem checkSurface_sound
     (c : SurfaceCertificate) (j : VerifiedJudgment)
@@ -224,7 +240,8 @@ theorem checkCertificate_implies_checkSurface
     (hne : c.steps ≠ [])
     (hprem : c.premises.length ≤ maxPremises)
     (hsteps : c.steps.length ≤ maxSteps)
-    (h : checkCertificate c = some j) :
+    (h : checkCertificate c = some j)
+    (hdepth : ∀ js, checkStepsLTR c.premises c.steps = some js → judgmentsDepthOk js = true) :
     checkSurface c.toSurface = some j := by
   have hu := checkCertificate_requires_unique_ids c j h
   have hmath := checkCertificate_mathEstablished_false c j h
@@ -251,6 +268,7 @@ theorem checkCertificate_implies_checkSurface
           have hs' :
               checkStepsLTR c.toSurface.premises (c.toSurface.steps.map (·.spec)) = some js := by
             simpa [StructuredCertificate.toSurface, hmap] using hs
+          have hdjs : judgmentsDepthOk js = true := hdepth js hs
           have hclaims : claimsMatchSteps c.toSurface.steps js = true := by
             simpa [StructuredCertificate.toSurface] using
               claimsMatchSteps_encode 0 c.steps js (by simpa [encodeSteps_length, hlen])
@@ -258,28 +276,44 @@ theorem checkCertificate_implies_checkSurface
             simp [claimsMatchTop, StructuredCertificate.toSurface, optionEq, hmath]
           have ht' : c.toSurface.conclusionStep < js.length := by
             simpa [StructuredCertificate.toSurface] using ht
-          have hlt' : Nat.decLt c.toSurface.conclusionStep js.length = isTrue ht' :=
-            Subsingleton.elim _ _
-          simp only [checkSurface, hwf, hs', hclaims, hlt']
-          simpa [StructuredCertificate.toSurface] using htop
+          cases hdec : Nat.decLt c.toSurface.conclusionStep js.length with
+          | isFalse nf => exact (nf ht').elim
+          | isTrue ht2 =>
+              -- `js[i]'ht` and `js[i]'ht2` are the same judgment
+              have hj : js[c.toSurface.conclusionStep]'ht2 = js[c.conclusionStep]'ht := by
+                simp [StructuredCertificate.toSurface]
+              simp [checkSurface, hwf, hs', hdjs, hclaims, hdec, hj, htop]
 
+/-- Surface ↔ core when reconstructed formulas obey `maxFormulaDepth`. -/
 theorem checkSurface_iff_checkCertificate
     (c : StructuredCertificate) (j : VerifiedJudgment)
     (hne : c.steps ≠ [])
     (hprem : c.premises.length ≤ maxPremises)
-    (hsteps : c.steps.length ≤ maxSteps) :
+    (hsteps : c.steps.length ≤ maxSteps)
+    (hdepth : ∀ js, checkStepsLTR c.premises c.steps = some js → judgmentsDepthOk js = true) :
     checkSurface c.toSurface = some j ↔ checkCertificate c = some j := by
   constructor
   · intro h
     have := checkSurface_implies_checkCertificate c.toSurface j h
     simpa [StructuredCertificate.toSurface, SurfaceCertificate.erase,
       encodeSteps_map_spec] using this
-  · exact checkCertificate_implies_checkSurface c j hne hprem hsteps
+  · intro h
+    exact checkCertificate_implies_checkSurface c j hne hprem hsteps h hdepth
+
+theorem checkSurface_rejects_deep_judgment
+    (c : SurfaceCertificate) (js : List VerifiedJudgment) (j0 : VerifiedJudgment)
+    (hwf : surfaceWF c = true)
+    (hs : checkStepsLTR c.premises (c.steps.map (·.spec)) = some js)
+    (hj : j0 ∈ js) (hd : maxFormulaDepth < j0.formula.depth) :
+    checkSurface c = none := by
+  have hfo := judgmentsDepthOk_false_of_mem js j0 hj hd
+  simp [checkSurface, hwf, hs, hfo]
 
 end ScientificReasoning
 
 #print axioms ScientificReasoning.checkSurface_implies_checkCertificate
 #print axioms ScientificReasoning.checkSurface_sound
 #print axioms ScientificReasoning.checkSurface_iff_checkCertificate
+#print axioms ScientificReasoning.checkSurface_rejects_deep_judgment
 #print axioms ScientificReasoning.hyp_mathVerified_not_established
 #print axioms ScientificReasoning.checkSurface_rejects_bad_schema

@@ -5,11 +5,12 @@
 
 ## Latest improvements
 
-1. Formula/Authority/Rule JSON isomorphisms (`toJsonFormula` round-trips, injectivity)
-2. `json_semantic_triangle`, `derives_completeness_steps_pos`, `ProofTerm.compile_steps_pos`
-3. Belnap `designated_neg` / designated table helpers
-4. Depth + parse edge tests — **74** pytest total
-5. Irreducible only: byte-string `json.loads` / CPython
+1. **Depth hole closed:** reconstructed step formulas (andI spines) must obey `MAX_DEPTH=64` in Python + Lean `judgmentsDepthOk`
+2. **Exhaustive meet:** `meet_exhaustive` / `meet_assoc` / `meet_idem` (6×6)
+3. **JsonCert:** unknown keys on premises/steps rejected; Formula depth shared with Syntax
+4. **Tests:** andI depth 64/65; v0 meet drift lock — **77** pytest
+5. **Irreducible only:** byte-string `json.loads` / CPython
+6. **Honest residual:** `Classical.choice` only on surface↔core iff (decLt proof packages)
 
 ## Reproduce
 

@@ -227,6 +227,11 @@ def check(cert: dict) -> Judgment:
                 math_established=jf.math_established,
             )
 
+        # Enforce MAX_DEPTH on reconstructed formulas (not only premises).
+        # Closes andI left-spine bypass where atoms have depth 0 but the
+        # conjunction nest exceeds 64.
+        _formula_depth(j.formula)
+
         if "formula" in s and not _eq_formula(s["formula"], j.formula):
             raise CheckError("claimed formula mismatch")
         if "support" in s:

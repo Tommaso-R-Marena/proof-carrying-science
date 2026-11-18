@@ -52,23 +52,51 @@ theorem meet_rank_le (a b : Authority) :
   Nat.le_min.2 ⟨meet_le_left a b, meet_le_right a b⟩
 
 /-- Exhaustive 6×6 meet table (locks Finding G / Python meet_tables). -/
-theorem meet_truth_table :
-    (∀ b, Authority.meet .disputed b = .disputed) ∧
-    (Authority.meet .hypothesis .disputed = .disputed) ∧
-    (Authority.meet .hypothesis .hypothesis = .hypothesis) ∧
-    (Authority.meet .hypothesis .empiricalAsserted = .hypothesis) ∧
-    (Authority.meet .hypothesis .assumption = .hypothesis) ∧
-    (Authority.meet .hypothesis .derived = .hypothesis) ∧
-    (Authority.meet .hypothesis .mathVerified = .hypothesis) ∧
-    (Authority.meet .assumption .empiricalAsserted = .assumption) ∧
-    (Authority.meet .empiricalAsserted .assumption = .assumption) ∧
-    (Authority.meet .empiricalAsserted .mathVerified = .empiricalAsserted) ∧
-    (Authority.meet .assumption .mathVerified = .assumption) ∧
-    (Authority.meet .derived .mathVerified = .derived) ∧
-    (Authority.meet .mathVerified .mathVerified = .mathVerified) := by
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · intro b; cases b <;> decide
-  all_goals decide
+theorem meet_truth_table (a b : Authority) :
+    Authority.meet a b =
+      (if a.rank < b.rank then a
+       else if b.rank < a.rank then b
+       else if a.tie ≤ b.tie then a else b) := by
+  rfl
+
+theorem meet_exhaustive (a b : Authority) :
+    Authority.meet a b =
+      match a, b with
+      | .disputed, _ => .disputed
+      | _, .disputed => .disputed
+      | .hypothesis, .hypothesis => .hypothesis
+      | .hypothesis, .empiricalAsserted => .hypothesis
+      | .hypothesis, .assumption => .hypothesis
+      | .hypothesis, .derived => .hypothesis
+      | .hypothesis, .mathVerified => .hypothesis
+      | .empiricalAsserted, .hypothesis => .hypothesis
+      | .assumption, .hypothesis => .hypothesis
+      | .derived, .hypothesis => .hypothesis
+      | .mathVerified, .hypothesis => .hypothesis
+      | .empiricalAsserted, .empiricalAsserted => .empiricalAsserted
+      | .assumption, .assumption => .assumption
+      | .assumption, .empiricalAsserted => .assumption
+      | .empiricalAsserted, .assumption => .assumption
+      | .empiricalAsserted, .derived => .empiricalAsserted
+      | .derived, .empiricalAsserted => .empiricalAsserted
+      | .empiricalAsserted, .mathVerified => .empiricalAsserted
+      | .mathVerified, .empiricalAsserted => .empiricalAsserted
+      | .assumption, .derived => .assumption
+      | .derived, .assumption => .assumption
+      | .assumption, .mathVerified => .assumption
+      | .mathVerified, .assumption => .assumption
+      | .derived, .derived => .derived
+      | .derived, .mathVerified => .derived
+      | .mathVerified, .derived => .derived
+      | .mathVerified, .mathVerified => .mathVerified := by
+  cases a <;> cases b <;> decide
+
+theorem meet_idem (a : Authority) : Authority.meet a a = a := by
+  cases a <;> decide
+
+theorem meet_assoc (a b c : Authority) :
+    Authority.meet (Authority.meet a b) c = Authority.meet a (Authority.meet b c) := by
+  cases a <;> cases b <;> cases c <;> decide
 
 /-- Declared authority is untrusted; mathEstablished is never set by Hyp from labels. -/
 structure Assurance where
@@ -86,5 +114,7 @@ def Assurance.hypDeclared (a : Authority) : Assurance :=
 end ScientificReasoning
 
 #print axioms ScientificReasoning.meet_comm
-#print axioms ScientificReasoning.meet_truth_table
+#print axioms ScientificReasoning.meet_exhaustive
+#print axioms ScientificReasoning.meet_assoc
+#print axioms ScientificReasoning.meet_idem
 

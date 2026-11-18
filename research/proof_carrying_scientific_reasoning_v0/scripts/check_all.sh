@@ -5,14 +5,14 @@ export PATH="${HOME}/.local/lean-4.28.0/bin:${PATH}"
 export PYTHONPATH="${ROOT}/python:${ROOT}/independent_checker:${PYTHONPATH:-}"
 
 echo "== Lean =="
-(cd "${ROOT}/lean" && lake build 2>&1 | tee "${ROOT}/results/lean_build_phase4.log")
+(cd "${ROOT}/lean" && lake build 2>&1 | tee "${ROOT}/results/lean_build.log")
 
 echo "== axiom audit (no sorryAx) =="
-if grep -E "sorryAx" "${ROOT}/results/lean_build_phase4.log"; then
+if grep -E "sorryAx" "${ROOT}/results/lean_build.log"; then
   echo "sorryAx present"
   exit 1
 fi
-echo "no sorryAx in phase4 build log"
+echo "no sorryAx in lean build log"
 
 echo "== pytest =="
 python3 -m pytest -q "${ROOT}/tests" "${ROOT}/adversarial"

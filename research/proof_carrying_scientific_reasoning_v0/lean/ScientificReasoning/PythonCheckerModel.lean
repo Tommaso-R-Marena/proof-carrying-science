@@ -57,9 +57,10 @@ theorem checkCertificatePy_iff_core
     (c : StructuredCertificate) (j : VerifiedJudgment)
     (hne : c.steps ≠ [])
     (hprem : c.premises.length ≤ maxPremises)
-    (hsteps : c.steps.length ≤ maxSteps) :
+    (hsteps : c.steps.length ≤ maxSteps)
+    (hdepth : ∀ js, checkStepsLTR c.premises c.steps = some js → judgmentsDepthOk js = true) :
     checkCertificatePy c.toSurface = some j ↔ checkCertificate c = some j :=
-  checkSurface_iff_checkCertificate c j hne hprem hsteps
+  checkSurface_iff_checkCertificate c j hne hprem hsteps hdepth
 
 /-- Top-level Python path after parse: typed JSON graph. -/
 def checkCertificateJson (c : JsonCertificate) : Option VerifiedJudgment :=
