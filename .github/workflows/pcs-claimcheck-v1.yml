@@ -75,6 +75,11 @@ jobs:
           python research/claimcheck_v1/replay_independent.py \
             research/claimcheck_v1/benchmark/results/bundles/08_pmc6238128 \
             --checker-sha256 "$(cut -d' ' -f1 research/claimcheck_v1/formal/ClaimCheck.lean.sha256)"
+      - name: The same bundle through the checked v1 replay (frozen replayer plus the claim-binding checks it lacks)
+        run: |
+          python research/claimcheck_v1_1/replay_v1_bundle_checked.py \
+            research/claimcheck_v1/benchmark/results/bundles/08_pmc6238128 \
+            --checker-sha256 "$(cut -d' ' -f1 research/claimcheck_v1/formal/ClaimCheck.lean.sha256)"
       - name: v1.1 offline tests (policy, records, statistics; runner incl. forged and altered proof files; no Lean, no network)
         run: python -m unittest discover -s research/claimcheck_v1_1/tests -v
       - name: v1.1 live checks with the real kernel (end to end, replay, tampering, fail-closed, runner incl. the reported forgery)

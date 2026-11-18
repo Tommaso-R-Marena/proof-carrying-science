@@ -43,6 +43,7 @@ from research.claimcheck_v1_1.verify import verify, write_bundle_v11
 
 HERE = Path(__file__).resolve().parent
 REPLAY = HERE.parent / "replay_independent_v1_1.py"
+CHECKED_V1 = HERE.parent / "replay_v1_bundle_checked.py"
 RUNNER = HERE.parent / "claimcheck_kernel_runner.py"
 OTHER_DATA = DATA.replace(b"12.31", b"12.51")
 SENTENCES = ["Mean body mass was 14.76 g (range 11.95–18.09 g) across the 12 individuals.",
@@ -198,6 +199,17 @@ class Binding(unittest.TestCase):
         edit(target)
         return replay(target) + (v1_problems(target),)
 
+    def assertCheckedV1Refuses(self, bundle: Path, expected: str):
+        """The frozen v1 replayer alone accepts the forged v1 bundle; the checked wrapper refuses it."""
+        self.assertEqual(v1_problems(bundle), [])
+        proc = subprocess.run([sys.executable, str(CHECKED_V1), str(bundle / "v1"), "--checker-sha256", lean_mod.checker_sha256(), "--skip-lean"],
+                              capture_output=True, text=True)
+        report = json.loads(proc.stdout)
+        self.assertEqual(report["v1_replayer_exit"], 0, "the frozen v1 replayer accepts it on its own")
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertFalse(report["all_replayed"])
+        self.assertTrue(any(expected in p["problem"] for p in report["binding"]["problems"]), report["binding"])
+
     def assertClaimBindingRefused(self, outcome, expected: str):
         """Refused by the v1.1 replayer; the frozen v1 replayer alone still accepts it (known limit)."""
         code, summary, v1 = outcome
@@ -215,6 +227,14 @@ class Binding(unittest.TestCase):
             self.assertTrue(any(text in p for p in found), (text, found))
 
     # ---- the genuine bundle ---------------------------------------------------------------------
+    def test_the_checked_v1_replay_accepts_the_genuine_bundle(self):
+        proc = subprocess.run([sys.executable, str(CHECKED_V1), str(self.work / "good" / "v1"), "--checker-sha256", lean_mod.checker_sha256(), "--skip-lean"],
+                              capture_output=True, text=True)
+        report = json.loads(proc.stdout)
+        self.assertEqual(proc.returncode, 0, report)
+        self.assertTrue(report["all_replayed"])
+        self.assertGreater(report["binding"]["receipts"], 0)
+
     def test_the_genuine_bundle_replays(self):
         code, summary = replay(self.work / "good")
         self.assertEqual(code, 0, problems(summary))
@@ -456,6 +476,7 @@ class Binding(unittest.TestCase):
             relabel(by_id(records, "c003"), "MATCH_PROVED")
             save(b, receipts, records)
         outcome = self.forged("f-dropped-convention", edit)
+        self.assertCheckedV1Refuses(self.work / "f-dropped-convention", "the checked variants are not the ones the claim's statistic requires")
         receipt = by_id(load(self.work / "f-dropped-convention")[0], "c003")
         self.assertEqual([v["stat"] for v in receipt["q1_mathematics"]["variants"]], ["sd_sample"])  # the forgery is in place
         self.assertClaimBindingRefused(outcome, "the checked variants are not the ones the claim's statistic requires")
@@ -479,6 +500,7 @@ class Binding(unittest.TestCase):
             relabel(by_id(records, "c005"), "MATCH_PROVED")
             save(b, receipts, records)
         outcome = self.forged("f-other-statistic", edit)
+        self.assertCheckedV1Refuses(self.work / "f-other-statistic", "the checked variants are not the ones the claim's statistic requires")
         receipt = by_id(load(self.work / "f-other-statistic")[0], "c005")
         self.assertEqual((receipt["claim"]["spec"]["stat"], receipt["q1_mathematics"]["variants"][0]["stat"]), ("mean", "median"))
         self.assertIn("arithmetic mean", receipt["claim"]["reading"])
@@ -506,6 +528,7 @@ class Binding(unittest.TestCase):
             rec["source_reading"]["findings"] = []
             save(b, receipts, records)
         outcome = self.forged("f-reported-value", edit)
+        self.assertCheckedV1Refuses(self.work / "f-reported-value", "the claim's reported value is not the number printed in the sentence")
         receipt = by_id(load(self.work / "f-reported-value")[0], "c002")
         self.assertEqual((receipt["claim"]["spec"]["reported"], receipt["q2_correspondence"]["reported_value"]["literal_checked"]), ("109.5", "111.2"))
         self.assertClaimBindingRefused(outcome, "the claim's reported value is not the number printed in the sentence")
