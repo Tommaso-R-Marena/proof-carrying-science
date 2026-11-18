@@ -46,7 +46,11 @@ Lean (optional, after `source scripts/activate_lean_428.sh`):
 cd research/proof_carrying_causal_reasoning_v1/lean && lake build
 ```
 
-## Live local models
+Lean now includes inductive confounder/collider/mediation proofs, an abstract
+non-identifiability theorem, and an exact-rational confounder SCM with
+`backdoor = do` plus correlation≠causation (see `RESULTS.md`).
+
+## Live local models (GGUF)
 
 Uses the same pinned Qwen3-0.6B/1.7B GGUF + llama.cpp contract as
 `research/public_study_validation_v1` (CPU, loopback only):
@@ -60,7 +64,22 @@ python -m research.proof_carrying_causal_reasoning_v1 model \
   --model Qwen/Qwen3-0.6B-GGUF
 ```
 
-Results are local measurements on small models, not an official leaderboard.
+## Gemini API (rate-limited)
+
+Requires `GEMINI_API_KEY` in the environment. The key is never written to
+results or the repository. Defaults: `gemini-3.5-flash-lite`, ≥8–10s between
+calls, capped request count.
+
+```bash
+export GEMINI_API_KEY=...   # shell only
+python -m research.proof_carrying_causal_reasoning_v1 gemini \
+  --out /tmp/pccr-gemini \
+  --model gemini-3.5-flash-lite \
+  --min-interval 10 \
+  --max-requests 10
+```
+
+Results are local measurements, not an official leaderboard.
 
 ## Task battery
 

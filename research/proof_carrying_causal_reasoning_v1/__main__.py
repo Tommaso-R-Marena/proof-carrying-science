@@ -30,6 +30,15 @@ def main(argv: list[str] | None = None) -> int:
     m.add_argument("--tasks", nargs="*", default=None)
     d = sub.add_parser("download-weights", help="Download pinned GGUF + llama.cpp")
     d.add_argument("--weights", type=Path, required=True)
+    g = sub.add_parser(
+        "gemini",
+        help="Rate-limited Gemini API evaluation (requires GEMINI_API_KEY env)",
+    )
+    g.add_argument("--out", type=Path, required=True)
+    g.add_argument("--model", default="gemini-3.5-flash-lite")
+    g.add_argument("--tasks", nargs="*", default=None)
+    g.add_argument("--min-interval", type=float, default=8.0)
+    g.add_argument("--max-requests", type=int, default=12)
 
     args = p.parse_args(argv)
 
@@ -98,6 +107,31 @@ def main(argv: list[str] | None = None) -> int:
                     "accuracy": payload["evaluation"]["accuracy"],
                     "n_accepted": payload["evaluation"]["n_accepted"],
                     "n_tasks": payload["evaluation"]["n_tasks"],
+                    "out": str(args.out),
+                },
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.cmd == "gemini":
+        from research.proof_carrying_causal_reasoning_v1.gemini_eval import run_gemini
+
+        payload = run_gemini(
+            args.out,
+            model=args.model,
+            task_ids=args.tasks,
+            min_interval_sec=args.min_interval,
+            max_requests=args.max_requests,
+        )
+        print(
+            json.dumps(
+                {
+                    "model": payload["model"],
+                    "accuracy": payload["evaluation"]["accuracy"],
+                    "n_accepted": payload["evaluation"]["n_accepted"],
+                    "n_tasks": payload["evaluation"]["n_tasks"],
+                    "n_calls": payload["n_calls"],
                     "out": str(args.out),
                 },
                 indent=2,
