@@ -63,7 +63,7 @@ def attack_document(doc, tau: Fraction) -> list[dict]:
                 proposals.append({"quote": sentence, "quote_start": w0, "spec": rd.spec(literal, ru).to_json()})
                 owner.append(literal)
         receipts = oracle_receipts(doc, proposals) if proposals else []
-        decisions = assess_document(ctx, receipts, tau=tau) if receipts else []
+        decisions = assess_document(ctx, receipts, tau=tau, oracle_receipts=True) if receipts else []
         confirmed: dict[str, list] = {}
         strong = []
         for lit, r, d in zip(owner, receipts, decisions):
@@ -95,7 +95,7 @@ def attack_document(doc, tau: Fraction) -> list[dict]:
         flagged: dict[str, list] = {}
         if acc_props:
             acc_receipts = oracle_receipts(doc, acc_props)
-            acc_decisions = assess_document(ctx, receipts + acc_receipts, tau=tau)[len(receipts):]
+            acc_decisions = assess_document(ctx, receipts + acc_receipts, tau=tau, oracle_receipts=True)[len(receipts):]
             for lit, r, d in zip(acc_owner, acc_receipts, acc_decisions):
                 if d["verdict"] == "DISCREPANCY_FOR_REVIEW":
                     flagged.setdefault(lit, []).append(r["claim"]["spec"])

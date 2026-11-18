@@ -68,10 +68,24 @@ theorem checked by the kernel; **proposal** = prepared, not applied.
 * **Change (implemented, tested):** `research/claimcheck_v1_1/replay_independent_v1_1.py`
   (`1d2f80ef`): the claim's reported value must be the printed literal, and the checked variants
   those the statistic requires. Not a protected file, but it changes an evidence tool, so it is
-  listed for your review. The frozen v1 replayer is unchanged and keeps the gap.
+  listed for your review. The frozen v1 replayer is unchanged and keeps the gap; a warning file
+  stands beside it (`research/claimcheck_v1/LEGACY_REPLAY_WARNING.md`) and
+  `research/claimcheck_v1_1/replay_v1_bundle_checked.py` replays v1 bundles with the checks it lacks.
 * **Tests:** three former gaps now refused; 0 violations on the 302 committed receipts; live replay
   of genuine bundles passes.
 * **If rejected:** revert that commit; the gap reopens for bundles handed to reviewers.
+
+### C5. The outward verdict follows the kernel-established status
+
+* **Change (implemented, tested):** `research/claimcheck_v1_1/policy.py` (`5a18afd7`):
+  `established_status` recomputes the status from the kernel-checked variants and requires every
+  summary field to agree; `binding_problem` ties the claim to the sentence; an inconsistent receipt
+  gives UNKNOWN and corroborates nothing.
+* **Tests:** `tests/test_decide_guard.py` (7 tests, including all 240 combinations of the summary
+  fields); all 1,590 committed receipts consistent; the site catalog re-exports byte-identical; the
+  research-branch conformance asserts the guard with the real code.
+* **If rejected:** revert that commit; a receipt with a contradictory `result` could again be
+  confirmed or flagged.
 
 ## Website (PR 149)
 

@@ -107,6 +107,112 @@ def math_status(receipt: dict) -> str:
     return "NOT_ESTABLISHED"
 
 
+_DECIDED = {"MATCH_PROVED": "PROVED", "MISMATCH_PROVED": "REFUTED"}
+
+
+def established_status(receipt: dict, *, oracle_receipts: bool = False) -> tuple[str, str | None]:
+    """The mathematical status the receipt's kernel-checked variants establish, and whether its summary agrees.
+
+    Returns (status, None) when every summary field of the receipt (`result`, `q1.status`,
+    `q1.conditional`, `reason`) follows from its variants, and ("NOT_ESTABLISHED", why) otherwise.
+    Each variant's status is recomputed as claimcheck_v1/pipeline.py::_complete computes it: decided only
+    if the Lean kernel accepted the obligation, which states the variant's predicted outcome, and that
+    outcome is defined; PROVED if the outcome is consistent, REFUTED if not.  The aggregate is recomputed
+    with the same rule as `_complete`.  A summary is never trusted on its own: a receipt whose `result`
+    or status was edited, or whose variants were dropped or downgraded, decides nothing.
+
+    `oracle_receipts=True` is for development analysis only (like `oracle_siblings`): a receipt that
+    `dev.common.oracle_receipts_raw` marked `oracle_predicted_only`, whose arithmetic is the untrusted
+    oracle's prediction, is then taken at its summary.  The verification pipeline never sets it, so
+    there an oracle-marked receipt is not kernel-established and decides nothing.
+    """
+    if oracle_receipts and receipt.get("oracle_predicted_only") is True:
+        return math_status(receipt), None
+    q1 = receipt.get("q1_mathematics")
+    if not isinstance(q1, dict):
+        q1 = {}
+    variants = q1.get("variants")
+    claimed = math_status(receipt)
+    statuses = []
+    for v in variants if isinstance(variants, list) else []:
+        if not isinstance(v, dict) or not isinstance(v.get("predicted_outcome"), dict) or not isinstance(v.get("lean"), dict):
+            return "NOT_ESTABLISHED", "a variant is malformed"
+        po = v["predicted_outcome"]
+        accepted = v["lean"].get("kernel_accepted") is True
+        if accepted and po.get("defined") is True and po.get("verdict") in ("consistent", "inconsistent"):
+            want = "PROVED" if po["verdict"] == "consistent" else "REFUTED"
+        else:
+            want = "UNKNOWN"
+        if v.get("status") != want:
+            return "NOT_ESTABLISHED", "a variant's status does not follow from its kernel result"
+        statuses.append(want)
+    conditional = False
+    if not statuses:
+        agg = "UNKNOWN"
+    elif len(statuses) == 1:
+        agg = statuses[0]
+    elif all(x == "PROVED" for x in statuses):
+        agg = "PROVED"
+    elif all(x == "REFUTED" for x in statuses):
+        agg = "REFUTED"
+    elif "UNKNOWN" in statuses:
+        agg = "UNKNOWN"
+    else:
+        agg, conditional = "UNKNOWN", True
+    if (q1.get("status") or "UNKNOWN") != agg or bool(q1.get("conditional")) != conditional:
+        return "NOT_ESTABLISHED", "the mathematical summary does not follow from the variants"
+    if agg == "PROVED":
+        status = "MATCH_PROVED"
+    elif agg == "REFUTED":
+        status = "MISMATCH_PROVED"
+    elif conditional:
+        status = "CONDITIONAL_ON_CONVENTION"
+    elif receipt.get("reason") == "statistic_undefined":
+        defined = variants[0]["predicted_outcome"].get("defined") if statuses else True
+        if defined is not False or not all(v["lean"].get("kernel_accepted") is True for v in variants):
+            return "NOT_ESTABLISHED", "an undefined statistic is claimed without a kernel-accepted undefined outcome"
+        status = "UNDEFINED_PROVED"
+    else:
+        status = "NOT_ESTABLISHED"
+    if status != claimed:
+        return "NOT_ESTABLISHED", "the mathematical summary does not follow from the variants"
+    reason = receipt.get("reason")
+    # the reasons _complete writes: a decided status ends with "checked" or "binding_not_grounded"
+    if (status in _DECIDED and reason not in ("checked", "binding_not_grounded")) or \
+       (reason == "statistic_undefined" and status != "UNDEFINED_PROVED") or \
+       (reason == "ambiguous_convention" and status != "CONDITIONAL_ON_CONVENTION"):
+        return "NOT_ESTABLISHED", f"the receipt's reason {reason!r} contradicts the kernel-established status {status}"
+    result = receipt.get("result")
+    if result in ("PROVED", "REFUTED") and _DECIDED.get(status) != result:
+        return "NOT_ESTABLISHED", f"the receipt's result {result} contradicts the kernel-established status {status}"
+    return status, None
+
+
+_SD_CONVENTIONS = {"n-1": "sd_sample", "n": "sd_pop"}
+
+
+def binding_problem(receipt: dict, manifest: dict | None) -> str | None:
+    """Why the receipt's claim is not the sentence's, or None.  The same two checks as the v1.1 replayer:
+    the claim's reported value must be the printed literal whenever the quote check found it, and the
+    checked variants must be exactly those the claim's statistic requires (claimcheck_v1/pipeline.py::
+    expand_spec: both standard-deviation conventions unless the manifest declares one)."""
+    spec = (receipt.get("claim") or {}).get("spec") or {}
+    q2 = receipt.get("q2_correspondence") or {}
+    if (q2.get("checks") or {}).get("reported_value_in_quote") and spec.get("reported") != (q2.get("reported_value") or {}).get("literal_checked"):
+        return "the claim's reported value is not the number printed in the sentence"
+    variants = (receipt.get("q1_mathematics") or {}).get("variants") or []
+    if variants:
+        stat = spec.get("stat")
+        if stat in ("sd", "sd_sample", "sd_pop"):
+            declared = (manifest or {}).get("sd_convention")
+            want = [_SD_CONVENTIONS[declared]] if declared in _SD_CONVENTIONS else ["sd_sample", "sd_pop"]
+        else:
+            want = [stat]
+        if [v.get("stat") if isinstance(v, dict) else None for v in variants] != want:
+            return "the checked variants are not the ones the claim's statistic requires"
+    return None
+
+
 def identity(ctx: SourceContext, spec: ClaimSpec) -> tuple[tuple | None, tuple | None]:
     """(what is computed, rows that enter it) for a reading; mirrors ``space.readings_for_window``."""
     t = ctx.table
@@ -134,13 +240,16 @@ def _scope(reading: Reading) -> tuple:
     return reading.ident[1] if reading.stat in ("count", "share") else reading.ident[3]
 
 
-def _item(ctx: SourceContext, receipt: dict) -> Item | None:
+def _item(ctx: SourceContext, receipt: dict, oracle_receipts: bool = False) -> Item | None:
     try:
         spec = ClaimSpec.from_json((receipt.get("claim") or {}).get("spec"), allow_unspecified_sd=True)
     except SpecError:
         return None
     q2 = receipt.get("q2_correspondence") or {}
-    it = Item(receipt, spec, receipt.get("result", "UNKNOWN"), math_status(receipt))
+    status, inconsistent = established_status(receipt, oracle_receipts=oracle_receipts)
+    inconsistent = inconsistent or binding_problem(receipt, ctx.manifest)
+    # an inconsistent receipt is never decided and never corroborates anything
+    it = Item(receipt, spec, "INCONSISTENT" if inconsistent else receipt.get("result", "UNKNOWN"), status)
     if q2.get("reported_value") and q2.get("sentence") and q2.get("quote"):
         it.w0, it.w1 = q2["sentence"]["start"], q2["sentence"]["end"]
         it.token_start = q2["reported_value"]["start"]
@@ -297,15 +406,19 @@ def sibling_proposals(ctx: SourceContext, receipt: dict) -> list[dict]:
     return out
 
 
-def assess_document(ctx: SourceContext, receipts: list[dict], *, tau: Fraction = TAU, oracle_siblings: bool = False) -> list[dict]:
+def assess_document(ctx: SourceContext, receipts: list[dict], *, tau: Fraction = TAU, oracle_siblings: bool = False,
+                    oracle_receipts: bool = False) -> list[dict]:
     """Outward verdict and findings for every v1 receipt about one source and one data file.
 
     ``oracle_siblings=True`` (development evaluation only) lets oracle-predicted sibling matches
-    corroborate without a kernel run.  The verification pipeline never sets it: there, corroborating
-    siblings are kernel-checked receipts in ``receipts``.
+    corroborate without a kernel run.  ``oracle_receipts=True`` (development analysis and offline tests
+    only) accepts receipts marked ``oracle_predicted_only`` at their summary.  The verification pipeline
+    sets neither: there, every decided verdict needs a status established by kernel-accepted variants
+    (``established_status``), and corroborating siblings are kernel-checked receipts in ``receipts``.
     """
-    items = [_item(ctx, r) for r in receipts]
-    decided = [it for it in items if it is not None and it.w0 is not None and it.v1_result in ("PROVED", "REFUTED") and it.ident is not None]
+    items = [_item(ctx, r, oracle_receipts) for r in receipts]
+    decided = [it for it in items if it is not None and it.w0 is not None and it.ident is not None
+               and _DECIDED.get(it.math) == it.v1_result]
     for it in decided:
         if it.v1_result == "PROVED":
             it.strong_match, it.findings = _numeric_evidence(ctx, it, tau)
@@ -323,7 +436,7 @@ def assess_document(ctx: SourceContext, receipts: list[dict], *, tau: Fraction =
                 if g.ok and sib.ident is not None:
                     sib.strong_match, sib.findings = _numeric_evidence(ctx, sib, tau)
                     siblings_extra.append(sib)
-    strong = [s for s in decided + siblings_extra if s.v1_result == "PROVED" and s.strong_match]
+    strong = [s for s in decided + siblings_extra if s.v1_result == "PROVED" and s.math == "MATCH_PROVED" and s.strong_match]
 
     def corroborators(it: Item, same_column: bool) -> list[Item]:
         out = []
@@ -340,25 +453,37 @@ def assess_document(ctx: SourceContext, receipts: list[dict], *, tau: Fraction =
 
     results = []
     for receipt, it in zip(receipts, items):
-        results.append(_decide(ctx, receipt, it, corroborators, tau))
+        results.append(_decide(ctx, receipt, it, corroborators, tau, oracle_receipts))
     return results
 
 
-def _decide(ctx: SourceContext, receipt: dict, it: Item | None, corroborators, tau: Fraction) -> dict:
-    math = math_status(receipt)
+def _decide(ctx: SourceContext, receipt: dict, it: Item | None, corroborators, tau: Fraction, oracle_receipts: bool = False) -> dict:
+    math, inconsistent = established_status(receipt, oracle_receipts=oracle_receipts)
+    inconsistent = inconsistent or binding_problem(receipt, ctx.manifest)
+    if inconsistent:
+        math = "NOT_ESTABLISHED"
     q2 = receipt.get("q2_correspondence") or {}
     findings: list = []
     reasons: list[str] = []
 
     def out(verdict: str, corroboration=()):
-        assert verdict in OUTWARD
-        assert verdict != "CONFIRMATION" or receipt.get("result") == "PROVED"
-        assert verdict != "DISCREPANCY_FOR_REVIEW" or receipt.get("result") == "REFUTED"
+        if verdict not in OUTWARD:
+            raise ValueError("unknown outward verdict")
+        # fail closed (not an assert, which `python -O` removes): a decided verdict needs the matching
+        # kernel-established status AND the matching v1 result
+        if (verdict == "CONFIRMATION" and not (math == "MATCH_PROVED" and receipt.get("result") == "PROVED")) or \
+           (verdict == "DISCREPANCY_FOR_REVIEW" and not (math == "MISMATCH_PROVED" and receipt.get("result") == "REFUTED")):
+            reasons.append("A decided verdict was not supported by the kernel-established status; it is withheld.")
+            verdict, corroboration = "UNKNOWN", ()
         return {"verdict": verdict, "mathematical_status": math, "reasons": reasons, "findings": findings,
                 "corroborated_by": [{"printed": s.literal, "reading": s.spec.to_json(), "kernel_checked": not s.oracle_only,
                                      "receipt_sha256": (s.receipt or {}).get("receipt_sha256")} for s in corroboration],
                 "policy": policy_parameters() | {"max_decoy_coincidence_rate": str(tau)}}
 
+    if inconsistent:
+        reasons.append("The receipt is not consistent with its own kernel-checked variants or with the sentence ("
+                       + inconsistent + "), so nothing is decided from it.")
+        return out("UNKNOWN")
     if math in ("NOT_ESTABLISHED", "UNDEFINED_PROVED"):
         reasons.append({"NOT_ESTABLISHED": "No mathematical result was established by the Lean kernel.",
                         "UNDEFINED_PROVED": "The statistic is undefined for this file (kernel-confirmed)."}[math])
@@ -378,7 +503,7 @@ def _decide(ctx: SourceContext, receipt: dict, it: Item | None, corroborators, t
         return out("REQUIRE_HUMAN_REVIEW")
     window = ctx.source[it.w0:it.w1]
 
-    if receipt["result"] == "PROVED":
+    if math == "MATCH_PROVED":                # the kernel-established status decides the branch, not `result`
         findings.extend(it.findings)
         if it.strong_match:
             return out("CONFIRMATION")

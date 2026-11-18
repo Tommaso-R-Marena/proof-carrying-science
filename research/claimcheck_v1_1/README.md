@@ -138,8 +138,25 @@ variants must be exactly those the claim's statistic requires (both standard-dev
 unless the manifest declares one). Before, a resealed bundle whose claim had another reported value,
 another statistic, or a dropped convention replayed successfully, with the real kernel too, because
 the remaining theorem is true. All 302 committed receipts satisfy both rules. The frozen v1 replayer
-is unchanged and still accepts such bundles on its own: use the v1.1 replayer for v1.1 bundles
+is unchanged and still accepts such bundles on its own: **do not use it alone to establish the
+integrity of a bundle from an untrusted source** (`../claimcheck_v1/LEGACY_REPLAY_WARNING.md`). Use the
+v1.1 replayer for v1.1 bundles and `replay_v1_bundle_checked.py` for v1 bundles: it runs the frozen
+replayer unchanged and adds the binding checks; the six committed held-out bundles pass it
 (`tests/test_binding_offline.py`).
+
+**Outward verdict and the kernel-established status, 2026-11-17.** `policy._decide` chose its rules by
+the receipt's `result` field and checked a decided verdict only against that field, so a receipt whose
+`result` contradicted its kernel-checked variants could be confirmed or flagged, and could corroborate
+another number. Now `policy.established_status` recomputes the status from the variants exactly as the
+pipeline builds it, and every summary field (`result`, `q1.status`, `q1.conditional`, `reason`) must
+agree; `policy.binding_problem` applies the replay's binding checks; an inconsistent receipt decides
+nothing (UNKNOWN) and corroborates nothing. All 1,590 committed receipts are consistent, so no recorded
+verdict changes (the site catalog re-exports byte-identical). `assess_document(oracle_receipts=True)` is
+the explicit development-only way to use oracle-predicted receipts; the verification pipeline never
+sets it. Tests: `tests/test_decide_guard.py` (flipped results, all 240 combinations of summary fields,
+forged, downgraded, missing or malformed variants, another number or statistic, a dropped convention,
+forged siblings). The policy does not run Lean: a consistent lie in the kernel record itself is caught
+by the replay, which re-runs the kernel.
 
 A pass verifies the supplied mathematical obligation: each theorem in the file, about the reviewed
 checker, holds for the data bytes embedded in the file. It does **not** verify that the obligation

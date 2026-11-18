@@ -99,8 +99,29 @@ literal whenever the quote check found it, and the checked variants must be exac
 statistic requires (both standard-deviation conventions unless the manifest declares one). All 302
 committed receipts satisfy both rules (0 violations); the live check still replays genuine bundles.
 The three tests now assert refusal (`tests/test_binding_offline.py`, 15 tests). **Not fixed in the
-frozen v1 replayer** (`FREEZE.json` pins it); on its own it still accepts these bundles, and the tests
-record that. Use the v1.1 replayer for v1.1 bundles.
+frozen v1 replayer** (`FREEZE.json` pins it): on its own it still accepts these bundles, and it must
+not be used alone to establish the integrity of a bundle from an untrusted source
+(`research/claimcheck_v1/LEGACY_REPLAY_WARNING.md`, a new file; no frozen file changed). Safe paths:
+the v1.1 replayer for v1.1 bundles, and `research/claimcheck_v1_1/replay_v1_bundle_checked.py` for v1
+bundles, which runs the frozen replayer unchanged and adds the binding and result-consistency checks.
+The six committed held-out bundles pass it (302 receipts, no problem; bundle 08 also with the real
+kernel, now in CI); the three forgeries are refused by it while the frozen replayer alone accepts them.
+
+## 5a. The outward verdict followed a mutable field (closed 2026-11-17)
+
+`policy._decide` chose the match or mismatch rules by the receipt's `result` field and checked a
+decided verdict only against that field (with `assert`, which `python -O` removes). A receipt whose
+`result` contradicted its kernel-checked variants could therefore be confirmed or flagged, and could
+corroborate another number. **Fixed** (`5a18afd7`): `policy.established_status` recomputes the status
+from the variants as the pipeline builds it and requires `result`, `q1.status`, `q1.conditional` and
+`reason` to agree; `policy.binding_problem` applies the replay's binding checks; an inconsistent receipt
+decides nothing and corroborates nothing; the decided-verdict check is no longer an `assert`. All 1,590
+committed receipts are consistent and the site catalog re-exports byte-identical. Tests:
+`tests/test_decide_guard.py`, including all 240 combinations of the summary fields. On the research
+branch the conformance check now asserts, with the real guard, that a receipt whose result contradicts
+its status decides nothing (it was recorded, not asserted, before), and that the guard accepts every
+receipt the pipeline can write (all 84 status patterns). Out of scope by design: a consistent lie in
+the kernel record itself, which only re-running the kernel detects (the replay does).
 
 ## 6. The website's receipt rule
 
@@ -129,4 +150,7 @@ Implementation and evidence: see the site's `docs/governance/CLAIMCHECK_PROPOSAL
   directory) is reasoned from documented behaviour and was not executed on Windows.
 * A receipt is not a signature: the page can check that a receipt is consistent with its own file,
   not that a kernel actually ran. Only running the runner (or `lean`) yourself establishes that.
-* The frozen v1 replayer keeps the claim-binding gap of section 5.
+* The frozen v1 replayer keeps the claim-binding gap of section 5; use it only through
+  `replay_v1_bundle_checked.py` for bundles from untrusted sources.
+* The policy layer checks the internal consistency of a receipt, not the truth of its kernel record;
+  that is the replay's job (it re-runs the kernel).
