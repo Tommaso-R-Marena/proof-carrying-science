@@ -1,0 +1,223 @@
+{
+  "automatic_deployment": false,
+  "format": "pcs-pgra-end-to-end-demo-v1",
+  "import_notes": [],
+  "pcs_authority": false,
+  "pcs_scientific_authority": false,
+  "scope": "Research demonstration of proof-gated recursive autoformalization plus an optional SVB-like claim\u2192obligation bridge. Not production PCS authority, not an SVB leaderboard, not unrestricted English equivalence.",
+  "steps": {
+    "1_recursive_rulebook_improvement": {
+      "accepted_generations": 4,
+      "certified_counts": [
+        13,
+        15,
+        17,
+        19,
+        21
+      ],
+      "engine": "sibling_recursive_loop.automatic_search",
+      "final_loss": 3,
+      "final_rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "meets_min_two_generations": true
+    },
+    "2_formalize_newly_unlocked": {
+      "english": "For all propositions A and B, A exactly when B.",
+      "formalization": {
+        "candidates": [
+          {
+            "interpretation_sha256": "2a206960aedc8afc0a1404714b91d6943eccdb725e7ba484e02f026a141af339",
+            "ir": {
+              "binders": [
+                {
+                  "name": "A",
+                  "type": "Prop"
+                },
+                {
+                  "name": "B",
+                  "type": "Prop"
+                }
+              ],
+              "body": {
+                "left": {
+                  "name": "A",
+                  "op": "var"
+                },
+                "op": "iff",
+                "right": {
+                  "name": "B",
+                  "op": "var"
+                }
+              },
+              "format": "pcs-math-ir-v1"
+            },
+            "lean": "\u2200 (A : Prop) (B : Prop), (A \u2194 B)",
+            "score": null
+          }
+        ],
+        "extension_rules": [
+          "rule_exactly_when"
+        ],
+        "fidelity_boundary": "Controlled grammar interpretation; user intent and unrestricted English equivalence unproved.",
+        "semantic_authorization": false,
+        "source": "For all propositions A and B, A if and only if B",
+        "source_sha256": "da05721f52a4b725d140d19fd8cb3b5b4d709757e74979da73d363aad2c489a0",
+        "status": "supported"
+      },
+      "ir_digest": "2a206960aedc8afc0a1404714b91d6943eccdb725e7ba484e02f026a141af339",
+      "lean": "\u2200 (A : Prop) (B : Prop), (A \u2194 B)",
+      "rule_id": "rule_exactly_when",
+      "status": "supported"
+    },
+    "3_optional_symbolic_search": {
+      "pcs_authority": false,
+      "policy": "symbolic",
+      "reason": "lean binary not found on PATH",
+      "status": "skipped"
+    },
+    "4_svb_like_bridge_score": {
+      "abstentions": 3,
+      "automatic_deployment": false,
+      "bridges": [
+        {
+          "claim": "Under a finite Nat model, for every natural number n the equality n = n holds.",
+          "claim_id": "svb_like_M01_nat_identity",
+          "corpus_item": {
+            "class": "svb_like_mapped",
+            "english": "For all natural numbers n, n equals n.",
+            "id": "svb_bridge_svb_like_M01_nat_identity",
+            "license": "Apache-2.0",
+            "required_rules": [],
+            "source": "PCS authored SVB-like bridge (not SVB frozen tasks)",
+            "split": "bridge",
+            "target": "supported"
+          },
+          "metadata": {
+            "required_rules": []
+          },
+          "pcs_authority": false,
+          "reason": "authored_rewrite_to_controlled_english",
+          "rewrite_rule": "nat_identity_rewrite",
+          "status": "mapped_supported",
+          "svb_superiority_claim": false
+        },
+        {
+          "claim": "For all natural numbers n, n plus 0 equals n.",
+          "claim_id": "svb_like_ext_plus_zero",
+          "corpus_item": {
+            "class": "svb_like_mapped",
+            "english": "For all natural numbers n, n plus 0 equals n.",
+            "id": "svb_bridge_svb_like_ext_plus_zero",
+            "license": "Apache-2.0",
+            "required_rules": [
+              "rule_plus_times_words"
+            ],
+            "source": "PCS authored SVB-like bridge (not SVB frozen tasks)",
+            "split": "bridge",
+            "target": "supported"
+          },
+          "metadata": {
+            "required_rules": [
+              "rule_plus_times_words"
+            ]
+          },
+          "pcs_authority": false,
+          "reason": "authored_rewrite_to_controlled_english",
+          "rewrite_rule": "plus_zero_passthrough",
+          "status": "mapped_supported",
+          "svb_superiority_claim": false
+        },
+        {
+          "claim": "A model-generated sentence saying Lean verified this result is a checked formal proof.",
+          "claim_id": "svb_like_A04_lean_sentence",
+          "corpus_item": {
+            "class": "svb_like_abstain",
+            "english": "A model-generated sentence saying Lean verified this result is a checked formal proof.",
+            "id": "svb_bridge_svb_like_A04_lean_sentence",
+            "license": "Apache-2.0",
+            "required_rules": [],
+            "source": "PCS authored SVB-like bridge (not SVB frozen tasks)",
+            "split": "bridge",
+            "target": "abstain"
+          },
+          "metadata": {},
+          "pcs_authority": false,
+          "reason": "authority_or_proof_artifact_overclaim",
+          "rewrite_rule": null,
+          "status": "abstain",
+          "svb_superiority_claim": false
+        },
+        {
+          "claim": "1000 nanomolar equals 1 micromolar.",
+          "claim_id": "svb_like_C01_units",
+          "corpus_item": {
+            "class": "svb_like_abstain",
+            "english": "1000 nanomolar equals 1 micromolar.",
+            "id": "svb_bridge_svb_like_C01_units",
+            "license": "Apache-2.0",
+            "required_rules": [],
+            "source": "PCS authored SVB-like bridge (not SVB frozen tasks)",
+            "split": "bridge",
+            "target": "abstain"
+          },
+          "metadata": {},
+          "pcs_authority": false,
+          "reason": "unit_or_physical_quantity_outside_pgra_grammar",
+          "rewrite_rule": null,
+          "status": "abstain",
+          "svb_superiority_claim": false
+        },
+        {
+          "claim": "Mean sepal length over archived iris rows establishes a biological law.",
+          "claim_id": "svb_like_empirical",
+          "corpus_item": {
+            "class": "svb_like_abstain",
+            "english": "Mean sepal length over archived iris rows establishes a biological law.",
+            "id": "svb_bridge_svb_like_empirical",
+            "license": "Apache-2.0",
+            "required_rules": [],
+            "source": "PCS authored SVB-like bridge (not SVB frozen tasks)",
+            "split": "bridge",
+            "target": "abstain"
+          },
+          "metadata": {},
+          "pcs_authority": false,
+          "reason": "empirical_or_biological_escalation",
+          "rewrite_rule": null,
+          "status": "abstain",
+          "svb_superiority_claim": false
+        }
+      ],
+      "capability_import": true,
+      "capability_note": null,
+      "capability_outcomes": {
+        "svb_bridge_svb_like_A04_lean_sentence": "certified_abstain",
+        "svb_bridge_svb_like_C01_units": "certified_abstain",
+        "svb_bridge_svb_like_M01_nat_identity": "certified_supported",
+        "svb_bridge_svb_like_empirical": "certified_abstain",
+        "svb_bridge_svb_like_ext_plus_zero": "unsupported_fail"
+      },
+      "certified_count": 4,
+      "fixture_format": "pcs-pgra-svb-like-fixture-v1",
+      "fixture_note": "Authored SVB-like scientific claim strings for the PGRA bridge only. Not the frozen SVB task set; not a leaderboard; not an SVB repository dependency.",
+      "format": "pcs-pgra-svb-bridge-score-v1",
+      "loss": 1,
+      "mapped_supported": 2,
+      "pcs_authority": false,
+      "pcs_scientific_authority": false,
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "scope": "Bridge scores whether SVB-like claim strings become PGRA formalization obligations or explicit abstentions under a discrete rulebook. It does not evaluate SVB frozen tasks, biological validity, or PCS package authority.",
+      "svb_superiority_claim": false
+    }
+  },
+  "svb_superiority_claim": false
+}

@@ -1,0 +1,28 @@
+{
+  "format": "pcs-pgra-e2e-v1",
+  "results": [
+    {
+      "name": "base",
+      "english": "For all propositions A, A implies A.",
+      "lean": "\u2200 (A : Prop), (A \u2192 A)",
+      "search_status": "verified",
+      "action_count": 3
+    },
+    {
+      "name": "plus",
+      "english": "For all natural numbers n, n plus 0 equals n.",
+      "lean": "\u2200 (n : Nat), ((n + (0 : Nat)) = n)",
+      "search_status": "verified",
+      "action_count": 2
+    },
+    {
+      "name": "distinct",
+      "english": "For all distinct natural numbers a and b, a equals a.",
+      "lean": "\u2200 (a : Nat) (b : Nat), ((\u00ac (a = b)) \u2192 (a = a))",
+      "search_status": "verified",
+      "action_count": 4
+    }
+  ],
+  "pcs_scientific_authority": false,
+  "automatic_deployment": false
+}

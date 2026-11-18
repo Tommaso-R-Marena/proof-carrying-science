@@ -1,0 +1,375 @@
+{
+  "automatic_deployment": false,
+  "format": "pcs-pgra-tasks-v1",
+  "frozen": true,
+  "item_count": 24,
+  "items": [
+    {
+      "class": "abstain_negative",
+      "english": "Every graph is connected.",
+      "generation_target": 0,
+      "id": "abstain_graphs",
+      "required_rules": [],
+      "split": "seed",
+      "target": "abstain"
+    },
+    {
+      "class": "abstain_negative",
+      "english": "Numbers go forever.",
+      "generation_target": 2,
+      "id": "abstain_informal",
+      "required_rules": [],
+      "split": "holdout",
+      "target": "abstain"
+    },
+    {
+      "class": "abstain_negative",
+      "english": "Energy is always conserved somehow.",
+      "generation_target": 2,
+      "id": "abstain_physics",
+      "required_rules": [],
+      "split": "holdout",
+      "target": "abstain"
+    },
+    {
+      "class": "abstain_negative",
+      "english": "Beauty is truth, truth beauty.",
+      "generation_target": 1,
+      "id": "abstain_poetry",
+      "required_rules": [],
+      "split": "validation",
+      "target": "abstain"
+    },
+    {
+      "class": "abstain_negative",
+      "english": "Prove everything.",
+      "generation_target": 0,
+      "id": "abstain_prove_everything",
+      "required_rules": [],
+      "split": "seed",
+      "target": "abstain"
+    },
+    {
+      "class": "abstain_negative",
+      "english": "For all real numbers x, x is blue.",
+      "generation_target": 1,
+      "id": "abstain_reals",
+      "required_rules": [],
+      "split": "validation",
+      "target": "abstain"
+    },
+    {
+      "class": "base_supported",
+      "english": "There exists a natural number n such that n equals 0.",
+      "expected_ir_digest": "15167643d3d453eb54dffa50bc45564c3f7ee6b652719bb7ffc604e4806e6c82",
+      "expected_lean": "(\u2203 (n : Nat), (n = (0 : Nat)))",
+      "freeze_rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "generation_target": 2,
+      "id": "base_exists",
+      "required_rules": [],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "base_supported",
+      "english": "For all natural numbers n, n + 0 equals n.",
+      "expected_ir_digest": "b04d7dc7dee3d00508869820680d783d2135a420009aa9e195e707477347381a",
+      "expected_lean": "\u2200 (n : Nat), ((n + (0 : Nat)) = n)",
+      "freeze_rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "generation_target": 0,
+      "id": "base_nat_add",
+      "required_rules": [],
+      "split": "seed",
+      "target": "supported"
+    },
+    {
+      "class": "base_supported",
+      "english": "For all natural numbers n, n equals n.",
+      "expected_ir_digest": "0b12134082804c9eed70c8a862582a4428eec2ae0f350466cc320e579f10aed3",
+      "expected_lean": "\u2200 (n : Nat), (n = n)",
+      "freeze_rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "generation_target": 0,
+      "id": "base_nat_eq",
+      "required_rules": [],
+      "split": "seed",
+      "target": "supported"
+    },
+    {
+      "class": "base_supported",
+      "english": "For all propositions A and B, if A then B.",
+      "expected_ir_digest": "21d0afaff4b05eafb194e3d8756c3db44122439b7022d88f43f46d863e42668c",
+      "expected_lean": "\u2200 (A : Prop) (B : Prop), (A \u2192 B)",
+      "freeze_rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "generation_target": 1,
+      "id": "base_prop_implies",
+      "required_rules": [],
+      "split": "validation",
+      "target": "supported"
+    },
+    {
+      "class": "abstain_negative",
+      "english": "Solve the Riemann hypothesis casually.",
+      "generation_target": 2,
+      "id": "dup_abstain",
+      "required_rules": [],
+      "split": "holdout",
+      "target": "abstain"
+    },
+    {
+      "class": "base_supported",
+      "english": "For all propositions A and B, A if and only if B.",
+      "expected_ir_digest": "2a206960aedc8afc0a1404714b91d6943eccdb725e7ba484e02f026a141af339",
+      "expected_lean": "\u2200 (A : Prop) (B : Prop), (A \u2194 B)",
+      "freeze_rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "generation_target": 1,
+      "id": "dup_base_iff",
+      "required_rules": [],
+      "split": "validation",
+      "target": "supported"
+    },
+    {
+      "class": "base_supported",
+      "english": "For all natural numbers m, m equals m.",
+      "expected_ir_digest": "cf47756ee2fa800dfeb8537c3759466eff5fb9dd6951f89c158ed2af897eb885",
+      "expected_lean": "\u2200 (m : Nat), (m = m)",
+      "freeze_rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ],
+      "generation_target": 2,
+      "id": "dup_base_nat_eq",
+      "required_rules": [],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all propositions P and Q, P exactly when Q.",
+      "expected_ir_digest": "fb5ecc4b1afad5a6a07b88857a43c89fedd4cad26cf38cf38ffd5b1cae67a083",
+      "expected_lean": "\u2200 (P : Prop) (Q : Prop), (P \u2194 Q)",
+      "freeze_rules": [
+        "rule_exactly_when"
+      ],
+      "generation_target": 2,
+      "id": "dup_ext_exactly",
+      "required_rules": [
+        "rule_exactly_when"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all propositions P and Q, neither P nor Q.",
+      "expected_ir_digest": "db580f837c741cacafa00a67d38099bd690d62caaa7743b71476214c3f8cb0bc",
+      "expected_lean": "\u2200 (P : Prop) (Q : Prop), ((\u00ac P) \u2227 (\u00ac Q))",
+      "freeze_rules": [
+        "rule_neither_nor"
+      ],
+      "generation_target": 2,
+      "id": "dup_ext_neither",
+      "required_rules": [
+        "rule_neither_nor"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all natural numbers x, x times 1 equals x.",
+      "expected_ir_digest": "7af2db52bd04a7aeff99f8a8a8f09fb0eca695613ef07dc37a705641d9500a58",
+      "expected_lean": "\u2200 (x : Nat), ((x * (1 : Nat)) = x)",
+      "freeze_rules": [
+        "rule_plus_times_words"
+      ],
+      "generation_target": 1,
+      "id": "dup_ext_plus",
+      "required_rules": [
+        "rule_plus_times_words"
+      ],
+      "split": "validation",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "There exists a unique natural number k such that k equals 1.",
+      "expected_ir_digest": "f11eca786a8ff1431e6af7b34b3f147e34270aa231ae04a5c432ce48e969d4b7",
+      "expected_lean": "(\u2203 (k : Nat), ((k = (1 : Nat)) \u2227 (\u2200 (m : Nat), ((m = (1 : Nat)) \u2192 (m = k)))))",
+      "freeze_rules": [
+        "rule_unique_exists"
+      ],
+      "generation_target": 2,
+      "id": "dup_ext_unique",
+      "required_rules": [
+        "rule_unique_exists"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all propositions P and Q, whenever P, Q.",
+      "expected_ir_digest": "fd41b8e19c23cd52a7b6bef9fa4dfa3e032d5793bb6b8e41d55ac1f192048f96",
+      "expected_lean": "\u2200 (P : Prop) (Q : Prop), (P \u2192 Q)",
+      "freeze_rules": [
+        "rule_whenever"
+      ],
+      "generation_target": 0,
+      "id": "dup_ext_whenever",
+      "required_rules": [
+        "rule_whenever"
+      ],
+      "split": "seed",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all distinct natural numbers a and b, a equals a.",
+      "expected_ir_digest": "c5f83f58e21627e0cffb70e2b48abe10024e63df1bfbbbfabad276108ab298bd",
+      "expected_lean": "\u2200 (a : Nat) (b : Nat), ((\u00ac (a = b)) \u2192 (a = a))",
+      "freeze_rules": [
+        "rule_distinct_forall"
+      ],
+      "generation_target": 2,
+      "id": "ext_distinct_forall",
+      "required_rules": [
+        "rule_distinct_forall"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all propositions A and B, A exactly when B.",
+      "expected_ir_digest": "2a206960aedc8afc0a1404714b91d6943eccdb725e7ba484e02f026a141af339",
+      "expected_lean": "\u2200 (A : Prop) (B : Prop), (A \u2194 B)",
+      "freeze_rules": [
+        "rule_exactly_when"
+      ],
+      "generation_target": 1,
+      "id": "ext_exactly_when",
+      "required_rules": [
+        "rule_exactly_when"
+      ],
+      "split": "validation",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all propositions A and B, neither A nor B.",
+      "expected_ir_digest": "ebd5c6bfb2887f18873ccc9b1b84b34cd57c596b02ccb450e0c0f47aad842b47",
+      "expected_lean": "\u2200 (A : Prop) (B : Prop), ((\u00ac A) \u2227 (\u00ac B))",
+      "freeze_rules": [
+        "rule_neither_nor"
+      ],
+      "generation_target": 0,
+      "id": "ext_neither_nor",
+      "required_rules": [
+        "rule_neither_nor"
+      ],
+      "split": "seed",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all natural numbers n, n plus 0 equals n.",
+      "expected_ir_digest": "b04d7dc7dee3d00508869820680d783d2135a420009aa9e195e707477347381a",
+      "expected_lean": "\u2200 (n : Nat), ((n + (0 : Nat)) = n)",
+      "freeze_rules": [
+        "rule_plus_times_words"
+      ],
+      "generation_target": 2,
+      "id": "ext_plus_times",
+      "required_rules": [
+        "rule_plus_times_words"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "There exists a unique natural number n such that n equals 0.",
+      "expected_ir_digest": "95c0cec4c1d2069c4c6edca5070efc1c7895855f0719f4d9f0fe97f6e57f1a42",
+      "expected_lean": "(\u2203 (n : Nat), ((n = (0 : Nat)) \u2227 (\u2200 (m : Nat), ((m = (0 : Nat)) \u2192 (m = n)))))",
+      "freeze_rules": [
+        "rule_unique_exists"
+      ],
+      "generation_target": 0,
+      "id": "ext_unique_exists",
+      "required_rules": [
+        "rule_unique_exists"
+      ],
+      "split": "seed",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all propositions A and B, whenever A, B.",
+      "expected_ir_digest": "21d0afaff4b05eafb194e3d8756c3db44122439b7022d88f43f46d863e42668c",
+      "expected_lean": "\u2200 (A : Prop) (B : Prop), (A \u2192 B)",
+      "freeze_rules": [
+        "rule_whenever"
+      ],
+      "generation_target": 1,
+      "id": "ext_whenever",
+      "required_rules": [
+        "rule_whenever"
+      ],
+      "split": "validation",
+      "target": "supported"
+    }
+  ],
+  "pcs_scientific_authority": false,
+  "rule_catalog": [
+    "rule_unique_exists",
+    "rule_neither_nor",
+    "rule_exactly_when",
+    "rule_whenever",
+    "rule_plus_times_words",
+    "rule_distinct_forall"
+  ],
+  "splits": [
+    "holdout",
+    "seed",
+    "validation"
+  ]
+}

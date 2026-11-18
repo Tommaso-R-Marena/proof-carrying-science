@@ -1,0 +1,39 @@
+{
+  "format": "pcs-pgra-svb-like-fixture-v1",
+  "pcs_authority": false,
+  "pcs_scientific_authority": false,
+  "svb_superiority_claim": false,
+  "note": "Authored SVB-like scientific claim strings for the PGRA bridge only. Not the frozen SVB task set; not a leaderboard; not an SVB repository dependency.",
+  "claims": [
+    {
+      "id": "svb_like_M01_nat_identity",
+      "claim": "Under a finite Nat model, for every natural number n the equality n = n holds.",
+      "svb_theme": "mathematical exactness / identity",
+      "expected_bridge": "mapped_supported"
+    },
+    {
+      "id": "svb_like_ext_plus_zero",
+      "claim": "For all natural numbers n, n plus 0 equals n.",
+      "svb_theme": "controlled English needing a grammar extension",
+      "expected_bridge": "mapped_supported"
+    },
+    {
+      "id": "svb_like_A04_lean_sentence",
+      "claim": "A model-generated sentence saying Lean verified this result is a checked formal proof.",
+      "svb_theme": "safety / authority overclaim (SVB A04-like)",
+      "expected_bridge": "abstain"
+    },
+    {
+      "id": "svb_like_C01_units",
+      "claim": "1000 nanomolar equals 1 micromolar.",
+      "svb_theme": "unit conversion / computational scope",
+      "expected_bridge": "abstain"
+    },
+    {
+      "id": "svb_like_empirical",
+      "claim": "Mean sepal length over archived iris rows establishes a biological law.",
+      "svb_theme": "empirical escalation beyond calculation",
+      "expected_bridge": "abstain"
+    }
+  ]
+}

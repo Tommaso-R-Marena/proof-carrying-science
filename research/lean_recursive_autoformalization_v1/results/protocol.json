@@ -1,0 +1,91 @@
+{
+  "automatic_deployment": false,
+  "claims": [
+    "Finite certified formalization capability under discrete rulebooks",
+    "Monotonic proof-gated rule enabling with exact integer loss"
+  ],
+  "corpus_sha256": "173c4c99a3946bd8f50026dd64b02e4abc1f6c3350d71aa7014baa73e5a88114",
+  "format": "pcs-pgra-protocol-v1",
+  "frozen": true,
+  "generation_targets": {
+    "0": [
+      "abstain_graphs",
+      "abstain_prove_everything",
+      "base_nat_add",
+      "base_nat_eq",
+      "dup_ext_whenever",
+      "ext_neither_nor",
+      "ext_unique_exists"
+    ],
+    "1": [
+      "abstain_poetry",
+      "abstain_reals",
+      "base_prop_implies",
+      "dup_base_iff",
+      "dup_ext_plus",
+      "ext_exactly_when",
+      "ext_whenever"
+    ],
+    "2": [
+      "abstain_informal",
+      "abstain_physics",
+      "base_exists",
+      "dup_abstain",
+      "dup_base_nat_eq",
+      "dup_ext_exactly",
+      "dup_ext_neither",
+      "dup_ext_unique",
+      "ext_distinct_forall",
+      "ext_plus_times"
+    ]
+  },
+  "non_claims": [
+    "General English-to-Lean understanding",
+    "Production scientific authority",
+    "Automatic deployment of rulebooks or models"
+  ],
+  "package": "research/lean_recursive_autoformalization_v1",
+  "pcs_scientific_authority": false,
+  "policy_binding": "pcs-pgra-v1/formalization-rulebook-gate",
+  "rule_catalog": [
+    "rule_unique_exists",
+    "rule_neither_nor",
+    "rule_exactly_when",
+    "rule_whenever",
+    "rule_plus_times_words",
+    "rule_distinct_forall"
+  ],
+  "splits": {
+    "holdout": [
+      "abstain_informal",
+      "abstain_physics",
+      "base_exists",
+      "dup_abstain",
+      "dup_base_nat_eq",
+      "dup_ext_exactly",
+      "dup_ext_neither",
+      "dup_ext_unique",
+      "ext_distinct_forall",
+      "ext_plus_times"
+    ],
+    "seed": [
+      "abstain_graphs",
+      "abstain_prove_everything",
+      "base_nat_add",
+      "base_nat_eq",
+      "dup_ext_whenever",
+      "ext_neither_nor",
+      "ext_unique_exists"
+    ],
+    "validation": [
+      "abstain_poetry",
+      "abstain_reals",
+      "base_prop_implies",
+      "dup_base_iff",
+      "dup_ext_plus",
+      "ext_exactly_when",
+      "ext_whenever"
+    ]
+  },
+  "tasks_sha256": "c31b2ec6e51a5c5c91ccea6f90181c6ec4661b5f336ae23be6c371e840f9e3d8"
+}
