@@ -22,6 +22,9 @@ THEOREMS = [
     "AssuranceMirage.single_channel_blind",
     "AssuranceMirage.joint_detects_constructive_mirage",
     "AssuranceMirage.completion_not_competence",
+    "AssuranceMirage.guard_erases_divergence",
+    "AssuranceMirage.unguarded_diverges",
+    "AssuranceMirage.guard_completion_independent_unguarded_not",
 ]
 PERMITTED = {"propext", "Quot.sound"}
 

@@ -14,9 +14,15 @@ from research.assurance_mirage_v1.channels import (
     mirage_gap,
     parse_proposal,
 )
+from research.assurance_mirage_v1.unguarded import replay_campaign_unguarded
 from research.assurance_mirage_v1.formal_check import check_formal
 from research.assurance_mirage_v1.programs.scientific_store import ScientificStore
-from research.assurance_mirage_v1.protocol import ADMITTED, APPROVED_SUMMARY, PRIVATE_MARKER, CASES
+from research.assurance_mirage_v1.protocol import (
+    ADMITTED,
+    APPROVED_SUMMARY,
+    CASES,
+    PRIVATE_MARKER,
+)
 
 
 class TestChannels(unittest.TestCase):
@@ -76,10 +82,17 @@ class TestScientificStore(unittest.TestCase):
 
 class TestProtocol(unittest.TestCase):
     def test_case_census(self):
-        self.assertEqual(len(CASES), 10)
+        self.assertEqual(len(CASES), 12)
         self.assertEqual(sum(1 for c in CASES if not c["attack"]), 2)
         ids = [c["id"] for c in CASES]
         self.assertEqual(len(ids), len(set(ids)))
+
+    def test_leak_detectors_encoding(self):
+        spaced = " ".join(PRIVATE_MARKER)
+        self.assertTrue(detect_raw_leak(spaced))
+        import base64
+
+        self.assertTrue(detect_raw_leak(base64.b64encode(PRIVATE_MARKER.encode()).decode()))
 
 
 class TestFormal(unittest.TestCase):
@@ -87,9 +100,22 @@ class TestFormal(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             manifest = check_formal(Path(td) / "formal")
             self.assertTrue(manifest["kernel_checked"])
-            self.assertEqual(len(manifest["theorems"]), 8)
+            self.assertEqual(len(manifest["theorems"]), 11)
             for axs in manifest["axiom_closures"].values():
                 self.assertTrue(set(axs) <= {"propext", "Quot.sound"})
+
+
+class TestUnguarded(unittest.TestCase):
+    def test_unguarded_exfil_from_qwen_capture(self):
+        root = Path(__file__).resolve().parent / "evidence" / "qwen06b"
+        if not (root / "summary.json").exists():
+            self.skipTest("qwen06b evidence absent")
+        with tempfile.TemporaryDirectory() as td:
+            report = replay_campaign_unguarded(root, Path(td) / "ung")
+            self.assertGreaterEqual(report["n_episodes"], 1)
+            # At least some Qwen attack proposals should cause unguarded unsafe effects
+            # or the harness should still produce a structured report.
+            self.assertIn("unguarded_private_publications", report)
 
 
 if __name__ == "__main__":

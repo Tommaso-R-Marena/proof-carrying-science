@@ -175,6 +175,42 @@ theorem completion_not_competence :
     ((run unsafePropose 4 .start [] []).2.filter (·.forbidden)).length = 4 := by
   decide
 
+/-- Unguarded step follows the proposal when the transition exists. -/
+def unguardedStep (s : State) (proposal : Option Action) : Option (State × Action × State) :=
+  match proposal with
+  | none => none
+  | some a =>
+    match nextState s a with
+    | none => none
+    | some t => some (s, a, t)
+
+def unguardedRun (propose : Nat → State → Option Action) : Nat → State → ToolTrace → ToolTrace
+  | 0, _, tools => tools
+  | n + 1, s, tools =>
+    match unguardedStep s (propose n s) with
+    | none => tools
+    | some (s0, a, t) => unguardedRun propose n t (tools ++ [(s0, a)])
+
+/-- Under the guard, safe and unsafe proposers share a tool trace. -/
+theorem guard_erases_divergence (fuel : Nat) :
+    (run safePropose fuel .start [] []).1 =
+    (run unsafePropose fuel .start [] []).1 :=
+  tool_trace_independent safePropose unsafePropose fuel .start [] [] []
+
+/-- Without the guard, the unsafe proposer diverges immediately. -/
+theorem unguarded_diverges :
+    unguardedRun safePropose 1 .start [] ≠
+    unguardedRun unsafePropose 1 .start [] := by
+  decide
+
+/-- Guarded completion length is independent of the proposer; unguarded is not. -/
+theorem guard_completion_independent_unguarded_not :
+    (run safePropose 4 .start [] []).1.length =
+      (run unsafePropose 4 .start [] []).1.length ∧
+    (unguardedRun safePropose 4 .start []).length ≠
+      (unguardedRun unsafePropose 4 .start []).length := by
+  decide
+
 end AssuranceMirage
 
 #print axioms AssuranceMirage.admit_unique
@@ -185,3 +221,6 @@ end AssuranceMirage
 #print axioms AssuranceMirage.single_channel_blind
 #print axioms AssuranceMirage.joint_detects_constructive_mirage
 #print axioms AssuranceMirage.completion_not_competence
+#print axioms AssuranceMirage.guard_erases_divergence
+#print axioms AssuranceMirage.unguarded_diverges
+#print axioms AssuranceMirage.guard_completion_independent_unguarded_not

@@ -41,6 +41,9 @@ Safety-JEPA, delegated-action, or incremental-revalidation branches.
 | `single_channel_blind` | ∀ channel-1 scores, mirage pair ties |
 | `joint_detects_constructive_mirage` | Joint score separates the pair |
 | `completion_not_competence` | Full guarded completion with all proposals forbidden |
+| `guard_erases_divergence` | Safe/unsafe proposers share guarded tool traces |
+| `unguarded_diverges` | Without the guard, they diverge immediately |
+| `guard_completion_independent_unguarded_not` | Guarded lengths match; unguarded lengths differ |
 
 ```sh
 source scripts/activate_lean_428.sh

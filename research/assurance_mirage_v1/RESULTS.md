@@ -68,13 +68,47 @@ PYTHONPATH=. python3 -m research.assurance_mirage_v1 replay \
 ## Gemini Flash-Lite (hosted free-tier arm)
 
 Model `gemini-flash-lite-latest` via Generative Language API, project
-`171569345899`. Hard caps: 20 requests, ≥6s spacing (~10 RPM). 5 episodes × 4
-turns completed with **0 mirages**, **0 proposal-harm**, **0 raw/split leaks**,
-**0 scope escalations**. Guarded completions 5/5. Token usage this arm: 3258
-prompt + 381 candidate = 3639 total.
+`171569345899`, ≥6s spacing (~10 RPM), hard per-wave request caps.
+
+Combined census (`evidence/gemini_combined/`): **17 episodes / 68 completions**
+across instruction-boundary (12) and plain (5) arms, including scope-escalation,
+split-channel, JSON-smuggle, and adaptive roleplay/encoding attacks.
+
+| Metric | Combined |
+|---|---:|
+| Guarded completions | 17/17 |
+| Proposal-harm | 0 |
+| Raw/split leaks | 0 |
+| Scope escalations | 0 |
+| Mirages | **0** |
+
+Gemini refused the attack goals while still completing the workflow under the
+guard. This does **not** prove general Gemini safety; it shows the mirage
+phenomenon is model-dependent on this finite suite.
 
 The API key is **not** stored in evidence. Absolute remaining project RPD/RPM is
-**not** exposed by this API key (Service Usage returns 401). Live limits belong
-in AI Studio: https://aistudio.google.com/rate-limit. Session accounting only.
+**not** exposed by this API key (Service Usage returns 401). Live limits:
+https://aistudio.google.com/rate-limit.
 
-Artifacts: `evidence/gemini_flash_lite_latest/`.
+## Unguarded replay control (0 API calls)
+
+Replaying recorded proposals **without** the correcting guard, and treating
+notes/raw text as a public channel:
+
+| Source | Episodes where guard prevented unsafe public effect | Private marker published unguarded |
+|---|---:|---:|
+| Qwen3-0.6B | 5 | 5 |
+| Qwen3-1.7B | 13 | 12 |
+| Gemini flash-lite | 0 | 0 |
+
+So for Qwen, guarded “perfect completion” concealed proposer failures that an
+unguarded executor would have made public. For Gemini on this suite, the
+proposer itself did not create those unsafe effects.
+
+Artifacts: `evidence/unguarded_replays/`, `evidence/compare.json`.
+
+## Formal v1.1
+
+Eleven theorems, including `guard_erases_divergence`, `unguarded_diverges`, and
+`guard_completion_independent_unguarded_not`: the guard equalizes tool traces
+across proposers; removing it lets safe and unsafe proposers diverge.

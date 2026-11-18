@@ -24,7 +24,7 @@ from .channels import (
     parse_proposal,
 )
 from .programs.scientific_store import ScientificStore
-from .protocol import CASES, PRIVATE_MARKER, SYSTEM_BOUNDARY, write_protocol
+from .protocol import CASES, PRIVATE_MARKER, SYSTEM_BOUNDARY, SYSTEM_PLAIN, write_protocol
 
 DEFAULT_MODEL = "gemini-flash-lite-latest"
 # Conservative vs commonly observed free-tier ~15 RPM flash-lite limits.
@@ -131,11 +131,23 @@ class GeminiClient:
             raise ValueError(f"Gemini HTTP {e.code}: {raw[:800]}") from e
 
 
-def _selected_cases(max_cases: int) -> list[dict]:
-    """Prefer one benign control then attacks, stable order from protocol."""
+def _selected_cases(
+    max_cases: int | None = None,
+    *,
+    case_ids: list[str] | None = None,
+) -> list[dict]:
+    """Prefer one benign control then attacks, or an explicit id list."""
+    by_id = {c["id"]: c for c in CASES}
+    if case_ids is not None:
+        missing = [i for i in case_ids if i not in by_id]
+        if missing:
+            raise ValueError(f"Unknown case ids: {missing}")
+        return [by_id[i] for i in case_ids]
     benign = [c for c in CASES if not c["attack"]]
     attacks = [c for c in CASES if c["attack"]]
     ordered = benign[:1] + attacks
+    if max_cases is None:
+        return ordered
     return ordered[:max_cases]
 
 
@@ -143,15 +155,20 @@ def run_gemini_arm(
     out: Path,
     *,
     model: str = DEFAULT_MODEL,
-    max_cases: int = 5,
+    max_cases: int | None = 5,
+    case_ids: list[str] | None = None,
+    prompt_arm: str = "instruction_boundary",
     turns: int = 4,
     max_requests: int = DEFAULT_MAX_REQUESTS,
     min_interval_sec: float = MIN_INTERVAL_SEC,
 ) -> dict:
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
+    if prompt_arm not in ("instruction_boundary", "plain"):
+        raise ValueError("prompt_arm must be instruction_boundary or plain")
+    system = SYSTEM_BOUNDARY if prompt_arm == "instruction_boundary" else SYSTEM_PLAIN
     protocol = write_protocol(out / "protocol.json")
-    cases = _selected_cases(max_cases)
+    cases = _selected_cases(max_cases, case_ids=case_ids)
     needed = len(cases) * turns
     if needed > max_requests:
         raise ValueError(
@@ -163,21 +180,21 @@ def run_gemini_arm(
     episodes: list[EpisodeResult] = []
     stopped_reason = None
     for case in cases:
-        ep_dir = out / "episodes" / case["id"]
+        ep_dir = out / "episodes" / f"{prompt_arm}__{case['id']}"
         ep_dir.mkdir(parents=True, exist_ok=False)
         store = ScientificStore(ep_dir / "store.sqlite")
         ep = EpisodeResult(
             case_id=case["id"],
             family=case["family"],
             attack=case["attack"],
-            prompt_arm="instruction_boundary",
+            prompt_arm=prompt_arm,
         )
         try:
             for turn in range(turns):
                 state = store.state
                 admitted = store.admitted()
                 prompt = (
-                    SYSTEM_BOUNDARY
+                    system
                     + f"\n\nState: {state}. Admitted next action: {admitted}.\n"
                     + f"User message: {case['user']}\n"
                     + 'Reply with exactly one JSON object: {"action":"...","note":"..."}'
@@ -227,6 +244,8 @@ def run_gemini_arm(
     summary = {
         "format": "pcs-assurance-mirage-gemini-arm-v1",
         "model": model,
+        "prompt_arm": prompt_arm,
+        "case_ids": [c["id"] for c in cases],
         "project_hint": "projects/171569345899",
         "free_tier_policy": {
             "min_interval_sec": min_interval_sec,
