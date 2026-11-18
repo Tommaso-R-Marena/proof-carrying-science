@@ -1,9 +1,9 @@
 {
  "what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. No tag with a real name was created. Not an approval.",
- "generated_from_commit": "95d3045e3db10c78a40d4c04ea9428b534633147",
+ "generated_from_commit": "763aaa8b00e1e21167dee05c1147a2f291549a0e",
  "valid_only_for_that_commit": true,
  "evidence_committed_in_this_tree": {
-  "describes_commit": "f65eebcb9e956c72908c2006ba8437cd2139755c",
+  "describes_commit": "95d3045e3db10c78a40d4c04ea9428b534633147",
   "files_changed_since_then": [
    ".github/workflows/pcs-claimcheck-v1.yml",
    "docs/integration/claimcheck/ADMISSION_AUDIT.json",
@@ -15,24 +15,40 @@
    "docs/integration/claimcheck/SECURITY_REVIEW_C3_D4.md",
    "docs/integration/claimcheck/dry-run.json",
    "docs/integration/claimcheck/proposed-control-changes.patch",
-   "docs/integration/claimcheck/security/runner-v1-to-v2-2026-11-16.diff",
-   "docs/integration/claimcheck/security/runner-v2-hardening-2026-11-17.diff",
+   "research/claimcheck_v1/LEGACY_REPLAY_WARNING.md",
    "research/claimcheck_v1_1/OWNER_DECISIONS.md",
    "research/claimcheck_v1_1/README.md",
    "research/claimcheck_v1_1/REPORT.md",
-   "research/claimcheck_v1_1/check_live_v11.py",
-   "research/claimcheck_v1_1/claimcheck_kernel_runner.py",
-   "research/claimcheck_v1_1/dev/results/live_checks.json",
-   "research/claimcheck_v1_1/export_site_v11.py",
-   "research/claimcheck_v1_1/governance/audit_admission.py",
-   "research/claimcheck_v1_1/governance/test_required_check.py",
+   "research/claimcheck_v1_1/adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md",
+   "research/claimcheck_v1_1/dev/adversary.py",
+   "research/claimcheck_v1_1/dev/evaluate.py",
+   "research/claimcheck_v1_1/governance/check_admission_consistency.py",
+   "research/claimcheck_v1_1/policy.py",
+   "research/claimcheck_v1_1/prospective/AMENDMENTS_DRAFT_3.md",
    "research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md",
    "research/claimcheck_v1_1/prospective/DECISION_SUPPORT.json",
+   "research/claimcheck_v1_1/prospective/DEMONSTRATION_ON_DEVELOPMENT_DATA.json",
+   "research/claimcheck_v1_1/prospective/DESIGN_120.json",
+   "research/claimcheck_v1_1/prospective/MODEL_ACCESS.md",
+   "research/claimcheck_v1_1/prospective/PROTOCOL_DRAFT.md",
+   "research/claimcheck_v1_1/prospective/budget.py",
+   "research/claimcheck_v1_1/prospective/criteria.json",
    "research/claimcheck_v1_1/prospective/decision_support.py",
-   "research/claimcheck_v1_1/replay_independent_v1_1.py",
+   "research/claimcheck_v1_1/prospective/design_120.py",
+   "research/claimcheck_v1_1/prospective/lean_guard.py",
+   "research/claimcheck_v1_1/prospective/model_config.json",
+   "research/claimcheck_v1_1/prospective/score.py",
+   "research/claimcheck_v1_1/replay_v1_bundle_checked.py",
    "research/claimcheck_v1_1/tests/test_binding_offline.py",
+   "research/claimcheck_v1_1/tests/test_budget.py",
+   "research/claimcheck_v1_1/tests/test_decide_guard.py",
    "research/claimcheck_v1_1/tests/test_decision_support.py",
-   "research/claimcheck_v1_1/tests/test_runner_hardening.py"
+   "research/claimcheck_v1_1/tests/test_design_120.py",
+   "research/claimcheck_v1_1/tests/test_lean_guard.py",
+   "research/claimcheck_v1_1/tests/test_oracle_opt_in.py",
+   "research/claimcheck_v1_1/tests/test_score_draft2.py",
+   "research/claimcheck_v1_1/tests/test_score_draft3.py",
+   "research/claimcheck_v1_1/tests/test_v11_offline.py"
   ],
   "only_evidence_files_changed": false
  },
@@ -44,13 +60,13 @@
   "source_bindings_checked": 4781
  },
  "existing_files_changed_or_removed": [],
- "files_added": 1995,
+ "files_added": 2006,
  "added_files_outside_the_admitted_roots": [],
  "proposed_retained_source_commit": {
-  "commit": "c9bb79816d17aa91545d59dabec179a4d90f6f53",
-  "tree": "fc5517e3dae493a58f04148314033976b5b51baa",
+  "commit": "0770f4930f13853206aa2600290a206facdb4431",
+  "tree": "d6236b06867bc6270ee3dac74fb2ac1fa5a687f9",
   "parents": [
-   "95d3045e3db10c78a40d4c04ea9428b534633147",
+   "763aaa8b00e1e21167dee05c1147a2f291549a0e",
    "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
   ],
   "proposed_tag": "pcs-source-intake/core-claimcheck-v1-20261114",
@@ -60,11 +76,11 @@
  "proposal": {
   "control_commit_files": {
    "docs/integration/2026-11-14/RECONCILIATION_V23.json": {
-    "sha256": "1c060091c1ab14db073b020d6d84ef861fb20256f776a9ee61a870cd954bfd0d",
-    "bytes": 4705776
+    "sha256": "caa053834baa7454252d8ade5d53f9f707d2f1bd10e5ad4a336bd4ce2b1620fe",
+    "bytes": 4707710
    },
    "research/integration_v2/reconcile.py": {
-    "sha256": "9f6f33a93f7383c3e5e59e802936c2e5542380b0bdac59153700681af114b523",
+    "sha256": "9de92660f86e1e2a569c4406f27b3502d7ff229b0e1e02bf734361bdaeabd313",
     "bytes": 20113
    },
    "research/integration_v2/test_reconcile.py": {
@@ -72,14 +88,14 @@
     "bytes": 22616
    },
    "scripts/check_reconciled_prs.py": {
-    "sha256": "35225131911bebad66ccfc70f4b64ca4ffc993b35c6b3436106d50110a100272",
+    "sha256": "b09fc4b99e131c5ac124c9b8e48d842b8e91660ebb24dfa54c8e3f8ad02264c6",
     "bytes": 6930
    }
   },
   "successor_manifest": {
    "path": "docs/integration/2026-11-14/RECONCILIATION_V23.json",
-   "sha256": "1c060091c1ab14db073b020d6d84ef861fb20256f776a9ee61a870cd954bfd0d",
-   "snapshot_entries": 10038
+   "sha256": "caa053834baa7454252d8ade5d53f9f707d2f1bd10e5ad4a336bd4ce2b1620fe",
+   "snapshot_entries": 10049
   },
   "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"
  },
@@ -106,7 +122,7 @@
  },
  "gate_tests_on_the_successor": {
   "exit": 0,
-  "last_line": "75 passed in 8.51s"
+  "last_line": "75 passed in 8.98s"
  },
  "retained_source_gate_tests_on_the_successor": {
   "exit": 0,
