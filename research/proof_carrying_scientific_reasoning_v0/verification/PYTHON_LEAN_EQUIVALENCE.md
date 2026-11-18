@@ -12,10 +12,12 @@
 | Classical vs Entails4 | `classical_entails_atom99_demoΓ` / `not_entails4_atom99_demoΓ` |
 | Finding F (Hyp) | `hyp_mathVerified_not_established` |
 | Meet lock | `meet_truth_table` + shared `meet_tables.py` |
+| JSON object graph → surface | `checkJsonCert_sound`, `checkCertificateJson` |
+| Unknown keys / deep formulas | `checkJsonCert_rejects_*` |
+| No mathEstablished w/o attestation | `no_math_established_without_attestation` |
 
 ## Irreducible boundary
 
-- CPython / `json.loads` / OS I/O (byte string → post-parse graph)
-- External attestation beyond declared labels
+- Byte-string `json.loads` / CPython / OS I/O → typed `JsonCertificate` AST
 
 Catalog: `EQUIVALENCE_BREAKS.md`.

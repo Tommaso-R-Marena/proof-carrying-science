@@ -9,5 +9,6 @@ import ScientificReasoning.CheckCertificate
 import ScientificReasoning.Belnap
 import ScientificReasoning.Completeness
 import ScientificReasoning.Surface
+import ScientificReasoning.JsonCert
 import ScientificReasoning.PythonCheckerModel
 import ScientificReasoning.Equivalence

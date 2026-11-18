@@ -1,26 +1,22 @@
 import ScientificReasoning.Surface
+import ScientificReasoning.JsonCert
 
 /-!
 # Lean model of the Python schema-v1 checker
 
-`checkCertificatePy` is the **surface** checker (`checkSurface`), matching
-`independent_checker/check_certificate_v1.check` after JSON parse:
+Layers (bottom → top):
 
-- schema version, size bounds, unique premise ids, step id = index
-- LTR reconstruction (`checkStepsLTR`)
-- claimed field checks + reject `math_established = true`
+1. `checkCertificate` — structured core LTR
+2. `checkSurface` / `checkCertificatePy` — WF + claims
+3. `checkJsonCert` — typed post-parse JSON object graph → surface
 
-**Irreducible boundary:** `json.loads` / CPython / OS I/O are not modelled.
-
-For core-only certificates, `checkSurface_iff_checkCertificate` relates surface
-acceptance to `checkCertificate` under size bounds.
+**Irreducible:** byte-string `json.loads` / CPython / OS I/O.
 -/
 
 namespace ScientificReasoning.PythonModel
 
 open ScientificReasoning
 
-/-- Python-model entrypoint = Lean surface checker. -/
 def checkCertificatePy (c : SurfaceCertificate) : Option VerifiedJudgment :=
   checkSurface c
 
@@ -57,7 +53,6 @@ theorem checkCertificatePy_implies_core
     checkCertificate c.erase = some j :=
   checkSurface_implies_checkCertificate c j h
 
-/-- Core ↔ surface for canonical embeddings (bounded, non-empty). -/
 theorem checkCertificatePy_iff_core
     (c : StructuredCertificate) (j : VerifiedJudgment)
     (hne : c.steps ≠ [])
@@ -66,8 +61,24 @@ theorem checkCertificatePy_iff_core
     checkCertificatePy c.toSurface = some j ↔ checkCertificate c = some j :=
   checkSurface_iff_checkCertificate c j hne hprem hsteps
 
+/-- Top-level Python path after parse: typed JSON graph. -/
+def checkCertificateJson (c : JsonCertificate) : Option VerifiedJudgment :=
+  checkJsonCert c
+
+theorem checkCertificateJson_eq :
+    checkCertificateJson = checkJsonCert := rfl
+
+theorem checkCertificateJson_sound
+    (c : JsonCertificate) (j : VerifiedJudgment)
+    (h : checkCertificateJson c = some j) :
+    ∃ sc, decodeJsonCert c = some sc ∧
+      Derives sc.erase.toContext j.support j.assurance.declared j.formula :=
+  checkJsonCert_sound c j h
+
 end ScientificReasoning.PythonModel
 
 #print axioms ScientificReasoning.PythonModel.checkCertificatePy_eq_surface
 #print axioms ScientificReasoning.PythonModel.checkCertificatePy_sound
 #print axioms ScientificReasoning.PythonModel.checkCertificatePy_iff_core
+#print axioms ScientificReasoning.PythonModel.checkCertificateJson_sound
+

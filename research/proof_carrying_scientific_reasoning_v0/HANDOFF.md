@@ -1,21 +1,17 @@
-# HANDOFF — Phase IV++ (close remaining gaps)
+# HANDOFF — Phase IV+++ (JsonCert + exhaustive tests)
 
 - **Branch:** `research/proof_carrying_scientific_reasoning_v0`
 - **PR:** #218 draft — do not merge
-- **CI:** sealed-census failures expected — do not weaken
 
-## Closed this push
+## Closed
 
-1. Lean `Surface.lean` / `checkSurface` — schema, sizes, step ids, claims, math_established
-2. `checkCertificatePy := checkSurface`; `checkSurface_iff_checkCertificate`
-3. Unified `meet_tables.py` (v1 + authority); Lean `meet_truth_table`
-4. Finding F: `hyp_mathVerified_not_established`
-5. Catalog: only irreducible leftovers are `json.loads`/CPython and external attestation
+1. `JsonCert.lean` — typed post-parse JSON graph → `checkSurface`; soundness + reject unknown keys / deep formulas
+2. `checkCertificateJson` in Python model
+3. Exhaustive pytest suite (**66** tests)
+4. Only irreducible boundary: byte-string `json.loads` / CPython
 
 ## Reproduce
 
 ```bash
 bash scripts/check_all.sh
 ```
-
-Expect: `ALL_OK`, no `sorryAx`, 46 pytest.
