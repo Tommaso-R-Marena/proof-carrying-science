@@ -2,8 +2,8 @@
   "accepted": true,
   "automatic_deployment": false,
   "gained": [
-    "dup_ext_plus",
-    "ext_plus_times"
+    "dup_ext_unique",
+    "ext_unique_exists"
   ],
   "new_eval": {
     "automatic_deployment": false,
@@ -13,11 +13,11 @@
       "base_nat_add",
       "base_nat_eq",
       "dup_base_nat_eq",
-      "dup_ext_plus",
-      "ext_plus_times"
+      "dup_ext_unique",
+      "ext_unique_exists"
     ],
     "format": "pcs-pgra-proof-coupled-eval-v2",
-    "loss": 1,
+    "loss": 7,
     "pcs_scientific_authority": false,
     "proof_ids": [
       "base_nat_eq",
@@ -25,14 +25,20 @@
       "dup_base_nat_eq",
       "ext_plus_times",
       "dup_ext_plus",
-      "ext_distinct_forall"
+      "ext_distinct_forall",
+      "ext_unique_exists",
+      "dup_ext_unique",
+      "ext_zero_word",
+      "dup_ext_zero",
+      "ext_is_equal_to",
+      "dup_ext_is_equal"
     ],
     "proved": [
       "base_nat_add",
       "base_nat_eq",
       "dup_base_nat_eq",
-      "dup_ext_plus",
-      "ext_plus_times"
+      "dup_ext_unique",
+      "ext_unique_exists"
     ],
     "proved_count": 5,
     "rows": [
@@ -70,15 +76,45 @@
         "receipt_goal_sha256": "cf47756ee2fa800dfeb8537c3759466eff5fb9dd6951f89c158ed2af897eb885"
       },
       {
-        "action_count": 2,
-        "formalization_outcome": "certified_supported",
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "dup_ext_is_equal",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
         "id": "dup_ext_plus",
-        "ir_digest": "7af2db52bd04a7aeff99f8a8a8f09fb0eca695613ef07dc37a705641d9500a58",
-        "lean": "\u2200 (x : Nat), ((x * (1 : Nat)) = x)",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": 6,
+        "formalization_outcome": "certified_supported",
+        "id": "dup_ext_unique",
+        "ir_digest": "f11eca786a8ff1431e6af7b34b3f147e34270aa231ae04a5c432ce48e969d4b7",
+        "lean": "(\u2203 (k : Nat), ((k = (1 : Nat)) \u2227 (\u2200 (m : Nat), ((m = (1 : Nat)) \u2192 (m = k)))))",
         "pcs_scientific_authority": false,
         "proof_status": "verified",
         "proved": true,
-        "receipt_goal_sha256": "7af2db52bd04a7aeff99f8a8a8f09fb0eca695613ef07dc37a705641d9500a58"
+        "receipt_goal_sha256": "f11eca786a8ff1431e6af7b34b3f147e34270aa231ae04a5c432ce48e969d4b7"
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "dup_ext_zero",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
       },
       {
         "action_count": null,
@@ -91,28 +127,58 @@
         "proved": false
       },
       {
-        "action_count": 2,
-        "formalization_outcome": "certified_supported",
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "ext_is_equal_to",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
         "id": "ext_plus_times",
-        "ir_digest": "b04d7dc7dee3d00508869820680d783d2135a420009aa9e195e707477347381a",
-        "lean": "\u2200 (n : Nat), ((n + (0 : Nat)) = n)",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": 6,
+        "formalization_outcome": "certified_supported",
+        "id": "ext_unique_exists",
+        "ir_digest": "95c0cec4c1d2069c4c6edca5070efc1c7895855f0719f4d9f0fe97f6e57f1a42",
+        "lean": "(\u2203 (n : Nat), ((n = (0 : Nat)) \u2227 (\u2200 (m : Nat), ((m = (0 : Nat)) \u2192 (m = n)))))",
         "pcs_scientific_authority": false,
         "proof_status": "verified",
         "proved": true,
-        "receipt_goal_sha256": "b04d7dc7dee3d00508869820680d783d2135a420009aa9e195e707477347381a"
+        "receipt_goal_sha256": "95c0cec4c1d2069c4c6edca5070efc1c7895855f0719f4d9f0fe97f6e57f1a42"
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "ext_zero_word",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
       }
     ],
     "rules": [
-      "rule_plus_times_words"
+      "rule_unique_exists"
     ]
   },
-  "new_loss": 1,
+  "new_loss": 7,
   "new_proved": [
     "base_nat_add",
     "base_nat_eq",
     "dup_base_nat_eq",
-    "dup_ext_plus",
-    "ext_plus_times"
+    "dup_ext_unique",
+    "ext_unique_exists"
   ],
   "old_eval": {
     "automatic_deployment": false,
@@ -124,7 +190,7 @@
       "dup_base_nat_eq"
     ],
     "format": "pcs-pgra-proof-coupled-eval-v2",
-    "loss": 3,
+    "loss": 9,
     "pcs_scientific_authority": false,
     "proof_ids": [
       "base_nat_eq",
@@ -132,7 +198,13 @@
       "dup_base_nat_eq",
       "ext_plus_times",
       "dup_ext_plus",
-      "ext_distinct_forall"
+      "ext_distinct_forall",
+      "ext_unique_exists",
+      "dup_ext_unique",
+      "ext_zero_word",
+      "dup_ext_zero",
+      "ext_is_equal_to",
+      "dup_ext_is_equal"
     ],
     "proved": [
       "base_nat_add",
@@ -177,7 +249,37 @@
       {
         "action_count": null,
         "formalization_outcome": "unsupported_fail",
+        "id": "dup_ext_is_equal",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
         "id": "dup_ext_plus",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "dup_ext_unique",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "dup_ext_zero",
         "ir_digest": null,
         "lean": null,
         "pcs_scientific_authority": false,
@@ -197,7 +299,37 @@
       {
         "action_count": null,
         "formalization_outcome": "unsupported_fail",
+        "id": "ext_is_equal_to",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
         "id": "ext_plus_times",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "ext_unique_exists",
+        "ir_digest": null,
+        "lean": null,
+        "pcs_scientific_authority": false,
+        "proof_status": null,
+        "proved": false
+      },
+      {
+        "action_count": null,
+        "formalization_outcome": "unsupported_fail",
+        "id": "ext_zero_word",
         "ir_digest": null,
         "lean": null,
         "pcs_scientific_authority": false,
@@ -207,7 +339,7 @@
     ],
     "rules": []
   },
-  "old_loss": 3,
+  "old_loss": 9,
   "old_proved": [
     "base_nat_add",
     "base_nat_eq",

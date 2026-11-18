@@ -4,7 +4,7 @@
     "Finite certified formalization capability under discrete rulebooks",
     "Monotonic proof-gated rule enabling with exact integer loss"
   ],
-  "corpus_sha256": "173c4c99a3946bd8f50026dd64b02e4abc1f6c3350d71aa7014baa73e5a88114",
+  "corpus_sha256": "5e34b8c023b2fabca1cfd354172b629fbf362eaabde431f4ce380128073028a3",
   "format": "pcs-pgra-protocol-v1",
   "frozen": true,
   "generation_targets": {
@@ -15,7 +15,8 @@
       "base_nat_eq",
       "dup_ext_whenever",
       "ext_neither_nor",
-      "ext_unique_exists"
+      "ext_unique_exists",
+      "ext_zero_word"
     ],
     "1": [
       "abstain_poetry",
@@ -24,6 +25,7 @@
       "dup_base_iff",
       "dup_ext_plus",
       "ext_exactly_when",
+      "ext_is_equal_to",
       "ext_whenever"
     ],
     "2": [
@@ -33,8 +35,10 @@
       "dup_abstain",
       "dup_base_nat_eq",
       "dup_ext_exactly",
+      "dup_ext_is_equal",
       "dup_ext_neither",
       "dup_ext_unique",
+      "dup_ext_zero",
       "ext_distinct_forall",
       "ext_plus_times"
     ]
@@ -53,7 +57,9 @@
     "rule_exactly_when",
     "rule_whenever",
     "rule_plus_times_words",
-    "rule_distinct_forall"
+    "rule_distinct_forall",
+    "rule_zero_word",
+    "rule_is_equal_to"
   ],
   "splits": {
     "holdout": [
@@ -63,8 +69,10 @@
       "dup_abstain",
       "dup_base_nat_eq",
       "dup_ext_exactly",
+      "dup_ext_is_equal",
       "dup_ext_neither",
       "dup_ext_unique",
+      "dup_ext_zero",
       "ext_distinct_forall",
       "ext_plus_times"
     ],
@@ -75,7 +83,8 @@
       "base_nat_eq",
       "dup_ext_whenever",
       "ext_neither_nor",
-      "ext_unique_exists"
+      "ext_unique_exists",
+      "ext_zero_word"
     ],
     "validation": [
       "abstain_poetry",
@@ -84,8 +93,9 @@
       "dup_base_iff",
       "dup_ext_plus",
       "ext_exactly_when",
+      "ext_is_equal_to",
       "ext_whenever"
     ]
   },
-  "tasks_sha256": "c31b2ec6e51a5c5c91ccea6f90181c6ec4661b5f336ae23be6c371e840f9e3d8"
+  "tasks_sha256": "5cc8b553615ef4fcfc4020ff674b8d42374a17289373c54aa44e80a44f7a4535"
 }

@@ -40,7 +40,8 @@ PROOF_PROTOCOL = {
 }
 
 # Items expected to be kernel-provable after their required rules unlock.
-# Chosen from the v1 e2e campaign (base / plus / distinct verified).
+# Chosen from measured symbolic search (base / plus / distinct / unique /
+# zero / is-equal-to verified under budget).
 DEFAULT_PROOF_TARGETS = (
     "base_nat_eq",
     "base_nat_add",
@@ -48,6 +49,12 @@ DEFAULT_PROOF_TARGETS = (
     "ext_plus_times",
     "dup_ext_plus",
     "ext_distinct_forall",
+    "ext_unique_exists",
+    "dup_ext_unique",
+    "ext_zero_word",
+    "dup_ext_zero",
+    "ext_is_equal_to",
+    "dup_ext_is_equal",
 )
 
 

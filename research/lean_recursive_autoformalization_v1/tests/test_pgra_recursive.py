@@ -52,7 +52,7 @@ def test_write_results_protocol_frozen(tmp_path: Path) -> None:
     assert protocol["automatic_deployment"] is False
     tasks = json.loads((out / "tasks.json").read_text())
     assert tasks["frozen"] is True
-    assert len(tasks["items"]) == 24
+    assert len(tasks["items"]) == 28
     gens = json.loads((out / "generations.json").read_text())
     assert gens["certified_counts"] == summary["certified_counts"]
     assert (out / "SHA256.json").exists()

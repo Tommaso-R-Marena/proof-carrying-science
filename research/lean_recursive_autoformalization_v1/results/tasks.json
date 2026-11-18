@@ -2,7 +2,7 @@
   "automatic_deployment": false,
   "format": "pcs-pgra-tasks-v1",
   "frozen": true,
-  "item_count": 24,
+  "item_count": 28,
   "items": [
     {
       "class": "abstain_negative",
@@ -66,10 +66,12 @@
       "freeze_rules": [
         "rule_distinct_forall",
         "rule_exactly_when",
+        "rule_is_equal_to",
         "rule_neither_nor",
         "rule_plus_times_words",
         "rule_unique_exists",
-        "rule_whenever"
+        "rule_whenever",
+        "rule_zero_word"
       ],
       "generation_target": 2,
       "id": "base_exists",
@@ -85,10 +87,12 @@
       "freeze_rules": [
         "rule_distinct_forall",
         "rule_exactly_when",
+        "rule_is_equal_to",
         "rule_neither_nor",
         "rule_plus_times_words",
         "rule_unique_exists",
-        "rule_whenever"
+        "rule_whenever",
+        "rule_zero_word"
       ],
       "generation_target": 0,
       "id": "base_nat_add",
@@ -104,10 +108,12 @@
       "freeze_rules": [
         "rule_distinct_forall",
         "rule_exactly_when",
+        "rule_is_equal_to",
         "rule_neither_nor",
         "rule_plus_times_words",
         "rule_unique_exists",
-        "rule_whenever"
+        "rule_whenever",
+        "rule_zero_word"
       ],
       "generation_target": 0,
       "id": "base_nat_eq",
@@ -123,10 +129,12 @@
       "freeze_rules": [
         "rule_distinct_forall",
         "rule_exactly_when",
+        "rule_is_equal_to",
         "rule_neither_nor",
         "rule_plus_times_words",
         "rule_unique_exists",
-        "rule_whenever"
+        "rule_whenever",
+        "rule_zero_word"
       ],
       "generation_target": 1,
       "id": "base_prop_implies",
@@ -151,10 +159,12 @@
       "freeze_rules": [
         "rule_distinct_forall",
         "rule_exactly_when",
+        "rule_is_equal_to",
         "rule_neither_nor",
         "rule_plus_times_words",
         "rule_unique_exists",
-        "rule_whenever"
+        "rule_whenever",
+        "rule_zero_word"
       ],
       "generation_target": 1,
       "id": "dup_base_iff",
@@ -170,10 +180,12 @@
       "freeze_rules": [
         "rule_distinct_forall",
         "rule_exactly_when",
+        "rule_is_equal_to",
         "rule_neither_nor",
         "rule_plus_times_words",
         "rule_unique_exists",
-        "rule_whenever"
+        "rule_whenever",
+        "rule_zero_word"
       ],
       "generation_target": 2,
       "id": "dup_base_nat_eq",
@@ -193,6 +205,22 @@
       "id": "dup_ext_exactly",
       "required_rules": [
         "rule_exactly_when"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all natural numbers k, k is equal to k.",
+      "expected_ir_digest": "19efb1937d004bed7e9fbc421fabb199384be91b56415aa768109849a56c2837",
+      "expected_lean": "\u2200 (k : Nat), (k = k)",
+      "freeze_rules": [
+        "rule_is_equal_to"
+      ],
+      "generation_target": 2,
+      "id": "dup_ext_is_equal",
+      "required_rules": [
+        "rule_is_equal_to"
       ],
       "split": "holdout",
       "target": "supported"
@@ -263,6 +291,22 @@
     },
     {
       "class": "extension_supported",
+      "english": "For all natural numbers m, m + zero equals m.",
+      "expected_ir_digest": "3ea216c7875030dc277ed3e3bd6e8a1079cdef00b85d198fa60d5d3160b3919e",
+      "expected_lean": "\u2200 (m : Nat), ((m + (0 : Nat)) = m)",
+      "freeze_rules": [
+        "rule_zero_word"
+      ],
+      "generation_target": 2,
+      "id": "dup_ext_zero",
+      "required_rules": [
+        "rule_zero_word"
+      ],
+      "split": "holdout",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
       "english": "For all distinct natural numbers a and b, a equals a.",
       "expected_ir_digest": "c5f83f58e21627e0cffb70e2b48abe10024e63df1bfbbbfabad276108ab298bd",
       "expected_lean": "\u2200 (a : Nat) (b : Nat), ((\u00ac (a = b)) \u2192 (a = a))",
@@ -289,6 +333,22 @@
       "id": "ext_exactly_when",
       "required_rules": [
         "rule_exactly_when"
+      ],
+      "split": "validation",
+      "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all natural numbers n, n is equal to n.",
+      "expected_ir_digest": "0b12134082804c9eed70c8a862582a4428eec2ae0f350466cc320e579f10aed3",
+      "expected_lean": "\u2200 (n : Nat), (n = n)",
+      "freeze_rules": [
+        "rule_is_equal_to"
+      ],
+      "generation_target": 1,
+      "id": "ext_is_equal_to",
+      "required_rules": [
+        "rule_is_equal_to"
       ],
       "split": "validation",
       "target": "supported"
@@ -356,6 +416,22 @@
       ],
       "split": "validation",
       "target": "supported"
+    },
+    {
+      "class": "extension_supported",
+      "english": "For all natural numbers n, zero + n equals n.",
+      "expected_ir_digest": "288d8f39e2850f5f4b100ff960257de268ed0642ab3a51b858cae8755f20af4b",
+      "expected_lean": "\u2200 (n : Nat), (((0 : Nat) + n) = n)",
+      "freeze_rules": [
+        "rule_zero_word"
+      ],
+      "generation_target": 0,
+      "id": "ext_zero_word",
+      "required_rules": [
+        "rule_zero_word"
+      ],
+      "split": "seed",
+      "target": "supported"
     }
   ],
   "pcs_scientific_authority": false,
@@ -365,7 +441,9 @@
     "rule_exactly_when",
     "rule_whenever",
     "rule_plus_times_words",
-    "rule_distinct_forall"
+    "rule_distinct_forall",
+    "rule_zero_word",
+    "rule_is_equal_to"
   ],
   "splits": [
     "holdout",

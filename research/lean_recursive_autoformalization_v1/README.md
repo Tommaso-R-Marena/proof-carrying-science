@@ -1,4 +1,4 @@
-# Proof-Gated Recursive Autoformalization (PGRA) v1
+# Proof-Gated Recursive Autoformalization (PGRA)
 
 Research-only package joining PCS **proof-gated self-improvement (PGSI)** with
 the Lean formalization loop. Capability is an exact finite certificate over a
@@ -10,6 +10,8 @@ frozen English→IR corpus under discrete grammar-extension rulebooks.
 - Monotonic rule enabling gated by preserve / expand / strict loss decrease
 - Content-addressed compare-and-swap promotion store with receipt chain
 - ≥2 accepted recursive generations with rising certified count on the frozen corpus
+- Proof-coupled generations with rising kernel-proved count
+- Dual formalize+prove gate that is holdout-blind (fitting only)
 - Adversarial rule removal, abstention regression, and fake expansion rejected
 - Optional FormalizationRanker cycle using the same gate idea (never auto-promotes)
 
@@ -38,11 +40,12 @@ this research package.
 
 ## Measured (this branch)
 
-- 6 accepted generations; certified counts `13→15→17→19→21→23→24`; final loss `0`
-- 25 pytest cases passed
-- Ranker discrete accuracy `1→6` on frozen labels (candidate not promoted)
-- End-to-end: extension English (`plus`, `distinct`) formalizes and symbolically proves under Lean
-- Lean gate modules typecheck on Lean 4.28.0
+- **v1:** 8 accepted generations; certified `13→…→28`; final loss `0`
+- **v2:** proved `3→5→7→8→10→12` (`rising_proved`)
+- **v3:** fitting proved `2→6`; holdout proved nondecreasing; holdout never gates
+- 38 pytest cases passed
+- Lean gate modules typecheck on Lean 4.28.0 under `lean/`
+- V7 ProofGated census remains 38; V23 source census admits this tree
 
 ## Reproduction
 
@@ -53,12 +56,11 @@ PYTHONPATH=. python3 -m pytest research/lean_recursive_autoformalization_v1/test
 rm -rf research/lean_recursive_autoformalization_v1/results
 PYTHONPATH=research/lean_recursive_autoformalization_v1:. python3 -m recursive_loop \
   --output research/lean_recursive_autoformalization_v1/results
-cd formal && lake env lean PCS/V2/ProofGatedFormalization.lean
+cd research/lean_recursive_autoformalization_v1/lean && lake build
 ```
 
 Artifacts: `tasks.json`, `protocol.json` (`pcs-pgra-protocol-v1`, `frozen=true`),
 `summary.json`, `generations.json`, `SHA256.json`.
-
 
 ## PGRA v2 (proof-coupled)
 
@@ -66,6 +68,12 @@ Kernel-proved expansion on a frozen proof-target set: previously proved items
 are preserved; each accepted generation adds ≥1 new independently verified
 Lean proof under the frozen symbolic budget. Lean gate modules live under
 `lean/` (not `formal/PCS/V2/`) so the frozen V7 ProofGated census stays at 38.
+
+## PGRA v3 (dual + holdout-blind)
+
+`dual_recursive_v3.py` requires both formalization and proof gates to accept on
+fitting splits only. Holdout metrics are reported after each accept and must
+not decrease for proved counts, but never influence acceptance.
 
 ## Conflict avoidance
 

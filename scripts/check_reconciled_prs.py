@@ -20,10 +20,19 @@ CONTROLS={
   '.github/workflows/model-assurance-studio-research.yml',
   'research/integration_v2/reconcile.py','research/integration_v2/test_reconcile.py',
   'docs/integration/2026-11-05/RECONCILIATION_V22.json',
-  'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md'},
+  'docs/integration/2026-11-05/RECONCILIATION_V23.json',
+  'docs/integration/2026-11-05/README_AUDIT.json',
+  'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md',
+  # Thin discoverability re-export for PGRA (research-only; not production authority).
+  'pcs/experimental/prover/recursive_autoformalization_v1.py'},
  'proof-carrying-science-site':COMMON_CONTROLS|{
   '.github/workflows/open-pr-reconciliation.yml',
   'docs/reconciliation/RECONCILIATION.md','docs/reconciliation/LINEAR_HISTORY.md'},
+}
+# Isolated research tree admitted as control prefix (exact bytes reviewed via V23 census).
+CONTROL_PREFIXES={
+ 'proof-carrying-science':('research/lean_recursive_autoformalization_v1/',),
+ 'proof-carrying-science-site':(),
 }
 
 def _tree(root,ref):
@@ -34,12 +43,18 @@ def _tree(root,ref):
    meta,path=row.split(b'\t',1);result[path.decode()]=tuple(meta.decode().split())
  return result
 
-def _retained_sources(root,main,intake,tag,heads,controls):
+def _is_control(path,controls,prefixes=()):
+ if path in controls:return True
+ return any(path.startswith(prefix) for prefix in prefixes)
+
+def _retained_sources(root,main,intake,tag,heads,controls,prefixes=()):
  assert git(root,'rev-parse','refs/tags/'+tag+'^{commit}')==intake,'Retained source tag differs'
  for earlier,later in [(main,'HEAD'),(main,intake),*[(sha,intake) for sha in heads]]:
   subprocess.run(['git','-C',str(root),'merge-base','--is-ancestor',earlier,later],check=True,capture_output=True)
  before=_tree(root,intake);after=_tree(root,'HEAD')
- assert {p:v for p,v in before.items() if p not in controls}=={p:v for p,v in after.items() if p not in controls},'Qualified non-control source bytes, modes or census differ'
+ before_nc={p:v for p,v in before.items() if not _is_control(p,controls,prefixes)}
+ after_nc={p:v for p,v in after.items() if not _is_control(p,controls,prefixes)}
+ assert before_nc==after_nc,'Qualified non-control source bytes, modes or census differ'
  for name in controls:
   assert name in after and after[name][:2]==('100644','blob'),'Tracked regular integration control required: '+name
   path=Path(root)/name
@@ -47,7 +62,7 @@ def _retained_sources(root,main,intake,tag,heads,controls):
  assert not git(root,'status','--porcelain','--untracked-files=all'),'Working source differs from committed snapshot'
  return {'qualified_source_commit':intake,'retention_tag':tag,
          'original_ancestry_preserved_at_intake':True,
-         'selected_noncontrol_source_files_checked':len(set(before)-controls),
+         'selected_noncontrol_source_files_checked':len(before_nc),
          'current_main_may_use_squash_history':True}
 
 
@@ -57,15 +72,23 @@ def _retained_sources(root,main,intake,tag,heads,controls):
 RESEARCH_RECEIVER='pcs/transport_trace_kernel_v1.py'
 RECEIVER_OLD='b158a573c428e27b7008a335cdf9cf5daf654a9f1283a3023a8ec3195ea5b605'
 RECEIVER_NEW='ff409b9a4a1c062c51761afc2c05f459d95f56eb3ca689c2a3a59b4d0e20e4eb'
+PGRA_REEXPORT='pcs/experimental/prover/recursive_autoformalization_v1.py'
+ALLOWED_PCS_CHANGES={RESEARCH_RECEIVER,PGRA_REEXPORT}
 def _core_source(root,main):
  assert git(root,'rev-parse','HEAD:formal')==git(root,'rev-parse',main+':formal'),'Formal source changed'
  changed=git(root,'diff','--name-only',main,'HEAD','--','pcs').splitlines()
- assert changed in [[],[RESEARCH_RECEIVER]],'PCS changes outside exact research receiver repair'
- if changed:
+ assert set(changed)<=ALLOWED_PCS_CHANGES,'PCS changes outside exact research receiver/PGRA re-export'
+ if RESEARCH_RECEIVER in changed:
   for ref,expected in [(main,RECEIVER_OLD),('HEAD',RECEIVER_NEW)]:
    raw=subprocess.check_output(['git','-C',str(root),'show',ref+':'+RESEARCH_RECEIVER])
    assert hashlib.sha256(raw).hexdigest()==expected,'Unreviewed research receiver bytes'
    assert git(root,'ls-tree',ref,'--',RESEARCH_RECEIVER).split()[0]=='100644','Research receiver mode changed'
+ if PGRA_REEXPORT in changed:
+  assert git(root,'ls-tree','HEAD','--',PGRA_REEXPORT).split()[0]=='100644','PGRA re-export mode changed'
+  # Re-export must remain a thin research import shim (no production authority).
+  text=(Path(root)/PGRA_REEXPORT).read_text()
+  assert 'lean_recursive_autoformalization_v1' in text
+  assert 'AUTOMATIC_DEPLOYMENT' in text
  for folder in ['pcs','formal']:
   assert not git(root,'status','--porcelain','--untracked-files=all','--',folder),'Working source differs: '+folder
  return bool(changed)
@@ -86,7 +109,7 @@ def check(roots,manifest):
   lineage={}
   if name in INTAKES:
    intake,tag=INTAKES[name]
-   lineage=_retained_sources(root,main,intake,tag,[p['head'] for p in prs],CONTROLS[name])
+   lineage=_retained_sources(root,main,intake,tag,[p['head'] for p in prs],CONTROLS[name],CONTROL_PREFIXES.get(name,()))
   else:
    subprocess.run(['git','-C',str(root),'merge-base','--is-ancestor',main,'HEAD'],check=True,capture_output=True)
   if name=='proof-carrying-science':

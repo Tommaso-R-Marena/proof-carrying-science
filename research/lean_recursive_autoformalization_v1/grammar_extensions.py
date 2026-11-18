@@ -41,6 +41,14 @@ RULE_CATALOG: tuple[tuple[str, str], ...] = (
         "rule_distinct_forall",
         '"For all distinct natural numbers a and b, ..." → ∀ a b, ¬(a = b) → body',
     ),
+    (
+        "rule_zero_word",
+        '"zero" as the Nat literal 0',
+    ),
+    (
+        "rule_is_equal_to",
+        '"is equal to" → =',
+    ),
 )
 
 RULE_IDS: tuple[str, ...] = tuple(rule_id for rule_id, _ in RULE_CATALOG)
@@ -152,6 +160,14 @@ def _rewrite_plus_times(body: str) -> str:
     return body
 
 
+def _rewrite_zero_word(body: str) -> str:
+    return re.sub(r"\bzero\b", "0", body, flags=re.I)
+
+
+def _rewrite_is_equal_to(body: str) -> str:
+    return re.sub(r"\bis equal to\b", "equals", body, flags=re.I)
+
+
 def _try_distinct_forall(source: str) -> dict[str, Any] | None:
     text = source.strip().rstrip(".")
     match = re.fullmatch(
@@ -232,6 +248,8 @@ def apply_extensions(source: str, rules: frozenset[str]) -> dict[str, Any] | Non
             "rule_exactly_when",
             "rule_whenever",
             "rule_plus_times_words",
+            "rule_zero_word",
+            "rule_is_equal_to",
         }
     )
     if not needs_body:
@@ -270,6 +288,12 @@ def apply_extensions(source: str, rules: frozenset[str]) -> dict[str, Any] | Non
     if "rule_plus_times_words" in rules and re.search(r"\b(plus|times)\b", rewritten, re.I):
         rewritten = _rewrite_plus_times(rewritten)
         used.append("rule_plus_times_words")
+    if "rule_zero_word" in rules and re.search(r"\bzero\b", rewritten, re.I):
+        rewritten = _rewrite_zero_word(rewritten)
+        used.append("rule_zero_word")
+    if "rule_is_equal_to" in rules and re.search(r"\bis equal to\b", rewritten, re.I):
+        rewritten = _rewrite_is_equal_to(rewritten)
+        used.append("rule_is_equal_to")
 
     if not used or rewritten == body:
         return None

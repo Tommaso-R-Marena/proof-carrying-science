@@ -27,9 +27,8 @@ from typing import Iterable, Sequence
 
 WIRE_MAGIC = "PGRA1"
 
-# formal/ relative to this file: research/lean_recursive_autoformalization_v1/ -> ../../formal
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-_FORMAL_DIR = _REPO_ROOT / "formal"
+_PKG_ROOT = Path(__file__).resolve().parent
+_LEAN_DIR = _PKG_ROOT / "lean"
 _ARTIFACTS_LEAN = "PCS/V2/ProofGatedFormalizationArtifacts.lean"
 
 
@@ -114,8 +113,19 @@ def _lean_env() -> dict[str, str]:
 
 def lean_accept_wire(old_wire: bytes, new_wire: bytes, *, timeout: float = 120.0) -> LeanVerdict:
     """Invoke `lake env lean --run` on the artifacts CLI. Fail-closed on errors."""
-    if not _FORMAL_DIR.is_dir():
-        raise FileNotFoundError(f"formal directory not found: {_FORMAL_DIR}")
+    if not _LEAN_DIR.is_dir():
+        raise FileNotFoundError(f"research Lean directory not found: {_LEAN_DIR}")
+    # Ensure oleans exist; --run needs the package import graph built.
+    built = build_modules(timeout=min(timeout, 300.0))
+    if built.returncode != 0:
+        return LeanVerdict(
+            False,
+            (built.stdout or "").strip(),
+            (built.stderr or "").strip() or "lake build failed",
+            built.returncode,
+            old_wire,
+            new_wire,
+        )
     with tempfile.TemporaryDirectory(prefix="pgra-") as tmp:
         tmp_path = Path(tmp)
         old_path = tmp_path / "old.pgra"
@@ -133,7 +143,7 @@ def lean_accept_wire(old_wire: bytes, new_wire: bytes, *, timeout: float = 120.0
         ]
         proc = subprocess.run(
             cmd,
-            cwd=str(_FORMAL_DIR),
+            cwd=str(_LEAN_DIR),
             env=_lean_env(),
             capture_output=True,
             text=True,
@@ -155,7 +165,7 @@ def typecheck_core(*, timeout: float = 300.0) -> subprocess.CompletedProcess[str
     cmd = ["lake", "env", "lean", "PCS/V2/ProofGatedFormalization.lean"]
     return subprocess.run(
         cmd,
-        cwd=str(_FORMAL_DIR),
+        cwd=str(_LEAN_DIR),
         env=_lean_env(),
         capture_output=True,
         text=True,
@@ -165,7 +175,7 @@ def typecheck_core(*, timeout: float = 300.0) -> subprocess.CompletedProcess[str
 
 
 def build_modules(modules: Iterable[str] | None = None, *, timeout: float = 600.0) -> subprocess.CompletedProcess[str]:
-    """`lake build` one or more PCS.V2 PGRA modules."""
+    """`lake build` one or more PCS.V2 PGRA modules in the research Lean package."""
     mods = list(modules) if modules is not None else [
         "PCS.V2.ProofGatedFormalization",
         "PCS.V2.ProofGatedFormalizationArtifacts",
@@ -173,7 +183,7 @@ def build_modules(modules: Iterable[str] | None = None, *, timeout: float = 600.
     cmd = ["lake", "build", *mods]
     return subprocess.run(
         cmd,
-        cwd=str(_FORMAL_DIR),
+        cwd=str(_LEAN_DIR),
         env=_lean_env(),
         capture_output=True,
         text=True,
