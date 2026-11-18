@@ -25,6 +25,10 @@ from .instrument import (
     balke_pearl_bounds,
     ASSUMPTIONS as INSTRUMENT_ASSUMPTIONS,
 )
+from .counterfactual import (
+    counterfactual_probability,
+    ASSUMPTIONS as COUNTERFACTUAL_ASSUMPTIONS,
+)
 from .dag import CausalDAG, GraphError
 from .scm import BinarySCM
 
@@ -41,7 +45,7 @@ ALLOWED_VERDICTS = (
     "bounds_certified",
 )
 
-ALLOWED_STRATEGIES = ("backdoor", "frontdoor", "instrument")
+ALLOWED_STRATEGIES = ("backdoor", "frontdoor", "instrument", "counterfactual")
 
 # Concrete Lean theorem names bound to suite graph instances (not general soundness).
 FORMAL_BINDINGS = {
@@ -62,6 +66,11 @@ FORMAL_BINDINGS = {
         "PcsPccr.InstrumentInd.Z_not_parent_Y_after_doX",
         "PcsPccr.InstrumentInd.u_not_instrument_exclusion",
     ),
+    "counterfactual": (
+        "PcsPccr.SCMCounterfactual.consistency_Y1_given_X1",
+        "PcsPccr.SCMCounterfactual.cf_ne_interventional_given_X0",
+        "PcsPccr.SCMCounterfactual.cf_Y1_given_X0_value",
+    ),
 }
 
 
@@ -70,6 +79,8 @@ def _assumptions_for(strategy: str) -> Tuple[str, ...]:
         return FRONTDOOR_ASSUMPTIONS
     if strategy == "instrument":
         return INSTRUMENT_ASSUMPTIONS
+    if strategy == "counterfactual":
+        return COUNTERFACTUAL_ASSUMPTIONS
     return BACKDOOR_ASSUMPTIONS
 
 
@@ -87,7 +98,9 @@ class CausalClaim:
     adjustment_set: FrozenSet[str]
     claimed_p_do: Optional[str]
     asserts_association_equals_effect: Optional[bool]
-    strategy: Optional[str] = None  # "backdoor" | "frontdoor" | None→backdoor
+    strategy: Optional[str] = None  # backdoor|frontdoor|instrument|counterfactual
+    evidence: Optional[Tuple[Tuple[str, int], ...]] = None
+    treatment_value: int = 1
     raw_text: str = ""
 
     def to_dict(self) -> dict:
@@ -101,6 +114,8 @@ class CausalClaim:
             "claimed_p_do": self.claimed_p_do,
             "asserts_association_equals_effect": self.asserts_association_equals_effect,
             "strategy": self.strategy or "backdoor",
+            "evidence": {k: v for k, v in self.evidence} if self.evidence else None,
+            "treatment_value": self.treatment_value,
         }
 
 
@@ -120,6 +135,7 @@ class CertificateVerdict:
     frontdoor: Optional[dict] = None
     instrument: Optional[dict] = None
     bounds: Optional[dict] = None
+    counterfactual: Optional[dict] = None
     formal_bindings: Tuple[str, ...] = ()
 
     def to_dict(self) -> dict:
@@ -132,6 +148,7 @@ class CertificateVerdict:
             "frontdoor": self.frontdoor,
             "instrument": self.instrument,
             "bounds": self.bounds,
+            "counterfactual": self.counterfactual,
             "intervention": self.intervention,
             "ground_truth": self.ground_truth,
             "claim": self.claim,
@@ -167,6 +184,13 @@ def parse_model_claim(task_id: str, text: str) -> CausalClaim:
             strategy = str(strategy)
             if strategy not in ALLOWED_STRATEGIES:
                 raise ValueError("unknown strategy")
+        evidence = _parse_evidence(payload.get("evidence", None))
+        tv = payload.get("treatment_value", 1)
+        if tv is None:
+            tv = 1
+        tv = int(tv)
+        if tv not in (0, 1):
+            raise ValueError("treatment_value must be 0 or 1")
         return CausalClaim(
             task_id=task_id,
             treatment=treatment,
@@ -176,10 +200,28 @@ def parse_model_claim(task_id: str, text: str) -> CausalClaim:
             claimed_p_do=claimed,
             asserts_association_equals_effect=assoc_eq,
             strategy=strategy,
+            evidence=evidence,
+            treatment_value=tv,
             raw_text=text,
         )
     except Exception:
         return _malformed(task_id, text)
+
+
+def _parse_evidence(raw) -> Optional[Tuple[Tuple[str, int], ...]]:
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        raise ValueError("evidence must be an object")
+    items = []
+    for k, v in raw.items():
+        if not isinstance(k, str) or not k:
+            raise ValueError("evidence keys must be non-empty strings")
+        iv = int(v)
+        if iv not in (0, 1):
+            raise ValueError("evidence values must be 0 or 1")
+        items.append((k, iv))
+    return tuple(sorted(items))
 
 
 def _malformed(task_id: str, text: str) -> CausalClaim:
@@ -192,6 +234,8 @@ def _malformed(task_id: str, text: str) -> CausalClaim:
         claimed_p_do=None,
         asserts_association_equals_effect=None,
         strategy=None,
+        evidence=None,
+        treatment_value=1,
         raw_text=text,
     )
 
@@ -208,7 +252,12 @@ def check_claim(
     """Independently check a causal claim against graph (+ optional executable SCM)."""
     reasons: List[str] = []
     empty = dict(
-        backdoor=None, frontdoor=None, instrument=None, bounds=None, intervention=None
+        backdoor=None,
+        frontdoor=None,
+        instrument=None,
+        bounds=None,
+        counterfactual=None,
+        intervention=None,
     )
     if not claim.treatment or not claim.outcome:
         return _verdict(
@@ -246,6 +295,10 @@ def check_claim(
 
     if strategy == "instrument":
         return _check_instrument(claim, graph, scm, true_identifiable=true_identifiable)
+    if strategy == "counterfactual":
+        return _check_counterfactual(
+            claim, graph, scm, true_identifiable=true_identifiable
+        )
 
     bd = verify_backdoor_set(graph, claim.treatment, claim.outcome, claim.adjustment_set)
     fd = verify_frontdoor_set(graph, claim.treatment, claim.outcome, claim.adjustment_set)
@@ -293,6 +346,7 @@ def check_claim(
                     frontdoor=fd.to_dict(),
                     instrument=None,
                     bounds=None,
+                    counterfactual=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -313,6 +367,7 @@ def check_claim(
                     frontdoor=fd.to_dict(),
                     instrument=None,
                     bounds=None,
+                    counterfactual=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -336,6 +391,7 @@ def check_claim(
                     frontdoor=fd.to_dict(),
                     instrument=None,
                     bounds=None,
+                    counterfactual=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -354,6 +410,7 @@ def check_claim(
                 frontdoor=fd.to_dict(),
                 instrument=None,
                 bounds=None,
+                counterfactual=None,
                 intervention=intervention_info,
                 ground_truth=gt,
             )
@@ -368,6 +425,7 @@ def check_claim(
                 frontdoor=fd.to_dict(),
                 instrument=None,
                 bounds=None,
+                counterfactual=None,
                 intervention=intervention_info,
                 ground_truth=gt,
             )
@@ -389,6 +447,7 @@ def check_claim(
                     frontdoor=fd.to_dict(),
                     instrument=None,
                     bounds=None,
+                    counterfactual=None,
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
@@ -404,6 +463,7 @@ def check_claim(
             frontdoor=fd.to_dict(),
             instrument=None,
             bounds=None,
+            counterfactual=None,
             intervention=intervention_info,
             ground_truth=gt,
         )
@@ -419,6 +479,7 @@ def check_claim(
             frontdoor=fd.to_dict(),
             instrument=None,
             bounds=None,
+            counterfactual=None,
             intervention=intervention_info,
             ground_truth=gt,
         )
@@ -432,6 +493,179 @@ def check_claim(
         frontdoor=fd.to_dict(),
         instrument=None,
         bounds=None,
+        counterfactual=None,
+        intervention=intervention_info,
+        ground_truth=gt,
+    )
+
+
+def _check_counterfactual(
+    claim: CausalClaim,
+    graph: CausalDAG,
+    scm: Optional[BinarySCM],
+    *,
+    true_identifiable: bool,
+) -> CertificateVerdict:
+    """Twin-network counterfactual strategy: exact shared-noise abduction."""
+    reasons: List[str] = []
+    empty = dict(
+        backdoor=None,
+        frontdoor=None,
+        instrument=None,
+        bounds=None,
+        counterfactual=None,
+        intervention=None,
+    )
+    if scm is None:
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="invalid_claim",
+            reasons=("counterfactual strategy requires an explicit finite SCM",),
+            ground_truth={"identifiable": true_identifiable, "strategy": "counterfactual"},
+            **empty,
+        )
+    if not claim.evidence:
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="invalid_claim",
+            reasons=("counterfactual strategy requires non-empty evidence",),
+            ground_truth={"identifiable": true_identifiable, "strategy": "counterfactual"},
+            **empty,
+        )
+    evidence = {k: v for k, v in claim.evidence}
+    try:
+        cf = counterfactual_probability(
+            scm,
+            outcome=claim.outcome,
+            treatment=claim.treatment,
+            treatment_value=claim.treatment_value,
+            evidence=evidence,
+        )
+    except GraphError as exc:
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="positivity_failure",
+            reasons=(str(exc),),
+            ground_truth={"identifiable": true_identifiable, "strategy": "counterfactual"},
+            **empty,
+        )
+
+    cf_info = cf.to_dict()
+    true_do = scm.interventional_expectation(
+        claim.outcome, {claim.treatment: claim.treatment_value}
+    )
+    gt = {
+        "identifiable": true_identifiable,
+        "strategy": "counterfactual",
+        "counterfactual": cf_info,
+        "p_do": _frac(true_do),
+        "differs_from_interventional": cf.probability != true_do,
+    }
+    intervention_info = scm.analyze_effect(
+        claim.treatment, claim.outcome, treatment_value=claim.treatment_value
+    ).to_dict()
+
+    # Consistency cross-check when evidence fixes treatment to treatment_value.
+    if (
+        claim.treatment in evidence
+        and evidence[claim.treatment] == claim.treatment_value
+    ):
+        obs = scm.conditional({claim.outcome: 1}, evidence)
+        if cf.probability != obs:
+            reasons.append(
+                "consistency failure: counterfactual given treatment=evidence "
+                f"≠ observational {_frac(obs)}"
+            )
+            return _verdict(
+                claim,
+                accepted=False,
+                verdict="intervention_mismatch",
+                reasons=tuple(reasons),
+                backdoor=None,
+                frontdoor=None,
+                instrument=None,
+                bounds=None,
+                counterfactual=cf_info,
+                intervention=intervention_info,
+                ground_truth=gt,
+            )
+
+    if not claim.asserts_identifiable:
+        reasons.append(
+            "counterfactual queries are identified under the declared SCM; "
+            "asserts_identifiable must be true"
+        )
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="invalid_claim",
+            reasons=tuple(reasons),
+            backdoor=None,
+            frontdoor=None,
+            instrument=None,
+            bounds=None,
+            counterfactual=cf_info,
+            intervention=intervention_info,
+            ground_truth=gt,
+        )
+
+    if not true_identifiable:
+        reasons.append("target is marked non-identifiable; claim overreached")
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="not_identifiable",
+            reasons=tuple(reasons),
+            backdoor=None,
+            frontdoor=None,
+            instrument=None,
+            bounds=None,
+            counterfactual=cf_info,
+            intervention=intervention_info,
+            ground_truth=gt,
+        )
+
+    if claim.claimed_p_do is not None:
+        claimed = Fraction(claim.claimed_p_do)
+        if claimed != cf.probability:
+            reasons.append(
+                f"claimed counterfactual {claim.claimed_p_do} ≠ exact {_frac(cf.probability)}"
+            )
+            return _verdict(
+                claim,
+                accepted=False,
+                verdict="intervention_mismatch",
+                reasons=tuple(reasons),
+                backdoor=None,
+                frontdoor=None,
+                instrument=None,
+                bounds=None,
+                counterfactual=cf_info,
+                intervention=intervention_info,
+                ground_truth=gt,
+            )
+
+    if cf.probability != true_do:
+        reasons.append(
+            "counterfactual ≠ interventional under confounding "
+            f"(CF {_frac(cf.probability)} vs do {_frac(true_do)})"
+        )
+    reasons.append(
+        "twin-network counterfactual certificate accepted under declared SCM assumptions"
+    )
+    return _verdict(
+        claim,
+        accepted=True,
+        verdict="identified_under_assumptions",
+        reasons=tuple(reasons),
+        backdoor=None,
+        frontdoor=None,
+        instrument=None,
+        bounds=None,
+        counterfactual=cf_info,
         intervention=intervention_info,
         ground_truth=gt,
     )
@@ -456,6 +690,7 @@ def _check_instrument(
             frontdoor=None,
             instrument=None,
             bounds=None,
+            counterfactual=None,
             intervention=None,
             ground_truth={"identifiable": true_identifiable, "strategy": "instrument"},
         )
@@ -636,6 +871,7 @@ def _verdict(
     bounds: Optional[dict],
     intervention: Optional[dict],
     ground_truth: dict,
+    counterfactual: Optional[dict] = None,
 ) -> CertificateVerdict:
     assert verdict in ALLOWED_VERDICTS
     strategy = claim.strategy or "backdoor"
@@ -650,6 +886,7 @@ def _verdict(
         "frontdoor": frontdoor,
         "instrument": instrument,
         "bounds": bounds,
+        "counterfactual": counterfactual,
         "intervention": intervention,
         "ground_truth": ground_truth,
         "assumptions": list(assumptions),
@@ -668,6 +905,7 @@ def _verdict(
         frontdoor=frontdoor,
         instrument=instrument,
         bounds=bounds,
+        counterfactual=counterfactual,
         intervention=intervention,
         ground_truth=ground_truth,
         claim=claim.to_dict(),

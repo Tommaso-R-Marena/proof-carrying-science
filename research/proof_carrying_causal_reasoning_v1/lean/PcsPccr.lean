@@ -11,4 +11,5 @@ import PcsPccr.NonIdent
 import PcsPccr.NonIdentSCM
 import PcsPccr.SCMConfounder
 import PcsPccr.SCMFrontDoor
+import PcsPccr.SCMCounterfactual
 import PcsPccr.Mutilate

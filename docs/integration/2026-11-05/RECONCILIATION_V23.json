@@ -47,10 +47,10 @@
     "trace_required_census": 45,
     "v23_pccr_admission": {
       "package": "research/proof_carrying_causal_reasoning_v1/",
-      "files_admitted": 119,
+      "files_admitted": 125,
       "draft_research_only": true,
       "production_authority": false,
-      "notes": "Proof-carrying causal reasoning research package (claim\u2192identify\u2192intervene/bounds certificates). Explicit non-claims retained in package README/RESULTS."
+      "notes": "Proof-carrying causal reasoning research package (claim\u2192identify\u2192intervene/bounds/counterfactual certificates). Explicit non-claims retained in package README/RESULTS."
     }
   },
   "control_paths": [
@@ -64704,7 +64704,7 @@
       "mode": "100644"
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
-      "sha256": "bacf840778c71ff8a81f6fd0ac227beee0ad776df0f8742bfb5fe17a6c7d44f7",
+      "sha256": "a16032d2203886f920d2d137dfa47c879385250c93d71f57823a861cf20c8e1f",
       "mode": "100644"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
@@ -85052,11 +85052,11 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/README.md": {
-      "sha256": "af0733d1dc664eaa67fbd1c7deb1f8b9ec0eeb82d17f3fee76f2cd483e04e733",
+      "sha256": "46eeb4a1aa10f06e18b268f72d48fa7aae15f7e45b59a7eb86df4b2e71725a8c",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/RESULTS.md": {
-      "sha256": "59ee6c015ec70b2f6aa1f70b834a93e41a980f43a63a5ee6d5d758cfc5b80fac",
+      "sha256": "c96d34da9b116adb6a162bfc3f023f95fac93d8d37288f88059d0df591c6984d",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/__init__.py": {
@@ -85336,7 +85336,7 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/experiment.py": {
-      "sha256": "d19100f39304221a48efd322f4b662db628e261b965256765c6ab8783bc4efdb",
+      "sha256": "072a4a4c97690292b8063e74641446649270f48fc7a22969ee839c22c1efb2b8",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/gemini_eval.py": {
@@ -85344,7 +85344,7 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/__init__.py": {
-      "sha256": "a3920dfb52705cd3faea034e43210606e971ee30530542b18f39870671402bb9",
+      "sha256": "964cd011e88228003ca0215a0ec32a5c60ddf07ccff8306e79111f594bd1a571",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/backdoor.py": {
@@ -85352,7 +85352,11 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/certificate.py": {
-      "sha256": "87eeb37b8ae0f6b8eeb25e598a9c4af233203e57d615814a3e48c792e3b7c59a",
+      "sha256": "b807b5de18c769e65029615e785091642bda7daf4754f7eb7559037a404cd83b",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/kernel/counterfactual.py": {
+      "sha256": "04a4a48c3b5df69b6102868c1bfc94da4895ec658e8e48c5ce264e0923c74992",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/d_separation.py": {
@@ -85365,6 +85369,10 @@
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/frontdoor.py": {
       "sha256": "515071df53a0b95b225aab17e755858872b6674397a3a40f710d18e54b6b6522",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/kernel/identify.py": {
+      "sha256": "dbb6d696a1b9a11e78db4754d6e43c14930561d4568cba0e8ae6b42db6c337e2",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/instrument.py": {
@@ -85380,7 +85388,7 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr.lean": {
-      "sha256": "94f3baf97001b4a938d0ad19fb6d8a35a13e464d2ae89ff3c794e3a6c4276751",
+      "sha256": "27d9c3aba0414f9f262ce6dcc591bde0fc9db1c57b9bce23f2d8c5b8b9aed219",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/Basic.lean": {
@@ -85433,6 +85441,10 @@
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/SCMConfounder.lean": {
       "sha256": "441b1eb45eeb997fd12f2fe83cdb45922ab3184669ef71a6ce6825631a91c6f7",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/SCMCounterfactual.lean": {
+      "sha256": "f2f5105b477cb1d05c29997ca7e87ac5ea7d66682c442a02a1cc950c977e9440",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/SCMFrontDoor.lean": {
@@ -85495,8 +85507,16 @@
       "sha256": "e3e4ea42542a2e76e75bc5a1601e4f7c14e85e6be90ebc95e2706ee91345096e",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/results/qualified-v5/results.json": {
+      "sha256": "4b4133bb51355d4b32e4d4a0026211abcb44a4402629a29d2e4496cbfe93d0d6",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/results/qualified-v5/results.sha256": {
+      "sha256": "974b604e13bf4d5e092c19de89ebb9d086659fa5672d26c3d52a648932250637",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/schemas/causal_claim.schema.json": {
-      "sha256": "062622f2e948cd365e9b1709184f4f9d359c408beb726cf2654cdd4057b9013a",
+      "sha256": "7ca06cb1685b2305afc1694acbece287b6d4ae44884210ec6b91c038ae20857f",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/scripts/check_all.sh": {
@@ -85508,11 +85528,15 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/tasks/battery.py": {
-      "sha256": "334a765e69c5eaaac514acdcf6cf1e62b183c558e2d0843cd056dbed8ef6ca90",
+      "sha256": "e229b1fa065cc20af40c7d0eae38dae1b60ade90c8985cdefbb42039740df0be",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/tests/test_adversarial.py": {
       "sha256": "c1aaf0ce43bbf275e2d8ac4c3e40874ac0071aa8ff2c5a9d7fb76e8e2ff3d32e",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/tests/test_counterfactual.py": {
+      "sha256": "8083376d952efd675812f41aee32e17bedd991300c39ade43c9024c66b52e502",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/tests/test_frontdoor_bridge.py": {

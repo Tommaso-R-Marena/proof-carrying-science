@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from fractions import Fraction
-from typing import FrozenSet, List, Optional, Sequence, Tuple
+from typing import FrozenSet, List, Mapping, Optional, Sequence, Tuple
 
 from research.proof_carrying_causal_reasoning_v1.kernel.dag import CausalDAG
 from research.proof_carrying_causal_reasoning_v1.kernel.backdoor import (
@@ -24,6 +24,9 @@ from research.proof_carrying_causal_reasoning_v1.kernel.scm import (
     logistic_from_parents,
 )
 from research.proof_carrying_causal_reasoning_v1.kernel.certificate import CausalClaim
+from research.proof_carrying_causal_reasoning_v1.kernel.counterfactual import (
+    counterfactual_probability,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,7 +76,12 @@ def _claim(
     claimed_p_do: Optional[str] = None,
     asserts_association_equals_effect: Optional[bool] = None,
     strategy: Optional[str] = None,
+    evidence: Optional[Mapping[str, int]] = None,
+    treatment_value: int = 1,
 ) -> CausalClaim:
+    ev = None
+    if evidence is not None:
+        ev = tuple(sorted((k, int(v)) for k, v in evidence.items()))
     return CausalClaim(
         task_id=task_id,
         treatment=treatment,
@@ -83,6 +91,8 @@ def _claim(
         claimed_p_do=claimed_p_do,
         asserts_association_equals_effect=asserts_association_equals_effect,
         strategy=strategy,
+        evidence=ev,
+        treatment_value=treatment_value,
         raw_text="",
     )
 
@@ -637,6 +647,96 @@ def build_tasks() -> Tuple[Task, ...]:
                     asserts_identifiable=False,
                     adjustment_set=["U"],
                     strategy="instrument",
+                ),
+            ),
+        )
+    )
+
+    # T11: twin-network counterfactual on the Lean confounder SCM.
+    # P(Y_{X=1}=1 | X=0) is identified by shared-noise abduction and differs
+    # from P(Y=1 | do(X=1)) under confounding — beyond interventional ID alone.
+    g11 = CausalDAG.from_edges(["Z", "X", "Y"], [("Z", "X"), ("Z", "Y"), ("X", "Y")])
+
+    def _pz(_p: Mapping[str, int]) -> Fraction:
+        return Fraction(1, 2)
+
+    def _px(p: Mapping[str, int]) -> Fraction:
+        return (1 + p.get("Z", 0)) / Fraction(4)
+
+    def _py(p: Mapping[str, int]) -> Fraction:
+        return (1 + p.get("X", 0) + 2 * p.get("Z", 0)) / Fraction(8)
+
+    scm11 = BinarySCM(g11, {"Z": _pz, "X": _px, "Y": _py})
+    cf_truth = counterfactual_probability(
+        scm11, outcome="Y", treatment="X", treatment_value=1, evidence={"X": 0}
+    )
+    tasks.append(
+        Task(
+            task_id="T11",
+            title="Twin-network counterfactual (CF ≠ do under confounding)",
+            domain="counterfactual",
+            prompt=(
+                "You are evaluating a counterfactual query under an explicit finite SCM.\n"
+                "Variables: X, Y, Z\n"
+                "Directed edges: Z->X, Z->Y, X->Y\n"
+                "Mechanisms (exact rationals):\n"
+                "  P(Z=1)=1/2; P(X=1|Z=z)=(1+z)/4; P(Y=1|X=x,Z=z)=(1+x+2z)/8\n"
+                "Query: identify P(Y_{do(X=1)}=1 | X=0) via twin-network shared-noise "
+                "abduction (not the interventional P(Y|do(X=1)) alone).\n"
+                "Respond with ONLY JSON:\n"
+                "{\n"
+                '  "treatment": "X",\n'
+                '  "outcome": "Y",\n'
+                '  "asserts_identifiable": true,\n'
+                '  "strategy": "counterfactual",\n'
+                '  "adjustment_set": [],\n'
+                '  "evidence": {"X": 0},\n'
+                '  "treatment_value": 1,\n'
+                '  "claimed_p_do": "7/20",\n'
+                '  "asserts_association_equals_effect": false\n'
+                "}\n"
+                "Do not report the interventional probability 3/8; the correct "
+                "counterfactual given X=0 is 7/20.\n"
+            ),
+            graph=g11,
+            scm=scm11,
+            treatment="X",
+            outcome="Y",
+            identifiable=True,
+            notes=(
+                f"exact twin-network P(Y_1=1|X=0)={cf_truth.probability}",
+                "differs from interventional P(Y|do(X=1))=3/8",
+                "consistency: P(Y_1=1|X=1)=P(Y=1|X=1)=5/12",
+            ),
+            allowed_strategies=("counterfactual",),
+            control_claims=(
+                _claim(
+                    "T11",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    strategy="counterfactual",
+                    evidence={"X": 0},
+                    treatment_value=1,
+                    claimed_p_do="7/20",
+                ),
+                _claim(
+                    "T11",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    strategy="counterfactual",
+                    evidence={"X": 0},
+                    treatment_value=1,
+                    claimed_p_do="3/8",  # interventional trap
+                ),
+                _claim(
+                    "T11",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    strategy="backdoor",
+                    adjustment_set=["Z"],
                 ),
             ),
         )

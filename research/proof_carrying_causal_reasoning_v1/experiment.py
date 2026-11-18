@@ -101,6 +101,7 @@ def _revive(payload: dict) -> CertificateVerdict:
         "frontdoor": payload.get("frontdoor"),
         "instrument": payload.get("instrument"),
         "bounds": payload.get("bounds"),
+        "counterfactual": payload.get("counterfactual"),
         "intervention": payload.get("intervention"),
         "ground_truth": payload["ground_truth"],
         "assumptions": list(assumptions),
@@ -119,6 +120,7 @@ def _revive(payload: dict) -> CertificateVerdict:
         frontdoor=payload.get("frontdoor"),
         instrument=payload.get("instrument"),
         bounds=payload.get("bounds"),
+        counterfactual=payload.get("counterfactual"),
         intervention=payload.get("intervention"),
         ground_truth=payload["ground_truth"],
         claim=payload["claim"],
@@ -181,6 +183,55 @@ def run_oracle_sanity(tasks: Optional[Sequence[Task]] = None) -> Dict[str, Any]:
                     "note": "observed-only non-identifiable; full-graph minimal sets require U",
                     "full_graph_minimal_sets": [sorted(s) for s in mins],
                     "ok": True,
+                }
+            )
+            continue
+        if task.task_id == "T11" or "counterfactual" in task.allowed_strategies:
+            from research.proof_carrying_causal_reasoning_v1.kernel.counterfactual import (
+                counterfactual_probability,
+            )
+
+            # Consistency: Y_x | X=x equals observational; CF under X≠x may ≠ do.
+            ok = True
+            details = []
+            for x_star in (0, 1):
+                for x_ev in (0, 1):
+                    cf = counterfactual_probability(
+                        task.scm,
+                        outcome=task.outcome,
+                        treatment=task.treatment,
+                        treatment_value=x_star,
+                        evidence={task.treatment: x_ev},
+                    )
+                    do_p = task.scm.interventional_expectation(
+                        task.outcome, {task.treatment: x_star}
+                    )
+                    if x_star == x_ev:
+                        obs = task.scm.conditional(
+                            {task.outcome: 1}, {task.treatment: x_ev}
+                        )
+                        match = cf.probability == obs
+                    else:
+                        match = True  # no forced equality; record difference
+                    ok = ok and match
+                    details.append(
+                        {
+                            "criterion": "counterfactual",
+                            "treatment_value": x_star,
+                            "evidence_treatment": x_ev,
+                            "cf": f"{cf.probability}",
+                            "do": f"{do_p}",
+                            "differs_from_do": cf.probability != do_p,
+                            "consistency_ok": match if x_star == x_ev else None,
+                        }
+                    )
+            rows.append(
+                {
+                    "task_id": task.task_id,
+                    "ok": ok,
+                    "details": details,
+                    "ate": f"{task.scm.ate(task.treatment, task.outcome)}",
+                    "notes": ["twin-network consistency + CF≠do under confounding"],
                 }
             )
             continue

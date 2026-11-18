@@ -5,6 +5,8 @@ from .d_separation import d_separated, find_backdoor_paths, path_blocked
 from .backdoor import verify_backdoor_set, find_minimal_backdoor_sets
 from .frontdoor import verify_frontdoor_set, find_frontdoor_sets
 from .scm import BinarySCM, InterventionResult
+from .counterfactual import counterfactual_probability, CounterfactualResult
+from .identify import synthesize_identification, IdentificationPlan
 from .certificate import (
     CausalClaim,
     CertificateVerdict,
@@ -24,6 +26,10 @@ __all__ = [
     "find_frontdoor_sets",
     "BinarySCM",
     "InterventionResult",
+    "counterfactual_probability",
+    "CounterfactualResult",
+    "synthesize_identification",
+    "IdentificationPlan",
     "CausalClaim",
     "CertificateVerdict",
     "check_claim",

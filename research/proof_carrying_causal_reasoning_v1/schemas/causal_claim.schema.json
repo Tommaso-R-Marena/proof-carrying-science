@@ -33,8 +33,23 @@
         { "type": "null" },
         {
           "type": "string",
-          "enum": ["backdoor", "frontdoor", "instrument"]
+          "enum": ["backdoor", "frontdoor", "instrument", "counterfactual"]
         }
+      ]
+    },
+    "evidence": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "enum": [0, 1] }
+        }
+      ]
+    },
+    "treatment_value": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "integer", "enum": [0, 1] }
       ]
     }
   }

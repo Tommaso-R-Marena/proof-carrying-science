@@ -133,6 +133,23 @@ Unit tests: **40/40** pass. Qualified snapshot: `results/qualified-v4/`.
 Gemini `gemini-3.5-flash-lite` on `{T10,T09,T02,T06}`: **4/4** accepted
 (evidence: `evidence/gemini-3.5-flash-lite-v4-adv/`).
 
+## Twin-network counterfactuals (v1.5 breakthrough)
+
+Beyond interventional identification: exact Pearl abduction→action→prediction
+on finite binary Markovian SCMs with shared Unif[0,1] exogenous noise.
+
+| Addition | Status |
+|----------|--------|
+| Python `counterfactual` twin-network kernel (exact rationals) | pass |
+| Consistency: `P(Y_x\|X=x)=P(Y\|X=x)` | pass (`5/12` on Lean SCM) |
+| CF ≠ do under confounding: `P(Y_1=1\|X=0)=7/20 ≠ 3/8` | pass |
+| Auto ID synthesizer (`identify.py`: IV/front-door/backdoor/CF) | pass |
+| Task T11 + certificate strategy `counterfactual` | controls + oracle green |
+| Lean `SCMCounterfactual` | consistency + CF≠do + closed forms |
+| Interventional trap (`claimed_p_do=3/8`) rejected | pass |
+
+Unit tests: **52/52** pass. Qualified snapshot: `results/qualified-v5/`.
+
 ## Non-claims
 
 - Not production PCS authority
@@ -142,5 +159,8 @@ Gemini `gemini-3.5-flash-lite` on `{T10,T09,T02,T06}`: **4/4** accepted
   general probabilistic soundness for arbitrary DAGs
 - Instrument Lean module certifies concrete IV side-conditions; closed-form
   and LP live in Python and are cross-checked against each other
+- Counterfactual Lean/Python modules identify under an *explicit finite SCM*
+  (twin-network shared noise); they do not claim observational-only
+  counterfactual ID without the SCM, nor general continuous/structural ID
 - `formal_bindings` name suite-instance theorems; they do not transfer to
   arbitrary DAGs
