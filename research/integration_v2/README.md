@@ -1,12 +1,12 @@
 # Explicit combined-source qualification
 
-The current contract is **V20**, under
-`docs/integration/2026-10-29/RECONCILIATION_V20.json`. It retains the exact historical
-70-PR census (69 reviewed source integrations plus held #117), original source
-identities, reviewed adaptation reasons, modes and the complete combined tree.
-It additionally pins the new public-study implementation, retained real-model
-measurements, updated documentation and the fail-closed required-CI source check.
-The original V12 manifest/control sources remain inspectable as historical data.
+The current contract is **V23**, under
+`docs/integration/2026-11-05/RECONCILIATION_V23.json`. It retains the exact historical
+PR census (including held #117), original source identities, reviewed adaptation
+reasons, modes and the complete combined tree, and additionally admits the draft
+`research/proof_carrying_causal_reasoning_v1/` package. Immutable V22/V21/V20
+predecessor manifests remain inspectable. This does not grant production PCS
+authority.
 
 From a clean committed checkout:
 

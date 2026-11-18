@@ -20,6 +20,7 @@ CONTROLS={
   '.github/workflows/model-assurance-studio-research.yml',
   'research/integration_v2/reconcile.py','research/integration_v2/test_reconcile.py',
   'docs/integration/2026-11-05/RECONCILIATION_V22.json',
+  'docs/integration/2026-11-05/RECONCILIATION_V23.json',
   'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md'},
  'proof-carrying-science-site':COMMON_CONTROLS|{
   '.github/workflows/open-pr-reconciliation.yml',
