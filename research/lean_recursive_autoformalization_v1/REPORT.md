@@ -38,6 +38,12 @@ Fitting certified `8 → 9 → 10 → 11 → 12`; fitting proved `2 → 3 → 4 
 across **4** accepted generations. Holdout proved `1 → 2 → 3 → 4 → 5`
 (non-decreasing; never consulted by the gate).
 
+Lemma harvest (alpha-deduped checked library + `reuse_priority`): fitting
+expansions **`52 → 18`** with proved count preserved (`6→6`).
+
+Lean `ProofGatedProofCoupled.lean` specializes the formalization gate to
+proved/unproved certificates with `accept_sound` and strict-loss theorems.
+
 ## What was built
 
 | Artifact | Role |

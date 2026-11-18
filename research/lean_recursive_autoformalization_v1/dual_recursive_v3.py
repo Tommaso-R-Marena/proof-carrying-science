@@ -158,9 +158,12 @@ def _harvest_library(
     except ImportError:
         from capability import formalize_with_rules
 
+    from pcs.experimental.prover.data import structural_fingerprint
+
     targets = {item["id"]: item for item in corpus if item["id"] in set(proof_ids)}
     entries: list[dict[str, Any]] = []
     records: list[dict[str, Any]] = []
+    seen_fps: set[str] = set()
     env = LeanEnvironment(timeout=90)
     try:
         for item_id in sorted(targets):
@@ -177,6 +180,18 @@ def _harvest_library(
                 records.append({"id": item_id, "status": proved.get("status") if proved else None})
                 continue
             checked = env.verify(ir, proved["receipt"]["actions"])
+            fp = structural_fingerprint(ir)
+            if fp in seen_fps:
+                records.append(
+                    {
+                        "id": item_id,
+                        "status": "verified_alpha_duplicate",
+                        "expansions": proved.get("expansions"),
+                        "actions": len(checked["actions"]),
+                    }
+                )
+                continue
+            seen_fps.add(fp)
             entries.append(
                 {
                     "goal": ir,
@@ -220,7 +235,7 @@ def _measure_expansions(
     library: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     from pcs.experimental.prover.environment import LeanEnvironment, search
-    from pcs.experimental.prover.library import LibraryEnvironment
+    from pcs.experimental.prover.library import LibraryEnvironment, reuse_priority
 
     try:
         from .capability import formalize_with_rules
@@ -229,8 +244,10 @@ def _measure_expansions(
 
     targets = [item for item in corpus if item["id"] in set(proof_ids)]
     rows: list[dict[str, Any]] = []
+    use_lib = bool(library and library.get("entries"))
     env: Any
-    if library and library.get("entries"):
+    rank = reuse_priority if use_lib else None
+    if use_lib:
         env = LibraryEnvironment(library, timeout=90)
     else:
         env = LeanEnvironment(timeout=90)
@@ -243,7 +260,7 @@ def _measure_expansions(
                 rows.append({"id": item["id"], "proved": False, "expansions": None})
                 continue
             ir = result["candidates"][0]["ir"]
-            proved = search(env, ir, budget=budget, beam=beam)
+            proved = search(env, ir, rank, budget=budget, beam=beam)
             ok = bool(proved and proved.get("status") == "verified")
             rows.append(
                 {
@@ -261,7 +278,8 @@ def _measure_expansions(
         "proved_count": sum(1 for r in rows if r["proved"]),
         "total_expansions": total_exp,
         "mean_expansions": (total_exp / len(proved_rows)) if proved_rows else None,
-        "used_library": bool(library and library.get("entries")),
+        "used_library": use_lib,
+        "ranker": "reuse_priority" if use_lib else "symbolic_default",
     }
 
 

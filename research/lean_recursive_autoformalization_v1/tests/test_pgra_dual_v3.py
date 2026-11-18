@@ -111,3 +111,10 @@ def test_formal_bridge_points_at_research_lean():
     assert python_accept(old, new)
     verdict = lean_accept(old, new, timeout=180)
     assert verdict.accepted, (verdict.stdout, verdict.stderr[-1000:])
+
+
+def test_proof_coupled_lean_module_builds():
+    from formal_bridge import build_modules
+
+    built = build_modules(["PCS.V2.ProofGatedProofCoupled"], timeout=180)
+    assert built.returncode == 0, (built.stdout[-1500:], built.stderr[-1500:])

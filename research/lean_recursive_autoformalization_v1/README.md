@@ -75,6 +75,11 @@ Lean proof under the frozen symbolic budget. Lean gate modules live under
 fitting splits only. Holdout metrics are reported after each accept and must
 not decrease for proved counts, but never influence acceptance.
 
+Optional lemma harvest builds a checked reusable library from verified fitting
+proofs (alpha-deduped) and re-searches under `reuse_priority`; measured
+expansions fell `52→18` with proved count preserved. Lean module
+`ProofGatedProofCoupled.lean` proves the proof-status gate soundness.
+
 ## Conflict avoidance
 
 Stay inside `research/lean_recursive_autoformalization_v1/`. Do not edit open-PR

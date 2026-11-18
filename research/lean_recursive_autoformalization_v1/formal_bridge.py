@@ -179,6 +179,7 @@ def build_modules(modules: Iterable[str] | None = None, *, timeout: float = 600.
     mods = list(modules) if modules is not None else [
         "PCS.V2.ProofGatedFormalization",
         "PCS.V2.ProofGatedFormalizationArtifacts",
+        "PCS.V2.ProofGatedProofCoupled",
     ]
     cmd = ["lake", "build", *mods]
     return subprocess.run(
