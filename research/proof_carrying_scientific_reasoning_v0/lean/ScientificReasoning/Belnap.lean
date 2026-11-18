@@ -110,6 +110,14 @@ theorem designated_and (a b : TruthValue) :
     designated (a.and b) = true ↔ designated a = true ∧ designated b = true := by
   simp [designated, and_hasT, Bool.and_eq_true]
 
+theorem designated_neg (v : TruthValue) :
+    designated v.neg = true ↔ v.hasF = true := by
+  cases v <;> decide
+
+theorem designated_both : designated .both = true := by decide
+theorem designated_onlyFalse : designated .onlyFalse = false := by decide
+theorem designated_none : designated .none = false := by decide
+
 def Entails4 (Γ : Context) (φ : Formula) : Prop :=
   ∀ σ, (∀ p ∈ Γ.premises, designated (Formula.eval4 σ p.formula) = true) →
     designated (Formula.eval4 σ φ) = true

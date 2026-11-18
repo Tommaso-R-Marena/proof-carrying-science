@@ -29,6 +29,10 @@ Lean **4.28.0**. No `sorry` / `admit` / custom axioms.
 | **`checkJsonCert_sound` / `checkJsonCert_implies_core`** | JsonCert | Post-parse JSON graph → Derives / core | propext, Quot.sound |
 | **`checkJsonCert_rejects_unknown_keys` / `_deep_formula`** | JsonCert | Surface decode rejects | propext |
 | **`no_math_established_without_attestation`** | JsonCert | Finding F at JSON layer | propext, Quot.sound |
+| **`toJsonFormula_toFormula` / inverse** | JsonCert | Formula ↔ JsonFormula iso | propext |
+| **`json_semantic_triangle`** | JsonCert | JSON accept ⇒ core + Derives + ¬mathEst | propext, Quot.sound |
+| **`derives_completeness_steps_pos`** | Equivalence | Completeness witness has steps | propext, Quot.sound |
+| **`designated_neg`** | Belnap | designated(¬v) ↔ hasF | none |
 
 See `PYTHON_LEAN_EQUIVALENCE.md` and `EQUIVALENCE_BREAKS.md`.
 

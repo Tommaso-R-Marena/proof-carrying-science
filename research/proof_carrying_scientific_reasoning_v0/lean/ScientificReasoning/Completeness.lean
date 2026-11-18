@@ -293,6 +293,24 @@ def ProofTerm.compile : ProofTerm → List StepSpec × Nat
       ((ProofTerm.compile t).1 ++ [.andE2 (ProofTerm.compile t).2],
         (ProofTerm.compile t).1.length)
 
+theorem ProofTerm.compile_steps_pos (t : ProofTerm) :
+    0 < (ProofTerm.compile t).1.length := by
+  induction t with
+  | hyp _ => simp [ProofTerm.compile]
+  | andI l r ihl ihr =>
+      simp [ProofTerm.compile, List.length_append, shiftSteps, List.length_map]
+      omega
+  | andE1 t ih =>
+      simp [ProofTerm.compile, List.length_append]
+  | andE2 t ih =>
+      simp [ProofTerm.compile, List.length_append]
+
+theorem ProofTerm.compile_steps_ne (t : ProofTerm) :
+    (ProofTerm.compile t).1 ≠ [] :=
+  fun h => by
+    have := ProofTerm.compile_steps_pos t
+    simp [h] at this
+
 def ProofTerm.interpret (Γ : Context) : ProofTerm → Option (Support × Authority × Formula)
   | .hyp pid =>
       match findPremise Γ.premises pid with

@@ -21,7 +21,8 @@ Exclusive path only.
 |---|---|
 | **Byte-string `json.loads` / CPython / OS I/O** | Produces the typed `JsonCertificate` AST; Lean checks everything afterward |
 
-## Test locks (66 pytest)
+## Test locks (74 pytest)
 
 - `test_exhaustive_checker.py` — 6×6 meet, all authorities, andI pairs, JSON/WF mutants, nested chains
+- `test_depth_and_parse.py` — depth 64/65, oversized/malformed JSON, authority alias
 - `test_equivalence_breaks.py`, `test_python_lean_differential.py`, `test_security_findings_v1.py`, adversarial

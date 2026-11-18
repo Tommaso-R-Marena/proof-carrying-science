@@ -34,12 +34,56 @@ def JsonFormula.toFormula : JsonFormula → Formula
   | .not φ => .not φ.toFormula
   | .and φ ψ => .and φ.toFormula ψ.toFormula
 
+def Formula.toJsonFormula : Formula → JsonFormula
+  | .atom i => .atom i
+  | .not φ => .not φ.toJsonFormula
+  | .and φ ψ => .and φ.toJsonFormula ψ.toJsonFormula
+
+theorem Formula.toJsonFormula_toFormula (φ : Formula) :
+    φ.toJsonFormula.toFormula = φ := by
+  induction φ with
+  | atom i => rfl
+  | not φ ih => simpa [Formula.toJsonFormula, JsonFormula.toFormula] using congrArg Formula.not ih
+  | and φ ψ ihφ ihψ =>
+      simp [Formula.toJsonFormula, JsonFormula.toFormula, ihφ, ihψ]
+
+theorem JsonFormula.toFormula_toJsonFormula (φ : JsonFormula) :
+    φ.toFormula.toJsonFormula = φ := by
+  induction φ with
+  | atom i => rfl
+  | not φ ih => simpa [JsonFormula.toFormula, Formula.toJsonFormula] using congrArg JsonFormula.not ih
+  | and φ ψ ihφ ihψ =>
+      simp [JsonFormula.toFormula, Formula.toJsonFormula, ihφ, ihψ]
+
+theorem JsonFormula.toFormula_injective {φ ψ : JsonFormula}
+    (h : φ.toFormula = ψ.toFormula) : φ = ψ := by
+  have := congrArg Formula.toJsonFormula h
+  simpa [JsonFormula.toFormula_toJsonFormula] using this
+
 def JsonFormula.depth : JsonFormula → Nat
   | .atom _ => 0
   | .not φ => φ.depth + 1
   | .and φ ψ => Nat.max φ.depth ψ.depth + 1
 
 def maxFormulaDepth : Nat := 64
+
+def Authority.toJsonAuth : Authority → JsonAuth
+  | .disputed => .disputed
+  | .hypothesis => .hypothesis
+  | .empiricalAsserted => .empiricalAsserted
+  | .assumption => .assumption
+  | .derived => .derived
+  | .mathVerified => .mathVerified
+
+theorem Authority.toJsonAuth_toAuthority (a : Authority) :
+    a.toJsonAuth.toAuthority = a := by cases a <;> rfl
+
+theorem JsonAuth.toAuthority_toJsonAuth (j : JsonAuth) :
+    j.toAuthority.toJsonAuth = j := by cases j <;> rfl
+
+theorem JsonAuth.toAuthority_surjective (a : Authority) :
+    ∃ j : JsonAuth, j.toAuthority = a :=
+  ⟨a.toJsonAuth, Authority.toJsonAuth_toAuthority a⟩
 
 structure JsonPremise where
   id : Nat
@@ -59,6 +103,10 @@ def JsonRule.toStepSpec : JsonRule → StepSpec
   | .andI l r => .andI l r
   | .andE1 s => .andE1 s
   | .andE2 s => .andE2 s
+
+theorem JsonRule.toStepSpec_injective {r₁ r₂ : JsonRule}
+    (h : r₁.toStepSpec = r₂.toStepSpec) : r₁ = r₂ := by
+  cases r₁ <;> cases r₂ <;> simp [JsonRule.toStepSpec] at h <;> simp [h]
 
 structure JsonStep where
   id : Nat
@@ -193,9 +241,40 @@ theorem no_math_established_without_attestation
     j.assurance.mathEstablished = false :=
   checkJsonCert_mathEstablished_false c j h
 
+theorem decodeJsonCert_ok_of
+    (c : JsonCertificate)
+    (hunk : c.unknownTopKeys = [])
+    (hdepth : formulasDepthOk c.premises = true) :
+    decodeJsonCert c = some {
+      schemaVersion := c.schemaVersion
+      premises := c.premises.map decodePremise
+      steps := c.steps.map decodeStep
+      conclusionStep := c.conclusionStep
+      claimedConclusion := c.claimedConclusion.map (·.toFormula)
+      claimedFinalSupport := c.claimedFinalSupport
+      claimedFinalAuthority := c.claimedFinalAuthority.map (·.toAuthority)
+    } := by
+  simp [decodeJsonCert, hunk, hdepth]
+
+/-- Semantic triangle at the JSON-object layer. -/
+theorem json_semantic_triangle
+    (c : JsonCertificate) (j : VerifiedJudgment)
+    (h : checkJsonCert c = some j) :
+    (∃ sc, decodeJsonCert c = some sc ∧ checkCertificate sc.erase = some j) ∧
+      j.assurance.mathEstablished = false ∧
+      (∃ sc, decodeJsonCert c = some sc ∧
+        Derives sc.erase.toContext j.support j.assurance.declared j.formula) :=
+  ⟨checkJsonCert_implies_core c j h,
+   checkJsonCert_mathEstablished_false c j h,
+   checkJsonCert_sound c j h⟩
+
 end ScientificReasoning
 
 #print axioms ScientificReasoning.checkJsonCert_sound
 #print axioms ScientificReasoning.checkJsonCert_rejects_unknown_keys
 #print axioms ScientificReasoning.checkJsonCert_rejects_deep_formula
 #print axioms ScientificReasoning.no_math_established_without_attestation
+#print axioms ScientificReasoning.Formula.toJsonFormula_toFormula
+#print axioms ScientificReasoning.JsonFormula.toFormula_toJsonFormula
+#print axioms ScientificReasoning.json_semantic_triangle
+#print axioms ScientificReasoning.JsonRule.toStepSpec_injective
