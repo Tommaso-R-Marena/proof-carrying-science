@@ -4,5 +4,8 @@ import PcsPccr.Collider
 import PcsPccr.ConfounderInd
 import PcsPccr.ColliderInd
 import PcsPccr.MediationInd
+import PcsPccr.FrontDoorInd
 import PcsPccr.NonIdent
+import PcsPccr.NonIdentSCM
 import PcsPccr.SCMConfounder
+import PcsPccr.Mutilate

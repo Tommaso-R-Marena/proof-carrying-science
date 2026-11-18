@@ -39,6 +39,7 @@ class Task:
     identifiable: bool
     notes: Tuple[str, ...]
     control_claims: Tuple[CausalClaim, ...]
+    allowed_strategies: Tuple[str, ...] = ("backdoor",)
 
     def minimal_sets(self) -> List[FrozenSet[str]]:
         return [
@@ -58,6 +59,7 @@ class Task:
             "minimal_adjustment_sets": [sorted(s) for s in self.minimal_sets()],
             "ate": f"{self.scm.ate(self.treatment, self.outcome)}",
             "notes": list(self.notes),
+            "allowed_strategies": list(self.allowed_strategies),
         }
 
 
@@ -70,6 +72,7 @@ def _claim(
     adjustment_set: Sequence[str] = (),
     claimed_p_do: Optional[str] = None,
     asserts_association_equals_effect: Optional[bool] = None,
+    strategy: Optional[str] = None,
 ) -> CausalClaim:
     return CausalClaim(
         task_id=task_id,
@@ -79,6 +82,7 @@ def _claim(
         adjustment_set=frozenset(adjustment_set),
         claimed_p_do=claimed_p_do,
         asserts_association_equals_effect=asserts_association_equals_effect,
+        strategy=strategy,
         raw_text="",
     )
 
@@ -467,6 +471,88 @@ def build_tasks() -> Tuple[Task, ...]:
                     asserts_identifiable=True,
                     adjustment_set=["Z"],
                     asserts_association_equals_effect=True,
+                ),
+            ),
+        )
+    )
+
+    # T09: classic front-door — X→M→Y with U→X, U→Y. Backdoor via U not adjustable
+    # if U unobserved; front-door via {M} identifies.
+    g9 = CausalDAG.from_edges(
+        ["U", "X", "M", "Y"],
+        [("U", "X"), ("U", "Y"), ("X", "M"), ("M", "Y")],
+    )
+    scm9 = BinarySCM(
+        g9,
+        {
+            "U": bernoulli(Fraction(1, 2)),
+            "X": logistic_from_parents({"U": Fraction(1, 2)}, Fraction(1, 4)),
+            "M": logistic_from_parents({"X": Fraction(1, 2)}, Fraction(1, 4)),
+            "Y": logistic_from_parents(
+                {"M": Fraction(1, 3), "U": Fraction(1, 3)}, Fraction(1, 6)
+            ),
+        },
+    )
+    tasks.append(
+        Task(
+            task_id="T09",
+            title="Front-door identification with latent confounder",
+            domain="frontdoor",
+            prompt=(
+                "You are evaluating a causal identification query under an explicit DAG.\n"
+                "Variables: M, U, X, Y\n"
+                "Directed edges: U->X, U->Y, X->M, M->Y\n"
+                "U is a latent confounder of X and Y. Backdoor adjustment that requires U "
+                "is unavailable if U is unobserved; the front-door criterion via mediator M "
+                "can still identify P(Y|do(X)).\n"
+                "Respond with ONLY JSON:\n"
+                "{\n"
+                '  "treatment": "X",\n'
+                '  "outcome": "Y",\n'
+                '  "asserts_identifiable": true,\n'
+                '  "strategy": "frontdoor",\n'
+                '  "adjustment_set": ["M"],\n'
+                '  "claimed_p_do": null,\n'
+                '  "asserts_association_equals_effect": false\n'
+                "}\n"
+                "Use strategy \"frontdoor\" and mediators in adjustment_set. "
+                "Do not claim backdoor with empty set.\n"
+            ),
+            graph=g9,
+            scm=scm9,
+            treatment="X",
+            outcome="Y",
+            identifiable=True,
+            notes=(
+                "front-door via {M}",
+                "empty backdoor fails due to U",
+                "backdoor with {U} would work if U observed",
+            ),
+            allowed_strategies=("frontdoor", "backdoor"),
+            control_claims=(
+                _claim(
+                    "T09",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    adjustment_set=["M"],
+                    strategy="frontdoor",
+                ),
+                _claim(
+                    "T09",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    adjustment_set=[],
+                    strategy="backdoor",
+                ),
+                _claim(
+                    "T09",
+                    "X",
+                    "Y",
+                    asserts_identifiable=True,
+                    adjustment_set=["U"],
+                    strategy="frontdoor",
                 ),
             ),
         )

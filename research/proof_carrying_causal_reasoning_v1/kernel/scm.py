@@ -9,6 +9,7 @@ from typing import Callable, Dict, Iterable, Mapping, Optional, Tuple
 
 from .dag import CausalDAG, GraphError
 from .backdoor import verify_backdoor_set
+from .frontdoor import verify_frontdoor_set
 
 
 Mechanism = Callable[[Mapping[str, int]], Fraction]
@@ -165,6 +166,48 @@ class BinarySCM:
                 if self.p_obs(ev) == 0:
                     return None  # positivity failure
                 total += self.observational_expectation(outcome, ev) * pz
+            return total
+        except GraphError:
+            return None
+
+    def frontdoor_estimate(
+        self,
+        treatment: str,
+        outcome: str,
+        treatment_value: int,
+        mediators: Iterable[str],
+    ) -> Optional[Fraction]:
+        """Front-door functional; None on positivity failure."""
+        M = list(mediators)
+        check = verify_frontdoor_set(self.graph, treatment, outcome, M)
+        if not check.valid:
+            raise GraphError("front-door set invalid; refuse estimation")
+        try:
+            # Σ_m P(M=m|X=x) Σ_{x'} P(Y=1|X=x',M=m) P(X=x')
+            total = Fraction(0)
+            px1 = self.p_obs({treatment: 1})
+            px0 = self.p_obs({treatment: 0})
+            for bits in product([0, 1], repeat=len(M)):
+                m_assign = dict(zip(M, bits))
+                # P(M=m | X=x)
+                ev_x = dict(m_assign)
+                ev_x[treatment] = treatment_value
+                if self.p_obs({treatment: treatment_value}) == 0:
+                    return None
+                try:
+                    p_m_given_x = self.conditional(m_assign, {treatment: treatment_value})
+                except GraphError:
+                    return None
+                inner = Fraction(0)
+                for xv, px in ((0, px0), (1, px1)):
+                    if px == 0:
+                        continue
+                    ev = dict(m_assign)
+                    ev[treatment] = xv
+                    if self.p_obs(ev) == 0:
+                        return None
+                    inner += self.observational_expectation(outcome, ev) * px
+                total += p_m_given_x * inner
             return total
         except GraphError:
             return None

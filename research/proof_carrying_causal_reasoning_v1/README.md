@@ -93,6 +93,7 @@ Results are local measurements, not an official leaderboard.
 | T06 | latent-confounding | unobserved U → not identifiable from {X,Y} |
 | T07 | mechanisms-toy | fork into mediator + treatment |
 | T08 | spurious-correlation | association without causation |
+| T09 | frontdoor | latent confounder; identify via mediator M |
 | P01 | program-systems | request-routing feature flag → latency |
 | P02 | program-systems | CI flaky → pass |
 

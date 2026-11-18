@@ -75,8 +75,33 @@ Notes:
 Compare with Qwen3-0.6B (0.6): Gemini-lite cleared mediator, latent, and
 program-grounded traps on this small battery under identical certificates.
 
+## Front-door + Lean expansion (v1.2)
+
+| Addition | Status |
+|----------|--------|
+| Python `frontdoor` criterion + exact functional | pass; matches intervention on T09 |
+| Task T09 (latent U, mediator M) | controls + oracle green |
+| Lean `FrontDoorInd` | intercept / no-direct / U↛M facts |
+| Lean `NonIdentSCM` | concrete obs-equal / do-disagree witness |
+| Lean `Mutilate` | do(X) edge characterization on confounder graph |
+| Lean↔Python bridge | SCMConfounder closed forms `3/8`, `5/12`, ATE `1/8` agree |
+
+Unit tests: **25/25** pass.
+
+## Gemini stress (rate-limited follow-up)
+
+`gemini-3.5-flash-lite` on `{T09,T02,T06,P01,P02}`: **5/5** accepted
+(evidence: `evidence/gemini-3.5-flash-lite-stress-v2/`).
+
+`gemini-3.1-flash-lite` on T09 alone: **rejected** — put a symbolic formula
+string into `claimed_p_do` instead of a rational or `null`; parser fail-closed
+as malformed (evidence: `evidence/gemini-3.1-flash-lite-t09/`). This is a
+retained negative finding, not a model ranking.
+
 ## Non-claims
 
 - Not production PCS authority
-- Not frontier SOTA / not a general causality theorem
+- Not frontier SOTA / not a general causality theorem for arbitrary DAGs
 - API key material is absent from the repository and evidence files
+- Front-door Lean module certifies concrete graphical side-conditions, not
+  full probabilistic soundness of the front-door functional in Lean

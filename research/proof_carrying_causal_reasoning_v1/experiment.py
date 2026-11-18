@@ -37,6 +37,7 @@ def check_task_claim(task: Task, claim: CausalClaim) -> CertificateVerdict:
         task.scm,
         true_identifiable=task.identifiable,
         minimal_sets=task.minimal_sets(),
+        allowed_strategies=task.allowed_strategies,
     )
 
 
@@ -91,6 +92,7 @@ def _revive(payload: dict) -> CertificateVerdict:
         "verdict": payload["verdict"],
         "reasons": payload["reasons"],
         "backdoor": payload.get("backdoor"),
+        "frontdoor": payload.get("frontdoor"),
         "intervention": payload.get("intervention"),
         "ground_truth": payload["ground_truth"],
         "assumptions": list(ASSUMPTIONS),
@@ -105,6 +107,7 @@ def _revive(payload: dict) -> CertificateVerdict:
         verdict=payload["verdict"],
         reasons=tuple(payload["reasons"]),
         backdoor=payload.get("backdoor"),
+        frontdoor=payload.get("frontdoor"),
         intervention=payload.get("intervention"),
         ground_truth=payload["ground_truth"],
         claim=payload["claim"],
@@ -172,16 +175,17 @@ def run_oracle_sanity(tasks: Optional[Sequence[Task]] = None) -> Dict[str, Any]:
             continue
         ok = True
         details = []
+        truth = task.scm.interventional_expectation(
+            task.outcome, {task.treatment: 1}
+        )
         for adj in task.minimal_sets():
             bd = verify_backdoor_set(task.graph, task.treatment, task.outcome, adj)
             est = task.scm.backdoor_estimate(task.treatment, task.outcome, 1, adj)
-            truth = task.scm.interventional_expectation(
-                task.outcome, {task.treatment: 1}
-            )
             match = bd.valid and est is not None and est == truth
             ok = ok and match
             details.append(
                 {
+                    "criterion": "backdoor",
                     "adjustment_set": sorted(adj),
                     "backdoor_valid": bd.valid,
                     "estimate": None if est is None else f"{est}",
@@ -189,6 +193,27 @@ def run_oracle_sanity(tasks: Optional[Sequence[Task]] = None) -> Dict[str, Any]:
                     "match": match,
                 }
             )
+        if "frontdoor" in task.allowed_strategies:
+            from research.proof_carrying_causal_reasoning_v1.kernel.frontdoor import (
+                find_frontdoor_sets,
+            )
+
+            for fd in find_frontdoor_sets(task.graph, task.treatment, task.outcome):
+                est = task.scm.frontdoor_estimate(
+                    task.treatment, task.outcome, 1, fd.mediators
+                )
+                match = fd.valid and est is not None and est == truth
+                ok = ok and match
+                details.append(
+                    {
+                        "criterion": "frontdoor",
+                        "mediators": sorted(fd.mediators),
+                        "frontdoor_valid": fd.valid,
+                        "estimate": None if est is None else f"{est}",
+                        "truth": f"{truth}",
+                        "match": match,
+                    }
+                )
         # Also confirm association≠effect where notes claim it for T01/T08.
         analysis = task.scm.analyze_effect(task.treatment, task.outcome)
         rows.append(

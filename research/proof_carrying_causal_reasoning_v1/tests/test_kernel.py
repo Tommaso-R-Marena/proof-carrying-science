@@ -115,6 +115,14 @@ class TestCertificate(unittest.TestCase):
         self.assertFalse(v.accepted)
         self.assertEqual(v.verdict, "malformed")
 
+    def test_non_rational_claimed_p_do_malformed(self):
+        claim = parse_model_claim(
+            "T01",
+            '{"treatment":"X","outcome":"Y","asserts_identifiable":true,'
+            '"adjustment_set":["Z"],"claimed_p_do":"sum_z P(Y|X,Z)P(Z)"}',
+        )
+        self.assertEqual(claim.treatment, "")
+
 
 class TestSuite(unittest.TestCase):
     def test_controls(self):

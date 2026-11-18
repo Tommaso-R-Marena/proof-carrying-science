@@ -12,9 +12,10 @@ import json
 import re
 from dataclasses import dataclass
 from fractions import Fraction
-from typing import Any, FrozenSet, List, Optional, Sequence, Tuple
+from typing import FrozenSet, List, Optional, Sequence, Tuple
 
 from .backdoor import verify_backdoor_set, find_minimal_backdoor_sets, ASSUMPTIONS
+from .frontdoor import verify_frontdoor_set
 from .dag import CausalDAG
 from .scm import BinarySCM
 
@@ -30,6 +31,8 @@ ALLOWED_VERDICTS = (
     "intervention_mismatch",
 )
 
+ALLOWED_STRATEGIES = ("backdoor", "frontdoor")
+
 
 @dataclass(frozen=True, slots=True)
 class CausalClaim:
@@ -38,13 +41,11 @@ class CausalClaim:
     task_id: str
     treatment: str
     outcome: str
-    # What the proposer asserts about the causal query.
     asserts_identifiable: bool
     adjustment_set: FrozenSet[str]
-    # Optional numeric claim: P(Y=1|do(X=1)) as rational string "a/b" or null.
     claimed_p_do: Optional[str]
-    # Optional: asserts that observational association equals causal effect.
     asserts_association_equals_effect: Optional[bool]
+    strategy: Optional[str] = None  # "backdoor" | "frontdoor" | None→backdoor
     raw_text: str = ""
 
     def to_dict(self) -> dict:
@@ -57,6 +58,7 @@ class CausalClaim:
             "adjustment_set": sorted(self.adjustment_set),
             "claimed_p_do": self.claimed_p_do,
             "asserts_association_equals_effect": self.asserts_association_equals_effect,
+            "strategy": self.strategy or "backdoor",
         }
 
 
@@ -73,6 +75,7 @@ class CertificateVerdict:
     assumptions: Tuple[str, ...]
     certificate_sha256: str
     epistemic_ceiling: str
+    frontdoor: Optional[dict] = None
 
     def to_dict(self) -> dict:
         return {
@@ -81,6 +84,7 @@ class CertificateVerdict:
             "verdict": self.verdict,
             "reasons": list(self.reasons),
             "backdoor": self.backdoor,
+            "frontdoor": self.frontdoor,
             "intervention": self.intervention,
             "ground_truth": self.ground_truth,
             "claim": self.claim,
@@ -96,16 +100,7 @@ def parse_model_claim(task_id: str, text: str) -> CausalClaim:
     """Parse a JSON causal claim from model output; fail closed on malformation."""
     payload = _extract_json_object(text)
     if payload is None:
-        return CausalClaim(
-            task_id=task_id,
-            treatment="",
-            outcome="",
-            asserts_identifiable=False,
-            adjustment_set=frozenset(),
-            claimed_p_do=None,
-            asserts_association_equals_effect=None,
-            raw_text=text,
-        )
+        return _malformed(task_id, text)
     try:
         treatment = str(payload["treatment"])
         outcome = str(payload["outcome"])
@@ -116,10 +111,15 @@ def parse_model_claim(task_id: str, text: str) -> CausalClaim:
         claimed = payload.get("claimed_p_do", None)
         if claimed is not None:
             claimed = str(claimed)
-            Fraction(claimed)  # validate rational
+            Fraction(claimed)
         assoc_eq = payload.get("asserts_association_equals_effect", None)
         if assoc_eq is not None:
             assoc_eq = bool(assoc_eq)
+        strategy = payload.get("strategy", None)
+        if strategy is not None:
+            strategy = str(strategy)
+            if strategy not in ALLOWED_STRATEGIES:
+                raise ValueError("unknown strategy")
         return CausalClaim(
             task_id=task_id,
             treatment=treatment,
@@ -128,19 +128,25 @@ def parse_model_claim(task_id: str, text: str) -> CausalClaim:
             adjustment_set=frozenset(adj),
             claimed_p_do=claimed,
             asserts_association_equals_effect=assoc_eq,
+            strategy=strategy,
             raw_text=text,
         )
     except Exception:
-        return CausalClaim(
-            task_id=task_id,
-            treatment="",
-            outcome="",
-            asserts_identifiable=False,
-            adjustment_set=frozenset(),
-            claimed_p_do=None,
-            asserts_association_equals_effect=None,
-            raw_text=text,
-        )
+        return _malformed(task_id, text)
+
+
+def _malformed(task_id: str, text: str) -> CausalClaim:
+    return CausalClaim(
+        task_id=task_id,
+        treatment="",
+        outcome="",
+        asserts_identifiable=False,
+        adjustment_set=frozenset(),
+        claimed_p_do=None,
+        asserts_association_equals_effect=None,
+        strategy=None,
+        raw_text=text,
+    )
 
 
 def check_claim(
@@ -150,6 +156,7 @@ def check_claim(
     *,
     true_identifiable: bool,
     minimal_sets: Optional[Sequence[FrozenSet[str]]] = None,
+    allowed_strategies: Sequence[str] = ("backdoor",),
 ) -> CertificateVerdict:
     """Independently check a causal claim against graph (+ optional executable SCM)."""
     reasons: List[str] = []
@@ -160,6 +167,7 @@ def check_claim(
             verdict="malformed",
             reasons=("could not parse structured causal claim JSON",),
             backdoor=None,
+            frontdoor=None,
             intervention=None,
             ground_truth={"identifiable": true_identifiable},
         )
@@ -171,19 +179,41 @@ def check_claim(
             verdict="invalid_claim",
             reasons=("treatment or outcome not in declared graph",),
             backdoor=None,
+            frontdoor=None,
+            intervention=None,
+            ground_truth={"identifiable": true_identifiable},
+        )
+
+    strategy = claim.strategy or "backdoor"
+    if strategy not in allowed_strategies:
+        return _verdict(
+            claim,
+            accepted=False,
+            verdict="invalid_claim",
+            reasons=(
+                f"strategy {strategy!r} not allowed for this task "
+                f"(allowed: {list(allowed_strategies)})",
+            ),
+            backdoor=None,
+            frontdoor=None,
             intervention=None,
             ground_truth={"identifiable": true_identifiable},
         )
 
     bd = verify_backdoor_set(graph, claim.treatment, claim.outcome, claim.adjustment_set)
+    fd = verify_frontdoor_set(graph, claim.treatment, claim.outcome, claim.adjustment_set)
     mins = list(minimal_sets) if minimal_sets is not None else [
         r.adjustment_set
         for r in find_minimal_backdoor_sets(graph, claim.treatment, claim.outcome)
     ]
+    id_ok = bd.valid if strategy == "backdoor" else fd.valid
     gt = {
         "identifiable": true_identifiable,
+        "strategy": strategy,
         "minimal_adjustment_sets": [sorted(s) for s in mins],
-        "proposed_set_valid": bd.valid,
+        "proposed_set_valid": id_ok,
+        "backdoor_valid": bd.valid,
+        "frontdoor_valid": fd.valid,
     }
 
     intervention_info: Optional[dict] = None
@@ -191,30 +221,39 @@ def check_claim(
         analysis = scm.analyze_effect(claim.treatment, claim.outcome, treatment_value=1)
         intervention_info = analysis.to_dict()
         gt["ate"] = _frac(scm.ate(claim.treatment, claim.outcome))
-        gt["p_do_1"] = _frac(scm.interventional_expectation(claim.outcome, {claim.treatment: 1}))
-        if bd.valid:
-            est = scm.backdoor_estimate(
-                claim.treatment, claim.outcome, 1, claim.adjustment_set
-            )
+        gt["p_do_1"] = _frac(
+            scm.interventional_expectation(claim.outcome, {claim.treatment: 1})
+        )
+        if id_ok:
+            if strategy == "backdoor":
+                est = scm.backdoor_estimate(
+                    claim.treatment, claim.outcome, 1, claim.adjustment_set
+                )
+                label = "backdoor_estimate"
+            else:
+                est = scm.frontdoor_estimate(
+                    claim.treatment, claim.outcome, 1, claim.adjustment_set
+                )
+                label = "frontdoor_estimate"
             if est is None:
-                reasons.append("positivity failure for proposed adjustment set")
+                reasons.append(f"positivity failure for proposed {strategy} set")
                 return _verdict(
                     claim,
                     accepted=False,
                     verdict="positivity_failure",
                     reasons=tuple(reasons),
                     backdoor=bd.to_dict(),
+                    frontdoor=fd.to_dict(),
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
             true_p = scm.interventional_expectation(
                 claim.outcome, {claim.treatment: 1}
             )
-            gt["backdoor_estimate"] = _frac(est)
+            gt[label] = _frac(est)
             if est != true_p:
-                # Should not happen if backdoor + positivity hold for this SCM class.
                 reasons.append(
-                    f"backdoor estimate {_frac(est)} ≠ interventional {_frac(true_p)}"
+                    f"{strategy} estimate {_frac(est)} ≠ interventional {_frac(true_p)}"
                 )
                 return _verdict(
                     claim,
@@ -222,11 +261,11 @@ def check_claim(
                     verdict="intervention_mismatch",
                     reasons=tuple(reasons),
                     backdoor=bd.to_dict(),
+                    frontdoor=fd.to_dict(),
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
 
-    # --- decision logic ---
     if claim.asserts_association_equals_effect is True and scm is not None:
         analysis = scm.analyze_effect(claim.treatment, claim.outcome)
         if analysis.observational_association is not None:
@@ -243,9 +282,12 @@ def check_claim(
                     verdict="invalid_claim",
                     reasons=tuple(reasons) + tuple(analysis.notes),
                     backdoor=bd.to_dict(),
+                    frontdoor=fd.to_dict(),
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
+
+    crit_reasons = bd.reasons if strategy == "backdoor" else fd.reasons
 
     if claim.asserts_identifiable:
         if not true_identifiable:
@@ -254,19 +296,23 @@ def check_claim(
                 claim,
                 accepted=False,
                 verdict="not_identifiable",
-                reasons=tuple(reasons) + bd.reasons,
+                reasons=tuple(reasons) + crit_reasons,
                 backdoor=bd.to_dict(),
+                frontdoor=fd.to_dict(),
                 intervention=intervention_info,
                 ground_truth=gt,
             )
-        if not bd.valid:
-            reasons.append("proposed adjustment set fails the backdoor criterion")
+        if not id_ok:
+            reasons.append(
+                f"proposed set fails the {strategy} criterion"
+            )
             return _verdict(
                 claim,
                 accepted=False,
                 verdict="invalid_claim",
-                reasons=tuple(reasons) + bd.reasons,
+                reasons=tuple(reasons) + crit_reasons,
                 backdoor=bd.to_dict(),
+                frontdoor=fd.to_dict(),
                 intervention=intervention_info,
                 ground_truth=gt,
             )
@@ -285,21 +331,24 @@ def check_claim(
                     verdict="intervention_mismatch",
                     reasons=tuple(reasons),
                     backdoor=bd.to_dict(),
+                    frontdoor=fd.to_dict(),
                     intervention=intervention_info,
                     ground_truth=gt,
                 )
-        reasons.append("identification certificate accepted under declared assumptions")
+        reasons.append(
+            f"{strategy} identification certificate accepted under declared assumptions"
+        )
         return _verdict(
             claim,
             accepted=True,
             verdict="identified_under_assumptions",
             reasons=tuple(reasons),
             backdoor=bd.to_dict(),
+            frontdoor=fd.to_dict(),
             intervention=intervention_info,
             ground_truth=gt,
         )
 
-    # Claim says not identifiable
     if true_identifiable:
         reasons.append("target is identifiable; claim incorrectly denied identification")
         return _verdict(
@@ -308,6 +357,7 @@ def check_claim(
             verdict="invalid_claim",
             reasons=tuple(reasons),
             backdoor=bd.to_dict(),
+            frontdoor=fd.to_dict(),
             intervention=intervention_info,
             ground_truth=gt,
         )
@@ -316,8 +366,9 @@ def check_claim(
         claim,
         accepted=True,
         verdict="not_identifiable",
-        reasons=tuple(reasons) + bd.reasons,
+        reasons=tuple(reasons) + crit_reasons,
         backdoor=bd.to_dict(),
+        frontdoor=fd.to_dict(),
         intervention=intervention_info,
         ground_truth=gt,
     )
@@ -330,6 +381,7 @@ def _verdict(
     verdict: str,
     reasons: Tuple[str, ...],
     backdoor: Optional[dict],
+    frontdoor: Optional[dict],
     intervention: Optional[dict],
     ground_truth: dict,
 ) -> CertificateVerdict:
@@ -340,6 +392,7 @@ def _verdict(
         "verdict": verdict,
         "reasons": list(reasons),
         "backdoor": backdoor,
+        "frontdoor": frontdoor,
         "intervention": intervention,
         "ground_truth": ground_truth,
         "assumptions": list(ASSUMPTIONS),
@@ -354,6 +407,7 @@ def _verdict(
         verdict=verdict,
         reasons=reasons,
         backdoor=backdoor,
+        frontdoor=frontdoor,
         intervention=intervention,
         ground_truth=ground_truth,
         claim=claim.to_dict(),
@@ -367,12 +421,10 @@ def _extract_json_object(text: str) -> Optional[dict]:
     text = text.strip()
     if not text:
         return None
-    # Prefer fenced or raw JSON object.
     candidates: List[str] = []
     fence = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
     if fence:
         candidates.append(fence.group(1))
-    # First balanced {...}
     start = text.find("{")
     end = text.rfind("}")
     if start != -1 and end != -1 and end > start:
