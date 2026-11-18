@@ -37,7 +37,7 @@ def run(sentences: list[str], proposals: list[tuple[int, dict]], manifest=None, 
     props = [{"quote": sentences[i], "spec": spec} for i, spec in proposals]
     m = manifest or MANIFEST
     receipts = oracle_receipts_raw(text, DATA, m, props)
-    return receipts, assess_document(SourceContext(text, DATA, m), receipts, oracle_siblings=oracle_siblings)
+    return receipts, assess_document(SourceContext(text, DATA, m), receipts, oracle_siblings=oracle_siblings, oracle_receipts=True)
 
 
 def verdicts(sentences, proposals, **kw):
