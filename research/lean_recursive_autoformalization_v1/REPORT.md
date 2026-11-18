@@ -64,3 +64,7 @@ cd formal && lake env lean PCS/V2/ProofGatedFormalization.lean
 - Relocated Lean gate out of `formal/PCS/V2/` → restores frozen V7 census (38 modules); `check_profile()` passes locally
 - Added proof-coupled recursive loop: preserve proved set, expand ≥1 kernel proof, loss↓
 - See `results/proof_coupled_v2/proof_coupled_summary.json`
+
+## Source census successor
+
+Reviewed combined-source contract successor `docs/integration/2026-11-05/RECONCILIATION_V23.json` admits the PGRA research tree while freezing V22/V21/V20 predecessors unchanged. V7 module discovery remains 38.
