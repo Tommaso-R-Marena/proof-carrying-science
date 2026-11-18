@@ -169,6 +169,13 @@ def balke_pearl_bounds(
     ]
     if point:
         notes.append("point-identified under this observational law")
+        wald = _wald_ate(scm, treatment, outcome, instrument)
+        if wald is not None and ate_lo == ate_hi:
+            notes.append(f"Wald ATE cross-check={_f(wald)}")
+            if wald != ate_lo:
+                raise GraphError(
+                    f"Wald ATE {_f(wald)} disagrees with collapsed Balke–Pearl {_f(ate_lo)}"
+                )
 
     return BalkePearlBounds(
         treatment=treatment,
@@ -359,6 +366,23 @@ def _reaches(graph: CausalDAG, src: str, dst: str) -> bool:
         seen.add(n)
         stack.extend(graph.children(n))
     return False
+
+
+def _wald_ate(
+    scm: BinarySCM,
+    treatment: str,
+    outcome: str,
+    instrument: str,
+) -> Optional[Fraction]:
+    """Classical Wald ratio when the first-stage denominator is nonzero."""
+    ey1 = scm.observational_expectation(outcome, {instrument: 1})
+    ey0 = scm.observational_expectation(outcome, {instrument: 0})
+    ex1 = scm.observational_expectation(treatment, {instrument: 1})
+    ex0 = scm.observational_expectation(treatment, {instrument: 0})
+    denom = ex1 - ex0
+    if denom == 0:
+        return None
+    return (ey1 - ey0) / denom
 
 
 def _f(x: Fraction) -> str:

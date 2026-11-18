@@ -110,6 +110,7 @@ retained negative finding, not a model ranking.
 | Lean `InstrumentInd` | relevance, exclusion, do(X) exogeneity lite, U fails exclusion |
 | Lean `DoCalc` Rule-2 context pack | pass |
 | Point-ID regression (deterministic X:=Z collapses bounds) | pass |
+| Wald ATE cross-check when bounds collapse | pass (must equal LP ATE) |
 
 Unit tests: **35/35** pass.
 

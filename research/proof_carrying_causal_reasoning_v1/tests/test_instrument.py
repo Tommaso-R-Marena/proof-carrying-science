@@ -98,6 +98,31 @@ class TestInstrument(unittest.TestCase):
         self.assertTrue(bp.point_identified)
         self.assertEqual(bp.p_do_lower, bp.p_do_upper)
         self.assertEqual(bp.p_do_lower, truth)
+        self.assertTrue(any(n.startswith("Wald ATE cross-check=") for n in bp.notes))
+        # Certificate path: asserts_identifiable=true accepted when bounds collapse.
+        from research.proof_carrying_causal_reasoning_v1.kernel.certificate import (
+            check_claim,
+        )
+
+        claim = CausalClaim(
+            task_id="point-iv",
+            treatment="X",
+            outcome="Y",
+            asserts_identifiable=True,
+            adjustment_set=frozenset(["Z"]),
+            claimed_p_do=None,
+            asserts_association_equals_effect=False,
+            strategy="instrument",
+        )
+        v = check_claim(
+            claim,
+            g,
+            scm,
+            true_identifiable=True,
+            allowed_strategies=("instrument",),
+        )
+        self.assertTrue(v.accepted)
+        self.assertEqual(v.verdict, "identified_under_assumptions")
 
     def test_t10_control(self):
         tasks = {t.task_id: t for t in all_research_tasks()}
