@@ -1,10 +1,12 @@
 # ClaimCheck v1.1 prospective evaluation: decision package for the owner
 
-**Status (2026-11-17): for the owner's decision. Protocol draft 2 is still unapproved.** Nothing has
-been sampled, retrieved, screened, labelled, scored or run for the prospective evaluation. No model
-call has been made, nobody has been recruited, and no file of the draft (protocol, `criteria.json`,
-queries, scorer, statistics, frozen v1 code) was changed by this package. Where the draft looks
-wrong, section 12 says what and proposes the fix; the owner decides.
+**Status (2026-11-18): for the owner's decision. The protocol is now draft 3, still UNAPPROVED.**
+Nothing has been sampled, retrieved, screened, labelled, scored or run for the prospective
+evaluation. No model call has been made and nobody has been recruited. The package was written
+against draft 2. Draft 3 resolves the nineteen inconsistencies of section 12; every change, its
+files and its test are in [`AMENDMENTS_DRAFT_3.md`](AMENDMENTS_DRAFT_3.md). Figures below that the
+fixes changed were updated. Section 14 assesses the feasibility study proposed before committing to
+the 120-paper design.
 
 ## How the figures were obtained
 
@@ -35,12 +37,12 @@ the intraclass correlation. "Bound" means the one-sided exact 95 % bound the cri
 | ICC floor | Keep **0.25**. Always report the grid. A criterion that is met at 0.25 but not at 0.5 is reported as "not robust". |
 | Sample size | **120 papers (40 per context)**, on two conditions: the preliminary adjudication round confirms about an hour or less per paper, and adjudicators are recruited for that load. Otherwise 60, with its zero-tolerance caveat stated in advance. |
 | Wording threshold (D1) | Set it at **0.20** for the lower bound of flag recall **on planted errors**, primary arm, all contexts pooled, clustered as the other bounds are. The owner should accept in advance that "confirmation only" is the expected outcome. |
-| C2c | Keep **50 % with at least 5 flags**. Compute the bound with the same clustering rule as the other bounds, and reword what it means. Resolve the conflict over "confirmation only" (section 12, item 5). |
+| C2c | Keep **50 % with at least 5 flags**. The bound is now clustered like the other bounds, the meaning is reworded, and the "confirmation only" conflict is resolved (all in draft 3; section 12, items 4 and 5). |
 | Screening cap and fallback | **600 per context** for 120 papers (300 for 60), with the fallback of protocol 10a as drafted. |
 | Model configuration | **P (capped paid route)**: 30 USD for 120 papers (15 for 60), split into sub-caps per provider. The cap is enforced in code by a budget check run before each request. Provider-side hard limits are added where offered. Re-list the models before approval and again just before the calls; record exact identifiers and parameters; keep every response. |
 
 Reasons and the consequences of each alternative are in section 13. The decisions are summarised in
-the table of section 14.
+the table of section 15.
 
 ## 2. Model calls: initial calls, retries, failures, withdrawal
 
@@ -99,8 +101,8 @@ Two cases bracket configuration F:
   run needs at least 6 days (60 papers) or 12 days (120 papers) of Gemini calls
   (`free_tier_days_for_gemini_calls_at_20_a_day`).
 
-The protocol has no pacing rule. It also does not say whether a call that failed after its repeats
-may be sent again later (section 12, item 18).
+Draft 2 had no pacing rule and no rule on sending a failed call again later (section 12, item 18).
+Draft 3 has both, implemented in `budget.py`.
 
 **A model withdrawn or changed mid-study.** That arm becomes "not run" for the remaining papers, and
 no substitute is allowed (protocol 2). The primary-complete share is then at most the share of papers
@@ -117,8 +119,8 @@ Mitigations:
 * record the model version each response reports (section 10).
 
 **Critic calls.** v1's `benchmark/run.py` also makes two "critic" calls per original document. The
-counts of 240 and 480 include proposal calls only. No prospective harness exists yet. The protocol
-should name the harness and state that no critic calls are made (section 12, item 15).
+counts of 240 and 480 include proposal calls only. Draft 3 names the harness (`budget.fetch_proposals`,
+which makes proposal calls only) and states that no critic calls are made (section 12, item 15).
 
 ## 3. Cost, and how the cap is enforced
 
@@ -150,22 +152,29 @@ Nemotron 10 and Gemini 20 USD at 120 papers, 5 and 10 USD at 60.) The owner comp
 with Google's price page before authorising. The cap holds whatever the price; a high price only
 means the cap stops the run earlier, and the calls it stops are recorded as "not run".
 
-**How the cap should be enforced in code** (a specification; nothing has been implemented):
+**How the cap is enforced in code** (implemented in draft 3 as `budget.py`, tested with a synthetic transport only; no request has been sent):
 
 1. **A budgeted transport.** `providers.complete` accepts a `transport` argument, but `propose.py`
    does not pass one. A v1.1 harness can route every request through a budgeted transport without
    changing a byte of v1. It substitutes `claimcheck_v1.propose.complete` with
    `functools.partial(providers.complete, transport=budgeted)` for the duration of the run. A test
    must show that no request reaches `_post` except through the budget.
-2. **Before each request.** Compute the worst-case cost: prompt and system bytes as an upper bound on
-   prompt tokens, plus the request's maximum output tokens (16,384), at that provider's frozen
-   prices. If the money already committed plus this worst case would exceed the provider's sub-cap
+2. **Before each request.** Compute the worst-case cost: the bytes of the whole request body as an
+   upper bound on prompt tokens, plus the request's maximum output tokens (16,384), at that
+   provider's frozen prices. If the money already committed plus this worst case would exceed the provider's sub-cap
    or the total cap, raise `BudgetExceeded` and send nothing. `BudgetExceeded` is a subclass of
    `ProviderError`, so `propose_with_model` records it as a failure of that arm for that document.
 3. **After each response.** Charge the usage the provider reports: Gemini's `promptTokenCount`,
    `candidatesTokenCount` and `thoughtsTokenCount`; OpenRouter's `prompt_tokens` and
-   `completion_tokens`. If usage is missing after a timeout or a server error, charge the worst case.
-   **Assumption, to be checked against the providers' statements:** 4xx answers are not billed.
+   `completion_tokens`. If usage is missing after a timeout (including HTTP 408), a server error or
+   a transport failure, charge the worst case. **Assumption, to be checked against the providers'
+   statements:** HTTP 400, 401, 402, 403, 404, 413, 422 and 429 are not billed (the request was
+   refused before any generation); any other answer without usage is charged its worst case.
+   **Tripwire:** the worst case assumes that every billed output token, including hidden reasoning
+   tokens, counts against the request's maximum. If a response's reported usage ever costs more
+   than its worst case, that assumption is wrong for that provider: the guard sends nothing more,
+   and a guard resumed from that log refuses to start. With one request in flight, a wrong
+   assumption can overshoot a cap by at most that one request.
 4. **A persistent spend log.** Append one line per attempt (time, provider, model, status, usage,
    amount charged, running total) and sync it to disk. A resumed run starts from the logged total. It
    refuses to start if cached responses exist but the log does not.
@@ -200,11 +209,13 @@ here means MB / 1024.
   minimum and the maximum of a 617-row column did not complete within their limits. That was 2 of 33
   adversarial readings checked on originals, or 6 % (`../REPORT.md`, section 2). C7 allows at most
   5 % of runs to be incomplete.
-* **C7 says "tables within the supported size" but never defines the size** (section 12, item 8).
+* **Draft 2's C7 said "tables within the supported size" but never defined the size** (section 12,
+  item 8). Draft 3 gives provisional sizes per statistic, from this table, until the capacity run.
 * **Two workers and memory.** The highest peak among accepted runs was 6.19 GB, so two such runs
   together take 12.4 GB of the reference machine's 16 GB. Two median runs on tables of 800 rows or
-  more would each try to reach 10.2 to 10.3 GB, or 20.6 GB together. Protocol step 4 sets no limit
-  per process (section 12, item 9).
+  more would each try to reach 10.2 to 10.3 GB, or 20.6 GB together. Draft 2's step 4 set no limit
+  per process (section 12, item 9). Draft 3 sets 7 GB per Lean process (`lean_guard.py`) and one claim
+  per proof file (item 10).
 * **Time per claim versus time per file.** C7 is stated per claim. Step 4 puts up to two claims in a
   proof file with a 900 s limit per file. The measurements used one claim per file and 600 s (item
   10).
@@ -228,7 +239,7 @@ runner-hours are the same apart from set-up. Requirements for the replay:
 
 * the runners need at least as much memory as the kernel's per-process limit;
 * C4 requires 100 % of bundles, so a job lost to a timeout or a runner fault must be allowed to run
-  again (replay is deterministic). The protocol does not say so (item 19).
+  again (replay is deterministic). Draft 2 did not say so (item 19); draft 3 does (step 6).
 
 ## 5. Adjudication: 140 to 230 adjudicator-hours plus a resolver
 
@@ -267,8 +278,11 @@ Proposed rule, which adds no work:
 **What the data say about the ICC.** In development, an ICC could be estimated only for outcomes
 that occur often (`DS development_icc_estimates`; six papers, so very imprecise):
 
-* coverage: 0.35 (Gemini), 0.26 (Nemotron), 0.35 (union);
-* detection: 0.06, 0.41 and 0.41.
+* coverage on original articles: 0.53 (Gemini), 0.32 (Nemotron), 0.49 (union);
+* detection of planted errors: 0.00 (2 detections), 0.32 and 0.32.
+
+(Draft 2's demonstration merged each original with its copy and gave 0.35, 0.26, 0.35 and 0.06,
+0.41, 0.41.)
 
 For unsupported confirmations and misleading flags, there were too few events to estimate anything
 (the estimate is 0). The floor is the assumption that replaces such estimates. The scorer uses the
@@ -299,18 +313,21 @@ accepted, one per paper. All three C1 conditions apply jointly (estimate ≤ 2 %
 
 At 120 papers the paper-level bound of C1 decides in most cells, not the ICC.
 
-**The scorer accepts more than protocol 10a says.** `score.judge` uses `stats.proportion`, which
-divides both the events and the opportunities by the design effect: `upper_bound(ceil(k / deff),
-n / deff)`. `design_120.py` divides only the opportunities, and its C1 row ignores the estimate and
-paper-level conditions. Every figure at the 0.25 floor agrees with the full `stats.proportion`
-(`verified_by_stats_proportion`). The 120-paper figures were also confirmed end to end, with
-synthetic per-paper counts through `score.metrics` and `score.judge` (test
+**The scorer accepted more than draft 2's protocol 10a said.** The scorer uses `stats.proportion`,
+which divides both the events and the opportunities by the design effect:
+`upper_bound(ceil(k / deff), n / deff)`. Draft 2's `design_120.py` divided only the opportunities,
+and its C1 row ignored the estimate and paper-level conditions. Every figure at the 0.25 floor
+agrees with the full `stats.proportion` (`verified_by_stats_proportion`). The 120-paper figures are
+confirmed end to end through `score.paper_counts` and `score.evaluate` (test
 `test_the_scorer_end_to_end_accepts_six_and_rejects_seven_at_120_papers`):
 
 * C2a, 120 papers with 10 exposed numbers per paper: 6 misleading flags pass and 7 fail, where
-  protocol 10a says 2. The binding condition is the estimate (≤ 0.5 %).
-* C1 jointly: 60 papers allow 1 and 1 (2.5 and 5 per paper), where 10a says 1 and 2. At 120 papers
-  6 and 6, where 10a says 5 and 8.
+  draft 2's 10a said 2. The binding condition is the estimate (≤ 0.5 %).
+* C1 jointly: 60 papers allow 1 and 1 (2.5 and 5 per paper), where draft 2 said 1 and 2. At 120
+  papers 6 and 6, where draft 2 said 5 and 8.
+
+Draft 3 keeps the scorer's rule (the standard effective sample size) and prints these figures in
+protocol 10a (item 6).
 
 C2b changes the practical picture, because flags in different papers each count against it
 (`DS C2_a_and_b_together`):
@@ -377,18 +394,19 @@ leaves the pilot.
   bound itself.
 * **With the design effect** that every other claim-level bound uses (floor 0.25), at least 8 flags
   are needed when flags come two per flagged paper, and 12 when they come four per paper. On the
-  development data, 0 misleading of 3 flags in 2 papers gives a scorer bound of 63.2 %, against a
-  clustered bound of 77.6 % (`DS C2c.development_union_arm`).
-* **Expected flags.** At development recall (7.9 %), about 19 to 21 correct flags on planted errors
-  are expected at 60 papers, and 38 to 41 at 120. C2c should therefore be evaluable unless recall
-  falls.
+  development data, 0 misleading of 3 flags in 2 papers gave draft 2's scorer a bound of 63.2 %. The
+  clustered bound, which draft 3 uses, is 77.6 % (`DS C2c.development_union_arm`). All 3 flags were
+  on planted-error copies, none on an original.
+* **Expected flags.** At the development recall on planted errors (11.5 %), about 28 to 30 correct
+  flags are expected at 60 papers, and 55 to 60 at 120. C2c should therefore be evaluable unless
+  recall falls.
 * **What C2c actually measures.** Flags on planted-error copies are included, and planting raises
   the share of real discrepancies far above a natural document. An illustration using development
   rates (`DS C2c.illustration_real_share_of_flags`; assumptions: 1.0 natural F number and 4.33
-  planted per paper, 7.75 exposed non-F numbers per document, recall 7.9 %): the share of flags that
-  are real is
-  * 87 % pooled but 67 % on originals alone, if 0.5 % of exposed numbers draw a misleading flag;
-  * 62 % pooled but 34 % on originals alone at 2 %, the C2a bound.
+  planted per paper, 7.75 exposed non-F numbers per document, recall 11.5 % for natural and planted
+  errors alike): the share of flags that are real is
+  * 90 % pooled but 75 % on originals alone, if 0.5 % of exposed numbers draw a misleading flag;
+  * 70 % pooled but 43 % on originals alone at 2 %, the C2a bound.
 
   A supervised pilot still has a PCS reviewer check every outward verdict. Even so, the meaning
   given in the criteria ("a flag is more often a real discrepancy than not") overstates what is
@@ -407,7 +425,7 @@ Assumptions: planted errors as protocol 5 describes them (4 per paper), or as th
 | **0.20** | **26.3 %** | **28.1 %** | **24.6 %** | **25.2 %** |
 | 0.30 | 37.5 % | 38.8 % | 35.0 % | 36.0 % |
 
-Chance of reaching 0.20 if the true recall is 7.9 % / 20 % / 25 % / 30 % (binomial, so optimistic
+Chance of reaching 0.20 if the true recall is 11.5 % / 20 % / 25 % / 30 % (binomial, so optimistic
 when detections cluster):
 
 * 60 papers: 0 / 0.011 / 0.351 / 0.911 (4 per paper), and 0 / 0.001 / 0.142 / 0.770 (mutate-like);
@@ -415,16 +433,19 @@ when detections cluster):
 
 What this means:
 
-* **Development recall was 7.9 % (3 of 38; lower bound 0).** If the prospective recall is similar,
-  the lower bound is 4 to 5 % (`lower_bound_at_observed_recall`). That meets the necessary condition
-  and is far from any wording threshold. **The expected outcome is "confirmation only".**
+* **Development recall on planted errors was 11.5 % (3 of 26; lower bound 0.5 %), and 0 of 6 on
+  natural F numbers.** Draft 2 pooled them as 3 of 38 (7.9 %), counting each natural number in both
+  copies. If the prospective recall is similar, the lower bound is 6 to 8 %
+  (`lower_bound_at_observed_recall`). That meets the necessary condition and is far from any wording
+  threshold. **The expected outcome is that nothing may describe the tool as finding errors.**
 * **At 0.20, only a system whose true recall is about 0.3 or more is likely to be described as
   finding errors.** A threshold of 0.10 would allow that description for a tool that misses nearly
   nine in ten planted errors.
-* **The scorer pools planted and natural F numbers** for the wording rule and the necessary
-  condition, whereas protocol 9a keeps them apart (item 2). **The planted count in protocol 5 ("up
-  to four") does not match `mutate.py`**, which changes each true derivable number with probability
-  ½ and takes no seed (item 1). The thresholds above change little between the two structures.
+* **Draft 2's scorer pooled planted and natural F numbers**, whereas protocol 9a kept them apart.
+  Draft 3 uses planted errors only (item 2). **Draft 2's planted count ("up to four") did not match
+  `mutate.py`**, which changes each true derivable number with probability ½ and takes no seed;
+  draft 3's protocol describes the frozen code (item 1). The thresholds above change little between
+  the two structures.
 
 ## 9. Ambiguous adjudications
 
@@ -523,7 +544,11 @@ It cannot show that researchers in general understand the scope.
 recruit for the preliminary round; and make the capacity run of section 13.7. None of these touches a
 prospective paper.
 
-## 12. Inconsistencies found in the draft (no file changed; proposed fixes)
+## 12. Inconsistencies found in draft 2 (all resolved in draft 3)
+
+**All nineteen are resolved in draft 3.** [`AMENDMENTS_DRAFT_3.md`](AMENDMENTS_DRAFT_3.md) gives, for
+each, what changed, in which files, and the test that checks it. The list below is kept as it was
+found in draft 2.
 
 Items 1 to 7 and 13 change what the code computes or what a criterion decides. Items 8 to 10, 15,
 18 and 19 are missing operational definitions. Items 11, 12, 14, 16 and 17 are wrong figures or
@@ -680,8 +705,8 @@ flagged at least X % of them", followed by the measured recall and its interval.
   recall is around 0.3 or more is likely to qualify (chance 0.77 to 0.996).
 * The threshold is a judgement, as protocol 9a says: no study of reviewers fixes it.
 
-*Consequence:* at development recall (7.9 %) the outcome is "confirmation only". Every screen must
-then say that the absence of a flag carries no information.
+*Consequence:* at the development recall on planted errors (11.5 %), nothing may describe the tool
+as finding errors. Every screen must then say that the absence of a flag carries no information.
 
 *Alternatives:*
 
@@ -795,17 +820,126 @@ of replay jobs (section 4). In development, 2 of 33 kernel runs on a 617-row col
 complete, already more than C7's 5 %. Whether C7 can be met is therefore an open question. It should
 be settled on development data, not discovered in the prospective run.
 
-## 14. Owner decisions: summary
+## 14. Preliminary adjudication and operational feasibility study
+
+**Is a study needed before committing to 120 papers? Yes.** The 120-paper design commits:
+
+* 140–230 adjudicator person-hours and a resolver for 22.5–37.5 h;
+* up to 300–600 h of screening (assumption: 10–20 minutes per candidate).
+
+Every one of those figures rests on something nobody has measured:
+
+* the plan's adjudication rates;
+* the screening time;
+* the yield in contexts B and C;
+* a kernel time with no documented basis;
+* supported sizes measured on synthetic data;
+* provider reliability seen in 46 attempts.
+
+Some of these failures would make the evaluation not evaluable at any size:
+
+* more than 20 % ambiguous numbers;
+* fewer than 90 % of papers primary-complete;
+* fewer than 95 % of kernel runs completed (development already shows 2 of 33 incomplete).
+
+A study on development and synthetic data finds this out for about 20 person-hours and a few
+machine-hours. Its results are development-set findings. They enter no criterion and are reported
+apart (adjudication plan, section 9).
+
+**What it measures** (costs from `DS feasibility_study`):
+
+* **A. Adjudication pilot.**
+  * *Data:* the prepared `v1_discrepancies` package (3 papers, 30 numbers). Then a full-protocol
+    package on the six held-out v1 papers, built by `build_package.py` and passed by
+    `check_blinding.py`; the copies' labels are carried over (protocol 7).
+  * *Measures:* minutes per paper per adjudicator (reading and per number); raw agreement and κ on
+    the class; disagreement share; resolver minutes; the A share among T, F and A numbers; problems
+    with the instructions.
+  * *Needs:* the owner's authorisation to recruit two adjudicators and a resolver, with their
+    independence confirmations. Time: 5.5–8.75 h per adjudicator and 1.1–1.9 h for the resolver,
+    12–19 person-hours in all.
+* **B. ICC estimate.**
+  * *Data:* A's labels, with the cached v1 receipts, through `score.evaluate`.
+  * *Measures:* the ICC of coverage and of detecting planted errors, which can be estimated.
+    Development gave 0.49 and 0.32, both above the 0.25 floor, on six papers. The ICC of
+    unsupported confirmations and misleading flags cannot be estimated from so few events; that is
+    what the floor is for.
+  * *Needs:* nothing beyond A.
+* **C. Kernel resource profile** (the capacity run of 13.7).
+  * *Data:* the synthetic sizes of `perf` and the eight development tables.
+  * *Configuration:* that of step 4: 2 workers, one claim per proof file, 900 s, 7 GB under
+    `lean_guard.py`.
+  * *Measures:* by statistic and table size, time per claim, peak memory per process and completed
+    share. From these: the supported sizes and kernel hours per paper, which give the total and the
+    number of replay jobs.
+  * *Needs:* Lean 4.28.0 on the reference machine; no people, no network.
+* **D. Provider reliability** (optional).
+  * *Data:* without a model call there is nothing beyond the v1 ledgers (Gemini 41 % of 29
+    attempts failed; Nemotron 1 of 17). With authorisation, a smoke run through `budget.py` in the
+    chosen configuration: the eight development papers that have a planted-error copy, 16 documents,
+    32 calls.
+  * *Measures:* per-call success and latency; served model versions; the spend log against the
+    provider's statement.
+  * *Needs:* the owner's authorisation of a model call. Nemotron costs 0.16 USD at measured sizes,
+    plus Gemini at the price entered.
+* **E. Screening time.**
+  * *Data:* the 51 records of the v1 candidate pool. They are development material, already
+    excluded from the prospective frame (protocol 4), and are screened again under draft 3's rules
+    by the person who will screen.
+  * *Measures:* minutes per candidate, and the yield under the draft-3 rules (context A only).
+  * *Needs:* retrieving pool articles that are not in the repository is a network step the owner
+    authorises.
+
+**Not measurable before approval:**
+
+* the yield in contexts B and C (the cap and fallback absorb it);
+* failure rates of the providers at full scale;
+* the rare-event ICC;
+* the A share in other fields.
+
+**Go / no-go for the 120-paper design.** All five must hold.
+
+1. **Adjudication time:** the median minutes per paper on the full-protocol package is at most 60.
+   At 120 papers that means at most 120 h per adjudicator with two, or 40 h with six
+   (`adjudication_at_120_papers_by_measured_minutes_per_paper`). Between 60 and 90 minutes: 120
+   papers only with six adjudicators (at most 60 h each). Above 90: 60 papers.
+2. **Labels can carry the criteria:** κ on the class is at least 0.6 (a judgement: conventionally
+   "substantial") and the A share is at most 10 %, half the protocol's limit. **Stop** if the A share
+   exceeds 20 % or κ is below 0.4. The labels could not carry C1 to C3 at any size; revise the
+   instructions and repeat the pilot.
+3. **Kernel:** within the supported sizes, C7's limits hold on the development claims (median ≤ 60 s,
+   95th percentile ≤ 300 s, peak ≤ 7 GB, ≥ 95 % complete). The projected kernel time at 120 papers is
+   at most 60 h, which 12 replay jobs of 5 h absorb. Otherwise there are two options. If C7 fails
+   within the supported size, shrink the supported sizes before approval, accepting lower coverage.
+   If more than 60 h are projected, use more replay jobs, or 60 papers.
+4. **Providers:** configuration P is chosen, and the guard is verified. If the owner authorises part
+   D, that means every smoke call answered within its repeats, the spend log agreeing with the
+   provider's statement, and served versions recorded. Configuration F is a no-go for 120 papers,
+   since it needs at least 12 days of paced calls.
+5. **Screening effort:** the measured minutes per candidate make the worst case (3 × 600 candidates)
+   acceptable to the owner, for example at most 300 h at 10 minutes. Otherwise use a cap of 300 and
+   60 papers.
+
+**Outcomes:**
+
+* If 1 or 5 fails while 2 to 4 hold: run the 60-paper design, with its zero-tolerance caveat stated
+  in advance.
+* If 2 fails: stop and revise; no prospective run.
+* If 3 fails: change the supported sizes or the kernel configuration, then run C again.
+* The owner decides at approval, with these measurements in hand.
+
+## 15. Owner decisions: summary
 
 | # | Decision | Options | Recommended | Main consequence |
 | --- | --- | --- | --- | --- |
 | 1 | ICC floor | 0.1 / **0.25** / 0.5 | **0.25**, grid reported, "not robust" if 0.5 changes the result | at 60 papers C2a needs 0 flags and ≥ 5 exposed numbers per paper; at 0.5 it is unattainable at 60 |
 | 2 | Sample size | 60 / 105 / **120** | **120**, if the preliminary round confirms about 1 h per paper and adjudicators are recruited | removes the zero tolerance of C2 (one affected paper allowed); 140–230 person-hours of adjudication |
-| 3 | Wording threshold (D1) | unset / 0.10 / **0.20** / 0.30 | **0.20**, on planted errors, contexts pooled, design-effect lower bound; limited wording | "confirmation only" is expected (development recall 7.9 %) |
+| 3 | Wording threshold (D1) | unset / 0.10 / **0.20** / 0.30 | **0.20**, on planted errors, contexts pooled, design-effect lower bound; limited wording | no "finds errors" wording is expected (development recall on planted errors 11.5 %) |
 | 4 | C2c | 50 % with 5 flags / 1/3 / 0.2 | **50 %, 5 flags**, with the bound clustered as for the other criteria and the meaning reworded | evaluable at expected flag counts; ≥ 8 flags needed with clustering |
 | 5 | Screening cap and fallback | 300 / **600** / none | **600** (300 for 60), fallback as drafted; decide whether all eligible papers proceed after a fallback | bounded worst-case screening effort of 300–600 h (assumption) |
 | 6 | Model configuration | F / **P** | **P**, 30 USD total (15 for 60), sub-caps, cap enforced in code before every request, provider limits, Gemini price entered | evaluable within hours; owner authorises payment |
-| 7 | Inconsistencies 1–19 (section 12) | fix before freeze / accept | fix items 1–7 and 13 before approval; the others in the same revision | the scorer then computes what the protocol says |
+| 7 | Inconsistencies 1–19 (section 12) | review draft 3 | resolved in draft 3 (`AMENDMENTS_DRAFT_3.md`, each with its test) | the scorer computes what the protocol says |
 | 8 | Capacity run on development and synthetic tables under the step-4 configuration | run / skip | run before approval (no prospective data) | defines C7's supported size, the memory limit and the kernel-time estimate |
 | 9 | C2a: count each printed number once per paper | yes / as drafted | owner's choice; yes is more conservative | at 60 papers with 4 exposed numbers per document C2a then fails even with no flag |
 | 10 | Re-list models; preliminary adjudication round; ethics submission for the usability study | authorise / wait | authorise; none of them touches a prospective paper | start of recruitment needs the owner's explicit authorisation |
+| 11 | Preliminary adjudication and operational feasibility study (section 14) | run first / commit to 120 now | **run first**; commit to 120 only if every go criterion of section 14 holds | about 20 person-hours and a few machine-hours before committing hundreds of hours; adjudicator recruitment needs authorisation |

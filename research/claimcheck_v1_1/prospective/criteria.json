@@ -1,6 +1,6 @@
 {
- "status": "DRAFT 2 FOR OWNER REVIEW (amended 2026-11-15 after the owner's decision 'amend before approval'). Not frozen. Nothing has been evaluated against these criteria.",
- "version": "claimcheck-v1.1-readiness-criteria-draft-2",
+ "status": "DRAFT 3 FOR OWNER REVIEW (2026-11-18): the 19 inconsistencies of DECISION_PACKAGE.md section 12 resolved, every change in AMENDMENTS_DRAFT_3.md. Not approved, not frozen. Nothing has been evaluated against these criteria.",
+ "version": "claimcheck-v1.1-readiness-criteria-draft-3",
  "confidence": 0.95,
  "primary_arm": "union",
  "primary_arm_meaning": "Readings proposed by both language models (each without access to data rows), all passed through the v1.1 pipeline.",
@@ -27,11 +27,14 @@
     "owner_option_larger_sample": {
      "papers": 120,
      "papers_per_context": 40,
-     "why": "see protocol 10 and 10a: at 60 papers the misleading-flag criteria tolerate no affected paper and no misleading flag (C2b passes with chance 55 % if the true paper-level rate is 1 %); at 120 one affected paper and one or two flags are allowed (66 %, and 88 % at 0.5 %).",
+     "why": "see protocol 10 and 10a: at 60 papers C2 tolerates no affected paper and no misleading flag (C2b passes with chance 55 % if the true paper-level rate is 1 %); at 120 one affected paper is allowed (66 %, and 88 % at 0.5 %), with up to 2 or 5 misleading flags in it for 5 or 10 exposed numbers per paper (DESIGN_120.json, the scorer's own rule).",
      "screening_cap_per_context": 600,
      "fallback": "If a context has at least 20 but fewer than 40 eligible papers when its cap is reached, the primary analysis uses the first 20 eligible papers of every context in hash order (the 60-paper design and its thresholds); all eligible papers are a pre-specified secondary analysis. Fewer than 20: the shortfall rule applies.",
-     "design_tables": "prospective/DESIGN_120.json (protocol 10a)"
-    }
+     "design_tables": "prospective/DESIGN_120.json (protocol 10a)",
+     "fallback_implemented_by": "score.select_primary"
+    },
+    "per_context_rule": "each of the three contexts needs at least 20 eligible papers; a context is never topped up from another (implemented by score.select_primary)",
+    "primary_complete_rule": "below 0.9 of the primary-analysis papers primary-complete, C1 to C3 are not evaluable (score.select_primary)"
    },
    "criteria": {
     "C1_unsupported_confirmations": {
@@ -40,7 +43,8 @@
      "max_conservative_upper_bound": 0.05,
      "max_paper_level_upper_bound": 0.1,
      "paper_level_denominator": "papers with at least one CONFIRMATION",
-     "rationale": "Every pilot result is read by a person who is told the reading is unreviewed. A worst-case one-in-twenty rate of wrong confirmations under that supervision is the conventional tolerance for a screening aid; the point estimate must be clearly below it."
+     "rationale": "Every pilot result is read by a person who is told the reading is unreviewed. A worst-case one-in-twenty rate of wrong confirmations under that supervision is the conventional tolerance for a screening aid; the point estimate must be clearly below it.",
+     "scope": "original articles"
     },
     "C2_misleading_refutations": {
      "definition": "A DISCREPANCY_FOR_REVIEW verdict is misleading unless the number is adjudicated F and the flagged reading is the adjudicated one. Flags on T, N and A numbers are misleading. Originals and planted-error copies, primary arm.",
@@ -54,35 +58,42 @@
       "max_paper_level_upper_bound": 0.05
      },
      "c_among_flags": {
-      "metric": "misleading flags / all flags issued",
+      "metric": "misleading flags / all flags issued, original articles and planted-error copies",
+      "bound": "conservative upper bound: the design effect with the ICC floor, as for every claim-level bound",
       "max_upper_bound": 0.5,
       "min_flags_for_evaluation": 5,
-      "meaning": "with 95 % confidence a flag is more often a real discrepancy than not; below that a flag stops being an alert. Not evaluable with fewer than 5 flags; then C2 is not met and the pilot scope is confirmation only (see D1)."
+      "meaning": "among flags on original articles and planted-error copies, with 95 % confidence more flags are real discrepancies than not. Planted errors raise the share of real discrepancies far above a natural document, so the same share on original articles alone is reported with its bound; it is not a criterion. Not evaluable with fewer than 5 flags.",
+      "reported": "the same share on original articles alone, with its conservative bound"
      },
      "also_reported": "misleading flags / all numbers adjudicated T, N or A (whether or not a reading was proposed)",
-     "rationale": "A flag that wrongly suggests a discrepancy in someone's paper is the more harmful error, so the tolerance is lower. A paper-level bound of 5 % with zero affected papers needs 59 papers, which sets the minimum sample."
+     "rationale": "A flag that wrongly suggests a discrepancy in someone's paper is the more harmful error, so the tolerance is lower. A paper-level bound of 5 % with zero affected papers needs 59 papers, which sets the minimum sample.",
+     "scope": "original articles and planted-error copies",
+     "pilot_scope_rule": "C2 is met for a pilot that shows discrepancy flags to pilot users if C2a, C2b and C2c are met. If C2a and C2b are met but C2c fails or is not evaluable, C2 is met only for a confirmation-only pilot, in which discrepancy flags reach the supervising PCS reviewer and nobody else. If C2a or C2b fails or is not evaluable, there is no pilot (score.judge, pilot_scope_if_C4_to_C10_are_met)."
     },
     "C3_useful_coverage": {
      "metric": "correct CONFIRMATION verdicts / (numbers adjudicated T + numbers adjudicated A), primary arm, original articles",
      "why_ambiguous_numbers_are_in_the_denominator": "If adjudicators call the hard numbers ambiguous and those are left out, coverage rises without the tool being more useful. Counting them against coverage is the conservative choice. Sensitivity: T only.",
      "min_estimate": 0.25,
      "min_lower_bound": 0.15,
-     "rationale": "A paper typically prints 5 to 15 such numbers. Below one in four, most papers would yield at most one or two confirmations and the tool would not repay the effort of preparing a manifest. Set from usefulness, not from development results (which were 24 % for one model and 31 % for the primary arm)."
+     "rationale": "A paper typically prints 5 to 15 such numbers. Below one in four, most papers would yield at most one or two confirmations and the tool would not repay the effort of preparing a manifest. Set from usefulness, not from development results (which were 24 % for one model and 31 % for the primary arm).",
+     "scope": "original articles"
     },
     "D1_discrepancy_detection": {
-     "status": "REPORTED, WITH A RULE ON WHAT MAY BE SAID. No pass/fail minimum is proposed: none can be justified from available evidence (protocol 9a).",
-     "flag_recall": "correct DISCREPANCY_FOR_REVIEW / numbers adjudicated F; reported for planted errors and for naturally occurring F numbers separately, per paper clustered",
+     "status": "REPORTED, WITH A RULE ON WHAT MAY BE SAID. No pass/fail minimum is proposed: none can be justified from available evidence (protocol 9a). The necessary condition and the wording rule use planted errors only (score.judge).",
+     "flag_recall": "correct DISCREPANCY_FOR_REVIEW on planted errors / planted errors (planted-error copies, primary arm, contexts pooled, clustered by paper). Natural F numbers of the original articles: reported apart, never pooled, never used for the necessary condition or the wording rule.",
      "mismatch_shown": "numbers adjudicated F for which a record shows a kernel-proved mismatch under the adjudicated reading (flagged or under REQUIRE_HUMAN_REVIEW) / numbers adjudicated F",
-     "necessary_condition": "lower bound of flag recall on planted errors > upper bound of C2a (a flag is associated with real mismatches at all)",
+     "necessary_condition": "the design-effect-adjusted lower bound (ICC floor) of flag recall on planted errors exceeds the conservative upper bound of C2a",
      "wording_rule": {
       "flag_recall_lower_bound_needed_to_describe_the_tool_as_finding_errors": null,
-      "owner_sets_this": "Suggested by the assistant: 0.2, as an owner's judgement, not a derived number. If unset or not reached: the pilot is confirmation only; every screen and document must say that the absence of a flag carries no information."
+      "statistic": "the design-effect-adjusted lower bound (ICC floor) of flag recall on planted errors, primary arm, contexts pooled",
+      "owner_sets_this": "Proposed in DECISION_PACKAGE.md 13.3: 0.2, as an owner's judgement, not a derived number. If unset or not reached, nothing may describe the tool as finding errors, and every screen and document must say that the absence of a flag carries no information. If reached, the wording is limited to: in a test with deliberately altered numbers it flagged at least X % of them, with the measured recall and its interval."
      }
     },
     "C4_independent_replay": {
      "metric": "bundles whose every record replays (v1.1 replayer, Lean kernel re-run, byte-identical proof files) on a clean hosted runner / all bundles",
      "required": 1.0,
-     "rationale": "A result that cannot be replayed from its bytes is not a ClaimCheck result."
+     "rationale": "A result that cannot be replayed from its bytes is not a ClaimCheck result.",
+     "infrastructure_failure_rule": "a replay job that does not finish (time-out, runner lost) is re-run and the event recorded; a bundle that replays with a different result fails C4 (score.judge_c4; jobs from score.replay_shards)"
     },
     "C5_adversarial_selection": {
      "metric_a": "free-choice adversary: unsupported CONFIRMATION verdicts obtained / all CONFIRMATION verdicts obtained, every printed number of every original article",
@@ -97,15 +108,39 @@
      "max_events": 0,
      "also": "every withheld record keeps its kernel result (checked mechanically for all records)",
      "max_share_ambiguous": 0.2,
-     "max_share_ambiguous_meaning": "If adjudicators leave more than 20 % of the statistic-like numbers ambiguous, the labels cannot carry C1 to C3: not evaluable."
+     "max_share_ambiguous_meaning": "If adjudicators leave more than 20 % of the numbers of the original articles that are statistics of the table, or ambiguous (T + F + A), ambiguous, the labels cannot carry C1 to C3: not evaluable.",
+     "max_share_ambiguous_denominator": "numbers of the original articles adjudicated T, F or A (N excluded)"
     },
     "C7_computation": {
-     "metric": "kernel runs on the reference machine (4 cores, 16 GB), tables within the supported size",
+     "metric": "kernel runs on the reference machine (4 cores, 16 GB), one claim per proof file, tables within the supported size of their statistic",
      "max_median_seconds_per_claim": 60,
      "max_p95_seconds_per_claim": 300,
      "max_peak_memory_gb": 8,
      "min_completed_share": 0.95,
-     "also": "a run that exceeds a limit yields UNKNOWN (tested)"
+     "also": "a run that exceeds a limit yields UNKNOWN (tested)",
+     "kernel_configuration": {
+      "workers": 2,
+      "claims_per_proof_file": 1,
+      "seconds_per_proof_file": 900,
+      "memory_limit_gb_per_lean_process": 7,
+      "memory_limit_enforced_by": "prospective/lean_guard.py (PCS_CLAIMCHECK_LEAN); a process stopped by it exits non-zero, which the frozen kernel call treats as not accepted (UNKNOWN); Lean is tied to the guard (parent-death signal), so a timeout of the frozen call stops Lean too",
+      "time_per_claim": "the kernel record's batch_seconds (batch_size 1)",
+      "peak_memory": "peak resident memory of the Lean process, from the guard's log"
+     },
+     "supported_size_bytes": {
+      "count": 51209,
+      "mean": 33760,
+      "sd": 33760,
+      "sd_sample": 33760,
+      "pearson": 33760,
+      "min": 8219,
+      "median": 8219,
+      "any_other_statistic": 8219
+     },
+     "supported_size_source": "PROVISIONAL: the largest table at which each statistic was accepted in perf/results.json (one claim per file, synthetic two-decimal data); statistics not measured take the smallest. Replaced by the capacity run of protocol 13.7 before approval.",
+     "outside_supported_size": "still run; an UNKNOWN counts as an abstention in C1 to C3 like any other; outside C7, reported separately with its completed share",
+     "completed": "the kernel accepted the obligation (a time-out, a memory stop or any rejection is not completed)",
+     "implemented_by": "score.judge_c7"
     },
     "C8_usability": {
      "metric": "formative study with researchers who have used neither PCS nor Lean",
@@ -137,7 +172,16 @@
     "the v1 policy on the same receipts",
     "each context alone (reported, never pooled into a claim about another context)"
    ],
-   "scope_rule_by_context": "A context in which any paper has a misleading flag, or whose C1 estimate exceeds 0.02, is outside the scope of a pilot even if the pooled criteria are met."
+   "scope_rule_by_context": "A context in which any paper has a misleading flag, or whose C1 estimate exceeds 0.02, is outside the scope of a pilot even if the pooled criteria are met.",
+   "scopes": {
+    "C1": "original articles",
+    "C2": "original articles and planted-error copies",
+    "C3": "original articles",
+    "D1_flag_recall": "planted errors of the planted-error copies; F numbers of the original articles are reported apart",
+    "C6_share_of_ambiguous_numbers": "original articles",
+    "implemented_by": "score.scoped_metrics"
+   },
+   "labels_of_the_planted_error_copy": "carried over from the original's adjudication. A number changed by mutate.py is a planted error (class F, under the adjudicated reading of the original number) only where the original number was adjudicated T; otherwise it keeps the original's class (N, A or F) and is not a planted error, so a flag on an N or A number stays misleading (score.copy_class). The copy is not adjudicated separately."
   },
   "unrestricted_public_release": {
    "meaning": "Anyone may use it without supervision. Not proposed now; listed so that the gap is explicit.",
@@ -172,7 +216,7 @@
   "confidence": "0.95, one-sided, for every bound",
   "independent_units": "papers; at most one paper per author group (protocol 4, E6)",
   "icc_floor": 0.25,
-  "icc_floor_meaning": "Claim-level bounds use a design effect computed with max(estimated ICC, 0.25). With few or no events the ICC cannot be estimated and draft 1 then used 0, which made the 'conservative' bound equal to the bound that ignores clustering. 0.25 is an assumption for the owner to confirm; bounds for 0, 0.1, 0.25, 0.5 and 1 are always reported.",
+  "icc_floor_meaning": "Claim-level bounds use a design effect computed with max(estimated ICC, 0.25). With few or no events the ICC cannot be estimated and draft 1 then used 0, which made the 'conservative' bound equal to the bound that ignores clustering. 0.25 is an assumption for the owner to confirm; bounds for 0, 0.1, 0.25, 0.5 and 1 are always reported. The scorer divides events and opportunities by the design effect (effective sample size). A criterion met at 0.25 but not at 0.5 is reported as not robust.",
   "assumption_free_inference": "The paper-level bounds assume only that papers are independent. They carry the claim; claim-level bounds are model-dependent."
  }
 }

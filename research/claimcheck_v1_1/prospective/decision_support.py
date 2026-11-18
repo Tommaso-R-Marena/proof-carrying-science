@@ -56,7 +56,9 @@ ASSUMPTIONS = {
     "per_paper_rate_of_a_misleading_flag": [0.005, 0.01, 0.02],
     "replay_underestimate_factors": [1, 1.5, 2, 3],
     "replay_setup_hours_per_job": 0.5,
-    "recall_values": [0.05, 0.079, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4],
+    "recall_values": [0.05, 0.1, 0.115, 0.15, 0.2, 0.25, 0.3, 0.4],
+    "feasibility_minutes_per_paper": [30, 45, 57.5, 60, 75, 90],
+    "feasibility_screening_candidates_per_context": [90, 300, 600],
     "per_call_success_grid": [0.9, 0.95, 0.97, 0.98, 0.99, 0.995],
 }
 
@@ -111,8 +113,8 @@ def _tolerance(check, limit):
 def claim_level(crit) -> dict:
     pilot = crit["levels"]["supervised_external_pilot"]["criteria"]
     c1, c2a = pilot["C1_unsupported_confirmations"], pilot["C2_misleading_refutations"]["a_per_exposed_claim"]
-    out = {"note": "events placed at most one per paper (ICC estimate 0, so the floor governs); the scorer deflates events "
-                   "and opportunities by the design effect; 'design_120_style' deflates only opportunities, as design_120.py does",
+    out = {"note": "events placed at most one per paper (ICC estimate 0, so the floor governs); the scorer divides events "
+                   "and opportunities by the design effect; 'draft_2_table_rule' divides only opportunities, as draft 2's design_120.py did",
            "C1": [], "C2a": []}
     specs = {"C1": [("2.5 (2 and 3 alternating)", (2, 3)), ("4", (4,)), ("5", (5,))],
              "C2a": [("4", (4,)), ("5", (5,)), ("8", (8,)), ("10", (10,))]}
@@ -144,7 +146,7 @@ def claim_level(crit) -> dict:
                     cell = {"design_effect": _r(deff, 3), "effective": _r(total / deff, 1),
                             "upper_bound_with_events": {str(k): _r(scorer_bounds(one_per_paper(sizes, k), icc)["upper"]) for k in (0, 1, 2)},
                             "events_allowed_by_scorer": allowed, "binding_condition_at_one_more": binding,
-                            "design_120_style_events_allowed": S.max_events_for_bound(int(total / deff), bound_cap)}
+                            "draft_2_table_rule_events_allowed": S.max_events_for_bound(int(total / deff), bound_cap)}
                     if icc == 0.25:
                         # the scorer itself, bootstrap included, at the boundary
                         def full(k):
@@ -242,18 +244,19 @@ def c2c(crit, demo) -> dict:
         clustered.append({"flags_per_flagged_paper": per, "design_effect": deff, "min_flags_none_misleading": min_flags(t, per, deff),
                           "misleading_allowed_at": allowed})
     u = demo["arms"]["union"]
-    fl = u["metrics"]["misleading_refutations_among_flags"]
+    fl = u["metrics"]["C2c_misleading_among_flags"]
     dev = {"flags": fl["opportunities"], "misleading": fl["events"], "papers": fl["papers"],
-           "scorer_bound_ignoring_clustering": _r(u["criteria"]["C2_misleading_refutations"]["c_among_flags"]["upper_bound"]),
-           "conservative_bound_with_floor": _r(fl["conservative_upper_bound"])}
+           "bound_ignoring_clustering": _r(S.upper_bound(fl["events"], fl["opportunities"])),
+           "conservative_bound_with_floor": _r(fl["conservative_upper_bound"]),
+           "flags_on_original_articles": u["metrics"]["C2c_misleading_among_flags_originals_only"]["opportunities"]}
     # what C2c measures: planted errors raise the share of real discrepancies far above a natural document
-    f_total = u["metrics"]["discrepancies_detected_among_false_statements"]["opportunities"]
-    exposed = u["metrics"]["misleading_refutations_per_exposed_number"]["opportunities"]
+    det = u["metrics"]["D1_flag_recall_planted"]
+    exposed = u["metrics"]["C2a_misleading_per_exposed_number"]["opportunities"]
     papers = u["metrics"]["papers"]
-    planted = sum(V1_PLANTED_PER_PAPER)
-    natural = (f_total - planted) / 2 / papers
+    planted = det["opportunities"]
+    natural = u["metrics"]["D1_flag_recall_natural"]["opportunities"] / papers
     exp_doc = exposed / (2 * papers)
-    recall = u["metrics"]["discrepancies_detected_among_false_statements"]["estimate"]
+    recall = det["estimate"]                           # assumed to apply to natural errors too
     ppv = []
     for mu in (0.005, 0.02):
         corr_o, mis_o = recall * natural, mu * exp_doc
@@ -262,20 +265,20 @@ def c2c(crit, demo) -> dict:
                     "real_share_of_flags_originals_and_copies": _r(corr_p / (corr_p + mis_p), 3)})
     expected = {}
     for label, per in (("4 per paper (protocol 5 text)", 4.0), ("4.33 per paper (frozen mutate.py, v1 held-out)", planted / len(V1_PLANTED_PER_PAPER))):
-        expected[label] = {str(p): {str(r): _r(r * per * p, 1) for r in (0.05, 0.079, 0.2)} for p in DESIGNS}
+        expected[label] = {str(p): {str(r): _r(r * per * p, 1) for r in (0.05, 0.115, 0.2)} for p in DESIGNS}
     return {"threshold": t, "min_flags": minf, "scorer_rule_ignoring_clustering": scorer, "alternative_thresholds": thresholds,
             "with_design_effect_floor_0_25": clustered, "development_union_arm": dev,
             "expected_correct_flags_on_planted_errors": expected,
             "illustration_real_share_of_flags": {"assumptions": {"natural_F_per_paper": _r(natural, 2), "planted_per_paper": _r(planted / papers, 2),
                                                                  "exposed_non_F_numbers_per_document": _r(exp_doc, 2), "flag_recall": _r(recall, 3),
-                                                                 "source": "DEMONSTRATION_ON_DEVELOPMENT_DATA.json union arm (38 F numbers, 93 exposed, 6 papers, 3/38 detected) and 26 planted in v1 held-out"},
+                                                                 "source": "DEMONSTRATION_ON_DEVELOPMENT_DATA.json union arm: 26 planted errors (3 flagged), 6 natural F numbers, 93 exposed numbers, 6 papers; natural errors assumed detected as often as planted ones"},
                                                  "rows": ppv}}
 
 
 # ---------------------------------------------------------------- D1 flag recall and the wording rule
 
 def flag_recall(c2a_rows, demo) -> dict:
-    dev_icc = demo["arms"]["union"]["metrics"]["discrepancies_detected_among_false_statements"]["icc_estimate"]
+    dev_icc = demo["arms"]["union"]["metrics"]["D1_flag_recall_planted"]["icc_estimate"]
     structures = {"4 per paper (protocol 5 text)": (4,), "as frozen mutate.py did in v1 held-out (7,1,4,4,9,1)": V1_PLANTED_PER_PAPER}
 
     def lb(k, total, deff):
@@ -311,7 +314,7 @@ def flag_recall(c2a_rows, demo) -> dict:
                 k = min_k(total, deff, target)
                 need[str(target)] = {"detections": k, "observed_recall": _r(k / total, 3),
                                      "chance_if_true_recall": {str(r): _r(1 - S.acceptance_probability(total, k - 1, r), 3)
-                                                               for r in (0.079, 0.15, 0.2, 0.25, 0.3, 0.4)}}
+                                                               for r in (0.115, 0.15, 0.2, 0.25, 0.3, 0.4)}}
             k = min_k(total, deff, c2a_bound, strict=True)
             row["observed_recall_needed_for_lower_bound"] = need
             row["necessary_condition"] = {"c2a_bound_no_flag_10_exposed": c2a_bound, "detections": k, "observed_recall": _r(k / total, 3)}
@@ -496,9 +499,31 @@ def icc_evidence(demo) -> dict:
     for arm, body in demo["arms"].items():
         m = body["metrics"]
         out[arm] = {k: {"events": m[k]["events"], "opportunities": m[k]["opportunities"], "icc_estimate": m[k]["icc_estimate"]}
-                    for k in ("coverage_of_true_statements", "discrepancies_detected_among_false_statements",
-                              "unsupported_confirmations_among_confirmations", "misleading_refutations_per_exposed_number")}
+                    for k in ("C3_coverage", "D1_flag_recall_planted", "C1_unsupported_among_confirmations", "C2a_misleading_per_exposed_number")}
     return out
+
+
+def feasibility(mc: dict) -> dict:
+    """What the preliminary study would cost, and what its measurements would imply at 120 papers
+    (DECISION_PACKAGE.md 14).  The pilot package: the prepared v1_discrepancies package (2 to 3 h each,
+    adjudication plan section 9) and the six held-out v1 papers at the plan's rates; the smoke run: the
+    eight development papers that have a planted-error copy, two documents each, one call per model."""
+    a = ASSUMPTIONS["adjudication"]
+    per_paper_h = [(a["minutes_reading_per_paper"][i] + a["numbers_per_paper"] * a["minutes_per_number"][i]) / 60 for i in (0, 1)]
+    each = [(2, 3)[i] + 6 * per_paper_h[i] for i in (0, 1)]
+    resolver = [6 * a["numbers_per_paper"] * sh * a["resolver_minutes_per_disagreement"] / 60 for sh in a["disagreement_share"]]
+    pilot = {"hours_each_adjudicator": [_r(x, 2) for x in each], "resolver_hours": [_r(x, 2) for x in resolver],
+             "person_hours_two_adjudicators_and_resolver": [_r(2 * each[i] + resolver[i], 1) for i in (0, 1)]}
+    smoke = {"papers": 8, "documents": 16, "calls": 32, "nemotron_calls": 16,
+             "nemotron_usd_at_measured_sizes": _r(16 * mc["nemotron_usd_per_call"]["measured_sizes"], 2)}
+    adj = {str(m): {"hours_each_two_adjudicators": _r(120 * m / 60, 1), "person_hours": _r(2 * 120 * m / 60, 1),
+                    "hours_each_six_adjudicators": _r(120 * m / 60 / 3, 1)} for m in ASSUMPTIONS["feasibility_minutes_per_paper"]}
+    scr = {str(n): {str(mi): _r(3 * n * mi / 60, 0) for mi in ASSUMPTIONS["screening_minutes_per_candidate"]}
+           for n in ASSUMPTIONS["feasibility_screening_candidates_per_context"]}
+    return {"pilot_adjudication": pilot, "smoke_run_configuration_P": smoke,
+            "adjudication_at_120_papers_by_measured_minutes_per_paper": adj,
+            "screening_hours_three_contexts_by_candidates_per_context_and_minutes_each": scr,
+            "plan_rates_minutes_per_paper": [a["minutes_reading_per_paper"][i] + a["numbers_per_paper"] * a["minutes_per_number"][i] for i in (0, 1)]}
 
 
 def tables() -> dict:
@@ -507,9 +532,10 @@ def tables() -> dict:
     return {"status": "synthetic operating characteristics for the owner's decisions; nothing sampled, nothing run, no network",
             "icc_floor_proposed": crit["assumptions"]["icc_floor"], "assumptions": ASSUMPTIONS,
             "claim_level_tolerance": cl, "C2_a_and_b_together": c2_joint(crit), "C2a_original_and_copy_counted_twice": duplicate_copies(),
-            "C2c": c2c(crit, demo), "D1_flag_recall": flag_recall(cl["C2a"], demo), "model_calls": model_calls(),
+            "C2c": c2c(crit, demo), "D1_flag_recall": flag_recall(cl["C2a"], demo), "model_calls": (mc := model_calls()),
             "kernel_and_replay": kernel(design), "adjudication": adjudication(), "usability": usability(),
-            "screening": screening(), "zero_event_rules": zero_event_rules(), "development_icc_estimates": icc_evidence(demo)}
+            "screening": screening(), "zero_event_rules": zero_event_rules(), "development_icc_estimates": icc_evidence(demo),
+            "feasibility_study": feasibility(mc)}
 
 
 def main(argv=None) -> int:

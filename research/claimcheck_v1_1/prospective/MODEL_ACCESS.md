@@ -1,6 +1,6 @@
 # Model access for the prospective evaluation (owner decision A5)
 
-**Status: prepared, nothing authorised, no paid call made.** Draft 2, 2026-11-15.
+**Status: prepared, nothing authorised, no paid call made.** Draft 3, 2026-11-18 (changes: [`AMENDMENTS_DRAFT_3.md`](AMENDMENTS_DRAFT_3.md), items 12 to 15 and 18). The frozen, machine-readable form of the identifiers, prices and caps is [`model_config.json`](model_config.json).
 
 ## What was verified, and how
 
@@ -23,11 +23,16 @@ change them without notice. The figures below were observed in this project's v1
 
 ## Measured in v1 (`claimcheck_v1/benchmark/results/heldout/prefetch_ledger*.json`)
 
-| | Calls | Failed attempts | Prompt tokens per call | Output tokens per call |
+| | Attempts | Failed attempts | Prompt tokens per successful call | Output tokens per successful call |
 | --- | ---: | ---: | ---: | ---: |
-| Nemotron free tier, day 1 | 14 | 0 | about 4,400 | about 3,000 |
-| Gemini free tier, day 2 | 14 | 7 | about 2,600 | about 300 |
-| later prefetch, both | 15 + 3 | 5 + 1 | | |
+| Nemotron free tier, day 1 | 14 | 0 | 4,404 | 3,032 |
+| Gemini free tier, day 2 | 14 | 7 | 5,160 | 563 |
+| later prefetch, Gemini | 15 | 5 | 2,846 | 643 |
+| later prefetch, Nemotron | 3 | 1 | 2,088 | 134 |
+
+The ledgers record tokens only for attempts that returned text. Draft 2 divided Gemini's totals by
+all 14 attempts, failed ones included, and printed about 2,600 and 300 tokens per call; per
+successful call they were twice that.
 
 The Gemini free tier refused about half of the attempts and allowed roughly 20 calls a day.
 
@@ -41,17 +46,29 @@ The Gemini free tier refused about half of the attempts and allowed roughly 20 c
 
 ## Two configurations for the owner to choose from
 
-**F. Free tiers only.** Gemini free tier and `…:free` on OpenRouter. Cost 0. At about 20 Gemini calls
-a day, 120 Gemini calls take at least 6 days plus repeats; a model withdrawn or changed during the run
-makes that arm "not run" for the remaining papers (no substitute model). Given v1's failure rate, the
-90 % primary-complete rule of the protocol is at real risk; the result may well be "not evaluable".
+**F. Free tiers only.** `gemini-3.6-flash` on Gemini's free tier and
+`nvidia/nemotron-3-ultra-550b-a55b:free` on OpenRouter. Cost 0. Calls are paced at 20 Gemini requests
+per UTC day (the v1 observation; `model_config.json`), so 120 Gemini calls take at least 6 days and
+240 at least 12, plus repeats; a call deferred by the limit is made on a later day, and a call that
+failed with a retryable error may be sent again in at most three sessions, at least 24 h apart,
+before verification starts (protocol 2). A model withdrawn or changed during the run makes that arm
+"not run" for the remaining papers (no substitute model). The 90 % primary-complete rule is at
+real risk; the result may well be "not evaluable".
 
-**P. Capped paid route.** OpenRouter's paid Nemotron and Gemini's paid tier, each with a hard spending
-limit set in the provider account by the owner (the code's per-provider call budget is a second
-limit). Nemotron, 120 calls at the measured sizes: 120 × 4,400 × 0.60e-6 + 120 × 3,000 × 2.40e-6
+**P. Capped paid route.** `nvidia/nemotron-3-ultra-550b-a55b` (OpenRouter's paid route; the
+identifier differs from v1's `…:free`) and `gemini-3.6-flash` on Gemini's paid tier. The cap is
+enforced in three layers: (1) the calling code, `prospective/budget.py`, refuses before sending any
+request whose worst case (the bytes of the whole request body and the maximum output, at the frozen
+prices) could take committed spending past the provider's sub-cap or the total cap, refuses a
+provider without a frozen price, keeps a synced spend log from which a resumed run continues, and
+stops for good if a response ever costs more than its worst case (the cost model is then wrong); (2) the frozen ledger's
+attempt budget, four attempts per call; (3) a hard limit in each provider account, set by the owner
+where the provider offers one (an alert that only notifies is not a limit). Nemotron, 120 calls at the measured sizes: 120 × 4,400 × 0.60e-6 + 120 × 3,000 × 2.40e-6
 ≈ 1.2 USD, at most about 5 USD if every call were repeated. Gemini: price to be read and entered by
-the owner. Proposed total cap: 15 USD for 60 papers, 30 USD for 120. Requires the owner's explicit
-authorisation; no paid call will be made before it.
+the owner in `model_config.json`; until then the guard refuses every paid Gemini request. Proposed
+total cap: 15 USD for 60 papers (sub-caps Gemini 10, Nemotron 5), 30 USD for 120 (20 and 10).
+Requires the owner's explicit authorisation, which the guard records; no paid call will be made
+before it.
 
 ## Frozen with the protocol (section 12)
 
@@ -61,7 +78,10 @@ authorisation; no paid call will be made before it.
 * sampling: temperature 0, at most 16,384 output tokens;
 * failures: as in protocol section 2 (repeat only transport, quota and server errors, three times, on
   the fixed schedule; never substitute a model; record every attempt);
-* every answer cached by request digest; a re-run never sends a request that already succeeded.
+* every answer cached by request digest; a re-run never sends a request that already succeeded;
+* the proposer calls are made only through `prospective/budget.py` (`fetch_proposals`): one
+  `propose_with_model` call per model per document, no critic calls, every attempt in the spend log
+  with the version and route the provider reports.
 
 ## Data handling
 

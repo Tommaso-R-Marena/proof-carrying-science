@@ -1,143 +1,150 @@
-# Owner authorization package: ClaimCheck integration (2026-11-17)
+# Owner decision package: ClaimCheck integration (final pre-admission pass, 2026-11-18)
 
-Each decision below is separate: approving one does not approve another. Nothing listed here has
-been applied, merged, deployed, tagged or approved by the assistant. Numbers that depend on the exact
-head of a pull request (manifest digest, retained commit) are in the pull request descriptions,
-because evidence about a commit cannot be stored inside that commit (see
-[`ADMISSION_PROPOSAL.md`](ADMISSION_PROPOSAL.md), "Why the evidence names an earlier commit").
+Each decision below is separate: approving one does not approve another. **Nothing here has been
+applied, merged, deployed, tagged or approved by the assistant.** The three pull requests (core 212,
+research 216, website 149) are drafts.
 
-Legend: **implemented** = on the draft branch; **tested** = the named tests pass; **proved** = Lean
-theorem checked by the kernel; **proposal** = prepared, not applied.
+Some numbers depend on the exact head of a pull request: the core head itself, the V23 manifest
+digest and the retained commit. Those are in the pull request description, because evidence about a
+commit cannot be stored inside that commit (see [`ADMISSION_PROPOSAL.md`](ADMISSION_PROPOSAL.md),
+"Why the evidence names an earlier commit"). For the same reason, the CI results of the final heads
+are in the pull request descriptions.
 
-## Core repository (PR 212)
+The words used below:
 
-### C1. Admit the ClaimCheck sidecar (successor manifest V23 and retained-source tag)
+* **implemented**: on a draft branch, not merged or deployed;
+* **tested**: the named tests pass;
+* **proved**: a Lean theorem checked by the kernel;
+* **proposal**: prepared, not applied.
 
-* **Change (proposal):** one control commit with four files, built by
-  `python -m research.claimcheck_v1_1.governance.prepare_core_admission --out <dir> --emit <dir>`:
-  `RECONCILIATION_V23.json` (new), and edits to `research/integration_v2/reconcile.py` (manifest path
-  and digest; V23 format), `research/integration_v2/test_reconcile.py` (the V22 test reads V22 by
-  path; one V23 test added) and `scripts/check_reconciled_prs.py` (new retained commit and tag; V23
-  as a control). Plus, outside the tree, the retained commit (same tree as the admitted commit;
-  parents: that commit and `0b521f39`) and the annotated tag
-  `pcs-source-intake/core-claimcheck-v1-20261114`. Patch: [`proposed-control-changes.patch`](proposed-control-changes.patch).
-* **Tests (dry run, `dry-run.json`):** both gates pass on the dry-run control commit; both protected
-  test files pass (75 and 13 tests, including the whole-tree squash); nine alterations rejected
-  (unlisted file, edited admitted file, edited V23, edited V22, edited frozen result, edited
-  production file, gate control edited after the control commit, retained entry retargeted, tag
-  moved). The proposal and the tested dry run differ only in the tag name.
-* **Audit:** [`ADMISSION_AUDIT.md`](ADMISSION_AUDIT.md): no credential, no generated file, every file
-  with a provenance class, CC BY 4.0 attribution index ([`THIRD_PARTY_ATTRIBUTION.md`](THIRD_PARTY_ATTRIBUTION.md)),
-  frozen digests verify, no protected path changed. Open question for you: whether the model
-  providers' terms permit keeping and publishing the 35 recorded model outputs.
-* **Implications:** widens the admitted tree by exactly the census; changes no existing source,
-  science, Lean or authority byte; one pinned control script changes (it names the new retained
-  commit).
-* **If approved:** regenerate at the commit you fix, compare digests with the PR description, create
-  the retained commit, push the tag, commit the four files as one reviewed control commit.
-  `source-policy` and `verified-public-integration` then pass.
-* **If rejected:** nothing to undo; the branch contains no protected change; the two checks stay red.
+## 1. Security fixes that are implemented and tested
 
-### C2. Required checks
+| | Fix | Commit | Tests |
+| --- | --- | --- | --- |
+| C3 | **Strict, hardened stand-alone runner.** It refuses any proof file whose tail is not exactly the generator's canonical form, before Lean starts, so the tail forgery is closed. It takes Lean only from an explicit path or an absolute PATH entry, never the working directory. It runs Lean with a minimal environment and a memory cap, limits literal size, writes its output atomically and records the Lean executable and its digest. SHA-256 `831bbaba…f75e9`. It replaces the withdrawn `8d9e07b4…` and `459155f3…`. | core `52b5e182`; site serves the same bytes (`b95a34b`) | `tests/test_runner_strict.py`, `test_runner_hardening.py` (11), `runner_negative_controls.py` (14), `check_live_v11.py` with the real kernel |
+| C4 | **The v1.1 replay binds the claim to the sentence.** The reported value must be the printed literal, and the checked variants must be those the statistic requires. | `1d2f80ef` | `tests/test_binding_offline.py`: three former gaps refused; 0 violations on 302 committed receipts |
+| C4 | **Checked replay of v1 bundles.** It runs the frozen v1 replayer unchanged, then adds the binding and result-consistency checks v1 lacks. A warning file stands beside the frozen replayer. | `035afec2` | six held-out bundles (302 receipts) pass, bundle 08 with the real kernel in CI; the three forgeries are refused while the frozen replayer alone accepts them |
+| C5 | **The outward verdict follows the kernel-established status.** `established_status` recomputes the status from the kernel-accepted variants and requires `result`, `q1.status`, `q1.conditional` and `reason` to agree. `binding_problem` ties the claim to the sentence. An inconsistent receipt gives UNKNOWN and corroborates nothing, and the last check is no longer an `assert`. | `5a18afd7` | `tests/test_decide_guard.py` (7, including all 240 summary-field combinations, forged, downgraded and missing variants, another number or statistic, a dropped convention, forged siblings); 1,590 committed receipts consistent; site catalog re-exports byte-identical |
+| C5 | **Follow-up: development evaluation.** It passed no development switch for its oracle receipts and silently scored five development documents as UNKNOWN. | `2830547d` | `tests/test_oracle_opt_in.py`: the pipeline and site export pass no development switch; `dev_arms.json` reproduced on every recorded value |
+| D4 | **The page's receipt rule.** Only v2 receipts about the page's own proof file, data and pinned checker are shown, labelled as reported by the user's run, never as verification. Fixed refusal messages; a snapshot at Check; reset on any input change. | site `e2e7451` | `npm run test:claim-check` (15); browser journey with the real kernel (successor record `docs/evidence/claim-check-v2/`, bound to the page bytes at site `c216672`) |
+| C2 | **Required-check workflow.** It runs on every pull request; `changes` diffs the merge commit with renames off, and `claimcheck-required` always reports. Actions are pinned and the checkout keeps no credentials. | in the workflow on PR 212 | `governance/test_required_check.py`: 13 scenarios on real merge commits; of 192 result combinations, exactly the 17 intended pass |
+| A5/A1 | **Enforcement code for a future prospective run.** It is not a fix to deployed function, and it has been tested with synthetic stand-ins only. `prospective/budget.py` refuses, before sending, any request whose worst case (whole request body, maximum output, frozen prices) could pass a cap, and halts if a response ever costs more than its worst case. `prospective/lean_guard.py` stops Lean at 7 GB and ties Lean to itself, so a timeout leaves no unguarded process. | `bcf62944`, review fixes `cf15770f` | `tests/test_budget.py` (15), `tests/test_lean_guard.py` (3); each review fix has a test that fails on the reviewed draft |
 
-* **Change (proposal; the workflow change is implemented and tested):** require exactly
-  `claimcheck-required` in the `main` ruleset after C1. Details: [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md).
-* **Tests:** `research/claimcheck_v1_1/governance/test_required_check.py` (13 change scenarios on
-  real merge commits; 192 result combinations, exactly the 17 intended pass).
-* **Also for you to confirm:** that none of the six jobs that are skipped on every pull request
-  (`pcs-ci.yml`, `pcs-required-self-hosted.yml`) is a required check; a skipped job passes a
-  requirement.
-* **If approved:** ClaimCheck changes cannot merge without both ClaimCheck jobs passing; other pull
-  requests are unaffected. **If rejected:** ClaimCheck checks stay advisory.
+Whole v1.1 suite at the final source commit: 132 tests and 69 subtests pass. The frozen v1 freeze
+check passes: software `1a7eeb57…ae2d`, benchmark `1a200180…c890`. No frozen file or historical
+record was changed.
 
-### C3. The corrected and hardened stand-alone runner
+## 2. Source-admission and qualification changes: proposed, not applied
 
-* **Change (implemented, tested):** runner SHA-256 `831bbaba…` (core `52b5e182`), replacing the
-  withdrawn `8d9e07b4…` and the 2026-11-16 version `459155f3…`. Review package:
-  [`SECURITY_REVIEW_C3_D4.md`](SECURITY_REVIEW_C3_D4.md), with the exact diffs.
-* **Tests:** 92 unit tests in `research/claimcheck_v1_1/tests` (strict grammar, 14 negative controls,
-  11 hardening tests, 15 binding tests); `check_live_v11.py` with the real kernel (forgery refused
-  before Lean; genuine file accepted; forced settings flagged; memory cap; executable recorded).
-* **Proved (research branch):** the canonical language and its meaning (`Claims.lean`); the runner's
-  parser agrees with it on 10,720 vectors (tested, not proved).
-* **If approved:** the runner can be used for files the page writes. **If rejected:** keep the page's
-  local-run section disabled; no recorded result depends on the runner.
+| | Proposal | Where | What you would do |
+| --- | --- | --- | --- |
+| C1 | **Admit the ClaimCheck sidecar** (2,006 added files, no existing file changed). Successor manifest V23, edits to `reconcile.py`, `test_reconcile.py` and `check_reconciled_prs.py`, a retained commit whose tree equals the admitted commit, and the tag `pcs-source-intake/core-claimcheck-v1-20261114`. | [`ADMISSION_PROPOSAL.md`](ADMISSION_PROPOSAL.md), [`ADMISSION_AUDIT.md`](ADMISSION_AUDIT.md), [`proposed-control-changes.patch`](proposed-control-changes.patch), [`dry-run.json`](dry-run.json) | the exact steps in `ADMISSION_PROPOSAL.md`, "What the owner would do"; start with `check_admission_consistency` |
+| C2 | Require exactly `claimcheck-required` on core `main` after C1. | [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md) | ruleset change |
+| D1 | The reading-help verifier accepts exactly one reviewed successor of its pin. | site `docs/governance/CLAIMCHECK_PROPOSALS.md`, patch 01 | apply patch 01 |
+| D2 | Public-tree admission. The retained commit `6c1ec33e…` has the same tree as site `e0b9136`, its parents are that commit and `d35e2b5e…`, and its tag is `pcs-source-intake/site-claimcheck-v1-20261117`. | patch 02, census (51 files) | the site's section 5 steps |
+| D3 | ClaimCheck's mandatory page tests become part of the required `site-full-gate`. | patch 03 | apply patch 03 |
+| R1 | Admit the assurance research separately, after C1, as a V24 successor. | PR 216 | decide the route |
 
-### C4. The v1.1 replay binds the claim to the sentence
+The dry runs are reproduced from scripts at the final source commits. Each is checked by an
+independent consistency checker, which recomputes the following from the repository itself: the
+census against the commit, the patch against the proposed digests, the gate against the proposed
+manifest digest, and the retained commit by `git commit-tree`, which creates no ref.
 
-* **Change (implemented, tested):** `research/claimcheck_v1_1/replay_independent_v1_1.py`
-  (`1d2f80ef`): the claim's reported value must be the printed literal, and the checked variants
-  those the statistic requires. Not a protected file, but it changes an evidence tool, so it is
-  listed for your review. The frozen v1 replayer is unchanged and keeps the gap; a warning file
-  stands beside it (`research/claimcheck_v1/LEGACY_REPLAY_WARNING.md`) and
-  `research/claimcheck_v1_1/replay_v1_bundle_checked.py` replays v1 bundles with the checks it lacks.
-* **Tests:** three former gaps now refused; 0 violations on the 302 committed receipts; live replay
-  of genuine bundles passes.
-* **If rejected:** revert that commit; the gap reopens for bundles handed to reviewers.
+* core: `python -m research.claimcheck_v1_1.governance.check_admission_consistency`;
+* site: `python3 scripts/check_claimcheck_proposals_consistency.py`.
 
-### C5. The outward verdict follows the kernel-established status
+Rulesets cannot be read with the tools available here. Both `main` branches are reported protected.
+The settings to verify by hand are listed in [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "What to
+verify by hand in the rulesets".
 
-* **Change (implemented, tested):** `research/claimcheck_v1_1/policy.py` (`5a18afd7`):
-  `established_status` recomputes the status from the kernel-checked variants and requires every
-  summary field to agree; `binding_problem` ties the claim to the sentence; an inconsistent receipt
-  gives UNKNOWN and corroborates nothing.
-* **Tests:** `tests/test_decide_guard.py` (7 tests, including all 240 combinations of the summary
-  fields); all 1,590 committed receipts consistent; the site catalog re-exports byte-identical; the
-  research-branch conformance asserts the guard with the real code.
-* **If rejected:** revert that commit; a receipt with a contradictory `result` could again be
-  confirmed or flagged.
+## 3. Formal guarantees versus executable conformance tests
 
-## Website (PR 149)
+| Kind | What | Where |
+| --- | --- | --- |
+| **Proved** (Lean 4.28, kernel-checked; 67 theorems, axioms only `propext`, `Classical.choice`, `Quot.sound`; no `sorry`) | the canonical claims-part language: renderer and parser round trip, canonicity, injectivity, one meaning one text; the header binding chain: decoder correctness, hex value = `ofBytes`; the abstract outward-verdict function | research branch, `formal/`, `AXIOMS.expected` |
+| **Tested, not proved** | the runner's Python parser agrees with the proved Lean parser on 10,720 vectors (0 disagreements); the Python outward decision agrees with the Lean function on all 983,040 reachable points of its 1,310,720-point domain; the real guard accepts every receipt the pipeline can write (84 status patterns) and decides nothing outside its input condition | research `conformance/` (`CORRESPONDENCE.md`) |
+| **Tested** | everything in section 1 | named tests |
+| **Reported by an external service, not replayed here** | Aristotle's results for the first C decoder (properties, unresolved obligations, a counterexample). No proof artifact was returned, so nothing is claimed to be kernel-checked. They are not a statement about the Python code. | research `c/ARISTOTLE_RESULTS.md` |
+| **Not established** | the correctness of the Python or JavaScript implementations as a whole (there is no refinement proof); the scientific correctness of any confirmed or flagged claim (a confirmation says only that the stated arithmetic holds on the bound data under the stated reading); human usability (no participant) | |
 
-### D1. Reading-help requalification (patch 01, `scripts/verify_browser_ui_sources.mjs`)
-### D2. Public-tree admission (patch 02, `scripts/check_reconciled_prs.py`, retained commit and tag)
-### D3. Complete gate (patch 03, `package.json` `ci:zero-minutes`)
-### D4. The page's receipt rule
+## 4. Existing vulnerabilities and unresolved authority gaps
 
-Each is explained line by line, with its dry run, negative controls, implications and the
-consequences of approval or rejection, in the site's `docs/governance/CLAIMCHECK_PROPOSALS.md`. In
-short: D1 accepts exactly one reviewed successor of the reading-help pin (the historical record is
-not edited); D2 lets the public tree change only to the exact tree of a commit you tag; D3 runs
-ClaimCheck's mandatory tests inside the already required `site-full-gate`; D4 shows a local receipt
-only if it is about the page's own file and labels it as reported by the user's run, never as
-verification.
+1. **The frozen v1 replayer keeps the claim-binding gap** (by design, not modified). It must not be
+   used to establish the integrity of untrusted verification bundles. Use the v1.1 replayer, or
+   `replay_v1_bundle_checked.py` for v1 bundles (`research/claimcheck_v1/LEGACY_REPLAY_WARNING.md`).
+2. **The withdrawn runners** (`8d9e07b4…`, `459155f3…`) remain in history. The research branch
+   keeps one deliberately as reproduction evidence. Any copy of them still accepts forged tails. The
+   page serves and pins only `831bbaba…`. No recorded result depends on a runner.
+3. **A receipt is a report, not a verification.** The guard detects inconsistency; it cannot detect
+   a consistent lie in the kernel record itself. Only re-running the kernel (replay) re-establishes a
+   result.
+4. **The development switches** `oracle_receipts` and `oracle_siblings` are part of the policy's
+   interface. The pipeline and the site export pass neither, and a test checks it, but no runtime
+   control would stop a new outward caller that passed one.
+5. **Until C1 and C2:**
+   * `claimcheck-required` is not required;
+   * a pull request can edit the ClaimCheck workflow, which is not yet pinned by a manifest;
+   * the site's `claim-check-page` is path-filtered;
+   * the live rulesets are unverified (manual checklist).
+6. **Prospective guards have stated limits.**
+   * The memory guard samples every 0.05 s, so a shorter spike can exceed 7 GB.
+   * The spending guard assumes billed tokens do not exceed request bytes, and that the output
+     maximum covers reasoning tokens. If either assumption is wrong, the tripwire stops it, after an
+     overshoot of at most one request.
+   * Provider-side hard limits are still needed.
+   * The Gemini price is unset, so paid Gemini requests are refused.
+7. **Aristotle:** the available tools offer no enforceable per-run spending limit. The first run
+   exceeded its allowance (92 credits billed against 50, promotional, no paid charge).
+8. **Licensing:** whether the providers' terms permit keeping and publishing the 35 recorded model
+   outputs is open.
+9. **Red checks by design** until you decide:
+   * core: `source-policy` and `verified-public-integration` (C1);
+   * site: `beginner-browser`, `lean-learning-browser` and `original-pr-ancestry-and-production-preservation` (D1, D2), and `site-full-gate`, which requires `lean-learning-browser` to pass.
 
-## Research (PR 216)
+## 5. Exact commits, digests, CI and owner-held actions
 
-### R1. How to admit the assurance research
+**Core (PR 212).**
 
-**Recommendation: a separate successor qualification after PR 212's admission, not together with
-the sidecar.** Reasons: it is stacked on PR 212 and changes nothing in it; it carries its own Lean
-modules, a C library, an Aristotle record and an axiom report whose review is different in kind
-from the sidecar's; admitting it together would make the C1 manifest depend on research that is
-still moving (decoder v2, conformance parts D and E were added this week); and its CI job
-`proofs-and-refinement` is path-filtered and should get the same change-detection aggregate before
-it could be required. Its findings that matter for PR 212 (the runner forgery, the replay gap) are
-already fixed and tested on PR 212's branch. Once PR 212 is admitted, the same script produces a
-V24 successor for the research files alone.
+* Fixes: `52b5e18287682619480e6e5da2d4582d002aa8ca` (runner), `1d2f80efa104b6be051cec02fd95403f7ff5cde7` (replay binding),
+  `5a18afd71f8253bb078e5280acfee4d8292ddca3` (guard), `035afec20e708ada335114eb16b2a9a25f775483` (legacy warning, checked v1 replay),
+  `2830547d45b1e3f7048dd494cba6dbb7aa62bed0` (development evaluation), `bcf629443b52e0dbe3ae126131c4ea07c77b2125` (protocol draft 3),
+  `cf15770f820ad9eb65c5255aa6918679f0b5d980` (review fixes), `ca35bf94b5bcec189e4ff06e7d857188269a37cd` (consistency checker).
+* The final source commit, its evidence commit, the V23 digest, the retained commit and the CI
+  results are in the PR description.
+* Protected baseline: `main` at `bc78660b5fac857fce3873eb6cda0445d1903da1`; V22 `28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83`; retained intake
+  `0b521f39af99f5856b69dfcc25bc274ec9dc804a` (`pcs-source-intake/core-open-prs-v1-20261105`).
+* Runner `831bbababd2f48e5b9f62fa33433fe7edfbc8ee1f2271e3e7700b883745f75e9`.
 
-## External verification (Aristotle)
+**Website (PR 149).**
 
-### E2. Continue the C decoder verification
+* Final source commit `e0b9136cf7e8480cfcf55c9bfa86b9582f22e39e`; evidence commit `fc6c7a468f3a614c5126f65092aa5e2d7b817974`.
+* Retained commit `6c1ec33e51c3ead21fcaa07f368b7a1c791771dc` (tree `1a2ab000ce15f14ad942240105a5efabda8a21e3`).
+* Journey record bound to `c21667253e5725aae7e3b1fa90e61a87287dd29b`. The predecessor record is unchanged.
+* `main` at `e8136625`.
 
-* **Status:** prepared, **not started**. The redesigned decoder (lengths by value, validation
-  before any write, nothing written on rejection) and the continuation prompt are on the research
-  branch (`c/DESIGN_DECODER_V2.md`, `c/ARISTOTLE_PROMPT_V2.md`, upload digests listed).
-* **Why not started:** your conditions require an enforceable limit. The tools offer no per-run
-  budget; cancellation works only while this session is active, and usage limits suspended it
-  during the first run (92 credits billed against 50) and twice during this work. Balance: 407.8
-  promotional credits, 0 paid, expiring 2026-11-29 06:00 UTC.
-* **To proceed:** configure a credit check-in (a server-side pause) in the Aristotle web app, or
-  submit the prepared prompt yourself from the web app, or state that supervised cancellation by a
-  session is acceptable. Recommended scope: P1 to P3 of the decoder only, at most 100 credits.
+**Research (PR 216):** its head is in the PR description. It merges this branch and changes nothing in it.
 
-## Prospective evaluation
+**Owner-held actions.** None has been taken.
 
-### A1–A5. Protocol, thresholds, model configuration
+1. **C1:** fix the commit to admit, run the consistency check, then regenerate with `--emit` and
+   compare digests with the PR description. Create the retained commit exactly as recorded, and
+   create and push its tag. Commit the four control files as one reviewed commit.
+2. **C2:** add `claimcheck-required` after C1. Verify both rulesets by hand.
+3. **C3 to C5, D4:** accept each, or revert its commit.
+4. **D1 to D3:** apply patches 01 to 03; for D2, create the retained commit and push its tag.
+   Deploying the page is a separate decision.
+5. **R1:** choose the research route.
+6. **Aristotle (E2):** no run unless an enforceable limit exists and you authorise it separately.
+7. **Prospective:**
+   * review draft 3 and choose the open values (ICC floor, 60 or 120, wording threshold, C2c,
+     screening cap, configuration and the Gemini price);
+   * decide the feasibility study (A7), and separately authorise recruitment, any model call and
+     re-fetching pool articles;
+   * set provider-side hard limits;
+   * approval freezes the protocol by digest.
+8. **Licensing** of the recorded model outputs.
+9. **Merges and deployment.**
 
-See [`../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md`](../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md)
-(section 14 summarises the decisions). Recommendations: ICC floor 0.25 with a "not robust" rule at
-0.5; 120 papers on three conditions; wording threshold 0.20; C2c 50 % with at least 5 flags plus two
-corrections; screening cap 600 per context; configuration P capped at 30 USD for 120 papers, with
-the cap enforced in code before each request. It lists 19 inconsistencies in draft 2 (8 to fix
-before approval). Nothing was sampled, inspected or run; no one was recruited.
+The prospective decisions in detail: [`../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md`](../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md)
+(section 14, the feasibility study; section 15, the summary). The decision register:
+[`../../research/claimcheck_v1_1/OWNER_DECISIONS.md`](../../research/claimcheck_v1_1/OWNER_DECISIONS.md).

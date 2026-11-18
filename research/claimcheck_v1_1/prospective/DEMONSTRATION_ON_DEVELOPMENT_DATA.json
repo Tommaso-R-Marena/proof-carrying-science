@@ -1,67 +1,65 @@
 {
- "WARNING": "DEVELOPMENT DATA. Six papers that were used to design v1.1, AI-assisted labels, oracle-predicted sibling corroboration. This demonstrates the scoring machinery. It is not an evaluation of v1.1 and no criterion can be met by it.",
+ "WARNING": "DEVELOPMENT DATA. Six papers that were used to design v1.1, one context, AI-assisted labels, oracle-predicted sibling corroboration. This demonstrates the scoring machinery. It is not an evaluation of v1.1 and no criterion can be met by it.",
+ "policy_flags": {
+  "oracle_siblings": true
+ },
  "arms": {
   "gemini": {
+   "sample": {
+    "design_requested": 60,
+    "design_used": 60,
+    "fallback": false,
+    "papers_per_context_used": 20,
+    "eligible_per_context": {
+     "ecology and organismal biology (v1)": 6
+    },
+    "primary": [
+     "06_pmc5980576",
+     "08_pmc6238128",
+     "09_pmc6476783",
+     "10_pmc5817150",
+     "12_pmc4417136",
+     "17_pmc9309151"
+    ],
+    "secondary_all_eligible": null,
+    "primary_complete_share": 1.0,
+    "evaluable": false,
+    "reasons": [
+     "1 contexts; 3 are required",
+     "shortfall: fewer than 20 eligible papers in ecology and organismal biology (v1); no topping up"
+    ]
+   },
    "metrics": {
-    "unsupported_confirmations_among_confirmations": {
+    "C1_unsupported_among_confirmations": {
      "events": 0,
-     "opportunities": 17,
-     "papers": 3,
+     "opportunities": 14,
+     "papers": 2,
      "papers_with_at_least_one_event": 0,
      "estimate": 0.0,
-     "design_effect": 2.676,
-     "effective_opportunities": 6.4,
-     "upper_bound_ignoring_clustering": 0.16156611126074008,
-     "upper_bound_design_effect_adjusted": 0.3930377689970827,
+     "design_effect": 2.643,
+     "effective_opportunities": 5.3,
+     "upper_bound_ignoring_clustering": 0.1926361756501353,
+     "upper_bound_design_effect_adjusted": 0.4507197283469411,
      "lower_bound_design_effect_adjusted": 0.0,
      "paper_level_estimate": 0.0,
-     "paper_level_upper_bound": 0.6315968501359613,
+     "paper_level_upper_bound": 0.776393202250021,
      "bootstrap_interval_over_papers": [
       0.0,
       0.0
      ],
-     "conservative_upper_bound": 0.3930377689970827,
+     "conservative_upper_bound": 0.4507197283469411,
      "icc_estimate": 0.0,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 7.71,
+     "weighted_cluster_size": 7.57,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.16156611126074008,
-      "0.1": 0.25886555089305224,
-      "0.25": 0.3930377689970827,
+      "0.0": 0.1926361756501353,
+      "0.1": 0.3123439780663679,
+      "0.25": 0.4507197283469411,
       "0.5": 0.6315968501359613,
-      "1.0": 0.776393202250021
-     }
-    },
-    "misleading_refutations_among_flags": {
-     "events": 0,
-     "opportunities": 2,
-     "papers": 1,
-     "papers_with_at_least_one_event": 0,
-     "estimate": 0.0,
-     "design_effect": 2.0,
-     "effective_opportunities": 1.0,
-     "upper_bound_ignoring_clustering": 0.776393202250021,
-     "upper_bound_design_effect_adjusted": 0.9500000000000001,
-     "lower_bound_design_effect_adjusted": 0.0,
-     "paper_level_estimate": 0.0,
-     "paper_level_upper_bound": 0.9500000000000001,
-     "bootstrap_interval_over_papers": [
-      0.0,
-      0.0
-     ],
-     "conservative_upper_bound": 0.9500000000000001,
-     "icc_estimate": 1.0,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 2.0,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.776393202250021,
-      "0.1": 0.9500000000000001,
-      "0.25": 0.9500000000000001,
-      "0.5": 0.9500000000000001,
       "1.0": 0.9500000000000001
      }
     },
-    "misleading_refutations_per_exposed_number": {
+    "C2a_misleading_per_exposed_number": {
      "events": 0,
      "opportunities": 36,
      "papers": 4,
@@ -90,7 +88,70 @@
       "1.0": 0.6315968501359613
      }
     },
-    "misleading_refutations_per_true_or_not_derivable_number": {
+    "C2b_papers_with_a_misleading_flag": {
+     "papers": 6,
+     "affected": 0,
+     "upper_bound": 0.3930377689970827
+    },
+    "C2c_misleading_among_flags": {
+     "events": 0,
+     "opportunities": 2,
+     "papers": 1,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 2.0,
+     "effective_opportunities": 1.0,
+     "upper_bound_ignoring_clustering": 0.776393202250021,
+     "upper_bound_design_effect_adjusted": 0.9500000000000001,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.9500000000000001,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.9500000000000001,
+     "icc_estimate": 1.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 2.0,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.776393202250021,
+      "0.1": 0.9500000000000001,
+      "0.25": 0.9500000000000001,
+      "0.5": 0.9500000000000001,
+      "1.0": 0.9500000000000001
+     }
+    },
+    "C2c_misleading_among_flags_originals_only": {
+     "events": 0,
+     "opportunities": 0,
+     "papers": 0,
+     "papers_with_at_least_one_event": 0,
+     "estimate": null,
+     "design_effect": 1.0,
+     "effective_opportunities": 0.0,
+     "upper_bound_ignoring_clustering": 1.0,
+     "upper_bound_design_effect_adjusted": 1.0,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": null,
+     "paper_level_upper_bound": 1.0,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      1.0
+     ],
+     "conservative_upper_bound": 1.0,
+     "icc_estimate": null,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 1.0,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 1.0,
+      "0.1": 1.0,
+      "0.25": 1.0,
+      "0.5": 1.0,
+      "1.0": 1.0
+     }
+    },
+    "misleading_per_true_not_derivable_or_ambiguous_number": {
      "events": 0,
      "opportunities": 124,
      "papers": 6,
@@ -119,158 +180,188 @@
       "1.0": 0.4507197283469411
      }
     },
-    "papers_with_a_misleading_refutation": {
+    "C3_coverage": {
+     "events": 14,
+     "opportunities": 48,
      "papers": 6,
-     "affected": 0,
-     "upper_bound": 0.3930377689970827
-    },
-    "coverage_of_true_statements": {
-     "events": 17,
-     "opportunities": 70,
-     "papers": 6,
-     "papers_with_at_least_one_event": 3,
-     "estimate": 0.24285714285714285,
-     "design_effect": 5.187,
-     "effective_opportunities": 13.5,
-     "upper_bound_ignoring_clustering": 0.34172122235578156,
-     "upper_bound_design_effect_adjusted": 0.5726193394082124,
-     "lower_bound_design_effect_adjusted": 0.0611029288589775,
-     "paper_level_estimate": 0.5,
-     "paper_level_upper_bound": 0.8468388820247769,
+     "papers_with_at_least_one_event": 2,
+     "estimate": 0.2916666666666667,
+     "design_effect": 5.384,
+     "effective_opportunities": 8.9,
+     "upper_bound_ignoring_clustering": 0.4178311587720126,
+     "upper_bound_design_effect_adjusted": 0.7107591834981906,
+     "lower_bound_design_effect_adjusted": 0.04102316750699653,
+     "paper_level_estimate": 0.3333333333333333,
+     "paper_level_upper_bound": 0.7286616274802477,
      "bootstrap_interval_over_papers": [
-      0.015625,
-      0.4473684210526316
+      0.0,
+      0.5625
      ],
-     "conservative_upper_bound": 0.5726193394082124,
-     "icc_estimate": 0.3531,
+     "conservative_upper_bound": 0.7107591834981906,
+     "icc_estimate": 0.5341,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
+     "weighted_cluster_size": 9.21,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.34172122235578156,
-      "0.1": 0.4060569517565053,
-      "0.25": 0.5219176931136312,
-      "0.5": 0.6066242161054134,
+      "0.0": 0.4178311587720126,
+      "0.1": 0.48699822123130454,
+      "0.25": 0.5774436628428433,
+      "0.5": 0.6550586340562966,
       "1.0": 0.8107446225622292
      }
     },
-    "coverage_of_true_statements_ambiguous_removed": {
-     "events": 17,
-     "opportunities": 70,
+    "C3_coverage_ambiguous_removed": {
+     "events": 14,
+     "opportunities": 48,
      "papers": 6,
-     "papers_with_at_least_one_event": 3,
-     "estimate": 0.24285714285714285,
-     "design_effect": 5.187,
-     "effective_opportunities": 13.5,
-     "upper_bound_ignoring_clustering": 0.34172122235578156,
-     "upper_bound_design_effect_adjusted": 0.5726193394082124,
-     "lower_bound_design_effect_adjusted": 0.0611029288589775,
-     "paper_level_estimate": 0.5,
-     "paper_level_upper_bound": 0.8468388820247769,
+     "papers_with_at_least_one_event": 2,
+     "estimate": 0.2916666666666667,
+     "design_effect": 5.384,
+     "effective_opportunities": 8.9,
+     "upper_bound_ignoring_clustering": 0.4178311587720126,
+     "upper_bound_design_effect_adjusted": 0.7107591834981906,
+     "lower_bound_design_effect_adjusted": 0.04102316750699653,
+     "paper_level_estimate": 0.3333333333333333,
+     "paper_level_upper_bound": 0.7286616274802477,
      "bootstrap_interval_over_papers": [
-      0.015625,
-      0.4473684210526316
+      0.0,
+      0.5625
      ],
-     "conservative_upper_bound": 0.5726193394082124,
-     "icc_estimate": 0.3531,
+     "conservative_upper_bound": 0.7107591834981906,
+     "icc_estimate": 0.5341,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
+     "weighted_cluster_size": 9.21,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.34172122235578156,
-      "0.1": 0.4060569517565053,
-      "0.25": 0.5219176931136312,
-      "0.5": 0.6066242161054134,
+      "0.0": 0.4178311587720126,
+      "0.1": 0.48699822123130454,
+      "0.25": 0.5774436628428433,
+      "0.5": 0.6550586340562966,
       "1.0": 0.8107446225622292
      }
     },
-    "discrepancies_detected_among_false_statements": {
+    "D1_flag_recall_planted": {
      "events": 2,
-     "opportunities": 38,
+     "opportunities": 26,
      "papers": 6,
      "papers_with_at_least_one_event": 1,
-     "estimate": 0.05263157894736842,
-     "design_effect": 3.066,
-     "effective_opportunities": 12.4,
-     "upper_bound_ignoring_clustering": 0.1565573015894268,
-     "upper_bound_design_effect_adjusted": 0.33868066843403233,
+     "estimate": 0.07692307692307693,
+     "design_effect": 2.327,
+     "effective_opportunities": 11.2,
+     "upper_bound_ignoring_clustering": 0.2228936549944984,
+     "upper_bound_design_effect_adjusted": 0.3643594892472426,
      "lower_bound_design_effect_adjusted": 0.0,
      "paper_level_estimate": 0.16666666666666666,
      "paper_level_upper_bound": 0.5818034092520259,
      "bootstrap_interval_over_papers": [
       0.0,
-      0.16
+      0.18181818181818182
      ],
-     "conservative_upper_bound": 0.33868066843403233,
-     "icc_estimate": 0.0644,
+     "conservative_upper_bound": 0.3643594892472426,
+     "icc_estimate": 0.0,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 9.26,
+     "weighted_cluster_size": 6.31,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.1565573015894268,
-      "0.1": 0.28261852488586087,
-      "0.25": 0.33868066843403233,
+      "0.0": 0.2228936549944984,
+      "0.1": 0.3438251992295894,
+      "0.25": 0.3643594892472426,
       "0.5": 0.520702973591307,
       "1.0": 0.7513953742698184
      }
     },
-    "abstention_on_true_statements": {
-     "events": 53,
-     "opportunities": 70,
+    "D1_flag_recall_natural": {
+     "events": 0,
+     "opportunities": 6,
+     "papers": 3,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 1.333,
+     "effective_opportunities": 4.5,
+     "upper_bound_ignoring_clustering": 0.3930377689970827,
+     "upper_bound_design_effect_adjusted": 0.5271291954984121,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.6315968501359613,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.5271291954984121,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 2.33,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.3930377689970827,
+      "0.1": 0.4507197283469411,
+      "0.25": 0.5271291954984121,
+      "0.5": 0.6315968501359613,
+      "1.0": 0.776393202250021
+     }
+    },
+    "abstention_on_true": {
+     "events": 34,
+     "opportunities": 48,
      "papers": 6,
      "papers_with_at_least_one_event": 6,
-     "estimate": 0.7571428571428571,
-     "design_effect": 5.187,
-     "effective_opportunities": 13.5,
-     "upper_bound_ignoring_clustering": 0.8389585878533179,
-     "upper_bound_design_effect_adjusted": 0.9719466226798241,
-     "lower_bound_design_effect_adjusted": 0.45999455347606744,
+     "estimate": 0.7083333333333334,
+     "design_effect": 5.384,
+     "effective_opportunities": 8.9,
+     "upper_bound_ignoring_clustering": 0.8142589148499424,
+     "upper_bound_design_effect_adjusted": 0.9936088490454551,
+     "lower_bound_design_effect_adjusted": 0.3449413659437034,
      "paper_level_estimate": 1.0,
      "paper_level_upper_bound": 1.0,
      "bootstrap_interval_over_papers": [
-      0.5526315789473685,
-      0.984375
+      0.4375,
+      1.0
      ],
-     "conservative_upper_bound": 0.984375,
-     "icc_estimate": 0.3531,
+     "conservative_upper_bound": 1.0,
+     "icc_estimate": 0.5341,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
+     "weighted_cluster_size": 9.21,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.8389585878533179,
-      "0.1": 0.892553092911325,
-      "0.25": 0.9501018454425771,
-      "0.5": 0.9632285621125349,
-      "1.0": 1.0
+      "0.0": 0.8142589148499424,
+      "0.1": 0.8662258743554812,
+      "0.25": 0.9431531324097532,
+      "0.5": 0.9589768324930035,
+      "1.0": 0.9897937816869886
      }
     },
     "ambiguous": {
      "numbers": 0,
-     "share_of_labelled_numbers": 0.0
+     "statistic_like_numbers": 54,
+     "share_of_statistic_like_numbers": 0.0
     },
     "not_adjudicated": {
-     "confirmations": 0,
-     "flags": 0
+     "confirmations_in_originals": 0,
+     "flags_in_both": 0
     },
     "papers": 6,
     "icc_floor_assumed": 0.25
    },
    "criteria": {
+    "sample_evaluable": false,
+    "reasons_not_evaluable": [
+     "1 contexts; 3 are required",
+     "shortfall: fewer than 20 eligible papers in ecology and organismal biology (v1); no topping up"
+    ],
     "C1_unsupported_confirmations": {
      "met": false,
      "evaluable": false,
      "estimate": 0.0,
-     "conservative_upper_bound": 0.3930377689970827,
-     "paper_level_upper_bound": 0.6315968501359613,
-     "confirmations": 17,
-     "papers": 6,
+     "conservative_upper_bound": 0.4507197283469411,
+     "paper_level_upper_bound": 0.776393202250021,
+     "confirmations": 14,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.16156611126074008,
-      "0.1": 0.25886555089305224,
-      "0.25": 0.3930377689970827,
+      "0.0": 0.1926361756501353,
+      "0.1": 0.3123439780663679,
+      "0.25": 0.4507197283469411,
       "0.5": 0.6315968501359613,
-      "1.0": 0.776393202250021
+      "1.0": 0.9500000000000001
      }
     },
     "C2_misleading_refutations": {
      "met": false,
      "evaluable": false,
+     "met_for_a_confirmation_only_pilot": false,
      "a_per_exposed_claim": {
       "met": false,
       "estimate": 0.0,
@@ -287,87 +378,96 @@
       "evaluable": false,
       "misleading": 0,
       "flags": 2,
-      "upper_bound": 0.776393202250021
+      "conservative_upper_bound": 0.9500000000000001,
+      "bound_ignoring_clustering": 0.776393202250021
+     },
+     "c_among_flags_originals_only_reported": {
+      "misleading": 0,
+      "flags": 0,
+      "conservative_upper_bound": null
      }
     },
     "C3_useful_coverage": {
      "met": false,
      "evaluable": false,
-     "estimate": 0.24285714285714285,
-     "lower_bound": 0.0611029288589775,
-     "estimate_with_ambiguous_numbers_removed": 0.24285714285714285
+     "estimate": 0.2916666666666667,
+     "lower_bound": 0.04102316750699653,
+     "estimate_with_ambiguous_numbers_removed": 0.2916666666666667
     },
     "D1_discrepancy_detection": {
-     "flag_recall": 0.05263157894736842,
-     "lower_bound": 0.0,
-     "false_statements": 38,
+     "flag_recall_planted": 0.07692307692307693,
+     "lower_bound_planted": 0.0,
+     "planted_errors": 26,
+     "flag_recall_natural_reported": 0.0,
+     "natural_false_numbers": 6,
      "necessary_condition_met": false,
      "may_be_described_as_finding_errors": false,
-     "note": "No pass/fail minimum. If the wording threshold is unset or not reached, a pilot is confirmation only."
+     "note": "No pass/fail minimum. If the wording threshold is unset or not reached, nothing may describe the tool as finding errors."
+    },
+    "pilot_scope_if_C4_to_C10_are_met": {
+     "pilot": false,
+     "discrepancy_flags_shown_to": null,
+     "may_be_described_as_finding_errors": false,
+     "every_screen_must_say_that_no_flag_carries_no_information": true
     }
    }
   },
   "openrouter": {
+   "sample": {
+    "design_requested": 60,
+    "design_used": 60,
+    "fallback": false,
+    "papers_per_context_used": 20,
+    "eligible_per_context": {
+     "ecology and organismal biology (v1)": 6
+    },
+    "primary": [
+     "06_pmc5980576",
+     "08_pmc6238128",
+     "09_pmc6476783",
+     "10_pmc5817150",
+     "12_pmc4417136",
+     "17_pmc9309151"
+    ],
+    "secondary_all_eligible": null,
+    "primary_complete_share": 1.0,
+    "evaluable": false,
+    "reasons": [
+     "1 contexts; 3 are required",
+     "shortfall: fewer than 20 eligible papers in ecology and organismal biology (v1); no topping up"
+    ]
+   },
    "metrics": {
-    "unsupported_confirmations_among_confirmations": {
+    "C1_unsupported_among_confirmations": {
      "events": 1,
-     "opportunities": 21,
+     "opportunities": 17,
      "papers": 4,
      "papers_with_at_least_one_event": 1,
-     "estimate": 0.047619047619047616,
-     "design_effect": 2.619,
-     "effective_opportunities": 8.0,
-     "upper_bound_ignoring_clustering": 0.20672537900806995,
-     "upper_bound_design_effect_adjusted": 0.4706794086011315,
+     "estimate": 0.058823529411764705,
+     "design_effect": 2.382,
+     "effective_opportunities": 7.1,
+     "upper_bound_ignoring_clustering": 0.25012445186647636,
+     "upper_bound_design_effect_adjusted": 0.520702973591307,
      "lower_bound_design_effect_adjusted": 0.0,
      "paper_level_estimate": 0.25,
      "paper_level_upper_bound": 0.7513953742698184,
      "bootstrap_interval_over_papers": [
       0.0,
-      0.09375
+      0.10344827586206896
      ],
-     "conservative_upper_bound": 0.4706794086011315,
+     "conservative_upper_bound": 0.520702973591307,
      "icc_estimate": 0.0,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 7.48,
+     "weighted_cluster_size": 6.53,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.20672537900806995,
-      "0.1": 0.33868066843403233,
-      "0.25": 0.4706794086011315,
+      "0.0": 0.25012445186647636,
+      "0.1": 0.3941633024365048,
+      "0.25": 0.520702973591307,
       "0.5": 0.7513953742698184,
       "1.0": 0.9746794344808964
      }
     },
-    "misleading_refutations_among_flags": {
-     "events": 0,
-     "opportunities": 3,
-     "papers": 2,
-     "papers_with_at_least_one_event": 0,
-     "estimate": 0.0,
-     "design_effect": 1.167,
-     "effective_opportunities": 2.6,
-     "upper_bound_ignoring_clustering": 0.6315968501359613,
-     "upper_bound_design_effect_adjusted": 0.776393202250021,
-     "lower_bound_design_effect_adjusted": 0.0,
-     "paper_level_estimate": 0.0,
-     "paper_level_upper_bound": 0.776393202250021,
-     "bootstrap_interval_over_papers": [
-      0.0,
-      0.0
-     ],
-     "conservative_upper_bound": 0.776393202250021,
-     "icc_estimate": 0.0,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 1.67,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.6315968501359613,
-      "0.1": 0.776393202250021,
-      "0.25": 0.776393202250021,
-      "0.5": 0.776393202250021,
-      "1.0": 0.9500000000000001
-     }
-    },
-    "misleading_refutations_per_exposed_number": {
+    "C2a_misleading_per_exposed_number": {
      "events": 0,
      "opportunities": 91,
      "papers": 6,
@@ -396,255 +496,12 @@
       "1.0": 0.4507197283469411
      }
     },
-    "misleading_refutations_per_true_or_not_derivable_number": {
-     "events": 0,
-     "opportunities": 124,
-     "papers": 6,
-     "papers_with_at_least_one_event": 0,
-     "estimate": 0.0,
-     "design_effect": 6.363,
-     "effective_opportunities": 19.5,
-     "upper_bound_ignoring_clustering": 0.023869635435592455,
-     "upper_bound_design_effect_adjusted": 0.14586850331224344,
-     "lower_bound_design_effect_adjusted": 0.0,
-     "paper_level_estimate": 0.0,
-     "paper_level_upper_bound": 0.3930377689970827,
-     "bootstrap_interval_over_papers": [
-      0.0,
-      0.0
-     ],
-     "conservative_upper_bound": 0.14586850331224344,
-     "icc_estimate": 0.0,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 22.45,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.023869635435592455,
-      "0.1": 0.07393758892668655,
-      "0.25": 0.14586850331224344,
-      "0.5": 0.25886555089305224,
-      "1.0": 0.4507197283469411
-     }
-    },
-    "papers_with_a_misleading_refutation": {
+    "C2b_papers_with_a_misleading_flag": {
      "papers": 6,
      "affected": 0,
      "upper_bound": 0.3930377689970827
     },
-    "coverage_of_true_statements": {
-     "events": 20,
-     "opportunities": 70,
-     "papers": 6,
-     "papers_with_at_least_one_event": 4,
-     "estimate": 0.2857142857142857,
-     "design_effect": 4.03,
-     "effective_opportunities": 17.4,
-     "upper_bound_ignoring_clustering": 0.387502634969328,
-     "upper_bound_design_effect_adjusted": 0.5219176931136312,
-     "lower_bound_design_effect_adjusted": 0.07969540880247417,
-     "paper_level_estimate": 0.6666666666666666,
-     "paper_level_upper_bound": 0.9371501082916457,
-     "bootstrap_interval_over_papers": [
-      0.07142857142857142,
-      0.47368421052631576
-     ],
-     "conservative_upper_bound": 0.5219176931136312,
-     "icc_estimate": 0.2555,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.387502634969328,
-      "0.1": 0.47214043929769606,
-      "0.25": 0.5802946483738276,
-      "0.5": 0.6066242161054134,
-      "1.0": 0.8107446225622292
-     }
-    },
-    "coverage_of_true_statements_ambiguous_removed": {
-     "events": 20,
-     "opportunities": 70,
-     "papers": 6,
-     "papers_with_at_least_one_event": 4,
-     "estimate": 0.2857142857142857,
-     "design_effect": 4.03,
-     "effective_opportunities": 17.4,
-     "upper_bound_ignoring_clustering": 0.387502634969328,
-     "upper_bound_design_effect_adjusted": 0.5219176931136312,
-     "lower_bound_design_effect_adjusted": 0.07969540880247417,
-     "paper_level_estimate": 0.6666666666666666,
-     "paper_level_upper_bound": 0.9371501082916457,
-     "bootstrap_interval_over_papers": [
-      0.07142857142857142,
-      0.47368421052631576
-     ],
-     "conservative_upper_bound": 0.5219176931136312,
-     "icc_estimate": 0.2555,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.387502634969328,
-      "0.1": 0.47214043929769606,
-      "0.25": 0.5802946483738276,
-      "0.5": 0.6066242161054134,
-      "1.0": 0.8107446225622292
-     }
-    },
-    "discrepancies_detected_among_false_statements": {
-     "events": 3,
-     "opportunities": 38,
-     "papers": 6,
-     "papers_with_at_least_one_event": 2,
-     "estimate": 0.07894736842105263,
-     "design_effect": 4.375,
-     "effective_opportunities": 8.7,
-     "upper_bound_ignoring_clustering": 0.19158811127255077,
-     "upper_bound_design_effect_adjusted": 0.4706794086011315,
-     "lower_bound_design_effect_adjusted": 0.0,
-     "paper_level_estimate": 0.3333333333333333,
-     "paper_level_upper_bound": 0.7286616274802477,
-     "bootstrap_interval_over_papers": [
-      0.0,
-      0.23684210526315788
-     ],
-     "conservative_upper_bound": 0.4706794086011315,
-     "icc_estimate": 0.4085,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 9.26,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.19158811127255077,
-      "0.1": 0.28261852488586087,
-      "0.25": 0.33868066843403233,
-      "0.5": 0.520702973591307,
-      "1.0": 0.7513953742698184
-     }
-    },
-    "abstention_on_true_statements": {
-     "events": 50,
-     "opportunities": 70,
-     "papers": 6,
-     "papers_with_at_least_one_event": 6,
-     "estimate": 0.7142857142857143,
-     "design_effect": 4.03,
-     "effective_opportunities": 17.4,
-     "upper_bound_ignoring_clustering": 0.80193205556905,
-     "upper_bound_design_effect_adjusted": 0.9153548979694217,
-     "lower_bound_design_effect_adjusted": 0.44595444164069953,
-     "paper_level_estimate": 1.0,
-     "paper_level_upper_bound": 1.0,
-     "bootstrap_interval_over_papers": [
-      0.5263157894736842,
-      0.9285714285714286
-     ],
-     "conservative_upper_bound": 0.9285714285714286,
-     "icc_estimate": 0.2555,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.80193205556905,
-      "0.1": 0.8447224384701163,
-      "0.25": 0.9153548979694217,
-      "0.5": 0.9632285621125349,
-      "1.0": 0.9897937816869886
-     }
-    },
-    "ambiguous": {
-     "numbers": 0,
-     "share_of_labelled_numbers": 0.0
-    },
-    "not_adjudicated": {
-     "confirmations": 0,
-     "flags": 0
-    },
-    "papers": 6,
-    "icc_floor_assumed": 0.25
-   },
-   "criteria": {
-    "C1_unsupported_confirmations": {
-     "met": false,
-     "evaluable": false,
-     "estimate": 0.047619047619047616,
-     "conservative_upper_bound": 0.4706794086011315,
-     "paper_level_upper_bound": 0.7513953742698184,
-     "confirmations": 21,
-     "papers": 6,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.20672537900806995,
-      "0.1": 0.33868066843403233,
-      "0.25": 0.4706794086011315,
-      "0.5": 0.7513953742698184,
-      "1.0": 0.9746794344808964
-     }
-    },
-    "C2_misleading_refutations": {
-     "met": false,
-     "evaluable": false,
-     "a_per_exposed_claim": {
-      "met": false,
-      "estimate": 0.0,
-      "conservative_upper_bound": 0.15331755395727822
-     },
-     "b_per_paper": {
-      "met": false,
-      "affected_papers": 0,
-      "papers": 6,
-      "upper_bound": 0.3930377689970827
-     },
-     "c_among_flags": {
-      "met": false,
-      "evaluable": false,
-      "misleading": 0,
-      "flags": 3,
-      "upper_bound": 0.6315968501359613
-     }
-    },
-    "C3_useful_coverage": {
-     "met": false,
-     "evaluable": false,
-     "estimate": 0.2857142857142857,
-     "lower_bound": 0.07969540880247417,
-     "estimate_with_ambiguous_numbers_removed": 0.2857142857142857
-    },
-    "D1_discrepancy_detection": {
-     "flag_recall": 0.07894736842105263,
-     "lower_bound": 0.0,
-     "false_statements": 38,
-     "necessary_condition_met": false,
-     "may_be_described_as_finding_errors": false,
-     "note": "No pass/fail minimum. If the wording threshold is unset or not reached, a pilot is confirmation only."
-    }
-   }
-  },
-  "union": {
-   "metrics": {
-    "unsupported_confirmations_among_confirmations": {
-     "events": 1,
-     "opportunities": 23,
-     "papers": 4,
-     "papers_with_at_least_one_event": 1,
-     "estimate": 0.043478260869565216,
-     "design_effect": 2.935,
-     "effective_opportunities": 7.8,
-     "upper_bound_ignoring_clustering": 0.19020396669201192,
-     "upper_bound_design_effect_adjusted": 0.520702973591307,
-     "lower_bound_design_effect_adjusted": 0.0,
-     "paper_level_estimate": 0.25,
-     "paper_level_upper_bound": 0.7513953742698184,
-     "bootstrap_interval_over_papers": [
-      0.0,
-      0.07894736842105263
-     ],
-     "conservative_upper_bound": 0.520702973591307,
-     "icc_estimate": 0.0,
-     "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 8.74,
-     "upper_bound_by_assumed_icc": {
-      "0.0": 0.19020396669201192,
-      "0.1": 0.33868066843403233,
-      "0.25": 0.520702973591307,
-      "0.5": 0.7513953742698184,
-      "1.0": 0.9746794344808964
-     }
-    },
-    "misleading_refutations_among_flags": {
+    "C2c_misleading_among_flags": {
      "events": 0,
      "opportunities": 3,
      "papers": 2,
@@ -673,36 +530,36 @@
       "1.0": 0.9500000000000001
      }
     },
-    "misleading_refutations_per_exposed_number": {
+    "C2c_misleading_among_flags_originals_only": {
      "events": 0,
-     "opportunities": 93,
-     "papers": 6,
+     "opportunities": 0,
+     "papers": 0,
      "papers_with_at_least_one_event": 0,
-     "estimate": 0.0,
-     "design_effect": 5.172,
-     "effective_opportunities": 18.0,
-     "upper_bound_ignoring_clustering": 0.03169888899111485,
-     "upper_bound_design_effect_adjusted": 0.16156611126074008,
+     "estimate": null,
+     "design_effect": 1.0,
+     "effective_opportunities": 0.0,
+     "upper_bound_ignoring_clustering": 1.0,
+     "upper_bound_design_effect_adjusted": 1.0,
      "lower_bound_design_effect_adjusted": 0.0,
-     "paper_level_estimate": 0.0,
-     "paper_level_upper_bound": 0.3930377689970827,
+     "paper_level_estimate": null,
+     "paper_level_upper_bound": 1.0,
      "bootstrap_interval_over_papers": [
       0.0,
-      0.0
+      1.0
      ],
-     "conservative_upper_bound": 0.16156611126074008,
-     "icc_estimate": 0.0,
+     "conservative_upper_bound": 1.0,
+     "icc_estimate": null,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 17.69,
+     "weighted_cluster_size": 1.0,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.03169888899111485,
-      "0.1": 0.08433964335062538,
-      "0.25": 0.16156611126074008,
-      "0.5": 0.2831288355631135,
-      "1.0": 0.4507197283469411
+      "0.0": 1.0,
+      "0.1": 1.0,
+      "0.25": 1.0,
+      "0.5": 1.0,
+      "1.0": 1.0
      }
     },
-    "misleading_refutations_per_true_or_not_derivable_number": {
+    "misleading_per_true_not_derivable_or_ambiguous_number": {
      "events": 0,
      "opportunities": 124,
      "papers": 6,
@@ -731,150 +588,179 @@
       "1.0": 0.4507197283469411
      }
     },
-    "papers_with_a_misleading_refutation": {
-     "papers": 6,
-     "affected": 0,
-     "upper_bound": 0.3930377689970827
-    },
-    "coverage_of_true_statements": {
-     "events": 22,
-     "opportunities": 70,
+    "C3_coverage": {
+     "events": 16,
+     "opportunities": 48,
      "papers": 6,
      "papers_with_at_least_one_event": 4,
-     "estimate": 0.3142857142857143,
-     "design_effect": 5.174,
-     "effective_opportunities": 13.5,
-     "upper_bound_ignoring_clustering": 0.41749910632887477,
+     "estimate": 0.3333333333333333,
+     "design_effect": 3.596,
+     "effective_opportunities": 13.3,
+     "upper_bound_ignoring_clustering": 0.461285392796025,
      "upper_bound_design_effect_adjusted": 0.6452007189803869,
      "lower_bound_design_effect_adjusted": 0.10404730759236547,
      "paper_level_estimate": 0.6666666666666666,
      "paper_level_upper_bound": 0.9371501082916457,
      "bootstrap_interval_over_papers": [
-      0.07142857142857142,
-      0.5411764705882353
+      0.08108108108108109,
+      0.5625
      ],
      "conservative_upper_bound": 0.6452007189803869,
-     "icc_estimate": 0.352,
+     "icc_estimate": 0.3162,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
+     "weighted_cluster_size": 9.21,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.41749910632887477,
-      "0.1": 0.5041914941605489,
-      "0.25": 0.5802946483738276,
-      "0.5": 0.6964627874359578,
+      "0.0": 0.461285392796025,
+      "0.1": 0.5261623592178303,
+      "0.25": 0.6404347897823461,
+      "0.5": 0.7486323725918226,
       "1.0": 0.8107446225622292
      }
     },
-    "coverage_of_true_statements_ambiguous_removed": {
-     "events": 22,
-     "opportunities": 70,
+    "C3_coverage_ambiguous_removed": {
+     "events": 16,
+     "opportunities": 48,
      "papers": 6,
      "papers_with_at_least_one_event": 4,
-     "estimate": 0.3142857142857143,
-     "design_effect": 5.174,
-     "effective_opportunities": 13.5,
-     "upper_bound_ignoring_clustering": 0.41749910632887477,
+     "estimate": 0.3333333333333333,
+     "design_effect": 3.596,
+     "effective_opportunities": 13.3,
+     "upper_bound_ignoring_clustering": 0.461285392796025,
      "upper_bound_design_effect_adjusted": 0.6452007189803869,
      "lower_bound_design_effect_adjusted": 0.10404730759236547,
      "paper_level_estimate": 0.6666666666666666,
      "paper_level_upper_bound": 0.9371501082916457,
      "bootstrap_interval_over_papers": [
-      0.07142857142857142,
-      0.5411764705882353
+      0.08108108108108109,
+      0.5625
      ],
      "conservative_upper_bound": 0.6452007189803869,
-     "icc_estimate": 0.352,
+     "icc_estimate": 0.3162,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
+     "weighted_cluster_size": 9.21,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.41749910632887477,
-      "0.1": 0.5041914941605489,
-      "0.25": 0.5802946483738276,
-      "0.5": 0.6964627874359578,
+      "0.0": 0.461285392796025,
+      "0.1": 0.5261623592178303,
+      "0.25": 0.6404347897823461,
+      "0.5": 0.7486323725918226,
       "1.0": 0.8107446225622292
      }
     },
-    "discrepancies_detected_among_false_statements": {
+    "D1_flag_recall_planted": {
      "events": 3,
-     "opportunities": 38,
+     "opportunities": 26,
      "papers": 6,
      "papers_with_at_least_one_event": 2,
-     "estimate": 0.07894736842105263,
-     "design_effect": 4.375,
-     "effective_opportunities": 8.7,
-     "upper_bound_ignoring_clustering": 0.19158811127255077,
-     "upper_bound_design_effect_adjusted": 0.4706794086011315,
-     "lower_bound_design_effect_adjusted": 0.0,
+     "estimate": 0.11538461538461539,
+     "design_effect": 2.68,
+     "effective_opportunities": 9.7,
+     "upper_bound_ignoring_clustering": 0.2719019551555343,
+     "upper_bound_design_effect_adjusted": 0.54964164950661,
+     "lower_bound_design_effect_adjusted": 0.005116196891823632,
      "paper_level_estimate": 0.3333333333333333,
      "paper_level_upper_bound": 0.7286616274802477,
      "bootstrap_interval_over_papers": [
       0.0,
-      0.23684210526315788
+      0.2727272727272727
      ],
-     "conservative_upper_bound": 0.4706794086011315,
-     "icc_estimate": 0.4085,
+     "conservative_upper_bound": 0.54964164950661,
+     "icc_estimate": 0.3166,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 9.26,
+     "weighted_cluster_size": 6.31,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.19158811127255077,
-      "0.1": 0.28261852488586087,
-      "0.25": 0.33868066843403233,
+      "0.0": 0.2719019551555343,
+      "0.1": 0.3438251992295894,
+      "0.25": 0.4700867992791765,
       "0.5": 0.520702973591307,
       "1.0": 0.7513953742698184
      }
     },
-    "abstention_on_true_statements": {
-     "events": 48,
-     "opportunities": 70,
+    "D1_flag_recall_natural": {
+     "events": 0,
+     "opportunities": 6,
+     "papers": 3,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 1.333,
+     "effective_opportunities": 4.5,
+     "upper_bound_ignoring_clustering": 0.3930377689970827,
+     "upper_bound_design_effect_adjusted": 0.5271291954984121,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.6315968501359613,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.5271291954984121,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 2.33,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.3930377689970827,
+      "0.1": 0.4507197283469411,
+      "0.25": 0.5271291954984121,
+      "0.5": 0.6315968501359613,
+      "1.0": 0.776393202250021
+     }
+    },
+    "abstention_on_true": {
+     "events": 32,
+     "opportunities": 48,
      "papers": 6,
      "papers_with_at_least_one_event": 6,
-     "estimate": 0.6857142857142857,
-     "design_effect": 5.174,
-     "effective_opportunities": 13.5,
-     "upper_bound_ignoring_clustering": 0.776699659443121,
-     "upper_bound_design_effect_adjusted": 0.9339504327836904,
-     "lower_bound_design_effect_adjusted": 0.3904148675299166,
+     "estimate": 0.6666666666666666,
+     "design_effect": 3.596,
+     "effective_opportunities": 13.3,
+     "upper_bound_ignoring_clustering": 0.7784852183933062,
+     "upper_bound_design_effect_adjusted": 0.8873342192097179,
+     "lower_bound_design_effect_adjusted": 0.32502848160377495,
      "paper_level_estimate": 1.0,
      "paper_level_upper_bound": 1.0,
      "bootstrap_interval_over_papers": [
-      0.4588235294117647,
-      0.9285714285714286
+      0.4375,
+      0.918918918918919
      ],
-     "conservative_upper_bound": 0.9339504327836904,
-     "icc_estimate": 0.352,
+     "conservative_upper_bound": 0.918918918918919,
+     "icc_estimate": 0.3162,
      "icc_floor_assumed": 0.25,
-     "weighted_cluster_size": 12.86,
+     "weighted_cluster_size": 9.21,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.776699659443121,
-      "0.1": 0.8196154951639502,
-      "0.25": 0.9153548979694217,
-      "0.5": 0.9127355660858496,
+      "0.0": 0.7784852183933062,
+      "0.1": 0.8367181086205865,
+      "0.25": 0.9033416660080431,
+      "0.5": 0.9589768324930035,
       "1.0": 0.9897937816869886
      }
     },
     "ambiguous": {
      "numbers": 0,
-     "share_of_labelled_numbers": 0.0
+     "statistic_like_numbers": 54,
+     "share_of_statistic_like_numbers": 0.0
     },
     "not_adjudicated": {
-     "confirmations": 0,
-     "flags": 0
+     "confirmations_in_originals": 0,
+     "flags_in_both": 0
     },
     "papers": 6,
     "icc_floor_assumed": 0.25
    },
    "criteria": {
+    "sample_evaluable": false,
+    "reasons_not_evaluable": [
+     "1 contexts; 3 are required",
+     "shortfall: fewer than 20 eligible papers in ecology and organismal biology (v1); no topping up"
+    ],
     "C1_unsupported_confirmations": {
      "met": false,
      "evaluable": false,
-     "estimate": 0.043478260869565216,
+     "estimate": 0.058823529411764705,
      "conservative_upper_bound": 0.520702973591307,
      "paper_level_upper_bound": 0.7513953742698184,
-     "confirmations": 23,
-     "papers": 6,
+     "confirmations": 17,
      "upper_bound_by_assumed_icc": {
-      "0.0": 0.19020396669201192,
-      "0.1": 0.33868066843403233,
+      "0.0": 0.25012445186647636,
+      "0.1": 0.3941633024365048,
       "0.25": 0.520702973591307,
       "0.5": 0.7513953742698184,
       "1.0": 0.9746794344808964
@@ -883,6 +769,415 @@
     "C2_misleading_refutations": {
      "met": false,
      "evaluable": false,
+     "met_for_a_confirmation_only_pilot": false,
+     "a_per_exposed_claim": {
+      "met": false,
+      "estimate": 0.0,
+      "conservative_upper_bound": 0.15331755395727822
+     },
+     "b_per_paper": {
+      "met": false,
+      "affected_papers": 0,
+      "papers": 6,
+      "upper_bound": 0.3930377689970827
+     },
+     "c_among_flags": {
+      "met": false,
+      "evaluable": false,
+      "misleading": 0,
+      "flags": 3,
+      "conservative_upper_bound": 0.776393202250021,
+      "bound_ignoring_clustering": 0.6315968501359613
+     },
+     "c_among_flags_originals_only_reported": {
+      "misleading": 0,
+      "flags": 0,
+      "conservative_upper_bound": null
+     }
+    },
+    "C3_useful_coverage": {
+     "met": false,
+     "evaluable": false,
+     "estimate": 0.3333333333333333,
+     "lower_bound": 0.10404730759236547,
+     "estimate_with_ambiguous_numbers_removed": 0.3333333333333333
+    },
+    "D1_discrepancy_detection": {
+     "flag_recall_planted": 0.11538461538461539,
+     "lower_bound_planted": 0.005116196891823632,
+     "planted_errors": 26,
+     "flag_recall_natural_reported": 0.0,
+     "natural_false_numbers": 6,
+     "necessary_condition_met": false,
+     "may_be_described_as_finding_errors": false,
+     "note": "No pass/fail minimum. If the wording threshold is unset or not reached, nothing may describe the tool as finding errors."
+    },
+    "pilot_scope_if_C4_to_C10_are_met": {
+     "pilot": false,
+     "discrepancy_flags_shown_to": null,
+     "may_be_described_as_finding_errors": false,
+     "every_screen_must_say_that_no_flag_carries_no_information": true
+    }
+   }
+  },
+  "union": {
+   "sample": {
+    "design_requested": 60,
+    "design_used": 60,
+    "fallback": false,
+    "papers_per_context_used": 20,
+    "eligible_per_context": {
+     "ecology and organismal biology (v1)": 6
+    },
+    "primary": [
+     "06_pmc5980576",
+     "08_pmc6238128",
+     "09_pmc6476783",
+     "10_pmc5817150",
+     "12_pmc4417136",
+     "17_pmc9309151"
+    ],
+    "secondary_all_eligible": null,
+    "primary_complete_share": 1.0,
+    "evaluable": false,
+    "reasons": [
+     "1 contexts; 3 are required",
+     "shortfall: fewer than 20 eligible papers in ecology and organismal biology (v1); no topping up"
+    ]
+   },
+   "metrics": {
+    "C1_unsupported_among_confirmations": {
+     "events": 1,
+     "opportunities": 19,
+     "papers": 4,
+     "papers_with_at_least_one_event": 1,
+     "estimate": 0.05263157894736842,
+     "design_effect": 2.737,
+     "effective_opportunities": 6.9,
+     "upper_bound_ignoring_clustering": 0.22637424927237804,
+     "upper_bound_design_effect_adjusted": 0.5818034092520259,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.25,
+     "paper_level_upper_bound": 0.7513953742698184,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.08571428571428572
+     ],
+     "conservative_upper_bound": 0.5818034092520259,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 7.95,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.22637424927237804,
+      "0.1": 0.3643594892472426,
+      "0.25": 0.5818034092520259,
+      "0.5": 0.7513953742698184,
+      "1.0": 0.9746794344808964
+     }
+    },
+    "C2a_misleading_per_exposed_number": {
+     "events": 0,
+     "opportunities": 93,
+     "papers": 6,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 5.172,
+     "effective_opportunities": 18.0,
+     "upper_bound_ignoring_clustering": 0.03169888899111485,
+     "upper_bound_design_effect_adjusted": 0.16156611126074008,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.3930377689970827,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.16156611126074008,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 17.69,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.03169888899111485,
+      "0.1": 0.08433964335062538,
+      "0.25": 0.16156611126074008,
+      "0.5": 0.2831288355631135,
+      "1.0": 0.4507197283469411
+     }
+    },
+    "C2b_papers_with_a_misleading_flag": {
+     "papers": 6,
+     "affected": 0,
+     "upper_bound": 0.3930377689970827
+    },
+    "C2c_misleading_among_flags": {
+     "events": 0,
+     "opportunities": 3,
+     "papers": 2,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 1.167,
+     "effective_opportunities": 2.6,
+     "upper_bound_ignoring_clustering": 0.6315968501359613,
+     "upper_bound_design_effect_adjusted": 0.776393202250021,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.776393202250021,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.776393202250021,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 1.67,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.6315968501359613,
+      "0.1": 0.776393202250021,
+      "0.25": 0.776393202250021,
+      "0.5": 0.776393202250021,
+      "1.0": 0.9500000000000001
+     }
+    },
+    "C2c_misleading_among_flags_originals_only": {
+     "events": 0,
+     "opportunities": 0,
+     "papers": 0,
+     "papers_with_at_least_one_event": 0,
+     "estimate": null,
+     "design_effect": 1.0,
+     "effective_opportunities": 0.0,
+     "upper_bound_ignoring_clustering": 1.0,
+     "upper_bound_design_effect_adjusted": 1.0,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": null,
+     "paper_level_upper_bound": 1.0,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      1.0
+     ],
+     "conservative_upper_bound": 1.0,
+     "icc_estimate": null,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 1.0,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 1.0,
+      "0.1": 1.0,
+      "0.25": 1.0,
+      "0.5": 1.0,
+      "1.0": 1.0
+     }
+    },
+    "misleading_per_true_not_derivable_or_ambiguous_number": {
+     "events": 0,
+     "opportunities": 124,
+     "papers": 6,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 6.363,
+     "effective_opportunities": 19.5,
+     "upper_bound_ignoring_clustering": 0.023869635435592455,
+     "upper_bound_design_effect_adjusted": 0.14586850331224344,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.3930377689970827,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.14586850331224344,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 22.45,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.023869635435592455,
+      "0.1": 0.07393758892668655,
+      "0.25": 0.14586850331224344,
+      "0.5": 0.25886555089305224,
+      "1.0": 0.4507197283469411
+     }
+    },
+    "C3_coverage": {
+     "events": 18,
+     "opportunities": 48,
+     "papers": 6,
+     "papers_with_at_least_one_event": 4,
+     "estimate": 0.375,
+     "design_effect": 5.007,
+     "effective_opportunities": 9.6,
+     "upper_bound_ignoring_clustering": 0.5038164957096618,
+     "upper_bound_design_effect_adjusted": 0.7486323725918226,
+     "lower_bound_design_effect_adjusted": 0.0872644339141504,
+     "paper_level_estimate": 0.6666666666666666,
+     "paper_level_upper_bound": 0.9371501082916457,
+     "bootstrap_interval_over_papers": [
+      0.08108108108108109,
+      0.6666666666666666
+     ],
+     "conservative_upper_bound": 0.7486323725918226,
+     "icc_estimate": 0.4881,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 9.21,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.5038164957096618,
+      "0.1": 0.5643373061443663,
+      "0.25": 0.6404347897823461,
+      "0.5": 0.7486323725918226,
+      "1.0": 0.8107446225622292
+     }
+    },
+    "C3_coverage_ambiguous_removed": {
+     "events": 18,
+     "opportunities": 48,
+     "papers": 6,
+     "papers_with_at_least_one_event": 4,
+     "estimate": 0.375,
+     "design_effect": 5.007,
+     "effective_opportunities": 9.6,
+     "upper_bound_ignoring_clustering": 0.5038164957096618,
+     "upper_bound_design_effect_adjusted": 0.7486323725918226,
+     "lower_bound_design_effect_adjusted": 0.0872644339141504,
+     "paper_level_estimate": 0.6666666666666666,
+     "paper_level_upper_bound": 0.9371501082916457,
+     "bootstrap_interval_over_papers": [
+      0.08108108108108109,
+      0.6666666666666666
+     ],
+     "conservative_upper_bound": 0.7486323725918226,
+     "icc_estimate": 0.4881,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 9.21,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.5038164957096618,
+      "0.1": 0.5643373061443663,
+      "0.25": 0.6404347897823461,
+      "0.5": 0.7486323725918226,
+      "1.0": 0.8107446225622292
+     }
+    },
+    "D1_flag_recall_planted": {
+     "events": 3,
+     "opportunities": 26,
+     "papers": 6,
+     "papers_with_at_least_one_event": 2,
+     "estimate": 0.11538461538461539,
+     "design_effect": 2.68,
+     "effective_opportunities": 9.7,
+     "upper_bound_ignoring_clustering": 0.2719019551555343,
+     "upper_bound_design_effect_adjusted": 0.54964164950661,
+     "lower_bound_design_effect_adjusted": 0.005116196891823632,
+     "paper_level_estimate": 0.3333333333333333,
+     "paper_level_upper_bound": 0.7286616274802477,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.2727272727272727
+     ],
+     "conservative_upper_bound": 0.54964164950661,
+     "icc_estimate": 0.3166,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 6.31,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.2719019551555343,
+      "0.1": 0.3438251992295894,
+      "0.25": 0.4700867992791765,
+      "0.5": 0.520702973591307,
+      "1.0": 0.7513953742698184
+     }
+    },
+    "D1_flag_recall_natural": {
+     "events": 0,
+     "opportunities": 6,
+     "papers": 3,
+     "papers_with_at_least_one_event": 0,
+     "estimate": 0.0,
+     "design_effect": 1.333,
+     "effective_opportunities": 4.5,
+     "upper_bound_ignoring_clustering": 0.3930377689970827,
+     "upper_bound_design_effect_adjusted": 0.5271291954984121,
+     "lower_bound_design_effect_adjusted": 0.0,
+     "paper_level_estimate": 0.0,
+     "paper_level_upper_bound": 0.6315968501359613,
+     "bootstrap_interval_over_papers": [
+      0.0,
+      0.0
+     ],
+     "conservative_upper_bound": 0.5271291954984121,
+     "icc_estimate": 0.0,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 2.33,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.3930377689970827,
+      "0.1": 0.4507197283469411,
+      "0.25": 0.5271291954984121,
+      "0.5": 0.6315968501359613,
+      "1.0": 0.776393202250021
+     }
+    },
+    "abstention_on_true": {
+     "events": 30,
+     "opportunities": 48,
+     "papers": 6,
+     "papers_with_at_least_one_event": 6,
+     "estimate": 0.625,
+     "design_effect": 5.007,
+     "effective_opportunities": 9.6,
+     "upper_bound_ignoring_clustering": 0.741747070591359,
+     "upper_bound_design_effect_adjusted": 0.9022531865607242,
+     "lower_bound_design_effect_adjusted": 0.2224411010081292,
+     "paper_level_estimate": 1.0,
+     "paper_level_upper_bound": 1.0,
+     "bootstrap_interval_over_papers": [
+      0.3333333333333333,
+      0.918918918918919
+     ],
+     "conservative_upper_bound": 0.918918918918919,
+     "icc_estimate": 0.4881,
+     "icc_floor_assumed": 0.25,
+     "weighted_cluster_size": 9.21,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.741747070591359,
+      "0.1": 0.8060395506613177,
+      "0.25": 0.8583360283578468,
+      "0.5": 0.9022531865607242,
+      "1.0": 0.9897937816869886
+     }
+    },
+    "ambiguous": {
+     "numbers": 0,
+     "statistic_like_numbers": 54,
+     "share_of_statistic_like_numbers": 0.0
+    },
+    "not_adjudicated": {
+     "confirmations_in_originals": 0,
+     "flags_in_both": 0
+    },
+    "papers": 6,
+    "icc_floor_assumed": 0.25
+   },
+   "criteria": {
+    "sample_evaluable": false,
+    "reasons_not_evaluable": [
+     "1 contexts; 3 are required",
+     "shortfall: fewer than 20 eligible papers in ecology and organismal biology (v1); no topping up"
+    ],
+    "C1_unsupported_confirmations": {
+     "met": false,
+     "evaluable": false,
+     "estimate": 0.05263157894736842,
+     "conservative_upper_bound": 0.5818034092520259,
+     "paper_level_upper_bound": 0.7513953742698184,
+     "confirmations": 19,
+     "upper_bound_by_assumed_icc": {
+      "0.0": 0.22637424927237804,
+      "0.1": 0.3643594892472426,
+      "0.25": 0.5818034092520259,
+      "0.5": 0.7513953742698184,
+      "1.0": 0.9746794344808964
+     }
+    },
+    "C2_misleading_refutations": {
+     "met": false,
+     "evaluable": false,
+     "met_for_a_confirmation_only_pilot": false,
      "a_per_exposed_claim": {
       "met": false,
       "estimate": 0.0,
@@ -899,23 +1194,37 @@
       "evaluable": false,
       "misleading": 0,
       "flags": 3,
-      "upper_bound": 0.6315968501359613
+      "conservative_upper_bound": 0.776393202250021,
+      "bound_ignoring_clustering": 0.6315968501359613
+     },
+     "c_among_flags_originals_only_reported": {
+      "misleading": 0,
+      "flags": 0,
+      "conservative_upper_bound": null
      }
     },
     "C3_useful_coverage": {
      "met": false,
      "evaluable": false,
-     "estimate": 0.3142857142857143,
-     "lower_bound": 0.10404730759236547,
-     "estimate_with_ambiguous_numbers_removed": 0.3142857142857143
+     "estimate": 0.375,
+     "lower_bound": 0.0872644339141504,
+     "estimate_with_ambiguous_numbers_removed": 0.375
     },
     "D1_discrepancy_detection": {
-     "flag_recall": 0.07894736842105263,
-     "lower_bound": 0.0,
-     "false_statements": 38,
+     "flag_recall_planted": 0.11538461538461539,
+     "lower_bound_planted": 0.005116196891823632,
+     "planted_errors": 26,
+     "flag_recall_natural_reported": 0.0,
+     "natural_false_numbers": 6,
      "necessary_condition_met": false,
      "may_be_described_as_finding_errors": false,
-     "note": "No pass/fail minimum. If the wording threshold is unset or not reached, a pilot is confirmation only."
+     "note": "No pass/fail minimum. If the wording threshold is unset or not reached, nothing may describe the tool as finding errors."
+    },
+    "pilot_scope_if_C4_to_C10_are_met": {
+     "pilot": false,
+     "discrepancy_flags_shown_to": null,
+     "may_be_described_as_finding_errors": false,
+     "every_screen_must_say_that_no_flag_carries_no_information": true
     }
    }
   }

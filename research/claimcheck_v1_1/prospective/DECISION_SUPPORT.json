@@ -64,13 +64,26 @@
   "replay_setup_hours_per_job": 0.5,
   "recall_values": [
    0.05,
-   0.079,
    0.1,
+   0.115,
    0.15,
    0.2,
    0.25,
    0.3,
    0.4
+  ],
+  "feasibility_minutes_per_paper": [
+   30,
+   45,
+   57.5,
+   60,
+   75,
+   90
+  ],
+  "feasibility_screening_candidates_per_context": [
+   90,
+   300,
+   600
   ],
   "per_call_success_grid": [
    0.9,
@@ -82,7 +95,7 @@
   ]
  },
  "claim_level_tolerance": {
-  "note": "events placed at most one per paper (ICC estimate 0, so the floor governs); the scorer deflates events and opportunities by the design effect; 'design_120_style' deflates only opportunities, as design_120.py does",
+  "note": "events placed at most one per paper (ICC estimate 0, so the floor governs); the scorer divides events and opportunities by the design effect; 'draft_2_table_rule' divides only opportunities, as draft 2's design_120.py did",
   "C1": [
    {
     "per_paper": "2.5 (2 and 3 alternating)",
@@ -99,7 +112,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 2
+      "draft_2_table_rule_events_allowed": 2
      },
      "0.1": {
       "design_effect": 1.16,
@@ -111,7 +124,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 2
+      "draft_2_table_rule_events_allowed": 2
      },
      "0.25": {
       "design_effect": 1.4,
@@ -123,7 +136,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 1,
+      "draft_2_table_rule_events_allowed": 1,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -136,7 +149,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      }
     }
    },
@@ -155,7 +168,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 8
+      "draft_2_table_rule_events_allowed": 8
      },
      "0.1": {
       "design_effect": 1.16,
@@ -167,7 +180,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 6
+      "draft_2_table_rule_events_allowed": 6
      },
      "0.25": {
       "design_effect": 1.4,
@@ -179,7 +192,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 5,
+      "draft_2_table_rule_events_allowed": 5,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -192,7 +205,7 @@
       },
       "events_allowed_by_scorer": 5,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 3
+      "draft_2_table_rule_events_allowed": 3
      }
     }
    },
@@ -211,7 +224,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 6
+      "draft_2_table_rule_events_allowed": 6
      },
      "0.1": {
       "design_effect": 1.3,
@@ -223,7 +236,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 4
+      "draft_2_table_rule_events_allowed": 4
      },
      "0.25": {
       "design_effect": 1.75,
@@ -235,7 +248,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 2,
+      "draft_2_table_rule_events_allowed": 2,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -248,7 +261,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 1
+      "draft_2_table_rule_events_allowed": 1
      }
     }
    },
@@ -267,7 +280,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 15
+      "draft_2_table_rule_events_allowed": 15
      },
      "0.1": {
       "design_effect": 1.3,
@@ -279,7 +292,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 11
+      "draft_2_table_rule_events_allowed": 11
      },
      "0.25": {
       "design_effect": 1.75,
@@ -291,7 +304,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 7,
+      "draft_2_table_rule_events_allowed": 7,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -304,7 +317,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 4
+      "draft_2_table_rule_events_allowed": 4
      }
     }
    },
@@ -323,7 +336,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 8
+      "draft_2_table_rule_events_allowed": 8
      },
      "0.1": {
       "design_effect": 1.4,
@@ -335,7 +348,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 5
+      "draft_2_table_rule_events_allowed": 5
      },
      "0.25": {
       "design_effect": 2.0,
@@ -347,7 +360,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 2,
+      "draft_2_table_rule_events_allowed": 2,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -360,7 +373,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 1
+      "draft_2_table_rule_events_allowed": 1
      }
     }
    },
@@ -379,7 +392,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 20
+      "draft_2_table_rule_events_allowed": 20
      },
      "0.1": {
       "design_effect": 1.4,
@@ -391,7 +404,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 13
+      "draft_2_table_rule_events_allowed": 13
      },
      "0.25": {
       "design_effect": 2.0,
@@ -403,7 +416,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 8,
+      "draft_2_table_rule_events_allowed": 8,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -416,7 +429,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "paper-level bound",
-      "design_120_style_events_allowed": 4
+      "draft_2_table_rule_events_allowed": 4
      }
     }
    }
@@ -437,7 +450,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 1
+      "draft_2_table_rule_events_allowed": 1
      },
      "0.1": {
       "design_effect": 1.3,
@@ -449,7 +462,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      },
      "0.25": {
       "design_effect": 1.75,
@@ -461,7 +474,7 @@
       },
       "events_allowed_by_scorer": -1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": -1,
+      "draft_2_table_rule_events_allowed": -1,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -474,7 +487,7 @@
       },
       "events_allowed_by_scorer": -1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": -1
+      "draft_2_table_rule_events_allowed": -1
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -498,7 +511,7 @@
       },
       "events_allowed_by_scorer": 2,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 4
+      "draft_2_table_rule_events_allowed": 4
      },
      "0.1": {
       "design_effect": 1.3,
@@ -510,7 +523,7 @@
       },
       "events_allowed_by_scorer": 2,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 2
+      "draft_2_table_rule_events_allowed": 2
      },
      "0.25": {
       "design_effect": 1.75,
@@ -522,7 +535,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 1,
+      "draft_2_table_rule_events_allowed": 1,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -535,7 +548,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -559,7 +572,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 1
+      "draft_2_table_rule_events_allowed": 1
      },
      "0.1": {
       "design_effect": 1.4,
@@ -571,7 +584,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      },
      "0.25": {
       "design_effect": 2.0,
@@ -583,7 +596,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0,
+      "draft_2_table_rule_events_allowed": 0,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -596,7 +609,7 @@
       },
       "events_allowed_by_scorer": -1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": -1
+      "draft_2_table_rule_events_allowed": -1
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -620,7 +633,7 @@
       },
       "events_allowed_by_scorer": 3,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 6
+      "draft_2_table_rule_events_allowed": 6
      },
      "0.1": {
       "design_effect": 1.4,
@@ -632,7 +645,7 @@
       },
       "events_allowed_by_scorer": 3,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 3
+      "draft_2_table_rule_events_allowed": 3
      },
      "0.25": {
       "design_effect": 2.0,
@@ -644,7 +657,7 @@
       },
       "events_allowed_by_scorer": 2,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 1,
+      "draft_2_table_rule_events_allowed": 1,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -657,7 +670,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -681,7 +694,7 @@
       },
       "events_allowed_by_scorer": 2,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 4
+      "draft_2_table_rule_events_allowed": 4
      },
      "0.1": {
       "design_effect": 1.7,
@@ -693,7 +706,7 @@
       },
       "events_allowed_by_scorer": 1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 1
+      "draft_2_table_rule_events_allowed": 1
      },
      "0.25": {
       "design_effect": 2.75,
@@ -705,7 +718,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0,
+      "draft_2_table_rule_events_allowed": 0,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -718,7 +731,7 @@
       },
       "events_allowed_by_scorer": -1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": -1
+      "draft_2_table_rule_events_allowed": -1
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -742,7 +755,7 @@
       },
       "events_allowed_by_scorer": 4,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 11
+      "draft_2_table_rule_events_allowed": 11
      },
      "0.1": {
       "design_effect": 1.7,
@@ -754,7 +767,7 @@
       },
       "events_allowed_by_scorer": 4,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 5
+      "draft_2_table_rule_events_allowed": 5
      },
      "0.25": {
       "design_effect": 2.75,
@@ -766,7 +779,7 @@
       },
       "events_allowed_by_scorer": 4,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 2,
+      "draft_2_table_rule_events_allowed": 2,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -779,7 +792,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -803,7 +816,7 @@
       },
       "events_allowed_by_scorer": 3,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 6
+      "draft_2_table_rule_events_allowed": 6
      },
      "0.1": {
       "design_effect": 1.9,
@@ -815,7 +828,7 @@
       },
       "events_allowed_by_scorer": 3,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 2
+      "draft_2_table_rule_events_allowed": 2
      },
      "0.25": {
       "design_effect": 3.25,
@@ -827,7 +840,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0,
+      "draft_2_table_rule_events_allowed": 0,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -840,7 +853,7 @@
       },
       "events_allowed_by_scorer": -1,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": -1
+      "draft_2_table_rule_events_allowed": -1
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -864,7 +877,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 15
+      "draft_2_table_rule_events_allowed": 15
      },
      "0.1": {
       "design_effect": 1.9,
@@ -876,7 +889,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 6
+      "draft_2_table_rule_events_allowed": 6
      },
      "0.25": {
       "design_effect": 3.25,
@@ -888,7 +901,7 @@
       },
       "events_allowed_by_scorer": 6,
       "binding_condition_at_one_more": "estimate",
-      "design_120_style_events_allowed": 2,
+      "draft_2_table_rule_events_allowed": 2,
       "verified_by_stats_proportion": true
      },
      "0.5": {
@@ -901,7 +914,7 @@
       },
       "events_allowed_by_scorer": 0,
       "binding_condition_at_one_more": "claim-level bound",
-      "design_120_style_events_allowed": 0
+      "draft_2_table_rule_events_allowed": 0
      }
     },
     "lowest_possible_bound_no_flag_by_icc": {
@@ -1149,31 +1162,32 @@
    "flags": 3,
    "misleading": 0,
    "papers": 2,
-   "scorer_bound_ignoring_clustering": 0.6316,
-   "conservative_bound_with_floor": 0.7764
+   "bound_ignoring_clustering": 0.6316,
+   "conservative_bound_with_floor": 0.7764,
+   "flags_on_original_articles": 0
   },
   "expected_correct_flags_on_planted_errors": {
    "4 per paper (protocol 5 text)": {
     "60": {
      "0.05": 12.0,
-     "0.079": 19.0,
+     "0.115": 27.6,
      "0.2": 48.0
     },
     "120": {
      "0.05": 24.0,
-     "0.079": 37.9,
+     "0.115": 55.2,
      "0.2": 96.0
     }
    },
    "4.33 per paper (frozen mutate.py, v1 held-out)": {
     "60": {
      "0.05": 13.0,
-     "0.079": 20.5,
+     "0.115": 29.9,
      "0.2": 52.0
     },
     "120": {
      "0.05": 26.0,
-     "0.079": 41.1,
+     "0.115": 59.8,
      "0.2": 104.0
     }
    }
@@ -1183,25 +1197,25 @@
     "natural_F_per_paper": 1.0,
     "planted_per_paper": 4.33,
     "exposed_non_F_numbers_per_document": 7.75,
-    "flag_recall": 0.079,
-    "source": "DEMONSTRATION_ON_DEVELOPMENT_DATA.json union arm (38 F numbers, 93 exposed, 6 papers, 3/38 detected) and 26 planted in v1 held-out"
+    "flag_recall": 0.115,
+    "source": "DEMONSTRATION_ON_DEVELOPMENT_DATA.json union arm: 26 planted errors (3 flagged), 6 natural F numbers, 93 exposed numbers, 6 papers; natural errors assumed detected as often as planted ones"
    },
    "rows": [
     {
      "misleading_per_exposed_number": 0.005,
-     "real_share_of_flags_originals_only": 0.671,
-     "real_share_of_flags_originals_and_copies": 0.866
+     "real_share_of_flags_originals_only": 0.749,
+     "real_share_of_flags_originals_and_copies": 0.904
     },
     {
      "misleading_per_exposed_number": 0.02,
-     "real_share_of_flags_originals_only": 0.337,
-     "real_share_of_flags_originals_and_copies": 0.617
+     "real_share_of_flags_originals_only": 0.427,
+     "real_share_of_flags_originals_and_copies": 0.702
     }
    ]
   }
  },
  "D1_flag_recall": {
-  "development_icc_estimate_union": 0.4085,
+  "development_icc_estimate_union": 0.3166,
   "rows": [
    {
     "papers": 60,
@@ -1211,23 +1225,23 @@
     "lower_bound_at_observed_recall": {
      "0.25": {
       "0.05": 0.0191,
-      "0.079": 0.0398,
       "0.1": 0.0566,
+      "0.115": 0.0741,
       "0.15": 0.0982,
       "0.2": 0.1418,
       "0.25": 0.187,
       "0.3": 0.2333,
       "0.4": 0.3216
      },
-     "0.41": {
-      "0.05": 0.0184,
-      "0.079": 0.0374,
-      "0.1": 0.0511,
-      "0.15": 0.0952,
-      "0.2": 0.1342,
-      "0.25": 0.1745,
-      "0.3": 0.2243,
-      "0.4": 0.3189
+     "0.32": {
+      "0.05": 0.0215,
+      "0.1": 0.0573,
+      "0.115": 0.0701,
+      "0.15": 0.0968,
+      "0.2": 0.1383,
+      "0.25": 0.1814,
+      "0.3": 0.2255,
+      "0.4": 0.3165
      }
     },
     "observed_recall_needed_for_lower_bound": {
@@ -1235,7 +1249,7 @@
       "detections": 37,
       "observed_recall": 0.154,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.04,
        "0.15": 0.456,
        "0.2": 0.971,
        "0.25": 1.0,
@@ -1247,7 +1261,7 @@
       "detections": 51,
       "observed_recall": 0.212,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.006,
        "0.2": 0.338,
        "0.25": 0.924,
@@ -1259,7 +1273,7 @@
       "detections": 63,
       "observed_recall": 0.263,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.011,
        "0.25": 0.351,
@@ -1271,7 +1285,7 @@
       "detections": 90,
       "observed_recall": 0.375,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.0,
        "0.25": 0.0,
@@ -1294,23 +1308,23 @@
     "lower_bound_at_observed_recall": {
      "0.25": {
       "0.05": 0.0178,
-      "0.079": 0.0426,
       "0.1": 0.0561,
+      "0.115": 0.063,
       "0.15": 0.0917,
       "0.2": 0.1369,
       "0.25": 0.1759,
       "0.3": 0.2241,
       "0.4": 0.3154
      },
-     "0.41": {
-      "0.05": 0.0168,
-      "0.079": 0.0323,
-      "0.1": 0.0495,
-      "0.15": 0.0867,
-      "0.2": 0.1264,
-      "0.25": 0.1679,
-      "0.3": 0.2107,
-      "0.4": 0.2997
+     "0.32": {
+      "0.05": 0.0142,
+      "0.1": 0.0493,
+      "0.115": 0.0649,
+      "0.15": 0.0894,
+      "0.2": 0.1322,
+      "0.25": 0.1769,
+      "0.3": 0.2136,
+      "0.4": 0.3085
      }
     },
     "observed_recall_needed_for_lower_bound": {
@@ -1318,7 +1332,7 @@
       "detections": 42,
       "observed_recall": 0.162,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.015,
        "0.15": 0.326,
        "0.2": 0.951,
        "0.25": 1.0,
@@ -1330,7 +1344,7 @@
       "detections": 56,
       "observed_recall": 0.215,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.003,
        "0.2": 0.29,
        "0.25": 0.915,
@@ -1342,7 +1356,7 @@
       "detections": 73,
       "observed_recall": 0.281,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.001,
        "0.25": 0.142,
@@ -1354,7 +1368,7 @@
       "detections": 101,
       "observed_recall": 0.388,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.0,
        "0.25": 0.0,
@@ -1377,23 +1391,23 @@
     "lower_bound_at_observed_recall": {
      "0.25": {
       "0.05": 0.0282,
-      "0.079": 0.0517,
       "0.1": 0.0702,
+      "0.115": 0.0828,
       "0.15": 0.1149,
       "0.2": 0.1577,
       "0.25": 0.2049,
       "0.3": 0.2528,
       "0.4": 0.347
      },
-     "0.41": {
-      "0.05": 0.0253,
-      "0.079": 0.0508,
-      "0.1": 0.0661,
-      "0.15": 0.1099,
-      "0.2": 0.1554,
-      "0.25": 0.1977,
-      "0.3": 0.2452,
-      "0.4": 0.3424
+     "0.32": {
+      "0.05": 0.0285,
+      "0.1": 0.0685,
+      "0.115": 0.0825,
+      "0.15": 0.111,
+      "0.2": 0.1551,
+      "0.25": 0.204,
+      "0.3": 0.2499,
+      "0.4": 0.3436
      }
     },
     "observed_recall_needed_for_lower_bound": {
@@ -1401,7 +1415,7 @@
       "detections": 65,
       "observed_recall": 0.135,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.094,
        "0.15": 0.831,
        "0.2": 1.0,
        "0.25": 1.0,
@@ -1413,7 +1427,7 @@
       "detections": 91,
       "observed_recall": 0.19,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.011,
        "0.2": 0.733,
        "0.25": 0.999,
@@ -1425,7 +1439,7 @@
       "detections": 118,
       "observed_recall": 0.246,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.008,
        "0.25": 0.601,
@@ -1437,7 +1451,7 @@
       "detections": 168,
       "observed_recall": 0.35,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.0,
        "0.25": 0.0,
@@ -1460,23 +1474,23 @@
     "lower_bound_at_observed_recall": {
      "0.25": {
       "0.05": 0.0278,
-      "0.079": 0.0489,
       "0.1": 0.0674,
+      "0.115": 0.0788,
       "0.15": 0.1098,
       "0.2": 0.1537,
       "0.25": 0.1987,
       "0.3": 0.2488,
       "0.4": 0.3426
      },
-     "0.41": {
+     "0.32": {
       "0.05": 0.0245,
-      "0.079": 0.0428,
-      "0.1": 0.0622,
-      "0.15": 0.103,
-      "0.2": 0.1456,
-      "0.25": 0.1895,
-      "0.3": 0.24,
-      "0.4": 0.3323
+      "0.1": 0.0654,
+      "0.115": 0.0784,
+      "0.15": 0.1051,
+      "0.2": 0.151,
+      "0.25": 0.1981,
+      "0.3": 0.2414,
+      "0.4": 0.3399
      }
     },
     "observed_recall_needed_for_lower_bound": {
@@ -1484,7 +1498,7 @@
       "detections": 73,
       "observed_recall": 0.14,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.043,
        "0.15": 0.748,
        "0.2": 1.0,
        "0.25": 1.0,
@@ -1496,7 +1510,7 @@
       "detections": 103,
       "observed_recall": 0.198,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.002,
        "0.2": 0.561,
        "0.25": 0.998,
@@ -1508,7 +1522,7 @@
       "detections": 131,
       "observed_recall": 0.252,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.002,
        "0.25": 0.476,
@@ -1520,7 +1534,7 @@
       "detections": 187,
       "observed_recall": 0.36,
       "chance_if_true_recall": {
-       "0.079": 0.0,
+       "0.115": 0.0,
        "0.15": 0.0,
        "0.2": 0.0,
        "0.25": 0.0,
@@ -2174,70 +2188,143 @@
  },
  "development_icc_estimates": {
   "gemini": {
-   "coverage_of_true_statements": {
-    "events": 17,
-    "opportunities": 70,
-    "icc_estimate": 0.3531
+   "C3_coverage": {
+    "events": 14,
+    "opportunities": 48,
+    "icc_estimate": 0.5341
    },
-   "discrepancies_detected_among_false_statements": {
+   "D1_flag_recall_planted": {
     "events": 2,
-    "opportunities": 38,
-    "icc_estimate": 0.0644
-   },
-   "unsupported_confirmations_among_confirmations": {
-    "events": 0,
-    "opportunities": 17,
+    "opportunities": 26,
     "icc_estimate": 0.0
    },
-   "misleading_refutations_per_exposed_number": {
+   "C1_unsupported_among_confirmations": {
+    "events": 0,
+    "opportunities": 14,
+    "icc_estimate": 0.0
+   },
+   "C2a_misleading_per_exposed_number": {
     "events": 0,
     "opportunities": 36,
     "icc_estimate": 0.0
    }
   },
   "openrouter": {
-   "coverage_of_true_statements": {
-    "events": 20,
-    "opportunities": 70,
-    "icc_estimate": 0.2555
+   "C3_coverage": {
+    "events": 16,
+    "opportunities": 48,
+    "icc_estimate": 0.3162
    },
-   "discrepancies_detected_among_false_statements": {
+   "D1_flag_recall_planted": {
     "events": 3,
-    "opportunities": 38,
-    "icc_estimate": 0.4085
+    "opportunities": 26,
+    "icc_estimate": 0.3166
    },
-   "unsupported_confirmations_among_confirmations": {
+   "C1_unsupported_among_confirmations": {
     "events": 1,
-    "opportunities": 21,
+    "opportunities": 17,
     "icc_estimate": 0.0
    },
-   "misleading_refutations_per_exposed_number": {
+   "C2a_misleading_per_exposed_number": {
     "events": 0,
     "opportunities": 91,
     "icc_estimate": 0.0
    }
   },
   "union": {
-   "coverage_of_true_statements": {
-    "events": 22,
-    "opportunities": 70,
-    "icc_estimate": 0.352
+   "C3_coverage": {
+    "events": 18,
+    "opportunities": 48,
+    "icc_estimate": 0.4881
    },
-   "discrepancies_detected_among_false_statements": {
+   "D1_flag_recall_planted": {
     "events": 3,
-    "opportunities": 38,
-    "icc_estimate": 0.4085
+    "opportunities": 26,
+    "icc_estimate": 0.3166
    },
-   "unsupported_confirmations_among_confirmations": {
+   "C1_unsupported_among_confirmations": {
     "events": 1,
-    "opportunities": 23,
+    "opportunities": 19,
     "icc_estimate": 0.0
    },
-   "misleading_refutations_per_exposed_number": {
+   "C2a_misleading_per_exposed_number": {
     "events": 0,
     "opportunities": 93,
     "icc_estimate": 0.0
    }
   }
+ },
+ "feasibility_study": {
+  "pilot_adjudication": {
+   "hours_each_adjudicator": [
+    5.5,
+    8.75
+   ],
+   "resolver_hours": [
+    1.12,
+    1.88
+   ],
+   "person_hours_two_adjudicators_and_resolver": [
+    12.1,
+    19.4
+   ]
+  },
+  "smoke_run_configuration_P": {
+   "papers": 8,
+   "documents": 16,
+   "calls": 32,
+   "nemotron_calls": 16,
+   "nemotron_usd_at_measured_sizes": 0.16
+  },
+  "adjudication_at_120_papers_by_measured_minutes_per_paper": {
+   "30": {
+    "hours_each_two_adjudicators": 60.0,
+    "person_hours": 120.0,
+    "hours_each_six_adjudicators": 20.0
+   },
+   "45": {
+    "hours_each_two_adjudicators": 90.0,
+    "person_hours": 180.0,
+    "hours_each_six_adjudicators": 30.0
+   },
+   "57.5": {
+    "hours_each_two_adjudicators": 115.0,
+    "person_hours": 230.0,
+    "hours_each_six_adjudicators": 38.3
+   },
+   "60": {
+    "hours_each_two_adjudicators": 120.0,
+    "person_hours": 240.0,
+    "hours_each_six_adjudicators": 40.0
+   },
+   "75": {
+    "hours_each_two_adjudicators": 150.0,
+    "person_hours": 300.0,
+    "hours_each_six_adjudicators": 50.0
+   },
+   "90": {
+    "hours_each_two_adjudicators": 180.0,
+    "person_hours": 360.0,
+    "hours_each_six_adjudicators": 60.0
+   }
+  },
+  "screening_hours_three_contexts_by_candidates_per_context_and_minutes_each": {
+   "90": {
+    "10": 45.0,
+    "20": 90.0
+   },
+   "300": {
+    "10": 150.0,
+    "20": 300.0
+   },
+   "600": {
+    "10": 300.0,
+    "20": 600.0
+   }
+  },
+  "plan_rates_minutes_per_paper": [
+   35,
+   57.5
+  ]
  }
 }

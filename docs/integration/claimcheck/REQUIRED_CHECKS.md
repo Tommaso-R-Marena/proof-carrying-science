@@ -102,6 +102,23 @@ check and changes no ruleset. `claim-check-page` (the browser journey with the r
 stays a supplementary, path-scoped check; if the owner wants it required too, give it the same
 change-detection aggregate as the core workflow first.
 
+## What to verify by hand in the rulesets
+
+The tools used for this work list branches and say only whether one is protected: on 2026-11-18
+core `main` (`bc78660b`) and site `main` (`e8136625`) were both reported protected. Please check in
+**Settings → Rules → Rulesets** of each repository:
+
+* **core `main`:** required checks include `verified-public-integration` and `source-policy`; none
+  of `repository-integrity`, `python-assurance`, `lean-kernel`, `v06-byte-contract`,
+  `verified-integration` or `required-gate` is required (they are skipped, i.e. passing, on every
+  pull request); no retired Cloudflare or CircleCI context is required; pull requests, resolved
+  conversations, linear history, no force-push or deletion; no bypass actor.
+* **site `main`:** `site-full-gate` is required; `claim-check-page` is not (path-filtered); the same
+  pull-request, linear-history and no-bypass settings.
+* After C1: add `claimcheck-required` (GitHub Actions) to core `main`.
+* Tags: whether a rule restricts who may create `pcs-source-intake/*` tags (the retained-source
+  tags are owner-held).
+
 ## Consequences
 
 | Decision | If approved | If not |

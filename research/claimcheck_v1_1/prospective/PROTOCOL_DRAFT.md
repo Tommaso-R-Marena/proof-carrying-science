@@ -1,7 +1,9 @@
 # ClaimCheck v1.1 prospective evaluation: protocol for owner review
 
-**Status: DRAFT 2 (2026-11-15), amended after the owner's decision "amend before approval". Not
-approved, not frozen, not run.** Every change from draft 1 and its reason is in
+**Status: DRAFT 3 (2026-11-18), UNAPPROVED: not approved, not frozen, not run.** Draft 3 resolves
+the nineteen inconsistencies that the decision package found in draft 2
+([`DECISION_PACKAGE.md`](DECISION_PACKAGE.md), section 12); every change, its reason and its test are
+in [`AMENDMENTS_DRAFT_3.md`](AMENDMENTS_DRAFT_3.md), and the changes from draft 1 in
 [`AMENDMENTS_DRAFT_2.md`](AMENDMENTS_DRAFT_2.md). No new paper has been fetched, screened,
 labelled or scored for this evaluation. On approval, this file and `criteria.json` are frozen by
 digest (section 12) and nothing in them changes afterwards.
@@ -49,21 +51,38 @@ any paper.
     non-adversarial case);
   * `rules`: cue-word rules (secondary);
   * `adversary`: the free-choice adversary of `dev/adversary.py`, on every printed number.
-* **Models:** `gemini-3.6-flash` and `nvidia/nemotron-3-ultra-550b-a55b:free`, as in v1. A provider
-  failure is recorded as a failure of that arm for that paper. No substitute model is used.
-  Both identifiers were still served on 2026-11-15 ([`MODEL_ACCESS.md`](MODEL_ACCESS.md)); they are
-  checked again and frozen, with prompt version and sampling parameters (temperature 0), at approval.
+* **Models** ([`model_config.json`](model_config.json), frozen at approval): `gemini-3.6-flash` in
+  both configurations; for Nemotron, `nvidia/nemotron-3-ultra-550b-a55b:free` in configuration F
+  (free tiers, as in v1) and the paid route `nvidia/nemotron-3-ultra-550b-a55b` in configuration P.
+  A provider failure is recorded as a failure of that arm for that paper. No substitute model is
+  used: the spending guard refuses any identifier other than the frozen one. Both models were still
+  listed on 2026-11-15 ([`MODEL_ACCESS.md`](MODEL_ACCESS.md)); they are listed again before approval
+  and immediately before step 3, and frozen with prompt version and sampling parameters
+  (temperature 0).
 * **Calls:** one call per model per document. A paper has two documents, the original and the
-  planted-error copy, so **240 calls** for 60 papers. As implemented in
-  `claimcheck_v1/providers.py` (to be frozen): a transport failure, a quota refusal (HTTP 429) or a
+  planted-error copy, so **240 calls** for 60 papers (480 for 120). They are made by
+  `prospective/budget.py` (`fetch_proposals`), which calls the frozen
+  `claimcheck_v1.propose.propose_with_model` once per model per document and nothing else: the
+  "critic" calls of v1's `benchmark/run.py` are not made. The frozen ledger's attempt budget is set to
+  four attempts per call. As implemented in
+  `claimcheck_v1/providers.py` (frozen): a transport failure, a quota refusal (HTTP 429) or a
   server error is repeated with the identical request at most three times, after 15, 30 and 45 s
   (40, 80 and 120 s after a 429); a deterministic failure (HTTP 400, 401, 403, 404, or an answer with
   no text) is not repeated; an answer whose text does not parse is not repeated either (at
   temperature 0 a repeat would most likely return the same text). Every attempt is recorded and
   every answer is cached by request digest, so no request is ever sent twice after it succeeded. A paper is *primary-complete* when both
-  models returned a parseable answer for both of its documents. **If fewer than 90 % of papers are
-  primary-complete, the primary analysis is not evaluable.** (In v1, 7 of 14 first calls to one
-  provider failed on its free tier; a free-tier run is therefore likely to end "not evaluable".)
+  models returned a parseable answer for both of its documents. **If fewer than 90 % of the papers
+  of the primary analysis are primary-complete, the primary analysis is not evaluable**
+  (`score.select_primary`). (In v1, 7 of 14 first calls to one provider failed on its free tier.)
+* **Pacing and sending again** (`budget.fetch_proposals`, `model_config.json`): a call is not started
+  once its provider's daily request limit is reached (configuration F: 20 Gemini requests per UTC
+  day, the v1 observation); it is deferred, not failed, and made on a later day. A call whose
+  attempts all failed with a transport failure, HTTP 429, a server error or the daily limit may be
+  sent again in later sessions at least 24 h apart, in at most three sessions in all, and only before
+  step 4 (no verification result exists then). A deterministic failure, an answer that does not
+  parse and a refusal by the cost cap are final.
+* **Spending** (section 13): every request passes the guard of `prospective/budget.py`, which
+  refuses, before sending, any request whose worst case could take committed spending past a cap.
 
 ## 3. Sampling frame and selection
 
@@ -130,8 +149,14 @@ articles during their training. They never see data rows.
 3. **Provisional labels** by the annotation procedure of v1 (AI-assisted, each truth value
    confirmed by a separate calculation). These are needed to plant errors and as a fallback. They are
    never called expert labels and are superseded by human adjudication wherever it exists.
-4. **Planted-error copy:** one per paper, by `claimcheck_v1/benchmark/mutate.py` with the seed
-   `prospective-2026`, up to four numbers that the provisional labels mark as true.
+4. **Planted-error copy:** one per paper, by the frozen `claimcheck_v1/benchmark/mutate.py` as it is
+   (draft 3 describes the code instead of changing it). Its random generator is seeded with SHA-256
+   of `claimcheck-mutation-v1:<slug>`, so the slug, assigned at acquisition before any system run,
+   fixes the copy. Each number that the provisional labels mark as true and derivable is changed
+   with probability ½ (its last digits, or a printed unit swapped for a neighbouring one), and kept
+   only if a calculation that shares no code with the system confirms that it is then false. There
+   is no cap: in v1's held-out papers this planted 1 to 9 errors per paper (26 in 6 papers). The
+   copy's labels are carried over from the original's adjudication (section 7).
 5. No prompt-injection copies (v1 measured that separately; the verifier ignores model obedience).
 
 Then the benchmark is frozen by digest. After that, steps 6 to 8 run once.
@@ -142,11 +167,21 @@ Then the benchmark is frozen by digest. After that, steps 6 to 8 run once.
 1. Software freeze: digest over `research/claimcheck_v1_1/` (code) and the v1 freeze files.
 2. Enumeration, contamination check, ordering, screening (section 3), acquisition, materials
    (section 5). Benchmark freeze.
-3. Model calls for the proposer arms, cached. Budget: one call per model per document.
-4. One verification run of all arms. Kernel runs use two workers, at most two claims per proof
-   file, a 900 s limit per file. A run that is killed or times out yields UNKNOWN and is counted.
+3. Model calls for the proposer arms (`budget.fetch_proposals`), cached, under the spending guard.
+   Budget: one call per model per document.
+4. One verification run of all arms. Kernel runs use two workers, **one claim per proof file**
+   (`batch_size` 1; the v1.1 default of 4 is not used), a 900 s limit per file, and a **7 GB limit
+   per Lean process**, enforced by `prospective/lean_guard.py` named in `PCS_CLAIMCHECK_LEAN` (the
+   frozen kernel call is unchanged). A run that times out or is stopped by the limit exits non-zero,
+   yields UNKNOWN and is counted. Lean is tied to its guard (parent-death signal), so a run cut off
+   by the 900 s limit leaves no Lean process running without the memory limit. The guard logs a
+   start record for every run and, for each run that ends under it, its time and peak memory for C7.
 5. Free-choice adversary on every original article; everything it gets through is put to the kernel.
-6. Independent replay of every bundle on a clean hosted runner.
+6. Independent replay of every bundle on clean hosted runners: 12 jobs (6 for 60 papers) of papers
+   assigned by `score.replay_shards`, each job limited to 5.5 h, on runners with at least the
+   kernel's memory limit. A job that does not finish for infrastructure reasons (time-out, runner
+   lost) is run again and the event recorded; a bundle that replays with a different result fails
+   C4 (`score.judge_c4`).
 7. Blinded adjudication package to the adjudicators (section 8).
 8. Analysis exactly as in section 11. Report everything, including failures, time-outs and arms
    that did not run.
@@ -158,6 +193,16 @@ frozen file ends the prospective evaluation; whatever follows is exploratory and
 
 Unit of analysis: one printed number at one position in one document. Cluster: one paper (its
 original and its planted-error copy belong to the same cluster).
+
+**Scopes** (`score.scoped_metrics`): C1 and C3 are computed on original articles; C2 on original
+articles and planted-error copies; D1's flag recall on the planted errors of the copies, with the F
+numbers of the originals reported apart; the share of A numbers on original articles.
+
+**Labels of the planted-error copy** (`score.copy_class`): carried over from the original's
+adjudication; the copy is not adjudicated separately. An unchanged number keeps its class. A changed
+number is a planted error (F, under the adjudicated reading of the original number) only where the
+original number was adjudicated T; where it was adjudicated N, A or F, the changed number keeps that
+class and is not a planted error, so a flag on it is misleading if it is N or A.
 
 Adjudicated class of a number (section 8):
 
@@ -201,8 +246,9 @@ by the system; only people decide that, outside this evaluation).
 **Ambiguous numbers (A).** Primary analysis, chosen to be the unfavourable one for the system in
 each metric: a CONFIRMATION or a flag on an A number is an error (C1 and C2 numerators); A numbers
 count in the C2 denominators; A numbers count *against* coverage (C3 denominator T + A). All A
-numbers stay in the evidence with both adjudicators' notes. If more than 20 % of the statistic-like
-numbers are A, the labels cannot carry the criteria and C1 to C3 are not evaluable.
+numbers stay in the evidence with both adjudicators' notes. If more than 20 % of the numbers of the
+original articles that are adjudicated T, F or A (N excluded) are A, the labels cannot carry the
+criteria and C1 to C3 are not evaluable.
 
 ## 8. Independent human adjudication
 
@@ -235,13 +281,13 @@ In `criteria.json` (machine-readable; the scorer reads it; tested to agree). Sup
 | C1 | unsupported confirmations among confirmations (primary arm, originals) | estimate ≤ 2 %; claim-level upper bound ≤ 5 % with the assumed minimum clustering; papers with one, among papers with a confirmation: upper bound ≤ 10 % |
 | C2a | misleading flags per exposed T, N or A number | estimate ≤ 0.5 %; claim-level upper bound ≤ 2 % with the assumed minimum clustering |
 | C2b | papers with a misleading flag | upper bound ≤ 5 % |
-| C2c | misleading flags among all flags | upper bound ≤ 50 %; needs at least 5 flags |
+| C2c | misleading flags among all flags (originals and copies) | clustered upper bound ≤ 50 %; needs at least 5 flags |
 | C3 | correct confirmations among T and A numbers | estimate ≥ 25 %; lower bound ≥ 15 % |
 | D1 | discrepancy detection | reported; governs wording (9a); no pass mark |
 | C4 | independent replay on a clean runner | 100 % of bundles |
 | C5 | adversary: unsupported confirmations among its confirmations; papers with an adversarial flag on a T or N number | ≤ 5 % (upper bound ≤ 10 %); paper-level upper bound ≤ 5 % |
-| C6 | decided verdicts on numbers adjudicated ambiguous; share of ambiguous numbers | none; ≤ 20 % |
-| C7 | kernel cost on the reference machine | median ≤ 60 s, 95th percentile ≤ 300 s per claim, ≤ 8 GB, ≥ 95 % of runs complete |
+| C6 | decided verdicts on numbers adjudicated ambiguous; share of A among the T, F and A numbers of the originals | none; ≤ 20 % |
+| C7 | kernel cost on the reference machine, one claim per proof file, tables within the supported size of their statistic | median ≤ 60 s, 95th percentile ≤ 300 s per claim, ≤ 8 GB, ≥ 95 % of runs complete |
 | C8 | usability study, ≥ 5 researchers new to PCS and Lean | ≥ 80 % task completion; ≥ 80 % correct on each critical scope question |
 | C9 | independent human adjudication | done |
 | C10 | owner authorisation | given |
@@ -251,11 +297,27 @@ not changed after approval. They were set from what a supervised screening aid m
 from development results; on development data coverage was 24 % and 31 %, and one confirmation of 23
 is counted as unsupported.
 
-C2c is new. Its meaning: with 95 % confidence, a flag is more often a real discrepancy than not. It
-is the weakest requirement under which a flag is an alert at all, and it is not derived from what
-the system achieves. With the few flags expected (two or three per six papers in development) a
-tighter bound could not be shown by 60 papers: 25 flags with none misleading give an upper bound of
-11 %.
+C2c: among flags on original articles and planted-error copies, with 95 % confidence more flags
+are real discrepancies than not. It is the weakest requirement under which a flag is an alert at
+all, and it is not derived from what the system achieves. Its bound is the clustered
+(conservative) bound used for every claim-level criterion (draft 2's scorer ignored clustering):
+with flags two per flagged paper and none misleading, at least 8 flags are needed; 5 flags in 5
+papers pass (`DECISION_SUPPORT.json`). Planted errors raise the share of real discrepancies far
+above a natural document, so the same share on original articles alone is reported with its bound;
+it is not a criterion.
+
+**C2 and the pilot's scope** (`score.judge`; criteria `pilot_scope_rule`): C2 is met for a pilot
+that shows discrepancy flags to pilot users when C2a, C2b and C2c are all met. When C2a and C2b are
+met but C2c fails or cannot be evaluated, C2 is met only for a *confirmation-only* pilot, in which
+discrepancy flags reach the supervising PCS reviewer and nobody else. When C2a or C2b fails or
+cannot be evaluated, there is no pilot.
+
+**C7's supported size** (criteria `supported_size_bytes`, provisional): count 51,209 bytes; mean,
+standard deviation and Pearson correlation 33,760; minimum, median and every statistic not yet
+measured 8,219: the largest tables at which each statistic was accepted in `../perf/results.json`
+(one claim per file). Claims on larger tables are still run; their UNKNOWN results count as
+abstentions in C1 to C3; they are outside C7 and reported with their completed share
+(`score.judge_c7`). The capacity run of section 13 replaces these figures before approval.
 
 **Scope by context.** A context in which any paper has a misleading flag, or whose C1 estimate
 exceeds 2 %, is outside the scope of a pilot even if the pooled criteria are met.
@@ -268,7 +330,8 @@ for finding errors. Draft 2 therefore measures detection explicitly:
 
 * **flag recall** = correct flags / numbers adjudicated F, separately for planted errors (known by
   construction, enough of them) and for F numbers found in original articles (few; reported with
-  their interval and not pooled with planted ones);
+  their interval and not pooled with planted ones). The necessary condition and the wording rule
+  below use planted errors only (`score.judge`);
 * **mismatch shown** = F numbers for which some record shows a kernel-proved mismatch under the
   adjudicated reading, flagged or under REQUIRE_HUMAN_REVIEW / F numbers. This is what a reviewer
   who reads the review list could find;
@@ -284,11 +347,13 @@ What is fixed instead:
 
 1. a **necessary condition**: the lower bound of flag recall on planted errors must exceed the
    upper bound of C2a. Otherwise flags are not associated with real mismatches at all;
-2. a **rule on wording**: unless the lower bound of flag recall reaches a level the owner sets
-   before the run (field `wording_rule` in `criteria.json`, empty in this draft; 20 % is suggested
-   as a judgement, not a derivation), a pilot is *confirmation only*: nothing may describe the tool
-   as finding errors, and every screen and report says that the absence of a flag carries no
-   information;
+2. a **rule on wording**: unless the lower bound of flag recall on planted errors (design effect
+   with the ICC floor, primary arm, contexts pooled) reaches a level the owner sets before the run
+   (field `wording_rule` in `criteria.json`, empty in this draft; 0.20 is proposed in the decision
+   package as a judgement, not a derivation), nothing may describe the tool as finding errors, and
+   every screen and report says that the absence of a flag carries no information. If it is
+   reached, the wording is limited to "in a test with deliberately altered numbers it flagged at
+   least X % of them", with the measured recall and its interval;
 3. the measured recall, with its interval, is printed wherever flags are described.
 
 ## 10. Sample size and uncertainty
@@ -324,8 +389,11 @@ against accepting a poor system. It gives a good system only a moderate chance o
   effective sample cannot exceed about 60 / 0.25 = 240 however many numbers a paper has). Unequal
   numbers per paper raise these bounds (the weighted cluster size is mean + variance / mean).
   **One misleading flag anywhere fails C2a at 60 papers** (bound 2.6 to 3.4 %). At 120 papers no flag
-  gives 0.8 to 1.1 % and one flag 1.3 to 1.7 %, which passes; two pass with 8 or more exposed numbers
-  per paper. So at 60 papers C2a can be met only with zero misleading flags and at least about five
+  gives 0.8 to 1.1 % and one flag 1.3 to 1.7 %, which passes. The scorer divides events as well as
+  opportunities by the design effect, so C2a alone accepts 1, 2, 4 or 6 flags in different papers
+  with 4, 5, 8 or 10 exposed numbers per paper; together with C2b, which allows one affected paper,
+  C2 accepts misleading flags in one paper only: 1 if spread, up to 2 (5 exposed numbers per paper)
+  or 5 (10) if all are in that paper (`DESIGN_120.json`). So at 60 papers C2a can be met only with zero misleading flags and at least about five
   exposed numbers per paper. (Draft 2 of 2026-11-15 printed 2.2, 2.0 and 1.9 % for 5, 8 and 10; those
   figures did not follow from `stats.py` and are corrected here; the conclusion is unchanged.)
 * **C1's claim-level bound of 5 %** at 150 confirmations and ICC 0.25 with about four confirmations
@@ -372,13 +440,16 @@ screening except by this rule.
 | C2b: affected papers allowed (bound ≤ 5 %) | 0 | 1 |
 | C2b: chance of passing if 0.5 % / 1 % / 2 % / 5 % of papers are affected | 74 / 55 / 30 / 4.6 % | 88 / 66 / 31 / 1.6 % |
 | C2a: bound with no flag, 5 / 10 exposed numbers per paper | 2.0 / 1.6 % | 1.0 / 0.8 % |
-| C2a: misleading flags allowed, 5 / 10 exposed numbers per paper | 0 / 0 | 1 / 2 |
-| C1: unsupported confirmations allowed, 2.5 / 5 confirmations in every paper | 1 / 2 | 5 / 8 |
+| C2a alone: misleading flags allowed (in different papers), 5 / 10 exposed numbers per paper | 0 / 0 | 2 / 6 |
+| C2 (a and b together): misleading flags allowed, spread / all in one paper, 5 or 10 exposed numbers per paper | 0 / 0 or 0 / 0 | 1 / 2 or 1 / 5 |
+| C1: unsupported confirmations allowed (all three conditions), 2.5 / 5 confirmations in every paper | 1 / 1 | 6 / 6 |
 | C1 paper level: affected papers allowed (bound ≤ 10 %) | 1 | 6 |
 | C3: lower bound when the estimate is exactly 25 %, 8 numbers per paper | 19.8 % | 21.1 % |
 | per context, paper-level bound with no event | 13.9 % | 7.2 % |
 
-The larger sample mainly removes the zero-tolerance character of C2: at 60 papers a single paper
+Every row is the scorer's own rule; draft 2 divided only the opportunities by the design effect and
+left C1's estimate and paper-level conditions out (`tests/test_design_120.py` checks each row at its
+boundary against the scorer). The larger sample mainly removes the zero-tolerance character of C2: at 60 papers a single paper
 with a misleading flag, or a single misleading flag, fails it, so a failure says little about the
 system. It does not make discrepancy detection measurable with useful precision, and it does not
 make per-context results strong: a context with no event still only bounds its paper-level rate
@@ -390,14 +461,14 @@ at 7.2 %.
 | --- | --- | --- |
 | model calls (2 models × 2 documents per paper) | 240 | 480 |
 | HTTP requests in the worst case (each call and three retries after a 429) | 960 | 1,920 |
-| prompt / output tokens | 0.62–1.06 M / 0.07–0.72 M | 1.25–2.11 M / 0.14–1.44 M |
+| prompt / output tokens (per successful call 2,088–5,160 / 134–3,032) | 0.50–1.24 M / 0.03–0.73 M | 1.00–2.48 M / 0.06–1.46 M |
 | Nemotron half, paid configuration | about 1.2 USD (at most about 5) | about 2.4 USD (at most about 10) |
 | Gemini half | price not confirmed | price not confirmed |
 | proposed hard cap, paid configuration | 15 USD | 30 USD |
-| kernel time on the reference machine | about 10 h | about 20 h |
-| hosted replay of every bundle (C4) | about 10 runner-hours | about 20 runner-hours, in several jobs (6 h job limit) |
-| adjudication, if two adjudicators each cover all papers | 35–55 h each (70–110 person-hours) | 70–110 h each (140–220 person-hours) |
-| resolver | 11–19 h | 22–38 h |
+| kernel time on the reference machine (to be re-estimated by the capacity run, section 13) | about 10 h | about 20 h |
+| hosted replay of every bundle (C4) | about 10 runner-hours, 6 jobs | about 20 runner-hours, 12 jobs (6 h job limit; each ≤ 5.5 h) |
+| adjudication, if two adjudicators each cover all papers | 35–57.5 h each (70–115 person-hours) | 70–115 h each (140–230 person-hours) |
+| resolver | 11.2–18.8 h | 22.5–37.5 h |
 
 Adjudication figures are assumptions (adjudication plan, section 4); the preliminary round measures
 them before the owner commits to a size. With two adjudicators per context (six people) each covers
@@ -409,8 +480,11 @@ them before the owner commits to a size. With two adjudicators per context (six 
   all contexts pooled, clustered by paper, ambiguous numbers handled as in section 7.
 * **Fixed before the run and not changed:** the primary arm; the secondary arms and comparisons
   listed here; the ICC floor; the wording threshold of 9a; the list of sensitivity analyses.
-* **Analysis population:** all frozen papers. Papers that are not primary-complete are kept (they
-  contribute abstentions) and listed.
+* **Analysis population:** the primary-analysis set that `score.select_primary` takes from the frozen
+  papers: three contexts with at least 20 eligible papers each (no topping up), the first 20 of each
+  in hash order (40 in the 120-paper design), or the fallback of 10a. Papers that are not
+  primary-complete are kept (they contribute abstentions) and listed; below 90 % primary-complete,
+  the primary analysis is not evaluable.
 * **Per context:** every proportion with its interval for each context, reported whatever it shows.
   What may generalise across contexts is what does not depend on how a field writes: that a decided
   verdict implies the kernel result (proved, `claimcheck_assurance_v1`), replay, fail-closed
@@ -424,7 +498,8 @@ them before the owner commits to a size. With two adjudicators per context (six 
 * **Sensitivity analyses** (all reported; a conclusion that changes under any of them is stated as
   not robust): ambiguous numbers treated as T, as N, and removed; provisional labels in place of
   adjudicated ones; either adjudicator's "error" counted as an error before resolution; papers that
-  are not primary-complete removed; the v1 policy on the same receipts; each context alone.
+  are not primary-complete removed; the v1 policy on the same receipts; each context alone; the ICC
+  floor at 0.5 instead of 0.25.
 * **Multiplicity:** all criteria must hold jointly, so no adjustment is applied; no single
   favourable interval is reported as a success on its own.
 * **No interim looks.** Steps 3 to 5 of section 6 run once. No result is inspected before every
@@ -440,6 +515,7 @@ them before the owner commits to a size. With two adjudicators per context (six 
 | This protocol | _on approval_ | |
 | `criteria.json` | _on approval_ | |
 | `queries.json` | _on approval_ | |
+| `model_config.json` (identifiers, prices, caps) | _on approval_ | |
 | v1.1 software | _after approval, before step 2_ | |
 | Prospective benchmark | _after step 2, before step 3_ | |
 | Owner approval (who, when, how recorded) | | |
@@ -448,15 +524,25 @@ them before the owner commits to a size. With two adjudicators per context (six 
 
 240 model calls for 60 papers (480 for 120; the two designs side by side in 10a), before repeats:
 one per model per document, two documents per paper. Draft 1 said 120 and had forgotten the planted-error copies. Measured in v1,
-per call: about 2,600 to 4,400 prompt tokens and 300 to 3,000 output tokens. Free tiers and a capped
+per successful call: about 2,100 to 5,200 prompt tokens and 130 to 3,000 output tokens (draft 2
+divided Gemini's totals by all attempts, failed ones included). Free tiers and a capped
 paid configuration are in [`MODEL_ACCESS.md`](MODEL_ACCESS.md). The Nemotron half of a paid run
 (120 calls) is estimated at about 1.2 US dollars, at most about 5 if every call were repeated three
 times (about 2.4 and 10 for 120 papers); the Gemini price could not be read from the provider's
 model listing and must be confirmed before any paid use. A total cap of 15 US dollars is proposed
-for 60 papers and 30 for 120, to be enforced by the calling code, not by a provider setting. No paid
-call has been made. Kernel time about 10 hours per 60 papers on the reference machine, and the same
-again for the hosted replay of C4, which at 120 papers must be split into several jobs. Adjudication: roughly 1,500 numbers per
-adjudicator per 60 papers, estimated 35 to 55 hours each
+for 60 papers and 30 for 120, with sub-caps per provider (`model_config.json`), enforced in three
+layers: (1) the calling code, `prospective/budget.py`, refuses before sending any request whose worst
+case (the bytes of the whole request body and the maximum output, at the frozen prices) could take
+committed spending past a cap or sub-cap, refuses any provider without a frozen price, keeps a
+synced spend log and resumes from it, and stops for good if a response ever costs more than its
+worst case; (2) the frozen ledger's attempt budget, set to four attempts per call; (3) hard limits in
+the provider accounts, set by the owner where a provider offers them (a budget alert that only
+notifies is not a limit). No paid call has been made. Kernel time about 10 hours per 60 papers on
+the reference machine (an estimate without a documented basis: before approval, a capacity run on
+synthetic tables and the eight development tables under the configuration of step 4 re-estimates
+it and replaces the provisional supported sizes of C7), and the same again for the hosted replay of
+C4, in 6 or 12 jobs (step 6). Adjudication: roughly 1,500 numbers per
+adjudicator per 60 papers, estimated 35 to 57.5 hours each
 ([`../adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md`](../adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md)).
 
 ## 14. What this evaluation cannot show
