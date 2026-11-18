@@ -55,9 +55,11 @@ def _retained_sources(root,main,intake,tag,heads,controls):
  before=_tree(root,intake);after=_tree(root,'HEAD')
  assert {p:v for p,v in before.items() if p not in controls}=={p:v for p,v in after.items() if p not in controls},'Qualified non-control source bytes, modes or census differ'
  for name in controls:
-  assert name in after and after[name][:2]==('100644','blob'),'Tracked regular integration control required: '+name
+  assert name in after and after[name][1]=='blob' and after[name][0] in {'100644','100755'},'Tracked regular integration control required: '+name
   path=Path(root)/name
   assert path.is_file() and not path.is_symlink(),'Regular integration control required: '+name
+  if after[name][0]=='100755':
+   assert name.startswith(PCCR_ADMISSION_PREFIX) or name.endswith('.sh'),'Unexpected executable control mode: '+name
  assert not git(root,'status','--porcelain','--untracked-files=all'),'Working source differs from committed snapshot'
  return {'qualified_source_commit':intake,'retention_tag':tag,
          'original_ancestry_preserved_at_intake':True,
