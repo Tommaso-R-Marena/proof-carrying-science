@@ -112,20 +112,35 @@ retained negative finding, not a model ranking.
 | Point-ID regression (deterministic X:=Z collapses bounds) | pass |
 | Wald ATE cross-check when bounds collapse | pass (must equal LP ATE) |
 
-Unit tests: **35/35** pass.
+Unit tests: **35/35** pass (superseded by v1.4 count below).
 
 Gemini `gemini-3.5-flash-lite` on `{T10,T09,T06}`: **3/3** accepted
 (evidence: `evidence/gemini-3.5-flash-lite-iv-v3/`). T10 emitted
 `strategy=instrument` with `asserts_identifiable=false` → `bounds_certified`.
+
+## Closed-form IV + front-door Lean SCM (v1.4)
+
+| Addition | Status |
+|----------|--------|
+| Balke–Pearl 1997 closed forms vs exact LP | must match (π₀, π₁, ACE) |
+| Instrumental inequality gate | refuse bounds if violated |
+| `claimed_p_do` inside/outside IV interval | accept-with-note / reject |
+| Lean `SCMFrontDoor` | `frontdoor = do`; `5/16`, `9/32`, ATE `1/32`; assoc `17/48 ≠ 5/16` |
+| Adversarial cross-strategy attacks | T09↛instrument, T10↛frontdoor rejected |
+
+Unit tests: **40/40** pass. Qualified snapshot: `results/qualified-v4/`.
+
+Gemini `gemini-3.5-flash-lite` on `{T10,T09,T02,T06}`: **4/4** accepted
+(evidence: `evidence/gemini-3.5-flash-lite-v4-adv/`).
 
 ## Non-claims
 
 - Not production PCS authority
 - Not frontier SOTA / not a general causality theorem for arbitrary DAGs
 - API key material is absent from the repository and evidence files
-- Front-door Lean module certifies concrete graphical side-conditions, not
-  full probabilistic soundness of the front-door functional in Lean
-- Instrument Lean module certifies concrete IV side-conditions, not sharp
-  Balke–Pearl polytope soundness in Lean; the LP lives in Python
+- Front-door Lean modules certify concrete graphical / finite-SCM facts, not
+  general probabilistic soundness for arbitrary DAGs
+- Instrument Lean module certifies concrete IV side-conditions; closed-form
+  and LP live in Python and are cross-checked against each other
 - `formal_bindings` name suite-instance theorems; they do not transfer to
   arbitrary DAGs
