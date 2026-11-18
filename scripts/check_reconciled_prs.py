@@ -20,10 +20,18 @@ CONTROLS={
   '.github/workflows/model-assurance-studio-research.yml',
   'research/integration_v2/reconcile.py','research/integration_v2/test_reconcile.py',
   'docs/integration/2026-11-05/RECONCILIATION_V22.json',
-  'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md'},
+  'docs/integration/2026-11-05/RECONCILIATION_V23.json',
+  'docs/integration/2026-11-05/ASSURANCE_MIRAGE_V23.md',
+  'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md',
+  'research/README.md'},
  'proof-carrying-science-site':COMMON_CONTROLS|{
   '.github/workflows/open-pr-reconciliation.yml',
   'docs/reconciliation/RECONCILIATION.md','docs/reconciliation/LINEAR_HISTORY.md'},
+}
+# Reviewed research trees admitted by V23; every path under a prefix may differ from intake.
+REVIEWED_PREFIXES={
+ 'proof-carrying-science':frozenset({'research/assurance_mirage_v1/'}),
+ 'proof-carrying-science-site':frozenset(),
 }
 
 def _tree(root,ref):
@@ -34,20 +42,27 @@ def _tree(root,ref):
    meta,path=row.split(b'\t',1);result[path.decode()]=tuple(meta.decode().split())
  return result
 
-def _retained_sources(root,main,intake,tag,heads,controls):
+def _noncontrol(tree,controls,prefixes=frozenset()):
+ return {p:v for p,v in tree.items()
+         if p not in controls and not any(p.startswith(prefix) for prefix in prefixes)}
+
+def _retained_sources(root,main,intake,tag,heads,controls,prefixes=frozenset()):
  assert git(root,'rev-parse','refs/tags/'+tag+'^{commit}')==intake,'Retained source tag differs'
  for earlier,later in [(main,'HEAD'),(main,intake),*[(sha,intake) for sha in heads]]:
   subprocess.run(['git','-C',str(root),'merge-base','--is-ancestor',earlier,later],check=True,capture_output=True)
  before=_tree(root,intake);after=_tree(root,'HEAD')
- assert {p:v for p,v in before.items() if p not in controls}=={p:v for p,v in after.items() if p not in controls},'Qualified non-control source bytes, modes or census differ'
+ assert _noncontrol(before,controls,prefixes)==_noncontrol(after,controls,prefixes),'Qualified non-control source bytes, modes or census differ'
  for name in controls:
   assert name in after and after[name][:2]==('100644','blob'),'Tracked regular integration control required: '+name
   path=Path(root)/name
   assert path.is_file() and not path.is_symlink(),'Regular integration control required: '+name
  assert not git(root,'status','--porcelain','--untracked-files=all'),'Working source differs from committed snapshot'
+ reviewed=sorted(p for p in after if any(p.startswith(prefix) for prefix in prefixes))
  return {'qualified_source_commit':intake,'retention_tag':tag,
          'original_ancestry_preserved_at_intake':True,
-         'selected_noncontrol_source_files_checked':len(set(before)-controls),
+         'selected_noncontrol_source_files_checked':len(_noncontrol(before,controls,prefixes)),
+         'reviewed_prefix_files_checked':len(reviewed),
+         'reviewed_prefixes':sorted(prefixes),
          'current_main_may_use_squash_history':True}
 
 
@@ -86,7 +101,7 @@ def check(roots,manifest):
   lineage={}
   if name in INTAKES:
    intake,tag=INTAKES[name]
-   lineage=_retained_sources(root,main,intake,tag,[p['head'] for p in prs],CONTROLS[name])
+   lineage=_retained_sources(root,main,intake,tag,[p['head'] for p in prs],CONTROLS[name],REVIEWED_PREFIXES.get(name,frozenset()))
   else:
    subprocess.run(['git','-C',str(root),'merge-base','--is-ancestor',main,'HEAD'],check=True,capture_output=True)
   if name=='proof-carrying-science':
