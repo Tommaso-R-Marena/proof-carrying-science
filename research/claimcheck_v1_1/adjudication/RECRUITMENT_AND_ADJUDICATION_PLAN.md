@@ -48,11 +48,17 @@ arm, every number with a provisional label, and ten further sampled numbers: abo
 | --- | --- | --- | --- |
 | reading methods, opening the data | 10 to 20 min | | |
 | classifying (most numbers are quick; T and F need a computation) | 1 to 1.5 min per number | | |
-| **per adjudicator** | 35 to 57 min | **35 to 55 h** | 70 to 110 h |
+| **per adjudicator** | 35 to 57.5 min | **35 to 57.5 h** | 70 to 115 h |
 | resolver (assuming 15 to 25 % disagreement, about 3 min each) | | 11 to 19 h | 22 to 38 h |
 
 These figures are assumptions, not measurements: nobody has yet adjudicated a package and no timing
 exists. The preliminary round (section 9) measures them before the owner commits to a sample size.
+(Draft 3: the upper figures were 55 and 110 h, which correspond to 55 minutes per paper, not the 57.5
+of the rates above; corrected.)
+
+The planted-error copy of a paper is not adjudicated separately. Its labels are carried over from
+the original (protocol 7): an unchanged number keeps its class, and a number changed by the
+planted-error step is a planted error only where the original number was adjudicated T.
 
 ## 5. Blinding
 

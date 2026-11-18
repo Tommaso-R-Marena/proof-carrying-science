@@ -33,25 +33,35 @@ class DecisionSupport(unittest.TestCase):
         clustered = {r["flags_per_flagged_paper"]: r for r in self.t["C2c"]["with_design_effect_floor_0_25"]}
         self.assertGreater(clustered[2]["min_flags_none_misleading"], 5)
 
-    def test_scorer_tolerance_differs_from_the_design_tables(self):
+    def test_the_design_tables_now_follow_the_scorer(self):
         row = next(r for r in self.t["claim_level_tolerance"]["C2a"] if r["papers"] == 120 and r["per_paper"] == "10")
         cell = row["by_icc"]["0.25"]
-        self.assertEqual(cell["design_120_style_events_allowed"], 2)        # protocol 10a
-        self.assertEqual(cell["events_allowed_by_scorer"], 6)               # score.judge: events deflated, estimate cap binds
+        self.assertEqual(cell["draft_2_table_rule_events_allowed"], 2)        # what draft 2's protocol 10a printed
+        self.assertEqual(cell["events_allowed_by_scorer"], 6)                 # score.judge: events divided too, estimate cap binds
         self.assertEqual(cell["binding_condition_at_one_more"], "estimate")
+        design = json.loads((HERE / "DESIGN_120.json").read_text(encoding="utf-8"))
+        d120 = next(d for d in design["designs"] if d["papers"] == 120)["statistics"]
+        self.assertEqual(d120["C2a_by_exposed_numbers_per_paper"]["10"]["flags_allowed_alone"], 6)
+        joint = {(r["papers"], r["exposed_per_paper"]): r for r in self.t["C2_a_and_b_together"]["rows"]}
+        self.assertEqual(d120["C2a_by_exposed_numbers_per_paper"]["10"]["flags_allowed_all_in_one_paper"],
+                         joint[(120, 10)]["misleading_flags_allowed_all_in_one_paper"])
 
     def test_the_scorer_end_to_end_accepts_six_and_rejects_seven_at_120_papers(self):
-        """Synthetic per-paper counts through score.metrics and score.judge: 120 papers, 10 exposed numbers
-        and 5 confirmations each, k papers with one misleading flag and one unsupported confirmation."""
-        from collections import Counter
+        """Synthetic records through score.paper_counts and score.evaluate: 120 papers in three contexts, 10 exposed
+        numbers and 5 confirmations each; k papers with one misleading flag and one unsupported confirmation."""
         from research.claimcheck_v1_1.prospective import score
+
+        def paper(bad):
+            r = [{"variant": "original", "cls": "T", "outcome": "CONFIRMATION" if j < 5 - bad else "REQUIRE_HUMAN_REVIEW", "reading_matches": True}
+                 for j in range(5)]
+            n_out = (["CONFIRMATION", "DISCREPANCY_FOR_REVIEW"] if bad else []) + ["UNKNOWN"] * (5 - 2 * bad)
+            r += [{"variant": "original", "cls": "N", "outcome": o, "reading_matches": False} for o in n_out]
+            r += [{"variant": "planted", "cls": "T", "changed": True, "outcome": "DISCREPANCY_FOR_REVIEW", "reading_matches": True}]
+            return score.paper_counts(r)
         for k, expected in ((6, True), (7, False)):
-            papers = {}
-            for i in range(120):
-                bad = 1 if i < k else 0
-                papers[f"p{i}"] = Counter(exposed_true=10, true_claims_total=10, false_claims_total=4, correct_discrepancy=1,
-                                          misleading_refutation=bad, unsupported_confirmation=bad, correct_confirmation=5 - bad)
-            j = score.judge(score.metrics(papers, icc_floor=CRITERIA["assumptions"]["icc_floor"]), CRITERIA)
+            papers = {f"{c}{i:02d}": {"context": c, "order": f"{c}{i:02d}", "primary_complete": True,
+                                      "counts": paper(1 if n < k else 0)} for n, (c, i) in enumerate((c, i) for c in "ABC" for i in range(40))}
+            j = score.evaluate(papers, CRITERIA, design=120)["criteria"]
             self.assertIs(j["C2_misleading_refutations"]["a_per_exposed_claim"]["met"], expected)
             self.assertIs(j["C1_unsupported_confirmations"]["met"], expected)
             self.assertFalse(j["C2_misleading_refutations"]["b_per_paper"]["met"])   # C2b allows one affected paper
