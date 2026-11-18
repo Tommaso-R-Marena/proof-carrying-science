@@ -9,11 +9,21 @@ decision after approval.  The frozen v1 code is not changed:
   so every request made by the frozen ``propose_with_model`` passes through the guard.
 * Before each request the guard checks the model identifier against the frozen configuration
   (``model_config.json``), refuses a provider without a frozen price, applies the daily request
-  limit, and computes the worst case the request could cost: prompt and system bytes (an upper
-  bound on prompt tokens, assuming no token is shorter than one byte) plus the request's maximum
-  output tokens, at the frozen prices.  If the money committed so far plus that worst case would
-  exceed the provider's sub-cap or the total cap, it raises ``SpendingRefused`` (a ``ProviderError``)
-  and sends nothing.
+  limit, and computes the worst case the request could cost: the UTF-8 bytes of the whole request
+  body as an upper bound on billed prompt tokens (assuming no token is shorter than one byte; the
+  body's structure more than covers the few template tokens a provider adds per message), plus the
+  request's maximum output tokens, at the frozen prices.  The output bound assumes the provider
+  counts every billed output token, including hidden reasoning ("thinking") tokens, against the
+  request's maximum.  If the money committed so far plus that worst case would exceed the
+  provider's sub-cap or the total cap, it raises ``SpendingRefused`` (a ``ProviderError``) and sends
+  nothing.
+* After a request, the charge is the reported usage at the frozen prices; with no usage it is the
+  worst case, except for the statuses in ``UNBILLED`` (the request was refused, not processed).
+  A timeout (408), a server error or a transport failure is charged its worst case.
+* Tripwire: if a response's reported usage costs more than its computed worst case, the cost model
+  is wrong for that provider.  The guard then sends nothing more, and a guard resumed from a log
+  that records such a response refuses to start.  With one request in flight at a time, a wrong
+  model can overshoot a cap by at most that one request (provider-side limits are the last layer).
 * Every request is written to an append-only JSON-lines spend log, and synced, before it is sent;
   its result after.  A resumed guard rebuilds its totals from the log, and a request that was sent
   but has no result line (a crash) is charged its worst case.  A guard refuses to start if cached
@@ -44,6 +54,7 @@ CONFIG = Path(__file__).with_name("model_config.json")
 PROVIDERS = ("gemini", "openrouter")
 HOST_PROVIDER = {"generativelanguage.googleapis.com": "gemini", "openrouter.ai": "openrouter"}
 NO_REPEAT = (200, 400, 401, 403, 404)          # as providers.complete: these statuses are never repeated
+UNBILLED = (400, 401, 402, 403, 404, 413, 422, 429)   # refused before any generation: charged nothing
 FINAL_OUTCOMES = ("ok", "no_text", "deterministic")
 
 
@@ -70,13 +81,9 @@ def _identify(url: str, payload: dict) -> tuple[str | None, str | None]:
     return None, None
 
 
-def _prompt_bytes(provider: str, payload: dict) -> int:
-    if provider == "gemini":
-        texts = [p.get("text", "") for c in payload.get("contents", []) for p in c.get("parts", [])]
-        texts += [p.get("text", "") for p in (payload.get("systemInstruction") or {}).get("parts", [])]
-    else:
-        texts = [m.get("content", "") for m in payload.get("messages", [])]
-    return sum(len(t.encode("utf-8")) for t in texts if isinstance(t, str))
+def _prompt_bytes(payload: dict) -> int:
+    """UTF-8 bytes of the whole request body: every field a provider could bill as input is in it."""
+    return len(json.dumps(payload, ensure_ascii=False).encode("utf-8"))
 
 
 def _max_output(provider: str, payload: dict) -> int | None:
@@ -139,6 +146,7 @@ class BudgetGuard:
         self.inner = inner if inner is not None else _providers._post
         self.clock = clock
         self.current: tuple[str, str] | None = None
+        self.halted: str | None = None
         self._lock = threading.Lock()
         if cache_dir is not None and Path(cache_dir).exists() and any(Path(cache_dir).glob("*.json")) and not self.log_path.exists():
             raise SpendingRefused("cached responses exist but the spend log does not: refusing to restart the count at zero")
@@ -154,7 +162,10 @@ class BudgetGuard:
                 self._seq = max(self._seq, line["seq"])
             elif line["event"] == "result":
                 self.spent[line["provider"]] += line["charged_usd"]
-                sent.pop(line["seq"], None)
+                request = sent.pop(line["seq"], None)
+                if line.get("exceeded_worst_case") or (request is not None and line["charged_usd"] > request["worst_usd"] + 1e-12):
+                    raise SpendingRefused("the spend log records a response that cost more than its computed worst case: "
+                                          "the cost model is wrong; correct it before any further request")
         for line in sent.values():                     # sent, but no result: may have been billed
             self.spent[line["provider"]] += line["worst_usd"]
         self._append({"event": "session", "time": _utc(self.clock()).isoformat(), "session": session, "configuration": configuration,
@@ -184,6 +195,8 @@ class BudgetGuard:
     # -- the transport
     def transport(self, url: str, headers: dict, payload: dict, timeout: int):
         with self._lock:
+            if self.halted:
+                self._refuse(None, self.halted)
             provider, model = _identify(url, payload)
             if provider is None:
                 self._refuse(None, "unknown provider host")
@@ -196,7 +209,7 @@ class BudgetGuard:
             max_out = _max_output(provider, payload)
             if max_out is None:
                 self._refuse(provider, "the request does not bound its output")
-            prompt_bytes = _prompt_bytes(provider, payload)
+            prompt_bytes = _prompt_bytes(payload)
             worst = (prompt_bytes * p_in + max_out * p_out) / 1e6
             if not self.can_start(provider):
                 self._refuse(provider, "daily request limit reached", worst)
@@ -221,15 +234,19 @@ class BudgetGuard:
                 usage = _usage(provider, data) if status == 200 else None
                 if usage is not None:
                     charged = (usage[0] * p_in + usage[1] * p_out) / 1e6
-                elif 400 <= status < 500:
+                elif status in UNBILLED:
                     charged = 0.0
                 else:
                     charged = worst
+                exceeded = charged > worst + 1e-12
                 self.spent[provider] += charged - worst
                 self._append({"event": "result", "seq": seq, "time": _utc(self.clock()).isoformat(), "session": self.session,
                               "call": self.current, "provider": provider, "status": status, "outcome": _outcome(provider, status, data),
                               "usage": list(usage) if usage else None, "charged_usd": charged, "served": _served(provider, data),
-                              "spent_total_usd": self.total()})
+                              "exceeded_worst_case": exceeded, "spent_total_usd": self.total()})
+                if exceeded:
+                    self.halted = (f"halted: a {provider} response cost {charged:.6f} USD, more than its computed worst case "
+                                   f"{worst:.6f} USD; the cost model is wrong and no further request is sent")
         return status, data
 
 

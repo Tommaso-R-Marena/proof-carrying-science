@@ -25,11 +25,11 @@ added.
 | 6 | Protocol 10a's tolerance rows did not match the scorer. `design_120.py` divided only the opportunities by the design effect and left out C1's estimate and paper-level conditions. | **The scorer's rule (the standard effective sample size) is kept, and the tables now follow it.** `design_120.py` computes C1 jointly, C2a alone, and C2a and C2b jointly (spread, and all in one paper). Protocol 10 and 10a print these rows. The scorer itself is unchanged in this respect. | `design_120.py`, `DESIGN_120.json`, protocol 10 and 10a, `criteria.json` (larger-sample `why`) | `test_design_120`: `test_c1_rows_...`, `test_c2_rows_...` (each row at its boundary, against `stats.proportion` with its bootstrap), `test_the_protocol_table_prints_these_rows` |
 | 7 | The judge checked only the paper count. It did not check the 90 % primary-complete rule, the 20-per-context minimum or the fallback. | `score.select_primary` implements protocol 2, 3 and 10a: three contexts, at least 20 eligible papers each, no topping up, hash order, the 120-paper design or its fallback, then the 90 % rule on the primary set. `score.evaluate` applies it before any criterion. | `score.py`, `criteria.json` `minimum_sample`, protocol 2 and 11 | `test_per_context_minimum_without_topping_up`, `test_the_120_paper_design_and_its_fallback`, `test_the_90_percent_primary_complete_rule`, `test_too_few_confirmations` |
 | 8 | C7's "supported size" was undefined. | Provisional supported sizes per statistic are taken from `perf/results.json`: count 51,209 B; mean, sd and Pearson 33,760 B; min, median and anything not measured 8,219 B. A capacity run before approval replaces them. Larger tables are still run, and their UNKNOWN counts as an abstention in C1 to C3. They fall outside C7 and are reported with their completed share. "Completed" means the kernel accepted. | `criteria.json` C7, protocol 9 and 13, `score.judge_c7` | `test_c7_within_the_supported_size_of_each_statistic` |
-| 9 | There was no memory limit per process with two workers. | **A v1.1 wrapper.** `lean_guard.py` writes an executable named in `PCS_CLAIMCHECK_LEAN`, which the frozen kernel call already honours. It runs the real Lean, stops it at 7 GB of resident memory (two workers, under 16 GB) and logs time and peak memory per run for C7. A stopped run exits non-zero, which the frozen call treats as not accepted (UNKNOWN). | `lean_guard.py`, protocol 6 step 4, `criteria.json` C7 `kernel_configuration` | `test_lean_guard` (synthetic Lean, through the frozen `check_source`: accepted within the limit; stopped and failing closed above it) |
+| 9 | There was no memory limit per process with two workers. | **A v1.1 wrapper.** `lean_guard.py` writes an executable named in `PCS_CLAIMCHECK_LEAN`, which the frozen kernel call already honours. It runs the real Lean, stops it at 7 GB of resident memory (two workers, under 16 GB) and logs time and peak memory per run for C7. A stopped run exits non-zero, which the frozen call treats as not accepted (UNKNOWN). Lean is tied to the guard (parent-death signal), so the frozen call's timeout, which stops only the guard, stops Lean too; a start record without a finish record marks such a run. | `lean_guard.py`, protocol 6 step 4, `criteria.json` C7 `kernel_configuration` | `test_lean_guard` (synthetic Lean, through the frozen `check_source`: accepted within the limit; stopped and failing closed above it; after a timeout no Lean process is left running) |
 | 10 | C7 is per claim, but step 4 put two claims in a file (and the v1.1 default is four). | **One claim per proof file** (`batch_size` 1). The kernel record's `batch_seconds` is then the claim's time. The batch-rejection re-runs of the frozen `check_items` cannot occur. perf measured this configuration. | protocol 6 step 4, `criteria.json` C7 | `test_kernel_configuration` |
 | 11 | Adjudication upper figures of 55, 110 and 220 h did not follow from 57.5 minutes per paper. | Corrected to 57.5, 115 and 230. `design_120.py` now derives minutes from the plan's rates. | adjudication plan section 4, `design_120.py`, `DESIGN_120.json`, protocol 10a and 13 | `test_adjudication_hours_follow_the_plans_rates` |
 | 12 | `MODEL_ACCESS.md` divided Gemini's tokens by all attempts. | Now per successful call: 5,160 / 563 and 2,846 / 643. The ranges are 2,088–5,160 prompt and 134–3,032 output tokens. Token totals were recomputed. | `MODEL_ACCESS.md`, `design_120.py`, `DESIGN_120.json`, protocol 10a and 13 | `test_token_figures_are_the_v1_ledgers_per_successful_call` (reads the ledgers) |
-| 13 | Protocol 13 and `MODEL_ACCESS.md` contradicted each other on who enforces the cap, and the frozen code has no cost accounting. | Three layers, stated the same way in both. (1) `budget.py` refuses before sending any request whose worst case (prompt bytes and maximum output at frozen prices) could pass a sub-cap or the total cap. It refuses a provider without a frozen price and refuses without a recorded owner authorisation. It write-ahead logs every request to a synced spend log, resumes from it, charges a sent request with no result at its worst case, and refuses to start if cached answers exist without a log. (2) The frozen ledger's attempt budget is set to four per call. (3) Provider-side hard limits are set by the owner. | `budget.py`, `model_config.json`, protocol 2 and 13, `MODEL_ACCESS.md` | `test_budget.Guard` (9 tests, synthetic transport) |
+| 13 | Protocol 13 and `MODEL_ACCESS.md` contradicted each other on who enforces the cap, and the frozen code has no cost accounting. | Three layers, stated the same way in both. (1) `budget.py` refuses before sending any request whose worst case (the bytes of the whole request body and the maximum output, at frozen prices) could pass a sub-cap or the total cap, and stops for good if a response costs more than its worst case. It refuses a provider without a frozen price and refuses without a recorded owner authorisation. It write-ahead logs every request to a synced spend log, resumes from it, charges a sent request with no result at its worst case, and refuses to start if cached answers exist without a log. (2) The frozen ledger's attempt budget is set to four per call. (3) Provider-side hard limits are set by the owner. | `budget.py`, `model_config.json`, protocol 2 and 13, `MODEL_ACCESS.md` | `test_budget.Guard` (11 tests, synthetic transport) |
 | 14 | Protocol 2 named `…:free`, while configuration P uses the paid route. | Identifiers per configuration are in `model_config.json` and protocol 2. The guard refuses any other identifier. | `model_config.json`, protocol 2, `MODEL_ACCESS.md` | `test_model_identifiers_by_configuration`, `test_unpriced_provider_and_unfrozen_model_are_refused` |
 | 15 | v1's harness also makes critic calls. | `budget.fetch_proposals` calls only `propose_with_model`, once per model per document; the protocol says so. | `budget.py`, protocol 2 and 6 | `test_one_call_per_model_per_document_and_no_critic_call` |
 | 16 | The 20 % ambiguity rule had two denominators. | One denominator: T + F + A numbers of the originals (N excluded, the stricter choice), in the scorer and the text. | `criteria.json` C6, protocol 7 and 9, `score.scoped_metrics` | `test_ambiguous_share_counts_t_f_and_a_numbers_of_the_originals` (3 / 14 = 21 % fails; draft 2's 3 / 20 passed) |
@@ -48,10 +48,37 @@ added.
   skipped the sample rules, is gone. `tests/test_score_draft2.py` is replaced by
   `tests/test_score_draft3.py`.
 * **The development demonstration** goes through the same path. The six papers are one context, so
-  it reports "not evaluable" for the sample. It passes `oracle_receipts=True` to `assess_document`
-  when that flag exists; on this branch's `policy.py` it does not yet exist.
+  it reports "not evaluable" for the sample. It uses cached kernel receipts only, so it passes no
+  development switch for receipts: every decided verdict in it needs a kernel-established status
+  under the outward-verdict guard (`policy.established_status`).
 * **`DECISION_SUPPORT.json` and `DECISION_PACKAGE.md`** were updated where these changes alter
   figures.
+
+## Changes made on review, before integration (2026-11-18)
+
+The draft was reviewed independently before it was integrated. These changes were made; each has a
+test that fails on the reviewed draft and passes now.
+
+* **Lean outlived its guard after a timeout.** The frozen kernel call's timeout kills only the
+  process it started, which is the guard. The real Lean then kept running, with no memory limit,
+  and its run was never logged. Lean is now started with the parent-death signal set to SIGKILL, and
+  every run is logged when it starts (`lean_guard.stopped_from_outside` lists runs ended from
+  outside). Test: `test_a_timeout_of_the_frozen_call_stops_lean_with_its_guard`. Without the
+  parent-death signal it fails ("Lean outlived its guard").
+* **The prompt bound counted text parts only.** Any other input field (a tool definition, a schema,
+  a non-text part) would have counted as zero bytes. The bound is now the UTF-8 bytes of the whole
+  request body. Test: `test_the_prompt_bound_counts_every_byte_of_the_request_body`.
+* **A timeout (HTTP 408) was charged nothing**, against the package's own rule that a timeout is
+  charged its worst case. Only an explicit set of refusals (400, 401, 402, 403, 404, 413, 422 and
+  429) is now charged nothing. Test: `test_failed_attempts_without_usage_are_charged_conservatively`.
+* **Nothing detected a wrong cost model.** For example, a provider might bill reasoning tokens
+  beyond the requested maximum. A response that costs more than its worst case now halts the guard,
+  and a resumed guard refuses to start. Test:
+  `test_a_response_that_costs_more_than_its_worst_case_stops_the_guard`.
+* **The demonstration's conditional development switch** (it passed `oracle_receipts=True` only if
+  the parameter existed) is removed. The demonstration uses kernel receipts only. Regenerated at the
+  integrated head, `DEMONSTRATION_ON_DEVELOPMENT_DATA.json`, `DESIGN_120.json` and
+  `DECISION_SUPPORT.json` are byte-identical to the committed files.
 
 ## Not resolved here, and why
 

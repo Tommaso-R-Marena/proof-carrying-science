@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import inspect
 import json
 import math
 import statistics
@@ -360,8 +359,9 @@ def demo() -> dict:
     from ..dev.common import SPLITS, context, documents
     from ..dev.evaluate import token_outcomes_v11
     from ..policy import assess_document
-    # development use: receipts whose verdict an oracle predicted are marked as such (policy flag, where it exists)
-    extra = {"oracle_receipts": True} if "oracle_receipts" in inspect.signature(assess_document).parameters else {}
+    # Cached kernel receipts only (``_CacheOnly`` refuses a document without them), so every decided
+    # verdict here needs a kernel-established status: no oracle receipt is accepted.  Siblings that
+    # corroborate a discrepancy are oracle-predicted (development only); the pipeline kernel-checks them.
     results = SPLITS["heldout"]
     verifier = _CacheOnly(results / "receipts")
     records: dict[str, dict[str, list]] = defaultdict(lambda: defaultdict(list))
@@ -374,13 +374,13 @@ def demo() -> dict:
             if arm not in arms:
                 continue
             receipts = verifier.verify(doc, arms[arm], arm)
-            outcomes = token_outcomes_v11(doc, receipts, assess_document(ctx, receipts, oracle_siblings=True, **extra))
+            outcomes = token_outcomes_v11(doc, receipts, assess_document(ctx, receipts, oracle_siblings=True))
             records[arm][doc.slug].extend(dev_records(doc, outcomes))
     criteria = json.loads(CRITERIA.read_text(encoding="utf-8"))
     out = {"WARNING": "DEVELOPMENT DATA. Six papers that were used to design v1.1, one context, AI-assisted labels, oracle-predicted "
                       "sibling corroboration. This demonstrates the scoring machinery. It is not an evaluation of v1.1 and no "
                       "criterion can be met by it.",
-           "policy_flags": {"oracle_siblings": True, **extra}, "arms": {}}
+           "policy_flags": {"oracle_siblings": True}, "arms": {}}
     for arm, per_paper in records.items():
         papers = {slug: {"context": "ecology and organismal biology (v1)", "order": slug, "primary_complete": True,
                          "counts": paper_counts(recs)} for slug, recs in per_paper.items()}

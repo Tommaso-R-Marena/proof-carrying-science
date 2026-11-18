@@ -78,7 +78,7 @@ class Guard(unittest.TestCase):
     def test_a_request_that_could_exceed_the_cap_is_refused_before_it_is_sent(self):
         inner = Synthetic()
         g = self.guard(cfg=config(caps={"total": 15, "gemini": 0.05, "openrouter": 5}), inner=inner)
-        url, payload = gemini_payload()                     # worst case 1000 B x 1 + 16384 x 4 per million = 0.0665 USD
+        url, payload = gemini_payload()                     # worst case (1000 B + structure) x 1 + 16384 x 4 per million, about 0.0666 USD
         with self.assertRaises(B.SpendingRefused):
             g.transport(url, {}, payload, 30)
         self.assertEqual(inner.requests, [])
@@ -137,13 +137,37 @@ class Guard(unittest.TestCase):
         self.assertTrue(g.can_start("gemini"))
 
     def test_failed_attempts_without_usage_are_charged_conservatively(self):
-        inner = Synthetic(statuses=[0, 503, 429])
+        inner = Synthetic(statuses=[0, 503, 429, 408])
         g = self.guard(inner=inner)
         url, payload = gemini_payload()
-        worst = (1000 * 1.0 + 16384 * 4.0) / 1e6
-        for _ in range(3):
+        worst = (B._prompt_bytes(payload) * 1.0 + 16384 * 4.0) / 1e6
+        for _ in range(4):
             g.transport(url, {}, payload, 30)
-        self.assertAlmostEqual(g.spent["gemini"], 2 * worst)        # transport failure and 5xx: worst case; 429: nothing
+        self.assertAlmostEqual(g.spent["gemini"], 3 * worst)        # transport failure, 5xx and timeout: worst case; 429: nothing
+
+    def test_the_prompt_bound_counts_every_byte_of_the_request_body(self):
+        url, payload = gemini_payload()
+        self.assertGreater(B._prompt_bytes(payload), 1000)          # the text and the structure around it
+        payload["tools"] = [{"note": "y" * 5000}]                   # input the provider could bill that is not a text part
+        worst = (B._prompt_bytes(payload) * 1.0 + 16384 * 4.0) / 1e6
+        text_only = (1000 * 1.0 + 16384 * 4.0) / 1e6
+        inner = Synthetic()
+        g = self.guard(cfg=config(caps={"total": 15, "gemini": (text_only + worst) / 2, "openrouter": 5}), inner=inner)
+        with self.assertRaises(B.SpendingRefused):
+            g.transport(url, {}, payload, 30)
+        self.assertEqual(inner.requests, [])
+
+    def test_a_response_that_costs_more_than_its_worst_case_stops_the_guard(self):
+        inner = Synthetic(prompt_tokens=10 ** 6)                    # usage the worst-case model says is impossible
+        g = self.guard(inner=inner)
+        url, payload = gemini_payload()
+        g.transport(url, {}, payload, 30)
+        self.assertTrue(B.read_log(self.log)[-1]["exceeded_worst_case"])
+        with self.assertRaises(B.SpendingRefused):
+            g.transport(url, {}, payload, 30)
+        self.assertEqual(len(inner.requests), 1)                    # nothing further was sent
+        with self.assertRaises(B.SpendingRefused):                  # and a resumed guard refuses to start
+            self.guard(inner=inner)
 
 
 class Harness(unittest.TestCase):

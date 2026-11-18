@@ -58,9 +58,10 @@ real risk; the result may well be "not evaluable".
 **P. Capped paid route.** `nvidia/nemotron-3-ultra-550b-a55b` (OpenRouter's paid route; the
 identifier differs from v1's `…:free`) and `gemini-3.6-flash` on Gemini's paid tier. The cap is
 enforced in three layers: (1) the calling code, `prospective/budget.py`, refuses before sending any
-request whose worst case (prompt bytes and the maximum output, at the frozen prices) could take
-committed spending past the provider's sub-cap or the total cap, refuses a provider without a frozen
-price, and keeps a synced spend log from which a resumed run continues; (2) the frozen ledger's
+request whose worst case (the bytes of the whole request body and the maximum output, at the frozen
+prices) could take committed spending past the provider's sub-cap or the total cap, refuses a
+provider without a frozen price, keeps a synced spend log from which a resumed run continues, and
+stops for good if a response ever costs more than its worst case (the cost model is then wrong); (2) the frozen ledger's
 attempt budget, four attempts per call; (3) a hard limit in each provider account, set by the owner
 where the provider offers one (an alert that only notifies is not a limit). Nemotron, 120 calls at the measured sizes: 120 × 4,400 × 0.60e-6 + 120 × 3,000 × 2.40e-6
 ≈ 1.2 USD, at most about 5 USD if every call were repeated. Gemini: price to be read and entered by

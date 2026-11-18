@@ -159,15 +159,22 @@ means the cap stops the run earlier, and the calls it stops are recorded as "not
    changing a byte of v1. It substitutes `claimcheck_v1.propose.complete` with
    `functools.partial(providers.complete, transport=budgeted)` for the duration of the run. A test
    must show that no request reaches `_post` except through the budget.
-2. **Before each request.** Compute the worst-case cost: prompt and system bytes as an upper bound on
-   prompt tokens, plus the request's maximum output tokens (16,384), at that provider's frozen
-   prices. If the money already committed plus this worst case would exceed the provider's sub-cap
+2. **Before each request.** Compute the worst-case cost: the bytes of the whole request body as an
+   upper bound on prompt tokens, plus the request's maximum output tokens (16,384), at that
+   provider's frozen prices. If the money already committed plus this worst case would exceed the provider's sub-cap
    or the total cap, raise `BudgetExceeded` and send nothing. `BudgetExceeded` is a subclass of
    `ProviderError`, so `propose_with_model` records it as a failure of that arm for that document.
 3. **After each response.** Charge the usage the provider reports: Gemini's `promptTokenCount`,
    `candidatesTokenCount` and `thoughtsTokenCount`; OpenRouter's `prompt_tokens` and
-   `completion_tokens`. If usage is missing after a timeout or a server error, charge the worst case.
-   **Assumption, to be checked against the providers' statements:** 4xx answers are not billed.
+   `completion_tokens`. If usage is missing after a timeout (including HTTP 408), a server error or
+   a transport failure, charge the worst case. **Assumption, to be checked against the providers'
+   statements:** HTTP 400, 401, 402, 403, 404, 413, 422 and 429 are not billed (the request was
+   refused before any generation); any other answer without usage is charged its worst case.
+   **Tripwire:** the worst case assumes that every billed output token, including hidden reasoning
+   tokens, counts against the request's maximum. If a response's reported usage ever costs more
+   than its worst case, that assumption is wrong for that provider: the guard sends nothing more,
+   and a guard resumed from that log refuses to start. With one request in flight, a wrong
+   assumption can overshoot a cap by at most that one request.
 4. **A persistent spend log.** Append one line per attempt (time, provider, model, status, usage,
    amount charged, running total) and sync it to disk. A resumed run starts from the logged total. It
    refuses to start if cached responses exist but the log does not.

@@ -173,7 +173,9 @@ Then the benchmark is frozen by digest. After that, steps 6 to 8 run once.
    (`batch_size` 1; the v1.1 default of 4 is not used), a 900 s limit per file, and a **7 GB limit
    per Lean process**, enforced by `prospective/lean_guard.py` named in `PCS_CLAIMCHECK_LEAN` (the
    frozen kernel call is unchanged). A run that times out or is stopped by the limit exits non-zero,
-   yields UNKNOWN and is counted. The guard logs every run's time and peak memory for C7.
+   yields UNKNOWN and is counted. Lean is tied to its guard (parent-death signal), so a run cut off
+   by the 900 s limit leaves no Lean process running without the memory limit. The guard logs a
+   start record for every run and, for each run that ends under it, its time and peak memory for C7.
 5. Free-choice adversary on every original article; everything it gets through is put to the kernel.
 6. Independent replay of every bundle on clean hosted runners: 12 jobs (6 for 60 papers) of papers
    assigned by `score.replay_shards`, each job limited to 5.5 h, on runners with at least the
@@ -530,9 +532,10 @@ times (about 2.4 and 10 for 120 papers); the Gemini price could not be read from
 model listing and must be confirmed before any paid use. A total cap of 15 US dollars is proposed
 for 60 papers and 30 for 120, with sub-caps per provider (`model_config.json`), enforced in three
 layers: (1) the calling code, `prospective/budget.py`, refuses before sending any request whose worst
-case (prompt bytes and the maximum output at the frozen prices) could take committed spending past a
-cap or sub-cap, refuses any provider without a frozen price, keeps a synced spend log and resumes
-from it; (2) the frozen ledger's attempt budget, set to four attempts per call; (3) hard limits in
+case (the bytes of the whole request body and the maximum output, at the frozen prices) could take
+committed spending past a cap or sub-cap, refuses any provider without a frozen price, keeps a
+synced spend log and resumes from it, and stops for good if a response ever costs more than its
+worst case; (2) the frozen ledger's attempt budget, set to four attempts per call; (3) hard limits in
 the provider accounts, set by the owner where a provider offers them (a budget alert that only
 notifies is not a limit). No paid call has been made. Kernel time about 10 hours per 60 papers on
 the reference machine (an estimate without a documented basis: before approval, a capacity run on

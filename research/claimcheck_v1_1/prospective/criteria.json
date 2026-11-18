@@ -123,7 +123,7 @@
       "claims_per_proof_file": 1,
       "seconds_per_proof_file": 900,
       "memory_limit_gb_per_lean_process": 7,
-      "memory_limit_enforced_by": "prospective/lean_guard.py (PCS_CLAIMCHECK_LEAN); a process stopped by it exits non-zero, which the frozen kernel call treats as not accepted (UNKNOWN)",
+      "memory_limit_enforced_by": "prospective/lean_guard.py (PCS_CLAIMCHECK_LEAN); a process stopped by it exits non-zero, which the frozen kernel call treats as not accepted (UNKNOWN); Lean is tied to the guard (parent-death signal), so a timeout of the frozen call stops Lean too",
       "time_per_claim": "the kernel record's batch_seconds (batch_size 1)",
       "peak_memory": "peak resident memory of the Lean process, from the guard's log"
      },
