@@ -19,7 +19,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V23.json"
-MANIFEST_SHA256 = '65294fe7a42de3ae615fbe613aef567e1845b65818f573d5b210095310017d7e'
+MANIFEST_SHA256 = '601f6cffa71c42f83c1992ac3c2af5e4027567a6d066c6f82a58f375d1217775'
 API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
 # Exact reviewed source references for reconciling the held research branch.
 # This adds a source rollback check; it does not release PR117 or grant authority.
