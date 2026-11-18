@@ -123,6 +123,16 @@ its status decides nothing (it was recorded, not asserted, before), and that the
 receipt the pipeline can write (all 84 status patterns). Out of scope by design: a consistent lie in
 the kernel record itself, which only re-running the kernel detects (the replay does).
 
+Follow-up (`2830547d`, 2026-11-18). The guard accepts oracle-predicted receipts only when the caller
+passes the development switch `oracle_receipts=True`. `dev/evaluate.py` did not pass it for the five
+development documents it scores from oracle predictions, so those documents silently decided
+nothing and the committed development results no longer reproduced. It now passes the switch, and
+the regenerated results equal the committed ones on every recorded value. The failure was silent,
+so `tests/test_oracle_opt_in.py` reads the source: every function that builds oracle receipts must
+pass the switch literally, and the verification pipeline (`verify.py`) and the site export must
+pass neither development switch. The switches remain part of the policy's interface, so a new
+outward caller that passed one would weaken the guard; that test is the control.
+
 ## 6. The website's receipt rule
 
 What the page must enforce (requirements for decision D4): accept only schema
