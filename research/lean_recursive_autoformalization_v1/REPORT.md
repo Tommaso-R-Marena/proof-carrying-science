@@ -27,8 +27,8 @@ and exact loss falling to **0**. Automatic deployment remained false.
 | `store.py` | Content-addressed CAS promotion + receipts |
 | `recursive_loop.py` | Multi-generation proposer + gate + store |
 | `ranker_cycle.py` | FormalizationRanker gated candidate (never promoted) |
-| `formal/PCS/V2/ProofGatedFormalization.lean` | Lean soundness of the abstract gate |
-| `formal/PCS/V2/ProofGatedFormalizationArtifacts.lean` | Wire-format Lean artifact checker |
+| `research/.../lean/PCS/V2/ProofGatedFormalization.lean` | Lean soundness of the abstract gate |
+| `research/.../lean/PCS/V2/ProofGatedFormalizationArtifacts.lean` | Wire-format Lean artifact checker |
 
 ## Measured
 
@@ -57,3 +57,10 @@ PYTHONPATH=research/lean_recursive_autoformalization_v1:. python3 -m recursive_l
   --output research/lean_recursive_autoformalization_v1/results
 cd formal && lake env lean PCS/V2/ProofGatedFormalization.lean
 ```
+
+
+## PGRA v2 follow-up
+
+- Relocated Lean gate out of `formal/PCS/V2/` → restores frozen V7 census (38 modules); `check_profile()` passes locally
+- Added proof-coupled recursive loop: preserve proved set, expand ≥1 kernel proof, loss↓
+- See `results/proof_coupled_v2/proof_coupled_summary.json`

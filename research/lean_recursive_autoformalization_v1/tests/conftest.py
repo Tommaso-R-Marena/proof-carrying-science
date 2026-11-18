@@ -1,9 +1,11 @@
-"""Ensure repo root is on sys.path for package imports."""
+"""Ensure research package and repo root are on sys.path."""
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
 REPO = Path(__file__).resolve().parents[3]
-if str(REPO) not in sys.path:
-    sys.path.insert(0, str(REPO))
+for path in (ROOT, REPO):
+    if str(path) not in sys.path:
+        sys.path.insert(0, str(path))

@@ -1,0 +1,161 @@
+{
+  "accepted_generations": 2,
+  "automatic_deployment": false,
+  "corpus_sha256": "173c4c99a3946bd8f50026dd64b02e4abc1f6c3350d71aa7014baa73e5a88114",
+  "final_rules": [
+    "rule_distinct_forall",
+    "rule_plus_times_words"
+  ],
+  "format": "pcs-pgra-proof-coupled-summary-v2",
+  "generations": [
+    {
+      "generation": 0,
+      "loss": 3,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq"
+      ],
+      "proved_count": 3,
+      "rules": []
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_unique_exists"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "gained": [
+            "dup_ext_plus",
+            "ext_plus_times"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_plus_times_words"
+        }
+      ],
+      "gained": [
+        "dup_ext_plus",
+        "ext_plus_times"
+      ],
+      "generation": 1,
+      "loss": 1,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_plus",
+        "ext_plus_times"
+      ],
+      "proved_count": 5,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_plus_times_words"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_unique_exists"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "gained": [
+            "ext_distinct_forall"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_distinct_forall"
+        }
+      ],
+      "gained": [
+        "ext_distinct_forall"
+      ],
+      "generation": 2,
+      "loss": 0,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_plus",
+        "ext_distinct_forall",
+        "ext_plus_times"
+      ],
+      "proved_count": 6,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_plus_times_words"
+      ]
+    }
+  ],
+  "pcs_scientific_authority": false,
+  "policy_hash": "468a41db512b49ebef858a62c678053c9768416b9be7113c84159cad816501b9",
+  "proof_ids": [
+    "base_nat_eq",
+    "base_nat_add",
+    "dup_base_nat_eq",
+    "ext_plus_times",
+    "dup_ext_plus",
+    "ext_distinct_forall"
+  ],
+  "protocol": {
+    "automatic_deployment": false,
+    "beam": 4,
+    "budget": 96,
+    "depth": 18,
+    "format": "pcs-pgra-proof-coupled-protocol-v2",
+    "frozen": true,
+    "minimum_additional_proofs": 1,
+    "pcs_scientific_authority": false,
+    "policy": "symbolic"
+  },
+  "proved_counts": [
+    3,
+    5,
+    6
+  ],
+  "rising_proved": true,
+  "self_improvement_scope": "Finite proof-coupled formalization rulebooks: kernel-proved count on a frozen authored proof-target set under preserve/expand/loss. Not general AI self-improvement or unrestricted English."
+}

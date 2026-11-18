@@ -3,20 +3,16 @@
 The Lean CLI (`PCS.V2.ProofGatedFormalizationArtifacts`) is the reference
 authority for ACCEPT/REJECT. Python only proposes wire bytes and invokes:
 
-  cd formal && lake env lean --run PCS/V2/ProofGatedFormalizationArtifacts.lean \\
+  cd research/lean_recursive_autoformalization_v1/lean && \\
+    lake env lean --run PCS/V2/ProofGatedFormalizationArtifacts.lean \\
       <old.pgra> <new.pgra>
 
 Wire format (exact UTF-8, no trailing newline):
   PGRA1|<code>,<code>,...
 where codes are CaseStatus.toNat: fail=0, abstain=1, supported=2.
 
-Build / typecheck (from repo `formal/`):
-  export PATH=\"$HOME/.elan/bin:$PATH\"
-  lake build PCS.V2.ProofGatedFormalization
-  lake build PCS.V2.ProofGatedFormalizationArtifacts
-
-Or typecheck the core file alone:
-  lake env lean PCS/V2/ProofGatedFormalization.lean
+The Lean package lives under this research directory (not formal/PCS/V2/) so the
+frozen V7 ProofGated*.lean census is undisturbed.
 """
 
 from __future__ import annotations

@@ -59,6 +59,14 @@ cd formal && lake env lean PCS/V2/ProofGatedFormalization.lean
 Artifacts: `tasks.json`, `protocol.json` (`pcs-pgra-protocol-v1`, `frozen=true`),
 `summary.json`, `generations.json`, `SHA256.json`.
 
+
+## PGRA v2 (proof-coupled)
+
+Kernel-proved expansion on a frozen proof-target set: previously proved items
+are preserved; each accepted generation adds ≥1 new independently verified
+Lean proof under the frozen symbolic budget. Lean gate modules live under
+`lean/` (not `formal/PCS/V2/`) so the frozen V7 ProofGated census stays at 38.
+
 ## Conflict avoidance
 
 Stay inside `research/lean_recursive_autoformalization_v1/`. Do not edit open-PR
