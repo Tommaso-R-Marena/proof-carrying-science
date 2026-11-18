@@ -1,0 +1,57 @@
+{
+  "format": "pcs-assurance-mirage-formal-v1",
+  "source_sha256": "65ac3a2d3b10d44c827ff6898569b7403a524aa9989c99d5a4c91867b827b323",
+  "staged_sha256": "8ece13d47320db9dc2845c9b3c9aea004d15860e125b724dc78d7f995ff8dff7",
+  "olean_sha256": "1328f14e4ddbf22bf8df94384adff8f28b57f2a5ed69fa32c56722b05d6da1ee",
+  "lean_path": "/tmp/pcs-lean-428.Giau4b/lean-4.28.0-linux/bin/lean",
+  "leanchecker_path": "/tmp/pcs-lean-428.Giau4b/lean-4.28.0-linux/bin/leanchecker",
+  "theorems": [
+    "AssuranceMirage.admit_unique",
+    "AssuranceMirage.step_proposal_independent",
+    "AssuranceMirage.tool_trace_independent",
+    "AssuranceMirage.channel1_score_independent",
+    "AssuranceMirage.constructive_mirage",
+    "AssuranceMirage.single_channel_blind",
+    "AssuranceMirage.joint_detects_constructive_mirage",
+    "AssuranceMirage.completion_not_competence"
+  ],
+  "axiom_closures": {
+    "AssuranceMirage.admit_unique": [
+      "propext"
+    ],
+    "AssuranceMirage.step_proposal_independent": [
+      "propext"
+    ],
+    "AssuranceMirage.tool_trace_independent": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.channel1_score_independent": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.constructive_mirage": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.single_channel_blind": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.joint_detects_constructive_mirage": [
+      "propext"
+    ],
+    "AssuranceMirage.completion_not_competence": [
+      "propext"
+    ]
+  },
+  "permitted_axioms": [
+    "Quot.sound",
+    "propext"
+  ],
+  "kernel_checked": true,
+  "native_decide": false,
+  "sorry": false,
+  "production_authority": false,
+  "seconds": 65.219251
+}

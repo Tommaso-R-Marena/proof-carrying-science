@@ -7,6 +7,7 @@ and independent external validation are separate claims.
 
 | Start here | Capability and evidence |
 |---|---|
+| [Assurance Mirage v1](assurance_mirage_v1/README.md) | Kernel-checked channel-1 blindness under correcting guards; 160 fresh Qwen3 0.6B/1.7B completions on a real SQLite scientific program; mirage rates 93.75%–100% among attacks |
 | [Public-study actual-weight evaluation](public_study_validation_v1_results/README.md) | 72 fresh Qwen responses, five published attack templates, failures retained, 72 guarded episodes and 72 fresh receiving replays; current hardened receiving command |
 | [Canonical action laboratory](structured_action_lab_v4/README.md) | Recorded/fresh model modes, exact token/byte parsing, corrected proposals and visual reports |
 | [Token policy gate](token_policy_gate_v5/README.md) | Kernel-checked token/byte/selection binding and controller-version budget proofs; recorded-response replay |
