@@ -1,0 +1,79 @@
+{
+  "premises": [
+    {
+      "id": 0,
+      "formula": [
+        "atom",
+        0
+      ],
+      "authority": "empiricalAsserted"
+    },
+    {
+      "id": 1,
+      "formula": [
+        "atom",
+        1
+      ],
+      "authority": "mathVerified"
+    }
+  ],
+  "steps": [
+    {
+      "rule": "hyp",
+      "support": [
+        0
+      ],
+      "authority": "empiricalAsserted",
+      "formula": [
+        "atom",
+        0
+      ]
+    },
+    {
+      "rule": "hyp",
+      "support": [
+        1
+      ],
+      "authority": "mathVerified",
+      "formula": [
+        "atom",
+        1
+      ]
+    },
+    {
+      "rule": "andI",
+      "support": [
+        0,
+        1
+      ],
+      "authority": "mathVerified",
+      "formula": [
+        "and",
+        [
+          "atom",
+          0
+        ],
+        [
+          "atom",
+          1
+        ]
+      ]
+    }
+  ],
+  "final_support": [
+    0,
+    1
+  ],
+  "final_authority": "mathVerified",
+  "conclusion": [
+    "and",
+    [
+      "atom",
+      0
+    ],
+    [
+      "atom",
+      1
+    ]
+  ]
+}
