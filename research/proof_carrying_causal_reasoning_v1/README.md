@@ -48,9 +48,11 @@ cd research/proof_carrying_causal_reasoning_v1/lean && lake build
 
 Lean now includes inductive confounder/collider/mediation/front-door/IV proofs,
 do-calculus Rule-2 context packs, an abstract non-identifiability theorem, and
-an exact-rational confounder SCM with `backdoor = do` plus correlation≠causation
-(see `RESULTS.md`). Certificates carry strategy-specific assumptions and
-`formal_bindings` naming the concrete Lean theorems for the suite graphs.
+exact-rational SCMs with `backdoor = do` and `frontdoor = do` plus
+correlation≠causation (see `RESULTS.md`). Certificates carry strategy-specific
+assumptions and `formal_bindings` naming the concrete Lean theorems for the
+suite graphs. Binary IV bounds are dual-checked (exact LP ≡ Balke–Pearl
+closed forms) before certification.
 
 ## Live local models (GGUF)
 

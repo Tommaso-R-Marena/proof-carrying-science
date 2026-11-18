@@ -54,6 +54,7 @@ FORMAL_BINDINGS = {
         "PcsPccr.FrontDoorInd.m_frontdoor_intercepts",
         "PcsPccr.FrontDoorInd.m_frontdoor_no_direct",
         "PcsPccr.FrontDoorInd.m_frontdoor_U_not_to_M",
+        "PcsPccr.SCMFrontDoor.frontdoor_matches_do_X1_Y1",
     ),
     "instrument": (
         "PcsPccr.InstrumentInd.z_instrument_relevance",
@@ -545,6 +546,27 @@ def _check_instrument(
                 intervention=intervention_info,
                 ground_truth=gt,
             )
+        if claim.claimed_p_do is not None and bounds_info is not None:
+            claimed = Fraction(claim.claimed_p_do)
+            lo = Fraction(bounds_info["p_do_1_lower"])
+            hi = Fraction(bounds_info["p_do_1_upper"])
+            if claimed != lo or claimed != hi:
+                reasons.append(
+                    f"point-ID claim requires claimed_p_do equal to collapsed "
+                    f"bound {_frac(lo)}; got {claim.claimed_p_do}"
+                )
+                return _verdict(
+                    claim,
+                    accepted=False,
+                    verdict="intervention_mismatch",
+                    reasons=tuple(reasons),
+                    backdoor=None,
+                    frontdoor=None,
+                    instrument=iv.to_dict(),
+                    bounds=bounds_info,
+                    intervention=intervention_info,
+                    ground_truth=gt,
+                )
         reasons.append("instrument point-identified; bounds collapsed")
         return _verdict(
             claim,
@@ -557,6 +579,32 @@ def _check_instrument(
             bounds=bounds_info,
             intervention=intervention_info,
             ground_truth=gt,
+        )
+
+    if claim.claimed_p_do is not None and bounds_info is not None:
+        claimed = Fraction(claim.claimed_p_do)
+        lo = Fraction(bounds_info["p_do_1_lower"])
+        hi = Fraction(bounds_info["p_do_1_upper"])
+        if not (lo <= claimed <= hi):
+            reasons.append(
+                f"claimed P(Y|do(X=1))={claim.claimed_p_do} outside Balke–Pearl "
+                f"[{bounds_info['p_do_1_lower']}, {bounds_info['p_do_1_upper']}]"
+            )
+            return _verdict(
+                claim,
+                accepted=False,
+                verdict="intervention_mismatch",
+                reasons=tuple(reasons),
+                backdoor=None,
+                frontdoor=None,
+                instrument=iv.to_dict(),
+                bounds=bounds_info,
+                intervention=intervention_info,
+                ground_truth=gt,
+            )
+        reasons.append(
+            "claimed_p_do lies inside certified Balke–Pearl interval "
+            "(not a point identification)"
         )
 
     reasons.append(

@@ -118,12 +118,16 @@ def balke_pearl_bounds(
     outcome: str,
     instrument: str,
 ) -> BalkePearlBounds:
-    """Sharp bounds on P(Y=1|do(X=x)) via response-type linear programs."""
+    """Sharp bounds on P(Y=1|do(X=x)) via response-type linear programs.
+
+    Independently cross-checks against Balke–Pearl (1997) closed-form expressions
+    for π_x = P(Y=1|do(X=x)) and the sharp ACE bounds (Palmer et al. exposition).
+    """
     check = verify_instrument(scm.graph, treatment, outcome, instrument)
     if not check.valid:
         raise GraphError("instrument invalid; refuse bounds")
 
-    # Observational cells p(x,y|z)
+    # Observational cells p(y,x|z) indexed as (z, x, y)
     obs: Dict[Tuple[int, int, int], Fraction] = {}
     for z, x, y in product([0, 1], repeat=3):
         pz = scm.p_obs({instrument: z})
@@ -131,10 +135,13 @@ def balke_pearl_bounds(
             raise GraphError("instrument positivity failure")
         obs[(z, x, y)] = scm.p_obs({instrument: z, treatment: x, outcome: y}) / pz
 
+    if not instrument_inequality_holds(obs):
+        raise GraphError("instrumental inequality violated by observational law")
+
+    closed = balke_pearl_closed_forms(obs)
+
     # 16 response types: (x0, x1, y0, y1)
     types = list(product([0, 1], repeat=4))
-    # Build equality constraints A q = b for the 8 cells (then drop 2 redundant sum-to-1).
-    # For each (z,x,y): sum_{types compatible} q_t = obs[z,x,y]
     rows: List[List[Fraction]] = []
     rhs: List[Fraction] = []
     for z, x, y in product([0, 1], repeat=3):
@@ -142,30 +149,42 @@ def balke_pearl_bounds(
         for x0, x1, y0, y1 in types:
             xz = x0 if z == 0 else x1
             y_of_x = y0 if x == 0 else y1
-            # Observed (X=x,Y=y|Z=z) requires X(z)=x and Y(x)=y
             row.append(Fraction(1) if (xz == x and y_of_x == y) else Fraction(0))
         rows.append(row)
         rhs.append(obs[(z, x, y)])
 
-    # Also sum q = 1 (implied by summing either Z slice, but keep for conditioning)
     rows.append([Fraction(1)] * 16)
     rhs.append(Fraction(1))
 
-    # Objectives
     c_y1 = [Fraction(1) if y1 == 1 else Fraction(0) for (_x0, _x1, _y0, y1) in types]
     c_y0 = [Fraction(1) if y0 == 1 else Fraction(0) for (_x0, _x1, y0, _y1) in types]
 
     lo1, hi1 = _exact_lp_bounds(rows, rhs, c_y1)
     lo0, hi0 = _exact_lp_bounds(rows, rhs, c_y0)
-
-    # Sharp ATE bounds require joint optimization; compute via objective y1 - y0.
     c_ate = [c_y1[i] - c_y0[i] for i in range(16)]
     ate_lo, ate_hi = _exact_lp_bounds(rows, rhs, c_ate)
+
+    if (lo1, hi1, lo0, hi0, ate_lo, ate_hi) != (
+        closed["p_do_1_lower"],
+        closed["p_do_1_upper"],
+        closed["p_do_0_lower"],
+        closed["p_do_0_upper"],
+        closed["ate_lower"],
+        closed["ate_upper"],
+    ):
+        raise GraphError(
+            "LP bounds disagree with Balke–Pearl closed forms "
+            f"lp=({_f(lo0)},{_f(hi0)},{_f(lo1)},{_f(hi1)},{_f(ate_lo)},{_f(ate_hi)}) "
+            f"cf=({_f(closed['p_do_0_lower'])},{_f(closed['p_do_0_upper'])},"
+            f"{_f(closed['p_do_1_lower'])},{_f(closed['p_do_1_upper'])},"
+            f"{_f(closed['ate_lower'])},{_f(closed['ate_upper'])})"
+        )
 
     point = lo1 == hi1 and lo0 == hi0
     notes = [
         "bounds from exact rational LP over binary IV response types (Balke–Pearl polytope)",
         "ATE bounds are sharp (optimized directly), not Frechet envelopes",
+        "LP matches Balke–Pearl 1997 closed-form expressions",
     ]
     if point:
         notes.append("point-identified under this observational law")
@@ -190,6 +209,90 @@ def balke_pearl_bounds(
         point_identified=point,
         notes=tuple(notes),
     )
+
+
+def instrument_inequality_holds(obs: Dict[Tuple[int, int, int], Fraction]) -> bool:
+    """Pearl instrumental inequalities on p(y,x|z) cells (z,x,y)."""
+    # p00.0 + p10.1 ≤ 1, etc. (yx.z notation)
+    p = {(y, x, z): obs[(z, x, y)] for z, x, y in product([0, 1], repeat=3)}
+    checks = (
+        p[(0, 0, 0)] + p[(1, 0, 1)],
+        p[(1, 0, 0)] + p[(0, 0, 1)],
+        p[(1, 1, 0)] + p[(0, 1, 1)],
+        p[(0, 1, 0)] + p[(1, 1, 1)],
+    )
+    return all(v <= 1 for v in checks)
+
+
+def balke_pearl_closed_forms(
+    obs: Dict[Tuple[int, int, int], Fraction],
+) -> Dict[str, Fraction]:
+    """Closed-form sharp bounds (Balke–Pearl / Palmer–Ramsahai–Didelez–Sheehan).
+
+    `obs` maps (z, x, y) → P(Y=y, X=x | Z=z).
+    """
+    # Rename to p_yx.z
+    def p(y: int, x: int, z: int) -> Fraction:
+        return obs[(z, x, y)]
+
+    p000, p100, p010, p110 = p(0, 0, 0), p(1, 0, 0), p(0, 1, 0), p(1, 1, 0)
+    p001, p101, p011, p111 = p(0, 0, 1), p(1, 0, 1), p(0, 1, 1), p(1, 1, 1)
+
+    # π0 = P(Y=1|do(X=0))
+    p10_low = max(
+        p101,
+        p100,
+        p100 + p110 - p001 - p111,
+        p010 + p100 - p001 - p011,
+    )
+    p10_upp = min(
+        1 - p001,
+        1 - p000,
+        p010 + p100 + p101 + p111,
+        p100 + p110 + p011 + p101,
+    )
+    # π1 = P(Y=1|do(X=1))
+    p11_low = max(
+        p110,
+        p111,
+        -p000 - p010 + p001 + p111,
+        -p010 - p100 + p101 + p111,
+    )
+    p11_upp = min(
+        1 - p011,
+        1 - p010,
+        p000 + p110 + p101 + p111,
+        p100 + p110 + p001 + p111,
+    )
+    # Sharp ACE = π1 − π0 bounds (8 expressions each)
+    ate_low = max(
+        p000 + p111 - 1,
+        p001 + p111 - 1,
+        p110 + p001 - 1,
+        p000 + p110 - 1,
+        2 * p000 + p110 + p100 + p111 - 2,
+        p000 + 2 * p110 + p001 + p011 - 2,
+        p100 + p110 + 2 * p001 + p111 - 2,
+        p000 + p010 + p001 + 2 * p111 - 2,
+    )
+    ate_upp = min(
+        1 - p100 - p011,
+        1 - p010 - p101,
+        1 - p010 - p100,
+        1 - p011 - p101,
+        2 - 2 * p011 - p100 - p101 - p111,
+        2 - p010 - 2 * p100 - p001 - p011,
+        2 - p100 - p110 - 2 * p011 - p101,
+        2 - p000 - p010 - p011 - 2 * p101,
+    )
+    return {
+        "p_do_0_lower": p10_low,
+        "p_do_0_upper": p10_upp,
+        "p_do_1_lower": p11_low,
+        "p_do_1_upper": p11_upp,
+        "ate_lower": ate_low,
+        "ate_upper": ate_upp,
+    }
 
 
 def _exact_lp_bounds(

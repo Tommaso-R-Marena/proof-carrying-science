@@ -1,0 +1,590 @@
+{
+  "claims": {
+    "api_key_not_stored": true,
+    "empirical_causation_established": false,
+    "frontier_sota": false,
+    "local_measurement_only": true,
+    "production_authority": false,
+    "rate_limited": true
+  },
+  "evaluation": {
+    "accuracy": 1.0,
+    "kind": "model_evaluation",
+    "n_accepted": 4,
+    "n_tasks": 4,
+    "rows": [
+      {
+        "claim": {
+          "adjustment_set": [],
+          "asserts_association_equals_effect": true,
+          "asserts_identifiable": true,
+          "claimed_p_do": null,
+          "outcome": "Y",
+          "schema_version": 1,
+          "strategy": "backdoor",
+          "task_id": "T02",
+          "treatment": "X"
+        },
+        "raw": "{\n  \"treatment\": \"X\",\n  \"outcome\": \"Y\",\n  \"asserts_identifiable\": true,\n  \"adjustment_set\": [],\n  \"claimed_p_do\": null,\n  \"asserts_association_equals_effect\": true\n}",
+        "task_id": "T02",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = P(Y|X=x)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "bounds": null,
+          "certificate_sha256": "a47988996a039c5514e415d95942b6fae11d7ef3ca0d0625f48c5b298fe3f29e",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": true,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "strategy": "backdoor",
+            "task_id": "T02",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "formal_bindings": [
+            "PcsPccr.ConfounderInd.Z_satisfies_backdoor",
+            "PcsPccr.DoCalc.confounder_pack_backdoor",
+            "PcsPccr.SCMConfounder.backdoor_matches_do_X1_Y1"
+          ],
+          "frontdoor": {
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "front_door_graphical_conditions",
+              "consistency_Yx_equals_Y_when_X_x",
+              "positivity_for_front_door_conditionals"
+            ],
+            "criterion": "frontdoor",
+            "formula": null,
+            "mediators": [],
+            "outcome": "Y",
+            "reasons": [
+              "directed path not intercepted by M: X\u2192M\u2192Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "ground_truth": {
+            "ate": "1/4",
+            "backdoor_estimate": "5/8",
+            "backdoor_valid": true,
+            "frontdoor_valid": false,
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              []
+            ],
+            "p_do_1": "5/8",
+            "proposed_set_valid": true,
+            "strategy": "backdoor"
+          },
+          "instrument": null,
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "1/4",
+            "outcome": "Y",
+            "p_outcome_do": "5/8",
+            "p_outcome_obs": "5/8",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "backdoor identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T02",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "claim": {
+          "adjustment_set": [],
+          "asserts_association_equals_effect": false,
+          "asserts_identifiable": false,
+          "claimed_p_do": null,
+          "outcome": "Y",
+          "schema_version": 1,
+          "strategy": "backdoor",
+          "task_id": "T06",
+          "treatment": "X"
+        },
+        "raw": "{\n  \"treatment\": \"X\",\n  \"outcome\": \"Y\",\n  \"asserts_identifiable\": false,\n  \"adjustment_set\": [],\n  \"claimed_p_do\": null,\n  \"asserts_association_equals_effect\": false\n}",
+        "task_id": "T06",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-U-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "bounds": null,
+          "certificate_sha256": "aafb7e63d1867e1f1afc643ea156c108ecd461cad28dd78f4afd668e05127ea6",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": false,
+            "asserts_identifiable": false,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "strategy": "backdoor",
+            "task_id": "T06",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "formal_bindings": [
+            "PcsPccr.ConfounderInd.Z_satisfies_backdoor",
+            "PcsPccr.DoCalc.confounder_pack_backdoor",
+            "PcsPccr.SCMConfounder.backdoor_matches_do_X1_Y1"
+          ],
+          "frontdoor": {
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "front_door_graphical_conditions",
+              "consistency_Yx_equals_Y_when_X_x",
+              "positivity_for_front_door_conditionals"
+            ],
+            "criterion": "frontdoor",
+            "formula": null,
+            "mediators": [],
+            "outcome": "Y",
+            "reasons": [
+              "directed path not intercepted by M: X\u2192Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "ground_truth": {
+            "ate": "1/5",
+            "backdoor_valid": false,
+            "frontdoor_valid": false,
+            "identifiable": false,
+            "minimal_adjustment_sets": [],
+            "p_do_1": "11/20",
+            "proposed_set_valid": false,
+            "strategy": "backdoor"
+          },
+          "instrument": null,
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 9/20 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "9/20",
+            "outcome": "Y",
+            "p_outcome_do": "11/20",
+            "p_outcome_obs": "27/40",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "correctly recognized non-identifiability",
+            "unblocked backdoor paths remain: X-U-Y"
+          ],
+          "task_id": "T06",
+          "verdict": "not_identifiable"
+        }
+      },
+      {
+        "claim": {
+          "adjustment_set": [
+            "M"
+          ],
+          "asserts_association_equals_effect": false,
+          "asserts_identifiable": true,
+          "claimed_p_do": null,
+          "outcome": "Y",
+          "schema_version": 1,
+          "strategy": "frontdoor",
+          "task_id": "T09",
+          "treatment": "X"
+        },
+        "raw": "{\n  \"treatment\": \"X\",\n  \"outcome\": \"Y\",\n  \"asserts_identifiable\": true,\n  \"strategy\": \"frontdoor\",\n  \"adjustment_set\": [\n    \"M\"\n  ],\n  \"claimed_p_do\": null,\n  \"asserts_association_equals_effect\": false\n}",
+        "task_id": "T09",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "front_door_graphical_conditions",
+            "consistency_Yx_equals_Y_when_X_x",
+            "positivity_for_front_door_conditionals"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "M"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "adjustment set contains descendants of treatment: ['M']",
+              "unblocked backdoor paths remain: X-U-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "bounds": null,
+          "certificate_sha256": "03946b215c51d0353d7ea332c6e80bf2ef655719e77202856baaa789f5be3526",
+          "claim": {
+            "adjustment_set": [
+              "M"
+            ],
+            "asserts_association_equals_effect": false,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "strategy": "frontdoor",
+            "task_id": "T09",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "formal_bindings": [
+            "PcsPccr.FrontDoorInd.m_frontdoor_intercepts",
+            "PcsPccr.FrontDoorInd.m_frontdoor_no_direct",
+            "PcsPccr.FrontDoorInd.m_frontdoor_U_not_to_M",
+            "PcsPccr.SCMFrontDoor.frontdoor_matches_do_X1_Y1"
+          ],
+          "frontdoor": {
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "front_door_graphical_conditions",
+              "consistency_Yx_equals_Y_when_X_x",
+              "positivity_for_front_door_conditionals"
+            ],
+            "criterion": "frontdoor",
+            "formula": "P(Y|do(X=x)) = \u03a3_{M} P(M|X=x) \u03a3_{x'} P(Y|X=x',M) P(X=x')",
+            "mediators": [
+              "M"
+            ],
+            "outcome": "Y",
+            "reasons": [
+              "front-door criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "ground_truth": {
+            "ate": "1/6",
+            "backdoor_valid": false,
+            "frontdoor_estimate": "7/12",
+            "frontdoor_valid": true,
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "U"
+              ]
+            ],
+            "p_do_1": "7/12",
+            "proposed_set_valid": true,
+            "strategy": "frontdoor"
+          },
+          "instrument": null,
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 1/3 differs from ATE 1/6 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "1/3",
+            "outcome": "Y",
+            "p_outcome_do": "7/12",
+            "p_outcome_obs": "2/3",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "frontdoor identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T09",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "claim": {
+          "adjustment_set": [
+            "Z"
+          ],
+          "asserts_association_equals_effect": false,
+          "asserts_identifiable": false,
+          "claimed_p_do": null,
+          "outcome": "Y",
+          "schema_version": 1,
+          "strategy": "instrument",
+          "task_id": "T10",
+          "treatment": "X"
+        },
+        "raw": "{\n  \"treatment\": \"X\",\n  \"outcome\": \"Y\",\n  \"asserts_identifiable\": false,\n  \"strategy\": \"instrument\",\n  \"adjustment_set\": [\n    \"Z\"\n  ],\n  \"claimed_p_do\": null,\n  \"asserts_association_equals_effect\": false\n}",
+        "task_id": "T10",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "instrument_exogeneity_Z_dsep_Y_in_G_underline_X",
+            "instrument_relevance_Z_affects_X",
+            "exclusion_no_direct_Z_to_Y",
+            "consistency"
+          ],
+          "backdoor": null,
+          "bounds": {
+            "ate_lower": "-1/9",
+            "ate_upper": "5/9",
+            "instrument": "Z",
+            "notes": [
+              "bounds from exact rational LP over binary IV response types (Balke\u2013Pearl polytope)",
+              "ATE bounds are sharp (optimized directly), not Frechet envelopes",
+              "LP matches Balke\u2013Pearl 1997 closed-form expressions"
+            ],
+            "outcome": "Y",
+            "p_do_0_lower": "1/6",
+            "p_do_0_upper": "1/2",
+            "p_do_1_lower": "7/18",
+            "p_do_1_upper": "13/18",
+            "point_identified": false,
+            "treatment": "X"
+          },
+          "certificate_sha256": "4b807c261ba03b91213d17e53c3da5e17978148260c1970717da2493227e0f25",
+          "claim": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "asserts_association_equals_effect": false,
+            "asserts_identifiable": false,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "strategy": "instrument",
+            "task_id": "T10",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "formal_bindings": [
+            "PcsPccr.InstrumentInd.z_instrument_relevance",
+            "PcsPccr.InstrumentInd.exclusion_no_Z_Y",
+            "PcsPccr.InstrumentInd.Z_not_parent_Y_after_doX",
+            "PcsPccr.InstrumentInd.u_not_instrument_exclusion"
+          ],
+          "frontdoor": null,
+          "ground_truth": {
+            "ate": "1/4",
+            "bounds": {
+              "ate_lower": "-1/9",
+              "ate_upper": "5/9",
+              "instrument": "Z",
+              "notes": [
+                "bounds from exact rational LP over binary IV response types (Balke\u2013Pearl polytope)",
+                "ATE bounds are sharp (optimized directly), not Frechet envelopes",
+                "LP matches Balke\u2013Pearl 1997 closed-form expressions"
+              ],
+              "outcome": "Y",
+              "p_do_0_lower": "1/6",
+              "p_do_0_upper": "1/2",
+              "p_do_1_lower": "7/18",
+              "p_do_1_upper": "13/18",
+              "point_identified": false,
+              "treatment": "X"
+            },
+            "identifiable": false,
+            "instrument_valid": true,
+            "p_do_1": "13/24",
+            "strategy": "instrument"
+          },
+          "instrument": {
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "instrument_exogeneity_Z_dsep_Y_in_G_underline_X",
+              "instrument_relevance_Z_affects_X",
+              "exclusion_no_direct_Z_to_Y",
+              "consistency"
+            ],
+            "criterion": "instrument",
+            "instrument": "Z",
+            "outcome": "Y",
+            "reasons": [
+              "instrumental-variable graphical conditions satisfied"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 13/36 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "13/36",
+            "outcome": "Y",
+            "p_outcome_do": "13/24",
+            "p_outcome_obs": "43/72",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "instrument valid; Balke\u2013Pearl bounds certified (partial identification)",
+            "instrumental-variable graphical conditions satisfied"
+          ],
+          "task_id": "T10",
+          "verdict": "bounds_certified"
+        }
+      }
+    ]
+  },
+  "max_requests": 4,
+  "min_interval_sec": 10.0,
+  "model": "gemini-3.5-flash-lite",
+  "n_calls": 4,
+  "provenance": [
+    {
+      "attempt": 1,
+      "error": null,
+      "finish_reason": "STOP",
+      "model": "gemini-3.5-flash-lite",
+      "ok": true,
+      "request_sha256": "1ac6491e266f5654eec83e99a588c7345526e0b904e26e520d82d5ae4b90fab1",
+      "response_sha256": "f9017982446e3c2d7b7e68f23dd20ff23d2d488b2bf27dd58dfd8c698cc5ad1c",
+      "status": 200,
+      "task_id": "T02",
+      "usage": {
+        "candidatesTokenCount": 62,
+        "promptTokenCount": 255,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 255
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 317
+      }
+    },
+    {
+      "attempt": 1,
+      "error": null,
+      "finish_reason": "STOP",
+      "model": "gemini-3.5-flash-lite",
+      "ok": true,
+      "request_sha256": "73fb264c7f3af1dfe45b8ce9de6e536b16578c2585e3779c87dc7cf90c03465c",
+      "response_sha256": "44d93ca01ae6c1ebfb76af5692d0d3bbca694e23b53adbaf721274c622377c13",
+      "status": 200,
+      "task_id": "T06",
+      "usage": {
+        "candidatesTokenCount": 62,
+        "promptTokenCount": 205,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 205
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 267
+      }
+    },
+    {
+      "attempt": 1,
+      "error": null,
+      "finish_reason": "STOP",
+      "model": "gemini-3.5-flash-lite",
+      "ok": true,
+      "request_sha256": "6a1a1a53c27010b94bf1a53c4fff8c572095e8cdefc6b616e40cfd90a24ac485",
+      "response_sha256": "52adcc6dcf02f2e593cd29f77727e8c08a93cb1364810c413ddaff69a525e529",
+      "status": 200,
+      "task_id": "T09",
+      "usage": {
+        "candidatesTokenCount": 79,
+        "promptTokenCount": 207,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 207
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 286
+      }
+    },
+    {
+      "attempt": 1,
+      "error": null,
+      "finish_reason": "STOP",
+      "model": "gemini-3.5-flash-lite",
+      "ok": true,
+      "request_sha256": "5d188f95608d0394c514d1f018c1ea75557cecd87aafb1d9613dabdecaf17107",
+      "response_sha256": "9ff1b2e20625546919568d893973e5bc346d527f1d9611191904523b96451dc6",
+      "status": 200,
+      "task_id": "T10",
+      "usage": {
+        "candidatesTokenCount": 78,
+        "promptTokenCount": 204,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 204
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 282
+      }
+    }
+  ],
+  "provider": "google-generativelanguage"
+}
