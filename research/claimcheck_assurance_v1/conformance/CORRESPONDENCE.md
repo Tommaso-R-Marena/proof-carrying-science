@@ -86,15 +86,19 @@ patterns.
   (`assess_document`'s `strong` list and `corroborators`). E takes `corM` and `corD` as inputs, and
   only part A tests the composition. (The model allows sibling relations the code cannot produce,
   for example `corD` without `corM`; that over-approximation is safe for the theorems.)
-* **Input condition of E.** `_decide` chooses the match or the mismatch rules by
-  `receipt["result"]`; the model chooses by the mathematical status. The two coincide on every
-  receipt v1 writes: D checks `_complete`, and both replayers recompute the result from the status
-  and refuse a mismatch (`test_binding_offline`). `_decide` itself does not check this. A receipt
-  edited to have status MATCH_PROVED with result REFUTED gets DISCREPANCY_FOR_REVIEW, and one with
-  MISMATCH_PROVED and result PROVED gets CONFIRMATION. Both are recorded, not asserted, in
-  `conformance_report.json`. `verify` builds receipts in-process, and `export_site_v11` reads
-  committed receipts. The cheapest closure is one guard in `_decide` that requires the result to
-  match the status; that is the owner's decision, and `policy.py` is not changed here.
+* **Input condition of E, now enforced by the code (2026-11-17).** The model takes the mathematical
+  status as authoritative. Until 2026-11-17 `_decide` chose the match or the mismatch rules by
+  `receipt["result"]`, so a receipt edited to have status MATCH_PROVED with result REFUTED got
+  DISCREPANCY_FOR_REVIEW, and one with MISMATCH_PROVED and result PROVED got CONFIRMATION. The core
+  branch (`5a18afd7`) now has `policy.established_status`, which recomputes the status from the
+  kernel-checked variants as `_complete` builds it and requires every summary field to agree, and
+  `policy.binding_problem`; an inconsistent receipt decides nothing. Here: part D asserts that the
+  real guard is the identity on every receipt `_complete` can write (all 84 patterns), so the guard
+  rejects nothing the pipeline produces; parts B, C and E check the decision logic on the input
+  condition (their abstract receipts carry no concrete kernel records, so the guard is held at
+  identity there, stated in `input_condition()`); and `outside_the_input_condition` now asserts, with
+  the real guard, that both contradictory receipts give UNKNOWN. The policy does not re-run Lean: a
+  consistent lie in a kernel record is caught by the replay, which re-runs the kernel.
 * Python semantics, and the mapping of receipt and `Item` fields to the model's Booleans. Part E
   constructs that mapping and checks it by assertion.
 
@@ -180,8 +184,10 @@ On all 302 committed receipts both conditions already hold (re-checked with the 
 functions: 0 violations), and the live check with the real kernel still replays genuine bundles.
 The three tests, renamed `test_claim_binding_*`, now assert refusal by the v1.1 replayer. The
 frozen v1 replayer (`FREEZE.json`) was not changed: on its own it still accepts these bundles, and
-the tests record that. Use the v1.1 replayer for v1.1 bundles. The `_decide` guard below is still
-open.
+the tests record that. Use the v1.1 replayer for v1.1 bundles, and
+`research/claimcheck_v1_1/replay_v1_bundle_checked.py` for v1 bundles (frozen replayer unchanged,
+plus the binding checks; warning in `research/claimcheck_v1/LEGACY_REPLAY_WARNING.md`). The
+`_decide` guard is closed too (above).
 
 **Further limits of the binding, by design or not yet addressed**:
 
@@ -198,7 +204,7 @@ open.
 | gap | cheapest credible closure | now? |
 |---|---|---|
 | Replay does not bind the claim to the sentence (finding above) | The two checks above | **Done in the v1.1 replayer** (2026-11-17); the frozen v1 replayer keeps the gap |
-| `_decide` does not enforce the input condition of part E | One guard: a decided result must have the polarity of the status | Yes, together with the replay fix |
+| `_decide` does not enforce the input condition of part E | One guard: a decided result must have the polarity of the status | **Done** (2026-11-17, core `5a18afd7`): `established_status`, `binding_problem`; asserted here with the real guard |
 | Python parser ↔ proved Lean parser (tested, not proved) | Translation validation per proof file: have Lean run the proved `parseTail` on the file's generated part and require the runner's extraction to equal it, or kernel-check `parseTail t = some (…)` by `decide` (cost on 130 KB tails unmeasured) | Not now. 0 disagreements on 10,720 vectors, and the known forgery class is closed; the marginal gain is small |
 | Composition across receipts (strong list, siblings) | An exhaustive two-record check against a Lean export of `Doc.verdict` (a few thousand cases) | Cheap. Worth doing before the policy is frozen for a prospective run, after the two items above |
 | How findings are computed | Outside the formal argument by design | No formal work. This is what development and prospective evaluation measure; scientific validation matters more here |

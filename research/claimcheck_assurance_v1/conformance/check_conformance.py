@@ -76,7 +76,7 @@ def part_a():
             continue
         receipts = json.loads((ROOT / "research/claimcheck_v1/benchmark/results/bundles" / doc.slug / "receipts.json").read_text())
         captured = []
-        policy._decide = lambda ctx, receipt, it, cor, tau: captured.append((receipt, it, REAL_DECIDE(ctx, receipt, it, cor, tau))) or captured[-1][2]
+        policy._decide = lambda ctx, receipt, it, cor, tau, *more: captured.append((receipt, it, REAL_DECIDE(ctx, receipt, it, cor, tau, *more))) or captured[-1][2]
         try:
             results = policy.assess_document(context(doc), receipts)
         finally:
@@ -146,8 +146,23 @@ def analysis(truncated=False, rate_ok=True):
                            decoys_reproduced=0, examples=[], matching=[])
 
 
+REAL_GUARD = (policy.established_status, policy.binding_problem)
+
+
+def input_condition():
+    """Parts B, C and E check the decision logic on the Lean model's input condition: a receipt whose
+    summary agrees with its kernel-checked variants and whose claim is the sentence's.  Their receipts
+    are abstract (no concrete kernel records), so the guard is held at identity there; part D checks
+    that the real guard is the identity on every receipt the real pipeline writes, and
+    `outside_the_input_condition` checks, with the real guard, that every other receipt decides nothing."""
+    policy.established_status = lambda receipt, **kw: (policy.math_status(receipt), None)
+    policy.binding_problem = lambda receipt, manifest: None
+
+
 def stubbed(basic_ok, analyse, alternatives):
-    saved = {k: getattr(policy, k) for k in ("_basic_findings", "_analyse", "_alternatives", "_bound_to", "_rate_words", "_describe", "_same_quantity", "unit_factor")}
+    saved = {k: getattr(policy, k) for k in ("_basic_findings", "_analyse", "_alternatives", "_bound_to", "_rate_words", "_describe", "_same_quantity", "unit_factor",
+                                             "established_status", "binding_problem")}
+    input_condition()
     policy._basic_findings = lambda ctx, it: (basic_ok, [{"rule": "basic", "passed": basic_ok, "detail": "basic"}])
     policy._analyse = analyse
     policy._alternatives = alternatives
@@ -169,7 +184,7 @@ def decide(math, has_window, quote_ok, grounded, ident_ok, *, strong=False, cor_
     receipt = fake_receipt(math, grounded, quote_ok, variants)
     it = fake_item(receipt, math, has_window, ident_ok, stat, strong)
     it.analysis = analysis(truncated=truncated)
-    ctx = SimpleNamespace(source=window.ljust(40), data_unit=lambda spec: None)
+    ctx = SimpleNamespace(source=window.ljust(40), data_unit=lambda spec: None, manifest={})
     saved = stubbed(basic_ok, lambda ctx, it, restrict=None: analysis(rate_ok=pinned_ok),
                     lambda it, a, competing_only=False: ([SimpleNamespace()] if alts else []))
     try:
@@ -221,7 +236,7 @@ def part_c():
     for (g1, g2, g3, g4, cor_m, pin), want in MATCH.items():
         receipt = fake_receipt("MATCH_PROVED", True, True)
         it = fake_item(receipt, "MATCH_PROVED", True, True)
-        ctx = SimpleNamespace(source="the mean was 10 in all".ljust(40), data_unit=lambda spec: None)
+        ctx = SimpleNamespace(source="the mean was 10 in all".ljust(40), data_unit=lambda spec: None, manifest={})
         saved = stubbed(g1, lambda ctx, it, restrict=None: analysis(truncated=not g2, rate_ok=g4),
                         lambda it, a, competing_only=False: ([SimpleNamespace()] if (competing_only and not g3) else []))
         try:
@@ -268,6 +283,7 @@ def part_d():
                     r = pipeline._complete(pipeline._Pending(receipt, None, SimpleNamespace(ok=bound_ok, failures=["a gate failed"]), variants, [], Fraction(1)))
                     got = policy.math_status(r)
                     assert got == want, (pattern, [(o, lean) for o, lean in held], bound_ok, named, got, want)
+                    assert REAL_GUARD[0](r) == (got, None), (pattern, REAL_GUARD[0](r))   # the guard accepts what v1 writes
                     assert kinds(r) == pattern  # the abstraction part A applies to committed receipts
                     # what part E assumes of a receipt: a decided result is the kernel's status, with the same polarity
                     if r["result"] in ("PROVED", "REFUTED"):
@@ -331,7 +347,8 @@ def an(kind, truncated, rate_ok):
 
 
 def e_stubs():
-    saved = {k: getattr(policy, k) for k in ("_basic_findings", "_analyse", "_alternatives", "_bound_to")}
+    saved = {k: getattr(policy, k) for k in ("_basic_findings", "_analyse", "_alternatives", "_bound_to", "established_status", "binding_problem")}
+    input_condition()
 
     def analyse(ctx, it, restrict=None):
         if restrict is None:  # the mismatch rules: every eligible reading of the sentence
@@ -398,12 +415,12 @@ MISMATCH_RULES = {"not_a_count": "notCount", "eligible_reading": "basicOk", "bou
 
 
 def outside_the_input_condition():
-    """Recorded, not asserted: receipts whose decided result contradicts the kernel's status.
+    """Asserted (since 2026-11-17): a receipt whose decided result contradicts the kernel's status decides nothing.
 
-    `_decide` chooses the match or the mismatch rules by `receipt["result"]`, the model by the
-    mathematical status.  They coincide on every receipt v1 writes (`_finish` sets the result to the
-    status; part D checks `_complete`), which is the input condition of part E.  A receipt edited to
-    break it is outside the model; this shows what the code then does.
+    The model takes the mathematical status as authoritative.  Until 2026-11-17 `_decide` chose the
+    match or mismatch rules by `receipt["result"]`; such a receipt then gave DISCREPANCY_FOR_REVIEW or
+    CONFIRMATION.  With the real guard (`policy.established_status`, `policy.binding_problem`) it must
+    give UNKNOWN, with every finding passing and a sibling available.
     """
     seen = {}
     saved = e_stubs()
@@ -416,8 +433,11 @@ def outside_the_input_condition():
             CUR.pin = (False, False, False)
             if result == "PROVED":
                 it.strong_match, it.findings = policy._numeric_evidence(ctx, it, policy.TAU)
+            policy.established_status, policy.binding_problem = REAL_GUARD
             res = REAL_DECIDE(ctx, receipt, it, lambda item, same_column: [SIB_E], policy.TAU)
+            input_condition()
             seen[f"status {m}, result {result}, all findings pass, siblings"] = res["verdict"]
+            assert res["verdict"] == "UNKNOWN", (m, result, res["verdict"])
     finally:
         restore(saved)
     return seen
@@ -484,7 +504,7 @@ def part_e():
     counts["by_verdict"] = dict(sorted(counts["by_verdict"].items()))
     counts.update({"lean_table_sha256": digest, "lean_seconds": round(lean_seconds, 1), "python_seconds": round(time.monotonic() - started, 1),
                    "concrete_alternatives_used": sum(alternatives.values()), "points_whose_reported_findings_were_checked": findings_checked,
-                   "outside_the_input_condition_recorded_not_checked": outside_the_input_condition()})
+                   "outside_the_input_condition_decides_nothing": outside_the_input_condition()})
     assert counts["points"] == 5 << 18 and counts["checked"] + counts["unreachable_count_with_dispersion_wording_failed"] == counts["points"]
     return counts
 
