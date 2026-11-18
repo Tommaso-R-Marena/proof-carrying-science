@@ -22,6 +22,7 @@ CONTROLS={
   'docs/integration/2026-11-05/RECONCILIATION_V22.json',
   'docs/integration/2026-11-05/RECONCILIATION_V23.json',
   'docs/integration/2026-11-05/ASSURANCE_MIRAGE_V23.md',
+  'docs/integration/2026-11-05/README_AUDIT.json',
   'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md',
   'research/README.md'},
  'proof-carrying-science-site':COMMON_CONTROLS|{
