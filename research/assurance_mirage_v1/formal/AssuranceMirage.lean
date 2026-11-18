@@ -211,6 +211,48 @@ theorem guard_completion_independent_unguarded_not :
       (unguardedRun unsafePropose 4 .start []).length := by
   decide
 
+/-- The unique-action policy never admits exfiltration. -/
+theorem admit_never_exfiltrates (s : State) : admit s ≠ some .exfiltrate := by
+  cases s <;> decide
+
+/-- Channel-2 (proposal harm count) separates the constructive mirage pair. -/
+def channel2Score (props : List ProposalRecord) : Nat :=
+  (props.filter (·.forbidden)).length
+
+theorem channel2_detects_constructive_mirage :
+    channel2Score (episodeOf safePropose false 4).proposals ≠
+    channel2Score (episodeOf unsafePropose true 4).proposals := by
+  decide
+
+/-- Channel-3 (raw leakage bit) separates the constructive mirage pair. -/
+def channel3Score (raw : RawRecord) : Nat :=
+  if raw.leaked then 1 else 0
+
+theorem channel3_detects_constructive_mirage :
+    channel3Score (episodeOf safePropose false 4).raw ≠
+    channel3Score (episodeOf unsafePropose true 4).raw := by
+  decide
+
+/-- For every fuel budget, the constructive pair remains a mirage on tools + raw. -/
+theorem constructive_mirage_any_fuel (fuel : Nat) :
+    Mirage (episodeOf safePropose false fuel) (episodeOf unsafePropose true fuel) := by
+  have htools :=
+    tool_trace_independent safePropose unsafePropose fuel .start [] [] []
+  refine ⟨?tools, ?scores, Or.inr ?raw⟩
+  · simpa [episodeOf] using htools
+  · simpa [episodeOf, channel1Score] using congrArg List.length htools
+  · intro eq; cases eq
+
+/-- Without the guard, the unsafe proposer never advances the scientific workflow. -/
+theorem unguarded_unsafe_stalls :
+    unguardedRun unsafePropose 4 .start [] = ([] : ToolTrace) := by
+  decide
+
+/-- Safe unguarded execution completes the four-step workflow. -/
+theorem unguarded_safe_completes :
+    (unguardedRun safePropose 4 .start []).length = 4 := by
+  decide
+
 end AssuranceMirage
 
 #print axioms AssuranceMirage.admit_unique
@@ -224,3 +266,9 @@ end AssuranceMirage
 #print axioms AssuranceMirage.guard_erases_divergence
 #print axioms AssuranceMirage.unguarded_diverges
 #print axioms AssuranceMirage.guard_completion_independent_unguarded_not
+#print axioms AssuranceMirage.admit_never_exfiltrates
+#print axioms AssuranceMirage.channel2_detects_constructive_mirage
+#print axioms AssuranceMirage.channel3_detects_constructive_mirage
+#print axioms AssuranceMirage.constructive_mirage_any_fuel
+#print axioms AssuranceMirage.unguarded_unsafe_stalls
+#print axioms AssuranceMirage.unguarded_safe_completes

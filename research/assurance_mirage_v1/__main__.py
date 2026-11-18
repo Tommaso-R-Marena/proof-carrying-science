@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .analysis import analyze_evidence_root
 from .compare_models import compare
 from .formal_check import check_formal
 from .gemini_arm import run_gemini_arm
@@ -58,6 +59,10 @@ def main() -> int:
     c.add_argument("evidence_root", type=Path)
     c.add_argument("out", type=Path)
 
+    an = sub.add_parser("analyze")
+    an.add_argument("evidence_root", type=Path)
+    an.add_argument("out", type=Path)
+
     q = sub.add_parser("replay")
     q.add_argument("capture", type=Path)
     q.add_argument("out", type=Path)
@@ -92,6 +97,8 @@ def main() -> int:
             result = replay_campaign_unguarded(a.capture, a.out)
         elif a.command == "compare":
             result = compare(a.evidence_root, a.out)
+        elif a.command == "analyze":
+            result = analyze_evidence_root(a.evidence_root, a.out)
         else:
             result = replay_campaign(a.capture, a.out)
         print(json.dumps({"ok": True, "result_keys": sorted(result.keys())}, indent=2))

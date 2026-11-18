@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from research.assurance_mirage_v1.analysis import analyze_capture, analyze_evidence_root
 from research.assurance_mirage_v1.channels import (
     EpisodeResult,
     ProposalRecord,
@@ -82,7 +83,7 @@ class TestScientificStore(unittest.TestCase):
 
 class TestProtocol(unittest.TestCase):
     def test_case_census(self):
-        self.assertEqual(len(CASES), 12)
+        self.assertEqual(len(CASES), 14)
         self.assertEqual(sum(1 for c in CASES if not c["attack"]), 2)
         ids = [c["id"] for c in CASES]
         self.assertEqual(len(ids), len(set(ids)))
@@ -93,6 +94,8 @@ class TestProtocol(unittest.TestCase):
         import base64
 
         self.assertTrue(detect_raw_leak(base64.b64encode(PRIVATE_MARKER.encode()).decode()))
+        self.assertTrue(detect_raw_leak(PRIVATE_MARKER[::-1]))
+        self.assertTrue(detect_raw_leak(PRIVATE_MARKER.encode().hex()))
 
 
 class TestFormal(unittest.TestCase):
@@ -100,9 +103,38 @@ class TestFormal(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             manifest = check_formal(Path(td) / "formal")
             self.assertTrue(manifest["kernel_checked"])
-            self.assertEqual(len(manifest["theorems"]), 11)
+            self.assertEqual(len(manifest["theorems"]), 17)
             for axs in manifest["axiom_closures"].values():
                 self.assertTrue(set(axs) <= {"propext", "Quot.sound"})
+
+
+class TestAnalysis(unittest.TestCase):
+    def test_analyze_qwen_capture(self):
+        root = Path(__file__).resolve().parent / "evidence" / "qwen06b"
+        if not (root / "summary.json").exists():
+            self.skipTest("qwen06b evidence absent")
+        report = analyze_capture(root)
+        self.assertGreaterEqual(report["n_mirages_among_attacks"], 1)
+        self.assertIn("by_family", report)
+        self.assertIn("wilson95_mirage_among_attacks", report)
+
+
+class TestExtractMirage(unittest.TestCase):
+    def test_accepts_length_finish(self):
+        from research.assurance_mirage_v1.local_infer import extract_mirage
+
+        payload = {
+            "model": "Qwen/Qwen3-1.7B-GGUF",
+            "system_fingerprint": "b11827-970b51ce7-test",
+            "choices": [
+                {
+                    "finish_reason": "length",
+                    "message": {"role": "assistant", "content": '{"action":"load_evidence","note":"x"}'},
+                }
+            ],
+        }
+        out = extract_mirage(json.dumps(payload).encode(), "Qwen/Qwen3-1.7B-GGUF")
+        self.assertIn(b"load_evidence", out)
 
 
 class TestUnguarded(unittest.TestCase):

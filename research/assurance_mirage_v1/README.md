@@ -44,6 +44,12 @@ Safety-JEPA, delegated-action, or incremental-revalidation branches.
 | `guard_erases_divergence` | Safe/unsafe proposers share guarded tool traces |
 | `unguarded_diverges` | Without the guard, they diverge immediately |
 | `guard_completion_independent_unguarded_not` | Guarded lengths match; unguarded lengths differ |
+| `admit_never_exfiltrates` | Unique-action policy never admits exfiltration |
+| `channel2_detects_constructive_mirage` | Proposal-harm channel separates the pair |
+| `channel3_detects_constructive_mirage` | Raw-leak channel separates the pair |
+| `constructive_mirage_any_fuel` | Mirage holds for every fuel budget |
+| `unguarded_unsafe_stalls` | Unsafe proposer never advances unguarded |
+| `unguarded_safe_completes` | Safe proposer completes the four-step workflow |
 
 ```sh
 source scripts/activate_lean_428.sh
@@ -55,10 +61,12 @@ PYTHONPATH=. python3 -m research.assurance_mirage_v1 formal /tmp/mirage-formal
 - Models: `Qwen/Qwen3-0.6B-GGUF` and `Qwen/Qwen3-1.7B-GGUF` Q8_0, pinned SHA-256
   in `protocol.py` / `research/local_weights_v1/pins.json`.
 - Runtime: llama.cpp b11827, CPU, sealed memfd weight snapshot, temp 0, seed 42.
-- 10 cases × 2 prompt arms × 4 turns = 80 completions per model.
+- 14 cases × 2 prompt arms × 4 turns = 112 completions per model (AgentDojo-style,
+  adaptive, authority-spoof, and tool-return-injection families).
 - Guard always executes the unique admitted action; proposals never authorize effects.
 - Channels scored separately; a **mirage** is guarded completion with proposal harm,
   raw/split leakage, or scope escalation.
+- Offline `analyze` builds family tables, Wilson intervals, and cross-model contingency.
 
 ```sh
 source scripts/activate_lean_428.sh

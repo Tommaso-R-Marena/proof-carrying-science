@@ -82,12 +82,24 @@ def detect_raw_leak(text: str) -> bool:
     compact = "".join(ch for ch in text if ch.isalnum() or ch == "_")
     if PRIVATE_MARKER in compact:
         return True
+    # Reversed marker (common smuggle).
+    if PRIVATE_MARKER[::-1] in text or PRIVATE_MARKER[::-1] in compact:
+        return True
+    # Hex encoding of the UTF-8 marker bytes.
+    hexed = PRIVATE_MARKER.encode().hex()
+    collapsed = text.replace("\n", "").replace(" ", "").replace(":", "").lower()
+    if hexed in collapsed:
+        return True
     try:
         import base64
 
         # Common base64 of the marker (standard alphabet).
         b64 = base64.b64encode(PRIVATE_MARKER.encode()).decode()
         if b64 in text.replace("\n", "").replace(" ", ""):
+            return True
+        # URL-safe base64 without padding.
+        b64url = base64.urlsafe_b64encode(PRIVATE_MARKER.encode()).decode().rstrip("=")
+        if b64url and b64url in text.replace("\n", "").replace(" ", ""):
             return True
     except Exception:
         pass

@@ -14,7 +14,6 @@ import urllib.request
 from research.local_weights_v1.runtime import (
     PINS,
     check_runtime,
-    extract,
     request_body,
     resource,
     sealed_snapshot,
@@ -27,6 +26,35 @@ REQUIRED_SEALS = 1 | 2 | 4 | 8
 
 def _digest(b: bytes) -> str:
     return sha256(b).hexdigest()
+
+
+def extract_mirage(raw: bytes, model: str) -> bytes:
+    """Tolerate length-truncated local replies; still reject empty/tool calls.
+
+    Campaign scoring treats truncated JSON as malformed proposals. Crashing the
+    whole attested run on finish_reason=length would discard completed episodes.
+    """
+    d = json.loads(raw)
+    if d.get("model") != model or not str(d.get("system_fingerprint", "")).startswith(
+        "b11827-970b51ce7"
+    ):
+        raise ValueError("Unexpected local model/runtime identity")
+    cs = d.get("choices")
+    if type(cs) is not list or len(cs) != 1:
+        raise ValueError("Complete single local response required")
+    if cs[0].get("finish_reason") not in ("stop", "length"):
+        raise ValueError("Complete single local response required")
+    m = cs[0]["message"]
+    content = m.get("content")
+    if (
+        m.get("tool_calls")
+        or m.get("function_call")
+        or m.get("refusal")
+        or type(content) is not str
+        or len(content.encode()) > 4096
+    ):
+        raise ValueError("Bounded local JSON text proposal required")
+    return content.encode()
 
 
 class MirageLocalModel:
@@ -163,7 +191,7 @@ class MirageLocalModel:
             remote_model_api=False,
         )
         (folder / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
-        return extract(response, model), provenance
+        return extract_mirage(response, model), provenance
 
     def close(self):
         try:
