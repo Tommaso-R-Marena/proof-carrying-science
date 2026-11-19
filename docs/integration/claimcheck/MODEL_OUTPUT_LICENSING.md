@@ -286,8 +286,8 @@ Consequently:
 | 5. recoverability | done on that copy: read back, every digest recomputed, complete |
 | 6. replacement with the governed tool | **not done**: stopped before altering the originals, as instructed |
 | 7. provenance kept in the stubs | prepared: provider, model, cache key (as `cache_key`), prompt digest, usage, finish reason, digests and sizes of the original and of its text, the commit and time the file was first recorded, request identifier (not recorded by the client), terms, reason |
-| 8. regression suites | measured in a throw-away worktree with the stubs applied (below) |
-| 9. effect on offline reproducibility | measured (below) |
+| 8. regression suites | measured in a throw-away worktree with the stubs applied by the governed tool: all pass (below) |
+| 9. effect on offline reproducibility | measured: only the Nemotron arm, and the union of both models, can no longer be regenerated offline (below) |
 | 10. admission evidence | **not regenerated**: it follows step 6 |
 
 **Why no private archive.** The archive must be private, outside every public repository and artifact
@@ -320,6 +320,23 @@ That copy disappears with the container and does not count as the archive.
 2. Or attach a folder of one of your computers to this session (Claude desktop app: Settings,
    Claude Code, Remote Control) and authorise writing the archive there.
 3. Or name another private destination you authorise.
+
+**Measured effect of the withholding** (`withholding/withholding-effect.json`; simulated at
+`044d7ee2` in two throw-away worktrees, one without and one with the stubs written by the governed
+tool):
+
+* the stubs change exactly the 22 files and nothing outside `results/*/model_responses/`;
+* with the stubs, every check still passes: the frozen freeze check (both digests), the v1 offline
+  tests, the v1.1 offline tests, and the independent and checked replay of a committed bundle with
+  the real Lean kernel;
+* every tool that reads the cache still runs: the held-out analysis, the development evaluation and
+  the demonstration;
+* without the stubs, these tools reproduce every value recorded in the committed `analysis.json`,
+  `dev_arms.json` and `DEMONSTRATION_ON_DEVELOPMENT_DATA.json`;
+* **with the stubs, the Nemotron (`openrouter`) arm and the union arm drop out** of the regenerated
+  development evaluation and demonstration, and the held-out post-hoc analysis loses its
+  Nemotron-dependent figures. Regenerating them offline therefore needs your private archive. The
+  committed results themselves, the frozen receipts and bundles, and their replays are unaffected.
 
 After your confirmation, steps 6 to 10 follow:
 
