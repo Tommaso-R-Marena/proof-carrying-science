@@ -3,6 +3,7 @@
 `git commit-tree` writes objects and no ref, so these tests change no branch or tag.  The gates
 themselves are exercised by `governance/h1b_adversarial.py` (worktrees, placeholder tag).
 """
+import os
 import subprocess
 import unittest
 
@@ -78,7 +79,9 @@ class CleanHistory(unittest.TestCase):
         self.assertTrue(is_ancestor(ROOT, core["protected"]["main"], self.clean["commit"]))
 
     def test_a_source_commit_not_based_on_protected_main_is_refused(self):
-        orphan = git("commit-tree", git("rev-parse", f"{self.head}^{{tree}}"), "-m", "not based on protected main")
+        # the fixed identity of the dry runs: a CI runner has no git identity configured
+        orphan = subprocess.check_output(["git", "commit-tree", git("rev-parse", f"{self.head}^{{tree}}"), "-m", "not based on protected main"],
+                                         cwd=ROOT, text=True, env={**os.environ, **P.FIXED}).strip()
         with self.assertRaises(SystemExit):
             P.retained_commit(ROOT, orphan, "clean")
 
