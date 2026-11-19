@@ -42,3 +42,16 @@ Uses the sharp result that channel-1-factorable scores are mirage-blind. The
 evolving gate’s job is to **keep discovering and retaining** joint/ensemble
 mechanisms that dominate that blindness on attested real-model runs — including
 stealth cases where classic joint flags stay silent.
+
+## External bake-off (JailbreakBench + SOTA-style guards)
+
+```sh
+# Requires ProtectAI ONNX under /tmp/external-bench/protectai/onnx and
+# JailbreakBench CSVs under /tmp/external-bench/jbb/data (see external_bench/).
+PYTHONPATH=. python3 -m research.evolving_safety_gate_v1.external_bench.run_bakeoff \
+  /tmp/esg-bakeoff --jbb-max 50
+```
+
+Results: [`RESULTS_EXTERNAL.md`](RESULTS_EXTERNAL.md). Short version: Gemini wins on
+JBB *content* Goals; `ensembleProbe` wins on agent mirage/stealth episodes;
+ProtectAI is strong on injection syntax but noisy / incomplete on mirages.
