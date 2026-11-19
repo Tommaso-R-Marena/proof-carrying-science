@@ -169,6 +169,21 @@ This is an **external oracle match**, not an LLM leaderboard score on CLadder NL
 prompts. It validates that the v1.5 counterfactual breakthrough agrees with an
 independent community benchmark's causal engine on ATE and ETT.
 
+## Gemini live (v1.5 counterfactual battery)
+
+Rate-limited `gemini-3.5-flash-lite` on `{T01,T02,T06,T09,T10,T11}` (≥10s between
+calls; key only via `GEMINI_API_KEY`).
+
+Evidence: `evidence/gemini-3.5-flash-lite-v5-cf/`.
+
+| Metric | Value |
+|--------|------:|
+| Accepted certificates | **6 / 6** |
+| Accuracy | **1.0** |
+| T11 counterfactual | accepted with `claimed_p_do=7/20` (not the interventional `3/8` trap) |
+
+Local measurement only — not a frontier SOTA claim.
+
 ## Non-claims
 
 - Not production PCS authority
