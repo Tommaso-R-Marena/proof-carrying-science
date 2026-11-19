@@ -20,9 +20,22 @@ def parents(commit: str) -> list[str]:
     return git("rev-list", "--parents", "-n", "1", commit).split()[1:]
 
 
+def history_available() -> str | None:
+    """None if the objects the construction needs are present; else what is missing (a shallow clone, or no tags)."""
+    for name, commit in (("protected main", P.PROTECTED_MAIN), ("previous intake", P.OLD_INTAKE)):
+        if subprocess.run(["git", "cat-file", "-e", f"{commit}^{{commit}}"], cwd=ROOT, capture_output=True).returncode:
+            return f"the {name} commit {commit} is not in this clone"
+    if not is_ancestor(ROOT, P.PROTECTED_MAIN, "HEAD"):
+        return "HEAD does not descend from protected main in this clone (shallow history?)"
+    return None
+
+
 class CleanHistory(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        missing = history_available()
+        if missing:                         # fail clearly, and let the rest of the suite run (retained_commit would exit)
+            raise AssertionError(f"needs full history and tags ({missing}); run: git fetch --unshallow --tags")
         cls.head = git("rev-parse", "HEAD")
         cls.clean = P.retained_commit(ROOT, cls.head, "clean")
         cls.dev = P.retained_commit(ROOT, cls.head, "development")

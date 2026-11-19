@@ -1,5 +1,25 @@
 # Owner decision package: ClaimCheck integration (final pre-admission pass, 2026-11-18; decisions of 2026-11-19 recorded)
 
+**Final consolidation, later on 2026-11-19.** The single approval package is
+[`APPROVAL_PACKAGE.md`](APPROVAL_PACKAGE.md): one block per protected decision (C1, C2, C2b, D1, D2,
+D3, D2b, T1, H1, R1, and the optional G1). Each block says what the decision changes, why, the
+evidence, the assumptions, what approving authorises and what rejecting means. What changed since
+the sections below were written:
+
+* **Capacity study (A7 Part C):** complete. See `../../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md`,
+  section 16.
+* **Licensing (L1–L3):** the archive tool is verified. Nothing is withheld yet, because no durable
+  private destination is available to this session (owner action A1; `MODEL_OUTPUT_LICENSING.md`,
+  section 7).
+* **H1-b:** implemented and tested; 11 of 12 adversarial tests pass ([`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md)).
+  Test 9 found a trust root that predates H1-b: a committed edit to
+  `research/integration_v2/reconcile.py` or `test_reconcile.py` passes both gates.
+* **C2b:** the dry run is all as expected.
+* **D2b:** a pull request can make a required check vacuous by editing its own workflow. The
+  pre-merge check and G1 are proposed.
+* **T1:** validated against GitHub's REST description.
+* **P1:** drafted, not sent.
+
 **Recorded on 2026-11-19 (owner's statements).**
 
 * The C3, C4, C5 and D4 fixes are accepted as the proposed internal-research baseline, subject to
