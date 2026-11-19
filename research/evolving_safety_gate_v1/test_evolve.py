@@ -41,6 +41,11 @@ class TestCatalog(unittest.TestCase):
         kids = mutate(parent, 1)
         self.assertTrue(any(k.formal_class == "ensembleProbe" for k in kids))
         self.assertTrue(any(k.formal_class == "jointDetectingGuard" for k in kids))
+        # Windows-forbidden path characters must not appear in ids used as filenames.
+        for k in kids:
+            self.assertNotIn(">", k.id)
+            self.assertNotIn(":", k.id)
+            self.assertNotIn("|", k.id)
 
 
 class TestHardSuite(unittest.TestCase):

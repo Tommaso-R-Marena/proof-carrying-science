@@ -24,11 +24,20 @@ from .catalog import (
 )
 from .fitness import dominates_empirical, score_candidate
 from .formal_check import check_formal
-from .hard_suite import build_hard_suite, write_hard_suite
+from .hard_suite import write_hard_suite
 
 DEFAULT_EVIDENCE = (
     Path(__file__).resolve().parents[1] / "assurance_mirage_v1" / "evidence"
 )
+
+
+def _safe_name(candidate_id: str) -> str:
+    """Windows-safe filename stem (no '>', ':', '|', etc.)."""
+    bad = '<>:"/\\|?*'
+    out = candidate_id
+    for ch in bad:
+        out = out.replace(ch, "_")
+    return out.replace("->", "__")
 
 
 def _retainable_formal(parent: Candidate, succ: Candidate) -> bool:
@@ -66,8 +75,9 @@ def run_evolution(
         for c in population:
             s = score_candidate(c, evidence_root, hard_suite=hard_suite)
             scored.append({"candidate": c.to_json(), "score": s})
-            (out / "candidates" / f"{c.id}.json").parent.mkdir(parents=True, exist_ok=True)
-            (out / "candidates" / f"{c.id}.json").write_text(
+            cand_dir = out / "candidates"
+            cand_dir.mkdir(parents=True, exist_ok=True)
+            (cand_dir / f"{_safe_name(c.id)}.json").write_text(
                 json.dumps({"candidate": c.to_json(), "score": s}, indent=2) + "\n"
             )
             if s["formal_admissible"]:

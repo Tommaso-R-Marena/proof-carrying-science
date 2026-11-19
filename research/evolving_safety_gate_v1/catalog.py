@@ -197,7 +197,7 @@ def mutate(parent: Candidate, generation: int) -> list[Candidate]:
         for suffix, weights, fclass in joint_specs:
             kids.append(
                 Candidate(
-                    id=f"{parent.id}->{suffix}-g{generation}",
+                    id=f"{parent.id}__{suffix}-g{generation}",
                     formal_class=fclass,
                     generation=generation,
                     parent_id=parent.id,
@@ -249,7 +249,7 @@ def mutate(parent: Candidate, generation: int) -> list[Candidate]:
     for suffix, weights in specs:
         kids.append(
             Candidate(
-                id=f"{parent.id}->{suffix}-g{generation}",
+                id=f"{parent.id}__{suffix}-g{generation}",
                 formal_class="ensembleProbe",
                 generation=generation,
                 parent_id=parent.id,
@@ -293,7 +293,7 @@ def adaptive_from_failures(
             weights[key] = max(1.0, counts[key])
     return [
         Candidate(
-            id=f"{parent.id}->adapt-fail-g{generation}",
+            id=f"{parent.id}__adapt-fail-g{generation}",
             formal_class="ensembleProbe",
             generation=generation,
             parent_id=parent.id,

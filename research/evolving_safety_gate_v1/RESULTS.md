@@ -27,7 +27,7 @@ Attested fitness on Assurance Mirage captures + hard suite. Champion retained:
 `ensemble-v1` (`ensembleProbe`). Channel-1 never crowned. Joint-v1 plateau broken
 by stealth recall. Mutations did not dominate ensemble-v1 on this suite.
 
-Evidence: `evidence/generation-kernel-v2/`.
+Evidence: `evidence/generation-kernel-v2/` (candidate filenames use `__` lineage separators for Windows portability).
 
 ## Live Gemini stress (prior wave)
 
