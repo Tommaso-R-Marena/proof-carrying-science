@@ -61,9 +61,10 @@
       "also_changed": [
         "research/README.md",
         "scripts/check_reconciled_prs.py",
-        "docs/integration/2026-11-05/README_AUDIT.json"
+        "docs/integration/2026-11-05/README_AUDIT.json",
+        "research/assurance_mirage_v1/"
       ],
-      "reason": "ComposedStack Lean rank-4 + multi-track dominance vs JBB/ProtectAI/Gemini; uniquely undominated on suite.",
+      "reason": "Research-only evolving safety gate + Assurance Mirage: composedStack, external bake-off, qualification/routing measurement, formal promotion replay, observation adequacy. Production authority unchanged.",
       "production_authority_changed": false,
       "formal_root_changed": false
     }
@@ -64724,7 +64725,7 @@
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
       "mode": "100644",
-      "sha256": "71188167c1b84dffad14d84075cb376d4010ef50bdbfaafb83335eccc8f525df"
+      "sha256": "fdc1e46ab5273af8c5cf1d55476b3cf3389a576cc65d8fbde0a799b69d8e13ae"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
       "mode": "100644",
@@ -76244,11 +76245,11 @@
     },
     "research/assurance_mirage_v1/BREAKTHROUGH.md": {
       "mode": "100644",
-      "sha256": "cd63d6fa76ecfc0158d6c0c132859a5bb9dbcb5828c7c769d5da2a871ed1c95c"
+      "sha256": "5e749132a1a4622471cb93748f7611b1a9b958b25452b3386c6810718278c148"
     },
     "research/assurance_mirage_v1/README.md": {
       "mode": "100644",
-      "sha256": "3fd7fe389d49c62278e068923f4840a482f48039c832e38a42dc1405a8296449"
+      "sha256": "37c6cc95552772465528726258553a13cd16e22e0bf26c6b13544560e3da1a72"
     },
     "research/assurance_mirage_v1/RESULTS.md": {
       "mode": "100644",
@@ -76276,7 +76277,7 @@
     },
     "research/assurance_mirage_v1/detector.py": {
       "mode": "100644",
-      "sha256": "bd821ace71a16bcddb11cd287eef44603cf5bbf5e7e68fce73440df360494d0f"
+      "sha256": "10888fe0a31dc2f790d4282f75f639b6fcd0e636900b4622e808e8565a3a87fa"
     },
     "research/assurance_mirage_v1/evidence/analysis/bundle.json": {
       "mode": "100644",
@@ -86668,7 +86669,11 @@
     },
     "research/assurance_mirage_v1/formal/AssuranceMirage.lean": {
       "mode": "100644",
-      "sha256": "a90b2acc943656e46afd5eef6cf45dac010c0933538ab4db2e5479b5601687f3"
+      "sha256": "eb1447444c20a11c59194f65dbb1f733253e62941fb4785b1326f62aabc0e310"
+    },
+    "research/assurance_mirage_v1/formal/ObservationAdequacy.lean": {
+      "mode": "100644",
+      "sha256": "7801d819c6510aa91a235f6383d8b2bca251d763f4679aa98b669121513dafca"
     },
     "research/assurance_mirage_v1/formal_check.py": {
       "mode": "100644",
@@ -86712,7 +86717,7 @@
     },
     "research/assurance_mirage_v1/test_mirage.py": {
       "mode": "100644",
-      "sha256": "9d7c581e63de7abbc3c939403563dca48fdf3d8b157ce6d2e668c8f07bdefd5b"
+      "sha256": "f19bacc16e3a7c501739105133267e825312e52ed7c6a21652ac3481e88cada6"
     },
     "research/assurance_mirage_v1/transfer.py": {
       "mode": "100644",
@@ -87560,7 +87565,7 @@
     },
     "research/evolving_safety_gate_v1/README.md": {
       "mode": "100644",
-      "sha256": "a65f272cb53c82970bad3172cbef3879bd9c7a2334c4b63e4c67f2c33c216151"
+      "sha256": "8d4c84c2aabfae011bfc1d70b2414949260df79158d4af0120f75b6ea6edbd3d"
     },
     "research/evolving_safety_gate_v1/RESULTS.md": {
       "mode": "100644",
@@ -87568,11 +87573,11 @@
     },
     "research/evolving_safety_gate_v1/RESULTS_EXTERNAL.md": {
       "mode": "100644",
-      "sha256": "d9917ede5f03b3ac6089322c1116a12a26ed28a7218b8027715fc6826ee5a15e"
+      "sha256": "2e38960f79e3ec8ddf7b8aac4019862853d5e319a9c63db2c4383f80b5f5343c"
     },
     "research/evolving_safety_gate_v1/RESULTS_SOTA.md": {
       "mode": "100644",
-      "sha256": "3157aae7519f09d6b614cc206cef18d76dff3684bba403e47ce8164e85e17c18"
+      "sha256": "6f1870880067451d875410c35c0283c27ee2ae8dd676564a4e4f9e46682eb95d"
     },
     "research/evolving_safety_gate_v1/__init__.py": {
       "mode": "100644",
@@ -87584,7 +87589,7 @@
     },
     "research/evolving_safety_gate_v1/catalog.py": {
       "mode": "100644",
-      "sha256": "5f0df3a3987251078709a1dc48b2c64893629f88a8573c9e2c824c961b3531c0"
+      "sha256": "dcd470cdd405d21a60a96c031f911465a2d3647b91871287c0214098dd9e49c9"
     },
     "research/evolving_safety_gate_v1/evidence/external-bakeoff-v1/SOURCES.json": {
       "mode": "100644",
@@ -87750,41 +87755,77 @@
       "mode": "100644",
       "sha256": "04793463324e04e431d43b0e1dc4e201267b0f2694aa131ad685d01ddc45b44d"
     },
+    "research/evolving_safety_gate_v1/external_bench/adjudicate.py": {
+      "mode": "100644",
+      "sha256": "c13c57acc83be283862aee8de38d6f8c1280d33f8b3f6c76e23ec7e26d16b9cf"
+    },
     "research/evolving_safety_gate_v1/external_bench/baselines.py": {
       "mode": "100644",
-      "sha256": "5aae3cb8a6133b64849d4297e00f8ddf34f476052e097625128c50d0b35141d1"
+      "sha256": "4f8ddebfd1e56e100126f85e9e044fb550ea39d69296c29adda169ba3217ed92"
     },
     "research/evolving_safety_gate_v1/external_bench/composed.py": {
       "mode": "100644",
-      "sha256": "2fd20b1bd866c80445a056a026a7524c33a5999fa45352e725657c0a2b2863e0"
+      "sha256": "37bcc07d8ad58baba117cdf268feb9267e7e730de482e24f7ac5f3e3ede8d73b"
     },
     "research/evolving_safety_gate_v1/external_bench/dominance.py": {
       "mode": "100644",
-      "sha256": "287ac4899a92944a4ba30b34d92bf19c5ee42360d7b71da483b8dea2e4637f27"
+      "sha256": "de1ee6f459c0b3574b469ea3ccd694b77e897791770b6aec315c1356273577cf"
     },
     "research/evolving_safety_gate_v1/external_bench/live_transfer.py": {
       "mode": "100644",
       "sha256": "60581a9b87b70c7271474c0c62fe9afb7592d0163fc6d3bdc2a5155a623f5312"
     },
+    "research/evolving_safety_gate_v1/external_bench/measurement.py": {
+      "mode": "100644",
+      "sha256": "43d256b52c2126a7ae5645a99675ba85f21f6a7b880551427b770adc293db084"
+    },
     "research/evolving_safety_gate_v1/external_bench/run_bakeoff.py": {
       "mode": "100644",
-      "sha256": "52212970bba4853aa7b14d11c54db4b4e54028a8c5fb38261b937535dd12a900"
+      "sha256": "825bb2baee22299aeb6d71ea4fe09cc5c4785a9c949677bec658e60017004561"
     },
     "research/evolving_safety_gate_v1/external_bench/test_bakeoff.py": {
       "mode": "100644",
-      "sha256": "6c53f9fba6c35d0494218b87418dfc83d26e76fc5615039c042ec0d99a76412e"
+      "sha256": "13175bdd47af2e56f0488f3efce5686d8330a7ed3f4555cab6ce1a259116171c"
+    },
+    "research/evolving_safety_gate_v1/external_bench/test_measurement.py": {
+      "mode": "100644",
+      "sha256": "423b41d6c4cd4be7860516fe1c0d99db53f4d5c9844ec7c9a10441049acf7a54"
     },
     "research/evolving_safety_gate_v1/features.py": {
       "mode": "100644",
-      "sha256": "ff06683b08a17e5be9b34f50aa0958ef45fd1b53df60f251b6e2c95ec87aa417"
+      "sha256": "4d5e8788f67d0567a6ded54fbe86590df32844c1c01482ca5e052225d286e17d"
     },
     "research/evolving_safety_gate_v1/fitness.py": {
       "mode": "100644",
       "sha256": "223f9973a168368f68ffa9b5399f1a185a6c493abd81a80a2be8fb5398f6119a"
     },
+    "research/evolving_safety_gate_v1/formal/CheckLineage.lean": {
+      "mode": "100644",
+      "sha256": "0712c6acb68ea5dce2da9e1a4040bfbceb10af310f35e7cf5bc4d62866f35adb"
+    },
     "research/evolving_safety_gate_v1/formal/EvolvingSafetyGate.lean": {
       "mode": "100644",
       "sha256": "2a1ff2119a2fb0e0f1e9c1dd27360668633b006c59bdf0b6a5ca87f84859ed22"
+    },
+    "research/evolving_safety_gate_v1/formal/FORMAL_REPLAY.md": {
+      "mode": "100644",
+      "sha256": "76c762cb511e1a5292bdef5b611e7da8aa66292f598270d0d591452b4528702f"
+    },
+    "research/evolving_safety_gate_v1/formal/PromotionReplay.lean": {
+      "mode": "100644",
+      "sha256": "9db84f80c90111bd1bb472b90dfad108a0db5cb6657273ee257fd7610ab1ac0e"
+    },
+    "research/evolving_safety_gate_v1/formal/lineage_fixture/offers.txt": {
+      "mode": "100644",
+      "sha256": "02f11e9891b325351c3cffa090cd3a073cc7f3b0b1fba2fa580216e50f286855"
+    },
+    "research/evolving_safety_gate_v1/formal/lineage_fixture/review.txt": {
+      "mode": "100644",
+      "sha256": "bb6e75896fad248c15a442766d3d142da117ad0f8b546c914f2e67bdfa14cf85"
+    },
+    "research/evolving_safety_gate_v1/formal/replay_formal.sh": {
+      "mode": "100755",
+      "sha256": "f807a6c00531377cc0e47e00298614022560f4dbaedd027dc58776621d6c9b27"
     },
     "research/evolving_safety_gate_v1/formal_check.py": {
       "mode": "100644",
@@ -87797,6 +87838,46 @@
     "research/evolving_safety_gate_v1/live_stress.py": {
       "mode": "100644",
       "sha256": "fe916dbb033822b8a14eb6120b9d660e43cba8afe26e7dbc391f797d071b6e4d"
+    },
+    "research/evolving_safety_gate_v1/qualification/TRANSFER_PROTOCOL.md": {
+      "mode": "100644",
+      "sha256": "119ade19544545a346ebb5ea8f853bc651ab549333d25c32a1d6b8f6a067cce3"
+    },
+    "research/evolving_safety_gate_v1/qualification/__init__.py": {
+      "mode": "100644",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "research/evolving_safety_gate_v1/qualification/observation_transfer.py": {
+      "mode": "100644",
+      "sha256": "8dca30a6807e592c405eac3c5810f79e92434e89df0490cc4dfe733fb22cedb4"
+    },
+    "research/evolving_safety_gate_v1/qualification/replay_transfer.py": {
+      "mode": "100644",
+      "sha256": "d2a8fb3a743e0d131fd74988e384c17aea28c4d8289476dfadbcbca476af89d2"
+    },
+    "research/evolving_safety_gate_v1/qualification/routing-attempt.json": {
+      "mode": "100644",
+      "sha256": "9ed83f5cf9adc6b48cfc6ee98c92f7f6e1cb3c6f545d99f547c93f6f11088b9d"
+    },
+    "research/evolving_safety_gate_v1/qualification/routing-protocol.sha256": {
+      "mode": "100644",
+      "sha256": "c7bb27941913123ec64e656e668496ad3f31474611940d0800a7ccf3d10b4c5a"
+    },
+    "research/evolving_safety_gate_v1/qualification/routing-score.json": {
+      "mode": "100644",
+      "sha256": "9f052c14425ecd27f0bdaea3742d211cd1ea74bc5b3cb2f802da5ffc57e31f0d"
+    },
+    "research/evolving_safety_gate_v1/qualification/routing_pilot.py": {
+      "mode": "100644",
+      "sha256": "ef68a3791c2b96f492aa373fa2947c4df76a9f1e8b274ef0229b7c49874f4e3a"
+    },
+    "research/evolving_safety_gate_v1/qualification/test_observation_transfer.py": {
+      "mode": "100644",
+      "sha256": "07363b8121658ba3f4246c6bc4ffb7f49fd397c44941d91871c2555a41980c77"
+    },
+    "research/evolving_safety_gate_v1/qualification/transfer-results.json": {
+      "mode": "100644",
+      "sha256": "9437232d1e312f9a752565c39f4a809264418a0d6368fbe22bf7a271c6d2331e"
     },
     "research/evolving_safety_gate_v1/test_evolve.py": {
       "mode": "100644",
