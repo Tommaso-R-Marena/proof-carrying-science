@@ -31,7 +31,10 @@ CONTROLS={
 }
 # Reviewed research trees admitted by V23; every path under a prefix may differ from intake.
 REVIEWED_PREFIXES={
- 'proof-carrying-science':frozenset({'research/assurance_mirage_v1/'}),
+ 'proof-carrying-science':frozenset({
+   'research/assurance_mirage_v1/',
+   'research/evolving_safety_gate_v1/',
+ }),
  'proof-carrying-science-site':frozenset(),
 }
 

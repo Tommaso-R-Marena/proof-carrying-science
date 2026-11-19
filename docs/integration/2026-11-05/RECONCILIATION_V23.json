@@ -55,6 +55,17 @@
       "reason": "Research-only AI-safety breakthrough: sharp Lean characterization that channel-1-factorable scores are exactly mirage-blind under correcting guards; joint detector + leaderboard flip; lab-notebook transfer mirages; expanded Gemini pressure (still zero mirages); V23 whole-tree census.",
       "production_authority_changed": false,
       "formal_root_changed": false
+    },
+    "evolving_safety_gate_v23": {
+      "paths_prefix": "research/evolving_safety_gate_v1/",
+      "also_changed": [
+        "research/README.md",
+        "scripts/check_reconciled_prs.py",
+        "docs/integration/2026-11-05/README_AUDIT.json"
+      ],
+      "reason": "Research-only evolving safety gate: Lean admission lattice rejecting channel-1-only mechanisms; attested multi-generation evolution on Mirage evidence; live Gemini stress of champion; reviewed-prefix allowlist.",
+      "production_authority_changed": false,
+      "formal_root_changed": false
     }
   },
   "control_paths": [
@@ -64713,7 +64724,7 @@
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
       "mode": "100644",
-      "sha256": "bd4db76575727c05fa9553c1c9cfcf37cb75b3242639004e8e2d198d367534f1"
+      "sha256": "7ab310dd2e9dd842bd3623ea9762711e81cb05b253d7025baa7ea27a6d007666"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
       "mode": "100644",
@@ -73553,7 +73564,7 @@
     },
     "research/README.md": {
       "mode": "100644",
-      "sha256": "181a4cea62e05995b4edd6d43d6c945d93297a5a39e046fac2f26a788c38be39"
+      "sha256": "dc7a4eaca755665eec5b264a4587544942fa39e0a7706f26782595b08c2102c7"
     },
     "research/abstraction-repair-v2/EVIDENCE_SHA256.json": {
       "mode": "100644",
@@ -87546,6 +87557,530 @@
     "research/epistemic-stratification-v1/formal/lean-toolchain": {
       "mode": "100644",
       "sha256": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028"
+    },
+    "research/evolving_safety_gate_v1/README.md": {
+      "mode": "100644",
+      "sha256": "c63264e2121d08be3287ed5b285b77deb2b3310b7115f548684f3728eeb8be82"
+    },
+    "research/evolving_safety_gate_v1/RESULTS.md": {
+      "mode": "100644",
+      "sha256": "697aca4578c946c9ddcb4221fee6fbc513246f0d8cba9befa4a238f1db4fdc70"
+    },
+    "research/evolving_safety_gate_v1/__init__.py": {
+      "mode": "100644",
+      "sha256": "6a322c469c24de97db120c64c5485d3237d8ddea4cc330245e33b34d7b70c252"
+    },
+    "research/evolving_safety_gate_v1/__main__.py": {
+      "mode": "100644",
+      "sha256": "4441140eb0ea4d8a52265d94ab82c690e3be0faaf20806f4ff9afd1c1c8f3b80"
+    },
+    "research/evolving_safety_gate_v1/catalog.py": {
+      "mode": "100644",
+      "sha256": "656bb4442f231ea0b450dc94d198f7ee056b0c773327edb0db6febe291f19ae5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/MANIFEST.sha256.json": {
+      "mode": "100644",
+      "sha256": "fd9716a45debce1e70bcb9958106bd6c6d1b516f25bfbdbd2b08f22a21c32a38"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/c1-blind.json": {
+      "mode": "100644",
+      "sha256": "faba03561eab7164e103552c31fbe38280f3584baefc7268109d8fbbd3ad6521"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/correcting-only.json": {
+      "mode": "100644",
+      "sha256": "183a3e41a768fb4372bb174046d9e5a21d285329fe072454b1174c2d7b9fb300"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->balanced-v2-g1.json": {
+      "mode": "100644",
+      "sha256": "1fcd5968f30f970d58c4832588dc6be4f8b723b22687c84ac0d4e5e944e09263"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->balanced-v2-g2.json": {
+      "mode": "100644",
+      "sha256": "a5bb4f9ea2e81b1e8055eb39f1dabc2425cbf8584367dd9c3a55291f88eb27f6"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->balanced-v2-g3.json": {
+      "mode": "100644",
+      "sha256": "b0bd581441769e17e364574a0146351c6ca5d12a7def5cce04edf0d964efbce3"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->balanced-v2-g4.json": {
+      "mode": "100644",
+      "sha256": "494cf7857e42a6a899d5d1fe95bd0f9632e892369b249cb1573ff2bfb4371f22"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g1->corrupt-aware-g2.json": {
+      "mode": "100644",
+      "sha256": "34cbc50486ee2a9d2e1cf5fe8f509d75c28b8fffa060672ef0d54e58aaf931b5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g1->harm-sensitive-g2.json": {
+      "mode": "100644",
+      "sha256": "7579beaab67e57bc4113bf1faa1c4285d8aa3cc9a89db8ea53f3080990664bc8"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g1->leak-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "570898e960c64182bf8527b57566a3d195e91c2acb0a8e84ba14eaa4a9769f6e"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g1->scope-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "2876e8a17554e0335820890fe4724840261cb6fde9b0c2b74959ce416dea95b6"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g1->strict-threshold-g2.json": {
+      "mode": "100644",
+      "sha256": "700c7e385358460eb9ae03ea0db820bc4950d17ae39d737692ad9cac2d8755a1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g1.json": {
+      "mode": "100644",
+      "sha256": "0df49a1e48ce6fbe34d0bbb138203160e98b42d4d55037081408bcf3b59a2f43"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g2->corrupt-aware-g3.json": {
+      "mode": "100644",
+      "sha256": "55bf3bdff1f42eddd498e619cc07e00159d04a3500c57e70afca04dbe86b2992"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g2->harm-sensitive-g3.json": {
+      "mode": "100644",
+      "sha256": "c2a249de92eba4ef34e29836e3a9306b761efc4895c04902ee6ab9b92cd6336e"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g2->leak-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "5fbd38ad4ac843c2a1167f766b32249254e0f54a78545f6313c22fc5360fa397"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g2->scope-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "636264834b0603b94690a73bd189a18c86c84846c1e64cbd21979eed9664a0fa"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g2->strict-threshold-g3.json": {
+      "mode": "100644",
+      "sha256": "da83f5a2510239243b71e292d47d7c01d2d1e2d7a87c7496f86fc791c674d9c4"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g2.json": {
+      "mode": "100644",
+      "sha256": "9936f2244f9622ff941d680022e41470854342e527269e6d20efb6fb4712441c"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g3->corrupt-aware-g4.json": {
+      "mode": "100644",
+      "sha256": "b78f0fcc80b3fbdd583b4eafdaf305be9faf9a25baacce173afbd06aae25a3e3"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g3->harm-sensitive-g4.json": {
+      "mode": "100644",
+      "sha256": "b9c527895275b263ae0c1d482873deecabbcb45b6b29fcad1d5ead459ef6bb49"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g3->leak-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "85ce99036115b99f86d2c49447ebc955976082591be785114bb30eeeaf35243f"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g3->scope-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "4f90a7b0ba3a2b30fa2f073afe6a8df4d8eac6c80f99fb68666ecbb93e510820"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g3->strict-threshold-g4.json": {
+      "mode": "100644",
+      "sha256": "3a0f2d0c892eb3fb7bf6e929ba0b5a0be2f9a46e4ad758940e0f8e5dcb03dd83"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g3.json": {
+      "mode": "100644",
+      "sha256": "947f157a961e8da4975cb4465e1518d0bfd3314cf60d913a14b520ce76eb6fbb"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->corrupt-aware-g4.json": {
+      "mode": "100644",
+      "sha256": "12a464ff875009715e8496b13cad160ad92ed1499706b8e6e51ccc83278677b1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->harm-sensitive-g1.json": {
+      "mode": "100644",
+      "sha256": "f2cc922aaeea1197e511e5430403a628e973866bdc1c1b24fa44d517971e95ba"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->harm-sensitive-g2.json": {
+      "mode": "100644",
+      "sha256": "10dba5c1af435f3744e286fd767e2a102b49913f53e75135ce62b289be52b6b0"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->harm-sensitive-g3.json": {
+      "mode": "100644",
+      "sha256": "ebbbbd4da69ce95e3d6b0fcaddd5a82c0f24eaa5fe85102a1b4106915b3a8b55"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->harm-sensitive-g4.json": {
+      "mode": "100644",
+      "sha256": "5eadd4125d1f3889f7af36d7244f67afaf0084ddaa3d85c376d45663e7abec4d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1->balanced-v2-g2.json": {
+      "mode": "100644",
+      "sha256": "c49371d259bd4d9a85607d795933e85be53157090edefda1ac105d3e430da280"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1->corrupt-aware-g2.json": {
+      "mode": "100644",
+      "sha256": "59aa602162eeedf5986da7ff5fde76918a5664ad1fdef28c31ab1bd648eb1699"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1->harm-sensitive-g2.json": {
+      "mode": "100644",
+      "sha256": "b9119b0f8adf44b55da05bb08797cbd8cee2f33991c02625e8f7d3f4aa489697"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1->leak-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "c628bc707bcdbd90f3f30b7c4a5641b414be52484d5012cfc3e311d3a607caeb"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1->scope-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "aa4ed2197ebb9e1b6cfea3f7b51e6094d1084b8c716e5581663e3de5c21a47bc"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1->strict-threshold-g2.json": {
+      "mode": "100644",
+      "sha256": "5ae5f79a3400e4c19b5e1be41ec7c27b8f79f119ab8c0eb8c1eed58bf00fd47c"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g1.json": {
+      "mode": "100644",
+      "sha256": "081884bd27fbdba63f50a61705a4484f6c4a028101393c7a12d08d759c931296"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2->balanced-v2-g3.json": {
+      "mode": "100644",
+      "sha256": "726a3af9fecc30eaf5241740d4c74e43f636976beeab3a16e009a7932bae51ca"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2->corrupt-aware-g3.json": {
+      "mode": "100644",
+      "sha256": "544ca00751ccdeb6cecf50b19e613b7c25b586dfd80eefe0cfa81340f30ac0ae"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2->harm-sensitive-g3.json": {
+      "mode": "100644",
+      "sha256": "93b1a8de012a39b18d5804bcf6014e76800765361a533e1c8fee2ad253ec4d9d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2->leak-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "20077fe8d92471db208e7c78c38669bca1719c5b2308e2b91787d054aef174d2"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2->scope-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "1b0d1ebc07fd5ba962a369c1e58d7a2c2fa9d72157078f7b3ab31c5b88892e69"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2->strict-threshold-g3.json": {
+      "mode": "100644",
+      "sha256": "7c95d1466ecfdc04e9a3c2efea7830d9dfc31e9a0223c1043314ed65c0a5a9a1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "3d2a3457349b928770d2998a6ad07889d5e4c24236cf3cb860f0e110b4094775"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3->balanced-v2-g4.json": {
+      "mode": "100644",
+      "sha256": "6d38a4b1460e3e011f7a6235c3d1d3fe19a7b76ce78fc44dc993b3b5c3d71fd3"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3->corrupt-aware-g4.json": {
+      "mode": "100644",
+      "sha256": "168146581fa10859c073f0ce9fd820e550dde70c9678954ad33507dcacc92e0f"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3->harm-sensitive-g4.json": {
+      "mode": "100644",
+      "sha256": "8ddae9b0ce00bac3827b52804c4c94a5d88ce7a43e1fa2de3f33b66844c0550d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3->leak-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "34709ea2059bb846ec99e12eef64b2a46898034dd2fc269c7073b0b6a928ff1b"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3->scope-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "7c1b10057cdacf636e65bb742dd8fc6a2510e313a018b659abc29fe0114717fc"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3->strict-threshold-g4.json": {
+      "mode": "100644",
+      "sha256": "155b6c68d23153d02249f20b222ca4e1a559b6be050f369266f779e658f79cd4"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "ef6f18dbfcef6fba12fddd2d312d8db748373a55919c4f676ee529f264d43615"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->leak-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "d2358c0ebaab7110a7001eabcc1e09db7bec7b7418874d8ac06a57161acf562e"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1->balanced-v2-g2.json": {
+      "mode": "100644",
+      "sha256": "b7acc4a510d794a4c47b7e862e119865034c7907e6ffc0304e9253c7104f7399"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1->corrupt-aware-g2.json": {
+      "mode": "100644",
+      "sha256": "cd3e17d5e161590a2e94a3f28d1c16f60086ee6f9da8a41a85e4d728e6df56a5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1->harm-sensitive-g2.json": {
+      "mode": "100644",
+      "sha256": "f5db9e0a13ba7f56d0833db3374c1298dc99e3299ad5518466f2dcaac9d19518"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1->leak-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "c3a9375361e5dadd799a3816d4d564535bc7733d83cec0ef0ce9464c82036cf1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1->scope-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "7e21e27708c630b171aed33eb6fcc745a5c5408b22cc2e6e6b7fe951240b57b1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1->strict-threshold-g2.json": {
+      "mode": "100644",
+      "sha256": "2ed06c0f5e44782b4a1283154c265e7f252de425f69ba0d2ba1f76cf0bd5d6f7"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g1.json": {
+      "mode": "100644",
+      "sha256": "9a5b72a2f0d6269cbebc9be53e653d14d82cba1b158c2f7ea224a3f5b79939b5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2->balanced-v2-g3.json": {
+      "mode": "100644",
+      "sha256": "4da946b64a180336b44cde413218486af9ee8abe5a6bbe604baa0e361db055aa"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2->corrupt-aware-g3.json": {
+      "mode": "100644",
+      "sha256": "bd2ad9a8a45fb3763774516d94a2a9080027b039007fb39052bbfbe3d1835e4c"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2->harm-sensitive-g3.json": {
+      "mode": "100644",
+      "sha256": "566ac77f2308bad0d13f2602fa0b735672a002916bead1404e0c3bbee9e628b3"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2->leak-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "3d31ba16bac5c35adc4355f7233030fb628c51edb0c2eba7adb1c3a239737e3c"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2->scope-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "de605d86fa352e6d8f82c496776caa81c2a82a161101012ba1d65e829518cc70"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2->strict-threshold-g3.json": {
+      "mode": "100644",
+      "sha256": "f53237a480e8f5c5f1c4f9ded142c75df29af2b54e89085c4901da2204a7280a"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g2.json": {
+      "mode": "100644",
+      "sha256": "394d9617c104d43daf1b69bdeae807e4d7d60e384e789d584688e7c5b419f273"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3->balanced-v2-g4.json": {
+      "mode": "100644",
+      "sha256": "bc1fbd32c822d6e5aaff8991cae64ba5ce25ff13ac4831b9f10afeffc49ee5ef"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3->corrupt-aware-g4.json": {
+      "mode": "100644",
+      "sha256": "31fc462553284746fc0265b5bc8b4aaeebae496f096510b2eb2a19769ce00e34"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3->harm-sensitive-g4.json": {
+      "mode": "100644",
+      "sha256": "a3623b1953c62828597d38345d09af69830cbdd0649f07f0bf3b0383a6dad36d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3->leak-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "1bad90ac579b8ab10d7f14277e190377160cb95ddeb04e406e1648bc4cb83de5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3->scope-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "ad412657cc2bc72d612ee8e2cf4888c8be1187050ef154cd5d5a6b217e5d00e5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3->strict-threshold-g4.json": {
+      "mode": "100644",
+      "sha256": "4ac3db2fecb46ffbb42ce593115bb69d37c83ba93427778eac9f3bc25d68a7b7"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g3.json": {
+      "mode": "100644",
+      "sha256": "09e0dbacebd9631222faf9187405f28716b9585ca23f407fa334c241c6556bb8"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->scope-priority-g4.json": {
+      "mode": "100644",
+      "sha256": "97c6f3babb6cd71df117bc376cda48d20a229f56c8d68679eab66992e5010e63"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->strict-threshold-g1.json": {
+      "mode": "100644",
+      "sha256": "b34c8a6ec6006f11fd2b9b20f7d8e1f847b590333b028c27135d44c4229a07ad"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->strict-threshold-g2.json": {
+      "mode": "100644",
+      "sha256": "54fb219e08f6127c45347896692e5793342db0f9476b69974ae3742cacfb90e7"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->strict-threshold-g3.json": {
+      "mode": "100644",
+      "sha256": "11771c0f6423cc088b28538b77a11f7567355b529956d193ef76a700d1d86cef"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1->strict-threshold-g4.json": {
+      "mode": "100644",
+      "sha256": "5a3d6db2ddf04f637ca96f9419de771e62d04cc818093d2553e516633a6aa002"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/joint-v1.json": {
+      "mode": "100644",
+      "sha256": "9d7a5162a1d7ff817e87e93ad9a085465d42bb7435184b2866a31e3c734470f8"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/candidates/jump-joint-detecting-g1.json": {
+      "mode": "100644",
+      "sha256": "b8e9c5eec66328a384b65892146046f169819ded400ecaddf1a7957230b9bc59"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/champion.json": {
+      "mode": "100644",
+      "sha256": "9d7a5162a1d7ff817e87e93ad9a085465d42bb7435184b2866a31e3c734470f8"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/formal-build/EvolvingSafetyGate.lean": {
+      "mode": "100644",
+      "sha256": "0aa4ecc6bf8daac82a293f71287aaad6ed7b68b6b1ddc3eb617a75dbd32ddb14"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/formal-build/formal.json": {
+      "mode": "100644",
+      "sha256": "aa00e248385da0a7c9343e15d60a9638bb04f99a6b90488bf2bcd0c9a7d4121c"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/formal-build/lean.log": {
+      "mode": "100644",
+      "sha256": "a8cc64a8f2c25c8c5be08ce7215b8df2488c5e6efd925ea0202c11aad0ca7850"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/formal-build/leanchecker.log": {
+      "mode": "100644",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/lineage.json": {
+      "mode": "100644",
+      "sha256": "bdd3ca533bc2f171aedde359ce6fb4aefbc17800319301c8ed53ba0f70e044ef"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/episode.json": {
+      "mode": "100644",
+      "sha256": "3b2ecec6aeca54fdc0c2fd0ca7616ef68d1764ecda9da89f37905018094b7829"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/store.sqlite": {
+      "mode": "100644",
+      "sha256": "d77089d6f9e4aeeb434f06102ffa3ea45cccb40efc292f7f677ded8b53e4fa73"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-00-provenance.json": {
+      "mode": "100644",
+      "sha256": "b0bb2e47413b34be2275727ef949c893a58fe93ce07c57e2145a55b03d6976c1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-00-raw.txt": {
+      "mode": "100644",
+      "sha256": "d56e154562cbdb53722268554776cc0c2804f737d76e1437530e08cbe532bf37"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-01-provenance.json": {
+      "mode": "100644",
+      "sha256": "dab0a6f9fbc0f7d9c0e815de90587dad075e7af55ee4f05a50cc9101322de42d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-01-raw.txt": {
+      "mode": "100644",
+      "sha256": "3370603ac20c8a477c18f63d39dab1d9533ab5d72e472ab7ac2316c89c538bb6"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-02-provenance.json": {
+      "mode": "100644",
+      "sha256": "c8a99891c3ca195b66d68075cace419bcd429a36adef13b53d3dae5f16b7244e"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-02-raw.txt": {
+      "mode": "100644",
+      "sha256": "fa02e6baac5bb3c7b5d93e3a869ee1ecdc7103f0534547bb99d7d187857bcffb"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-03-provenance.json": {
+      "mode": "100644",
+      "sha256": "026ef20a3753f088bc93116d74160a7f8b8e1875dc9fa44582a97063a078b5a1"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__direct-exfil/turn-03-raw.txt": {
+      "mode": "100644",
+      "sha256": "b7fa63c40ee729a7ae31fad13c20bb81be540d7b266bb18b8a6e9ff0071d845b"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/episode.json": {
+      "mode": "100644",
+      "sha256": "fc9aac247c0da09bd638a37337f1b21bf65c49ba45a66d7a50499a2871b59054"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/store.sqlite": {
+      "mode": "100644",
+      "sha256": "d77089d6f9e4aeeb434f06102ffa3ea45cccb40efc292f7f677ded8b53e4fa73"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-00-provenance.json": {
+      "mode": "100644",
+      "sha256": "26868f3f7c2a20db405fa9d619a53efd0a798a7837bfbaf4a29ffd2624eb2a0d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-00-raw.txt": {
+      "mode": "100644",
+      "sha256": "0872c88a5c14a80f3daea2b9bffef7798eb2a94d75cacca328430bd13f432dad"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-01-provenance.json": {
+      "mode": "100644",
+      "sha256": "481c2d64e15037dd4433764d92170d1c5e0cdf0802f60c1a850486ef927c3025"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-01-raw.txt": {
+      "mode": "100644",
+      "sha256": "a714a20e150a9895dd09badb23b5cee0ac54235f7ad960a2810e0fc3c0c90ce7"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-02-provenance.json": {
+      "mode": "100644",
+      "sha256": "0c3f62e1ee8b0624e8cef5ad7be188ed61c6714180ba5ee02386e14b4320173d"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-02-raw.txt": {
+      "mode": "100644",
+      "sha256": "ed88afd39c6ab272bae2ec82ea02e3ecdace5d25f3cb0e3e7c799765cf7fcceb"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-03-provenance.json": {
+      "mode": "100644",
+      "sha256": "bea3e65e9d59be1817e0f9cab273efc2e61236fc8feb444528449bd4188e1732"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__many-shot-jailbreak/turn-03-raw.txt": {
+      "mode": "100644",
+      "sha256": "d734619edb1c600e94a03a65030e5e4b369f5b5a5002257b8f53c49b54cc5182"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/episode.json": {
+      "mode": "100644",
+      "sha256": "ea16fb6ef36191dd1b68b6a0127b217650d9c2a68a69fc84c9da7f76cd9ec9f8"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/store.sqlite": {
+      "mode": "100644",
+      "sha256": "d77089d6f9e4aeeb434f06102ffa3ea45cccb40efc292f7f677ded8b53e4fa73"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-00-provenance.json": {
+      "mode": "100644",
+      "sha256": "22343f4c683d94f045361b2cfd5a64cb31cc5a2dd7465495117fd2f68e558ec9"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-00-raw.txt": {
+      "mode": "100644",
+      "sha256": "f0cc397ceaa4b9f964212261580fc3cd35781f70ea227a002fd93b57e3e68a62"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-01-provenance.json": {
+      "mode": "100644",
+      "sha256": "5cb5efa88445e055304d1eb4f21fc3b4bb527a3e11b727db3a98f5c8462ad4ff"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-01-raw.txt": {
+      "mode": "100644",
+      "sha256": "3370603ac20c8a477c18f63d39dab1d9533ab5d72e472ab7ac2316c89c538bb6"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-02-provenance.json": {
+      "mode": "100644",
+      "sha256": "dfaa4cc34a99e8d415a01ea8b19f41c0abc9fa0725eb10461f3c10c5be079cc5"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-02-raw.txt": {
+      "mode": "100644",
+      "sha256": "5d09db84fa5bb2d882c241e7cfb4f094d468f652199a240e0252a99dfc4b025f"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-03-provenance.json": {
+      "mode": "100644",
+      "sha256": "c018f258af5864dedf44166cf4e8fe58a96a69ccbe8b2ebdfd0792bfaa0fd80f"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/episodes/instruction_boundary__policy-puppetry/turn-03-raw.txt": {
+      "mode": "100644",
+      "sha256": "f3096211f2e1e0ac8568474a1e73fcd7d1ce6d5171ece7cdaa29c87db2015f1b"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/protocol.json": {
+      "mode": "100644",
+      "sha256": "e3ee6e5faf992e2e85ddd7ceb648f5199163f7fd3d9d37d19d9621ae9d98e050"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/quota_session.json": {
+      "mode": "100644",
+      "sha256": "71e388fc4e047c35dcd93e322145bd95d5d19c023378654bd71d5ca0a9fd0c39"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/gemini-wave/summary.json": {
+      "mode": "100644",
+      "sha256": "6990761ea8f1869091da5dbd5e2feed7d21fa3a2b7948327f24ce39280f29bc3"
+    },
+    "research/evolving_safety_gate_v1/evidence/generation-live-v1/live/live_stress.json": {
+      "mode": "100644",
+      "sha256": "7056e598e6a325aa585fe86e9b8cd5b99c9dd16577962a31c78b85b19b2b6cd6"
+    },
+    "research/evolving_safety_gate_v1/evolve.py": {
+      "mode": "100644",
+      "sha256": "22eb97b741122deff92b51dc29a181a6f52879480388a8f00208642d72dbdcf6"
+    },
+    "research/evolving_safety_gate_v1/fitness.py": {
+      "mode": "100644",
+      "sha256": "87091639ca46813de82618a821a1edb19961c0c3b210abad471f74d8b676fd5f"
+    },
+    "research/evolving_safety_gate_v1/formal/EvolvingSafetyGate.lean": {
+      "mode": "100644",
+      "sha256": "9dd73c290687479a25ace46e4c1f5c567bd0fdd1f908ed35699437042dfde149"
+    },
+    "research/evolving_safety_gate_v1/formal_check.py": {
+      "mode": "100644",
+      "sha256": "ea77f7a9e043235134dec412fa2eedfe8b64f682279ddda81e0cf21ac263d95f"
+    },
+    "research/evolving_safety_gate_v1/live_stress.py": {
+      "mode": "100644",
+      "sha256": "fe916dbb033822b8a14eb6120b9d660e43cba8afe26e7dbc391f797d071b6e4d"
+    },
+    "research/evolving_safety_gate_v1/test_evolve.py": {
+      "mode": "100644",
+      "sha256": "a7ddad625364493654bee5f997fa9c423ac68c5b574ac1190d9c621b7666391c"
     },
     "research/experimental-calibration-v1/ALL_ESTIMATORS_ADDENDUM.json": {
       "mode": "100644",
@@ -104625,7 +105160,7 @@
     },
     "scripts/check_reconciled_prs.py": {
       "mode": "100644",
-      "sha256": "32407a028b319d8a40b63bcf13b85c0a85d1a4e36353a5958e25514ffc75afb2"
+      "sha256": "ccc92a63acee765c4b46919db3737f6cd2284f1a0a686bf8e11ce6431980439f"
     },
     "scripts/check_repository_integrity.py": {
       "mode": "100644",
