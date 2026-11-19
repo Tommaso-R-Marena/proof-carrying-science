@@ -48,7 +48,7 @@ class InterventionResult:
 class BinarySCM:
     """Finite binary SCM: each variable is Bernoulli given parents.
 
-    Exact enumeration over 2^|V| assignments with rational probabilities.
+    Exact factorization over binary variables with rational probabilities.
     Interventions mutilate mechanisms for treated variables.
     """
 
@@ -82,18 +82,54 @@ class BinarySCM:
         return table
 
     def p_obs(self, evidence: Mapping[str, int]) -> Fraction:
-        nodes = self.graph.topological_order()
-        total = Fraction(0)
-        for bits, mass in self.observational_table().items():
-            a = dict(zip(nodes, bits))
-            if all(a[k] == v for k, v in evidence.items()):
-                total += mass
-        return total
+        """Sum out processed variables as soon as their last child has used them.
+
+        At each step, masses is the marginal over the current frontier for
+        prefixes consistent with the observed bits. The complete joint table
+        remains available through observational_table for independent replay.
+        """
+        order = self.graph.topological_order()
+        for node in evidence:
+            if node not in self.graph.nodes:
+                raise KeyError(node)
+        parents = {node: tuple(sorted(self.graph.parents(node))) for node in order}
+        last_use = {node: i for i, node in enumerate(order)}
+        for i, node in enumerate(order):
+            for parent in parents[node]:
+                last_use[parent] = i
+
+        frontier = ()
+        masses = {(): Fraction(1)}
+        for i, node in enumerate(order):
+            # Validate even unreachable rows, as the full enumerator does.
+            mechanism = {}
+            for bits in product((0, 1), repeat=len(parents[node])):
+                q = self.mechanisms[node](dict(zip(parents[node], bits)))
+                if not 0 <= q <= 1:
+                    raise GraphError(f"mechanism for {node} outside [0,1]")
+                mechanism[bits] = q
+            coords = tuple(frontier.index(p) for p in parents[node])
+            live = tuple(j for j, name in enumerate(frontier) if last_use[name] > i)
+            keep_node = last_use[node] > i
+            updated = {}
+            for state, mass in masses.items():
+                q = mechanism[tuple(state[j] for j in coords)]
+                retained = tuple(state[j] for j in live)
+                for bit, prob in ((0, 1 - q), (1, q)):
+                    if prob == 0 or (node in evidence and evidence[node] != bit):
+                        continue
+                    key = retained + (bit,) if keep_node else retained
+                    updated[key] = updated.get(key, 0) + mass * prob
+            masses = updated
+            frontier = tuple(frontier[j] for j in live) + ((node,) if keep_node else ())
+        return masses.get((), Fraction(0))
 
     def conditional(self, query: Mapping[str, int], evidence: Mapping[str, int]) -> Fraction:
         joint_ev = self.p_obs(evidence)
         if joint_ev == 0:
             raise GraphError("conditioning on zero-probability event (positivity failure)")
+        if any(k in evidence and evidence[k] != v for k, v in query.items()):
+            return Fraction(0)
         merged = dict(evidence)
         merged.update(query)
         return self.p_obs(merged) / joint_ev
@@ -120,7 +156,7 @@ class BinarySCM:
         outcome: str,
         do: Mapping[str, int],
     ) -> Fraction:
-        """Exact P(outcome=1 | do(...)) by enumerating the intervened SCM."""
+        """Exact P(outcome=1 | do(...)) by marginalizing the intervened SCM."""
         if outcome not in self.graph.nodes:
             raise GraphError("unknown outcome")
         intervened = self.intervene(do)
