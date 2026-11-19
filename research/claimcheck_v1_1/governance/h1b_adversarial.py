@@ -249,17 +249,18 @@ def main(argv=None) -> int:
         uncommitted = P.gate(wt, "--require-committed")
         reset()
         pinned_ok = all(rejected(v["manifest_gate"]) for v in pinned.values())
-        trust_root = all(v["manifest_gate"]["passed"] and v["retained_source_gate"]["passed"] for v in trusted.values())
+        undetected = sorted(n for n, v in trusted.items() if v["manifest_gate"]["passed"] and v["retained_source_gate"]["passed"])
         T["9_changed_protected_control_file_fails"] = {
             "pinned_control_files_committed_edit": pinned, "pinned_control_files_rejected": pinned_ok,
             "gate_source_files_committed_edit": trusted,
-            "gate_source_files_are_a_trust_root_neither_gate_detects": trust_root,
+            "gate_source_files_neither_gate_detects": undetected,
             "g1_guard_would_flag_every_gate_source_edit": all(v["g1_guard_would_fail"] for v in trusted.values()),
             "uncommitted_edit_of_the_gate_rejected": rejected(uncommitted),
-            "note": "Holds for every pinned control file. For the manifest gate's own sources it does not hold: neither gate can detect "
-                    "a committed edit to them (reconcile.py, _snapshot: 'trusted checked-in configuration'). This predates H1-b and is the "
+            "note": "Holds for every pinned control file. It does not hold for the files listed under gate_source_files_neither_gate_detects: "
+                    "the manifest gate treats its own sources as trusted configuration (reconcile.py, _snapshot), and the retained-source "
+                    "gate lists the same files as controls, so a committed edit to them passes both gates. This predates H1-b and is the "
                     "same under H1-a; only review of the control commit, the pre-merge gate-definition check, or G1 catches it.",
-            "passed": pinned_ok and not trust_root}
+            "passed": pinned_ok and not undetected}
         # 10 --------------------------------------------------------------------------------------------
         a, b = json.loads(files[P.V23]), json.loads(files_dev[P.V23])
         snap_diff = sorted(k for k in set(a["snapshot"]) | set(b["snapshot"]) if a["snapshot"].get(k) != b["snapshot"].get(k))
