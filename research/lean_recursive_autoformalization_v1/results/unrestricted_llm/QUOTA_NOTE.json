@@ -1,0 +1,28 @@
+{
+  "format": "pcs-pgra-gemini-quota-note-v1",
+  "project_number": "171569345899",
+  "project_name": "projects/171569345899",
+  "remaining_quota_visible_in_api": false,
+  "api_observation": "generateContent returns usageMetadata per request only; no remaining RPM/TPM/RPD fields in response headers for this free project.",
+  "model_used": "gemini-3.1-flash-lite",
+  "assumed_free_tier_flash_lite": {
+    "rpm": "typically ~15 (harness soft-capped at 8)",
+    "tpm": "typically ~250000",
+    "rpd": "typically ~500 for flash-lite family (Flash non-lite often ~20 RPD)"
+  },
+  "this_harness_run": {
+    "requests": 20,
+    "successes": 20,
+    "prompt_tokens": 6389,
+    "candidates_tokens": 1196,
+    "total_tokens": 7585,
+    "plus_quota_probe_requests": 1
+  },
+  "session_estimate_including_setup_probes": {
+    "generateContent_calls_approx": "40-50 across flash-lite / flash-latest probes",
+    "portion_of_typical_flash_lite_500_rpd": "about 8-10%",
+    "portion_of_typical_flash_20_rpd": "N/A — eval used flash-lite, not Flash 20-RPD models"
+  },
+  "how_to_see_exact_remaining": "Google AI Studio → project 171569345899 → Usage & billing / Rate limits",
+  "pcs_scientific_authority": false
+}

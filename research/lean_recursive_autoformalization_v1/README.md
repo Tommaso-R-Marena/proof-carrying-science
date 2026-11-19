@@ -99,6 +99,19 @@ Axes: sealed lean-learning-v2 formalization + finals prove, OOD paraphrases,
 OOD/SVB fail-closed abstention. Measured: 10/10 exact IR, 15/15 OOD supported,
 0 SVB false accepts, 5/6 final proves.
 
+## Unrestricted English (miniF2F / FormL4 + Gemini)
+
+```bash
+export GEMINI_API_KEY=...   # never commit
+PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.unrestricted_llm_benchmark \
+  --output research/lean_recursive_autoformalization_v1/results/unrestricted_llm \
+  --limit 20 --model gemini-3.1-flash-lite
+```
+
+Uses facebookresearch/miniF2F informal + FormL4 (PDA) samples under free-tier
+soft caps. Measured: miniF2F/FormL4 zero-shot 0; LLM mostly abstains; bridge
+unrestricted→controlled **4/4** gated. API does not expose remaining quota.
+
 ## Conflict avoidance
 
 Stay inside `research/lean_recursive_autoformalization_v1/`. Do not edit open-PR

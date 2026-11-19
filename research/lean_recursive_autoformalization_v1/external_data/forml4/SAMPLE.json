@@ -1,0 +1,218 @@
+[
+  {
+    "id": "forml4_basic_0",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any natural number k, the ascending factorial of 0 up to (k + 1) is equal to 0.",
+    "formal_ref": "theorem zero_ascFactorial : \u2200 (k : \u2115), (0 : \u2115).ascFactorial k.succ = 0\n  | 0 => by\n    rw [ascFactorial_succ, ascFactorial_zero, Nat.zero_add, Nat.zero_mul]\n  | (k+1) => by\n    rw [ascFactorial_succ, zero_ascFactorial k, Nat.mul_zero]",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_1",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any non-negative integers n and k where k is less than or equal to n, the product of \"n choose k\", k factorial, and (n-k) factorial is equal to n factorial.",
+    "formal_ref": "theorem choose_mul_factorial_mul_factorial : \u2200 {n k}, k \u2264 n \u2192 choose n k * k ! * (n - k)! = n !\n  | 0, _, hk => by simp [Nat.eq_zero_of_le_zero hk]\n  | n + 1, 0, _ => by simp\n  | n + 1, succ k, hk => by\n    rcases lt_or_eq_of_le hk with hk\u2081 | hk\u2081\n    \u00b7 have h : choose n k * k.succ ! * (n - k)! = (k + 1) * n ! := by\n        rw [\u2190 choose_mul_factorial_mul_factorial (le_of_succ_le_succ hk)]\n        simp [factorial_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]\n      have h\u2081 : (n - k)! = (n - k) * (n - k.succ)! := by\n        rw [\u2190 succ_sub_succ, succ_sub (le_of_lt_succ hk\u2081), factorial_succ]\n      have h\u2082 : choose n (succ k) * k.succ ! * ((n - k) * (n - k.succ)!) = (n - k) * n ! := by\n        rw [\u2190 choose_mul_factorial_mul_factorial (le_of_lt_succ hk\u2081)]\n        simp [factorial_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]\n      have h\u2083 : k * n ! \u2264 n * n ! := Nat.mul_le_mul_right _ (le_of_succ_le_succ hk)\n      rw [choose_succ_succ, Nat.add_mul, Nat.add_mul, succ_sub_succ, h, h\u2081, h\u2082, Nat.add_mul,\n        Nat.mul_sub_right_distrib, factorial_succ, \u2190 Nat.add_sub_assoc h\u2083, Nat.add_assoc,\n        \u2190 Nat.add_mul, Nat.add_sub_cancel_left, Nat.add_comm]\n    \u00b7 rw [hk\u2081]; simp [hk\u2081, Nat.mul_comm, choose, Nat.sub_self]\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_2",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that 1 is coprime to any natural number x.",
+    "formal_ref": "theorem isCoprime_one_left : IsCoprime 1 x :=\n  \u27e81, 0, by rw [one_mul, zero_mul, add_zero]\u27e9\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_3",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that the coefficient of the term \\(x^k\\) in the \\(2n+k\\)-th Hermite polynomial is equal to  \\((-1)^n \\cdot (2n-1)!! \\cdot \\binom{2n+k}{k}\\).",
+    "formal_ref": "theorem coeff_hermite_explicit :\n    \u2200 n k : \u2115, coeff (hermite (2 * n + k)) k = (-1) ^ n * (2 * n - 1)\u203c * Nat.choose (2 * n + k) k\n  | 0, _ => by simp\n  | n + 1, 0 => by\n    convert coeff_hermite_succ_zero (2 * n + 1) using 1\n    -- Porting note: ring_nf did not solve the goal on line 165\n    rw [coeff_hermite_explicit n 1, (by rw [Nat.left_distrib, mul_one, Nat.add_one_sub_one] :\n      2 * (n + 1) - 1 = 2 * n + 1), Nat.doubleFactorial_add_one, Nat.choose_zero_right,\n      Nat.choose_one_right, pow_succ]\n    push_cast\n    ring\n  | n + 1, k + 1 => by\n    let hermite_explicit : \u2115 \u2192 \u2115 \u2192 \u2124 := fun n k =>\n      (-1) ^ n * (2 * n - 1)\u203c * Nat.choose (2 * n + k) k\n    have hermite_explicit_recur :\n      \u2200 n k : \u2115,\n        hermite_explicit (n + 1) (k + 1) =\n          hermite_explicit (n + 1) k - (k + 2) * hermite_explicit n (k + 2) := by\n      intro n k\n      simp only [hermite_explicit]\n      -- Factor out (-1)'s.\n      rw [mul_comm (\u2191k + _ : \u2124), sub_eq_add_neg]\n      nth_rw 3 [neg_eq_neg_one_mul]\n      simp only [mul_assoc, \u2190 mul_add, pow_succ']\n      congr 2\n      -- Factor out double factorials.\n      norm_cast\n      -- Porting note: ring_nf did not solve the goal on line 186\n      rw [(by rw [Nat.left_distrib, mul_one, Nat.add_one_sub_one] : 2 * (n + 1) - 1 = 2 * n + 1),\n        Nat.doubleFactorial_add_one, mul_comm (2 * n + 1)]\n      simp only [mul_assoc, \u2190 mul_add]\n      congr 1\n      -- Match up binomial coefficients using `Nat.choose_succ_right_eq`.\n      rw [(by ring : 2 * (n + 1) + (k + 1) = 2 * n + 1 + (k + 1) + 1),\n        (by ring : 2 * (n + 1) + k = 2 * n + 1 + (k + 1)),\n        (by ring : 2 * n + (k + 2) = 2 * n + 1 + (k + 1))]\n      rw [Nat.choose, Nat.choose_succ_right_eq (2 * n + 1 + (k + 1)) (k + 1), Nat.add_sub_cancel]\n      ring\n    change _ = hermite_explicit _ _\n    rw [\u2190 add_assoc, coeff_hermite_succ_succ, hermite_explicit_recur]\n    congr\n    \u00b7 rw [coeff_hermite_explicit (n + 1) k]\n    \u00b7 rw [(by ring : 2 * (n + 1) + k = 2 * n + (k + 2)), coeff_hermite_explicit n (k + 2)]\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_4",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that any natural number 'x' is coprime with 1.",
+    "formal_ref": "theorem isCoprime_one_right : IsCoprime x 1 :=\n  \u27e80, 1, by rw [one_mul, zero_mul, zero_add]\u27e9\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_5",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any integer 'a', the absolute value of 'a' is equal to the natural number absolute value of 'a'.",
+    "formal_ref": "theorem abs_eq_natAbs : \u2200 a : \u2124, |a| = natAbs a\n  | (n : \u2115) => abs_of_nonneg <| ofNat_zero_le _\n  | -[_+1] => abs_of_nonpos <| le_of_lt <| negSucc_lt_zero _\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_6",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any two integers, if they have the same sign, then their sum has the same sign as each of them.",
+    "formal_ref": "theorem sign_add_eq_of_sign_eq : \u2200 {m n : \u2124}, m.sign = n.sign \u2192 (m + n).sign = n.sign := by\n  have : (1 : \u2124) \u2260 -1 := by decide\n  rintro ((_ | m) | m) ((_ | n) | n) <;> simp [this, this.symm, Int.negSucc_add_negSucc]\n  rw [Int.sign_eq_one_iff_pos]\n  apply Int.add_pos <;> \u00b7 exact zero_lt_one.trans_le (le_add_of_nonneg_left <| coe_nat_nonneg _)\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_basic_7",
+    "split": "basic",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that the factorial of any natural number is greater than 0.",
+    "formal_ref": "theorem factorial_pos : \u2200 n, 0 < n !\n  | 0 => Nat.zero_lt_one\n  | succ n => Nat.mul_pos (succ_pos _) (factorial_pos n)\n",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_0",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any natural numbers 'm' and 'n', and any element 'a' from a set with an operation denoted by '\u2022', the following holds: (m + n) \u2022 a = (m \u2022 a) + (n \u2022 a).",
+    "formal_ref": "theorem add_nsmul (a : A) (m n : \u2115) : (m + n) \u2022 a = m \u2022 a + n \u2022 a := by\n   induction n with\n   | zero => rw [Nat.add_zero, zero_nsmul, add_zero]\n   | succ n ih => rw [Nat.add_succ, Nat.succ_eq_add_one, succ_nsmul, ih, succ_nsmul, add_assoc]\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_1",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Given a sequence defined by the recurrence relation `y_{n+2} = a\u2081 * y_{n+1} + y_n`, prove that for any natural number `n`, `y_n` is congruent to `n` modulo 2.  Here, `a\u2081` is a fixed constant natural number.",
+    "formal_ref": "theorem yn_modEq_two : \u2200 n, yn a1 n \u2261 n [MOD 2]\n   | 0 => by rfl\n   | 1 => by simp; rfl\n   | n + 2 =>\n     (yn_modEq_two n).add_right_cancel <| by\n       rw [yn_succ_succ, mul_assoc, (by ring : n + 2 + n = 2 * (n + 1))]\n       exact (dvd_mul_right 2 _).modEq_zero_nat.trans (dvd_mul_right 2 _).zero_modEq_nat\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_2",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any natural number k, the expression ((2 * k + 1) / (2 * k + 2)) * (\u03c0 / 2) is less than or equal to W(k), where W(k) represents Wallis's product up to k terms.",
+    "formal_ref": "theorem le_W (k : \u2115) : ((2 : \u211d) * k + 1) / (2 * k + 2) * (\u03c0 / 2) \u2264 W k := by\n   rw [\u2190 le_div_iff pi_div_two_pos, div_eq_inv_mul (W k) _]\n   rw [W_eq_integral_sin_pow_div_integral_sin_pow, le_div_iff (integral_sin_pow_pos _)]\n   convert integral_sin_pow_succ_le (2 * k + 1)\n   rw [integral_sin_pow (2 * k)]\n   simp only [sin_zero, ne_eq, add_eq_zero, and_false, not_false_eq_true, zero_pow, cos_zero,\n     mul_one, sin_pi, cos_pi, mul_neg, neg_zero, sub_self, zero_div, zero_add]\n   norm_cast\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_3",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that the sum of a geometric series with a positive odd number of terms is always greater than zero, given that the elements of the series belong to a linearly ordered ring.",
+    "formal_ref": "theorem Odd.geom_sum_pos [LinearOrderedRing \u03b1] (h : Odd n) : 0 < \u2211 i in range n, x ^ i := by\n   rcases n with (_ | _ | k)\n   \u00b7 exact ((show \u00acOdd 0 by decide) h).elim\n   \u00b7 simp only [Nat.zero_eq, \u2190 Nat.one_eq_succ_zero, geom_sum_one, zero_lt_one]\n   rw [Nat.odd_iff_not_even] at h\n   rcases lt_trichotomy (x + 1) 0 with (hx | hx | hx)\n   \u00b7 have := geom_sum_alternating_of_lt_neg_one hx k.one_lt_succ_succ\n     simp only [h, if_false] at this\n     exact zero_lt_one.trans this\n   \u00b7 simp only [eq_neg_of_add_eq_zero_left hx, h, neg_one_geom_sum, if_false, zero_lt_one]\n   \u00b7 exact geom_sum_pos' hx k.succ.succ_ne_zero\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_4",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any two natural numbers m and n, the sum (m + n) is odd if and only if exactly one of m or n is odd and the other is even.",
+    "formal_ref": "theorem odd_add : Odd (m + n) \u2194 (Odd m \u2194 Even n) := by\n   rw [odd_iff_not_even, even_add, not_iff, odd_iff_not_even]\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_5",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any two natural numbers *m* and *n*, *m* divides *n* if and only if *m* as an integer divides *n* as an integer.",
+    "formal_ref": "theorem coe_nat_dvd {m n : \u2115} : (\u2191m : \u2124) \u2223 \u2191n \u2194 m \u2223 n :=\n   \u27e8fun \u27e8a, ae\u27e9 =>\n     m.eq_zero_or_pos.elim (fun m0 => by\n       simp only [m0, Nat.cast_zero, zero_mul, cast_eq_zero] at ae\n       simp [ae, m0]) fun m0l => by\n       cases'\n         eq_ofNat_of_zero_le\n           (@nonneg_of_mul_nonneg_right \u2124 _ m a (by simp [ae.symm]) (by simpa using m0l)) with\n         k e\n       subst a\n       exact \u27e8k, Int.ofNat.inj ae\u27e9,\n     fun \u27e8k, e\u27e9 => Dvd.intro k <| by rw [e, Int.ofNat_mul]\u27e9\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_6",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "For any natural numbers \\(b\\) and \\(n\\) where \\(b\\) is greater than 1 and \\(n\\) is not 0, prove that the logarithm base \\(b\\) of (\\(n\\) multiplied by \\(b\\)) is equal to the logarithm base \\(b\\) of \\(n\\) plus 1.",
+    "formal_ref": "theorem log_mul_base {b n : \u2115} (hb : 1 < b) (hn : n \u2260 0) : log b (n * b) = log b n + 1 := by\n   apply log_eq_of_pow_le_of_lt_pow <;> rw [pow_succ', Nat.mul_comm b]\n   exacts [Nat.mul_le_mul_right _ (pow_log_le_self _ hn),\n     (Nat.mul_lt_mul_right (Nat.zero_lt_one.trans hb)).2 (lt_pow_succ_log_self hb _)]\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_random_7",
+    "split": "random",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "Prove that for any natural number n greater than 0, n multiplied by the factorial of (n-1) is equal to the factorial of n.",
+    "formal_ref": "theorem mul_factorial_pred (hn : 0 < n) : n * (n - 1)! = n ! :=\n   Nat.sub_add_cancel (Nat.succ_le_of_lt hn) \u25b8 rfl\n ",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_0",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_1",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_2",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_3",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_4",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_5",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_6",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  },
+  {
+    "id": "forml4_real_7",
+    "split": "real",
+    "benchmark": "FormL4",
+    "source": "rookie-joe/PDA data/FormL4",
+    "english": "",
+    "formal_ref": "",
+    "expect_in_pgra_grammar": false
+  }
+]

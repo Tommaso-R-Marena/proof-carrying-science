@@ -73,6 +73,23 @@ paraphrase fixes:
 All research generalization gates passed. Not unrestricted English; SVB axis
 is abstention fail-closed, not SVB label accuracy.
 
+### Unrestricted English via Gemini (miniF2F + FormL4)
+
+`unrestricted_llm_benchmark.py` + `gemini_client.py` (key via `GEMINI_API_KEY` only;
+free-tier soft RPM/RPD caps). Measured on `gemini-3.1-flash-lite`:
+
+| Slice | n | Zero-shot PGRA | LLM→gated supported | LLM abstain |
+| --- | ---: | ---: | ---: | ---: |
+| miniF2F informal | 8 | 0/8 | 0/8 | 7/8 |
+| FormL4 NL | 8 | 0/8 | 0/8 | 6/8 |
+| Bridge rewriteable unrestricted | 4 | 0/4 | **4/4** | 0/4 |
+
+Interpretation: olympiad/Mathlib unrestricted English correctly fail-closed;
+when Gemini rewrites elementary claims into controlled grammar, the dual gate
+accepts **4/4**. Remaining free-tier RPM/RPD is **not** returned by the API —
+see AI Studio for project `171569345899`; this run used ~21 flash-lite calls
+(~8–10% of a typical 500 RPD flash-lite day including setup probes).
+
 ## What was built
 
 | Artifact | Role |
