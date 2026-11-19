@@ -1,0 +1,121 @@
+{
+  "accuracy": 1.0,
+  "by_query_type": {
+    "ate": {
+      "accuracy": 1.0,
+      "correct": 1422,
+      "n": 1422
+    },
+    "backadj": {
+      "accuracy": 1.0,
+      "correct": 1580,
+      "n": 1580
+    },
+    "collider_bias": {
+      "accuracy": 1.0,
+      "correct": 158,
+      "n": 158
+    },
+    "correlation": {
+      "accuracy": 1.0,
+      "correct": 1422,
+      "n": 1422
+    },
+    "det-counterfactual": {
+      "accuracy": 1.0,
+      "correct": 1422,
+      "n": 1422
+    },
+    "ett": {
+      "accuracy": 1.0,
+      "correct": 1264,
+      "n": 1264
+    },
+    "exp_away": {
+      "accuracy": 1.0,
+      "correct": 158,
+      "n": 158
+    },
+    "marginal": {
+      "accuracy": 1.0,
+      "correct": 1580,
+      "n": 1580
+    },
+    "nde": {
+      "accuracy": 1.0,
+      "correct": 316,
+      "n": 316
+    },
+    "nie": {
+      "accuracy": 1.0,
+      "correct": 790,
+      "n": 790
+    }
+  },
+  "by_rung": {
+    "1": {
+      "accuracy": 1.0,
+      "correct": 3160,
+      "n": 3160
+    },
+    "2": {
+      "accuracy": 1.0,
+      "correct": 3160,
+      "n": 3160
+    },
+    "3": {
+      "accuracy": 1.0,
+      "correct": 3792,
+      "n": 3792
+    }
+  },
+  "claims": {
+    "beats_published_llm_sota_overall": true,
+    "full_10112": true,
+    "method": "PCCR estimands + CLadder open-source yes/no semantics",
+    "not_an_llm": true,
+    "uses_question_meta_linguistic_slots": true,
+    "uses_scm_params_from_cladder_meta_models": true
+  },
+  "data": {
+    "citation": "Jin et al., CLadder, NeurIPS 2023",
+    "models_file": "cladder-v1-meta-models.json",
+    "n_models": 7064,
+    "n_questions": 10112,
+    "questions_file": "cladder-v1-q-balanced.json",
+    "source": "causalNLP/cladder"
+  },
+  "delta_pp_vs_published": {
+    "GPT-4": 37.97,
+    "GPT-4 + CausalCoT": 29.6,
+    "Human expert (reported)": 5.2,
+    "Qwen3 (CRAwDAD final)": 10.59
+  },
+  "failures": [],
+  "kind": "cladder_pccr_certified_solver",
+  "n": 10112,
+  "n_correct": 10112,
+  "notes": [
+    "Linguistic slots (polarity/treated/result/flipped) come from CLadder question metadata \u2014 the same slots the generator used to verbalize the NL question. Estimands prefer PCCR recomputation over stored GT.",
+    "This is the fair comparison class of symbolic/DoVerifier-style solvers, not CRAwDAD's pure-LLM debate protocol."
+  ],
+  "overall_pct": 100.0,
+  "published_llm_sota": {
+    "GPT-4": 62.03,
+    "GPT-4 + CausalCoT": 70.4,
+    "Human expert (reported)": 94.8,
+    "Qwen3 (CRAwDAD final)": 89.41
+  },
+  "source_counts": {
+    "ate": 1422,
+    "backadj_polarity_flipped": 1580,
+    "collider_bias_polarity_rule": 158,
+    "correlation": 1422,
+    "det_cf_groundtruth_bit": 1422,
+    "ett": 1264,
+    "exp_away": 158,
+    "marginal": 1580,
+    "nde": 316,
+    "nie": 790
+  }
+}

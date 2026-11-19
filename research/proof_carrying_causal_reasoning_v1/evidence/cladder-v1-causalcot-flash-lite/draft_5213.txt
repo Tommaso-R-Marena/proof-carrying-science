@@ -1,0 +1,24 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V2, X -> V3, V2 -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+correlation (specifically, comparing $P(Y=1 | X=1)$ with $P(Y=1)$ or evaluating the conditional probability $P(Y=1 | X=1)$ vs the marginal/unconditional probability).
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+$P(Y = \text{death} \mid X = \text{execute})$
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+$P(X = \text{execute}) = 0.16$ ; $P(X = \text{release}, Y = \text{death}) = 0.24$ ; $P(X = \text{execute}, Y = \text{death}) = 0.12$
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+We want to find the probability of the prisoner's death given the captain's order to execute:
+$P(Y = \text{death} \mid X = \text{execute}) = \frac{P(X = \text{execute}, Y = \text{death})}{P(X = \text{execute})} = \frac{0.12}{0.16} = 0.75$ (or $75\%$).
+
+The overall (marginal) probability of the prisoner's death can be found by law of total probability using the two mutually exclusive states of $X$ (execute and release, assuming these are the partitions):
+$P(Y = \text{death}) = P(X = \text{execute}, Y = \text{death}) + P(X = \text{release}, Y = \text{death}) = 0.12 + 0.24 = 0.36$ (or $36\%$).
+
+Comparing the two:
+The chance of the prisoner's death when observing the captain's order to execute is $75\%$, whereas the overall (unconditional) chance of the prisoner's death is $36\%$. Therefore, the chance is *larger*, not smaller.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

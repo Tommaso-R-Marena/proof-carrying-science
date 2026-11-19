@@ -1,0 +1,28 @@
+To determine whether glimx is more likely than not glimx overall, let's follow the step-by-step causal inference process.
+
+**Step 1) Extract the causal graph:**
+Zuph has a direct effect on jyka, and Glimx has a direct effect on jyka.
+Edges: X -> V3, Y -> V3
+
+**Step 2) Identify the query type:**
+We are asked about the overall (marginal) probability of glimx without any conditioning or interventions.
+Query type: marginal
+
+**Step 3) Translate the query to a formal estimand:**
+$P(Y = 1)$
+
+**Step 4) Collect available probabilities from the text as P(...)=... ; ...**
+- The overall probability of zuph is 93%: $P(X = 1) = 0.93$ (meaning $P(X = 0) = 0.07$)
+- For those who are not zuph, the probability of glimx is 67%: $P(Y = 1 \mid X = 0) = 0.67$
+- For those who are zuph, the probability of glimx is 67%: $P(Y = 1 \mid X = 1) = 0.67$
+
+**Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability):**
+Using the law of total probability for the marginal probability of Y:
+$P(Y = 1) = P(Y = 1 \mid X = 1)P(X = 1) + P(Y = 1 \mid X = 0)P(X = 0)$
+$P(Y = 1) = 0.67 \times 0.93 + 0.67 \times 0.07$
+$P(Y = 1) = 0.67 \times (0.93 + 0.07) = 0.67 \times 1 = 0.67$
+
+Since $0.67 > 0.5$, glimx is more likely than not glimx overall.
+
+**Step 6) On the last line, write exactly:**
+FINAL: yes

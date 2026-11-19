@@ -1,0 +1,33 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+V1 -> V3, V1 -> X, X -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ate
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+E[Y | do(X = 1)] - E[Y | do(X = 0)]
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(V1 = 1) = 0.23; P(V1 = 0) = 0.77; P(Y = 1 | V1 = 0, X = 0) = 0.28; P(Y = 1 | V1 = 0, X = 1) = 0.26; P(Y = 1 | V1 = 1, X = 0) = 0.35; P(Y = 1 | V1 = 1, X = 1) = 0.37
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Since V1 is a common cause of X and Y (via V3 and direct effects, though effectively V1 causes X and V1 causes Y through Zory and Zuph paths), we adjust for V1 using the backdoor formula:
+P(Y = 1 | do(X = x)) = \sum_{v1} P(Y = 1 | X = x, V1 = v1) P(V1 = v1)
+
+For X = 1 (zuph):
+P(Y = 1 | do(X = 1)) = P(Y = 1 | X = 1, V1 = 0) P(V1 = 0) + P(Y = 1 | X = 1, V1 = 1) P(V1 = 1)
+= 0.26 * 0.77 + 0.37 * 0.23
+= 0.2002 + 0.0851 = 0.2853
+
+For X = 0 (not zuph):
+P(Y = 1 | do(X = 0)) = P(Y = 1 | X = 0, V1 = 0) P(V1 = 0) + P(Y = 1 | X = 0, V1 = 1) P(V1 = 1)
+= 0.28 * 0.77 + 0.35 * 0.23
+= 0.2156 + 0.0805 = 0.2961
+
+Comparing the two:
+P(Y = 1 | do(X = 1)) = 0.2853
+P(Y = 1 | do(X = 0)) = 0.2961
+Since 0.2853 < 0.2961, zuph decreases the chance of glimx. Thus, the answer is yes.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: yes

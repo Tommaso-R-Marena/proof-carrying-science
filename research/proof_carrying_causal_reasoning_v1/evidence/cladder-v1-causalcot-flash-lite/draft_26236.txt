@@ -1,0 +1,35 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+V1 -> X, V1 -> V3, X -> V3, V1 -> Y, X -> Y, V3 -> Y
+*(Note: Based on the prompt: Tijw(V1) has a direct effect on xevo(X) and gyzp(Y). Xevo(X) has a direct effect on tijv(V3). Tijv(V3) has a direct effect on gyzp(Y). Since the prompt mentions "Tijw has a direct effect on xevo and gyzp", "Xevo has a direct effect on tijv", and "Tijv has a direct effect on gyzp", the edges are: V1 -> X, V1 -> Y, X -> V3, V3 -> Y. Let's re-read carefully: "Tijw has a direct effect on xevo and gyzp. Xevo has a direct effect on tijv. Tijw has a direct effect on gyzp." Wait, does Tijw affect V3? The prompt says "Tijw has a direct effect on xevo and gyzp. Xevo has a direct effect on tijv. Tijw has a direct effect on gyzp." It does not explicitly state V1 -> V3, but wait, let's check the conditional probabilities provided: $P(V3 = 1 \mid X = 0)$ and $P(V3 = 1 \mid X = 1)$. This implies $X \to V3$, and since V1 is unobserved and causes X, V1 is a common cause or antecedent. But strictly by the text: V1 -> X, V1 -> Y, X -> V3, V3 -> Y).*
+List of edges: V1 -> X, V1 -> Y, X -> V3, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ate
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+$E[Y \mid do(X=1)] - E[Y \mid do(X=0)]$ or $P(Y=1 \mid do(X=1)) - P(Y=1 \mid do(X=0))$
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+$P(V3=1 \mid X=0) = 0.75$; $P(V3=1 \mid X=1) = 0.42$; $P(Y=1 \mid X=0, V3=0) = 0.35$; $P(Y=1 \mid X=0, V3=1) = 0.78$; $P(Y=1 \mid X=1, V3=0) = 0.40$; $P(Y=1 \mid X=1, V3=1) = 0.79$; $P(X=1) = 0.36$; $P(X=0) = 0.64$
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Using the backdoor adjustment or causal formula through the mediator V3 (since V3 is a mediator between X and Y, and V1 is the unobserved confounder affecting X and Y):
+$P(Y=1 \mid do(X=x)) = \sum_{v3} P(Y=1 \id X=x, V3=v3) P(V3=v3 \mid X=x)$
+
+For $X = 1$:
+$P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1, V3=0)P(V3=0 \mid X=1) + P(Y=1 \mid X=1, V3=1)P(V3=1 \mid X=1)$
+$= (0.40 \times (1 - 0.42)) + (0.79 \times 0.42)$
+$= (0.40 \times 0.58) + (0.3318)$
+$= 0.232 + 0.3318 = 0.5638$
+
+For $X = 0$:
+$P(Y=1 \mid do(X=0)) = P(Y=1 \mid X=0, V3=0)P(V3=0 \mid X=0) + P(Y=1 \mid X=0, V3=1)P(V3=1 \mid X=0)$
+$= (0.35 \times (1 - 0.75)) + (0.78 \times 0.75)$
+$= (0.35 \times 0.25) + (0.585)$
+$= 0.0875 + 0.585 = 0.6725$
+
+Difference: $P(Y=1 \mid do(X=1)) - P(Y=1 \mid do(X=0)) = 0.5638 - 0.6725 = -0.1087$.
+Since the causal effect is negative, xevo decreases the chance of gyzp.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: yes

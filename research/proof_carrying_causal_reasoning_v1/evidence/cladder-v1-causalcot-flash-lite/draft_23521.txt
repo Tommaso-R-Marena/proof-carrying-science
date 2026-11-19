@@ -1,0 +1,18 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V3, Muvq -> V3 (where Muvq is another variable, let's denote it as M). Specifically from the text: "X -> V3, M -> V3".
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+marginal
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = true)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = true) = 0.85; P(M = true | X = false) = 0.95; P(M = true | X = true) = 0.95
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Since P(M = true | X = false) = 0.95 and P(M = true | X = true) = 0.95, the probability of M is 0.95 regardless of X. Thus, the overall probability of M is 0.95 (greater than 0.5, so M is more likely than not M). 
+Therefore, Muvq is not less likely than not muvq overall.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

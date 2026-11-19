@@ -1,0 +1,11 @@
+Step 1) Extract the causal graph: X -> V3, X -> V2, V3 -> Y, V2 -> Y
+
+Step 2) Identify the query type: ate
+
+Step 3) Translate the query to a formal estimand: $P(Y=1 \mid do(X=1)) - P(Y=1 \mid do(X=0))$
+
+Step 4) Collect available probabilities from the text as $P(Y=1 \mid X=0) = 0.38$; $P(Y=1 \mid X=1) = 0.48$
+
+Step 5) Solve the estimand with causal inference: Since $X$ has no parents in the given graph, the do-probabilities are equal to the conditional probabilities: $P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1) = 0.48$, and $P(Y=1 \mid do(X=0)) = P(Y=1 \mid X=0) = 0.38$. The difference is $0.48 - 0.38 = 0.10$, which is greater than 0. Therefore, zuph increases the chance of glimx, so it does not decrease it.
+
+FINAL: no

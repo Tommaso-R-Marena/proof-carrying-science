@@ -1,0 +1,20 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V2, X -> V3, V2 -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+det-counterfactual
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+$Y_{X=\text{dry}}$
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+Deterministic relationships: 
+- Rainy season causes rain ($V2 = \text{rain}$) and sprinkler on ($V3 = \text{on}$).
+- Dry season (implied by "dry season instead of rainy season") causes no rain ($V2 = \text{dry}$) and sprinkler off ($V3 = \text{off}$).
+- Rain ($V2 = \text{rain}$) or sprinkler on ($V3 = \text{on}$) causes wet ground ($Y = \text{wet}$). Conversely, neither rain nor sprinkler on causes dry ground ($Y = \text{dry}$).
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Under the dry season ($X = \text{dry}$), the weather is dry ($V2 = \text{dry}$) and the sprinkler is off ($V3 = \text{off}$). Since neither rain nor sprinkler on occurs, the ground is not wet (it is dry). Therefore, the ground is not wet.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

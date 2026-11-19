@@ -58,28 +58,57 @@ def generate(
     temperature: float = 0.0,
     max_output_tokens: int = 512,
 ) -> Dict[str, Any]:
-    """One generateContent call. Returns redacted provenance + text."""
+    """One generateContent call forcing JSON (PCCR task battery)."""
+    return _generate_raw(
+        "You answer causal identification questions. "
+        "Output a single JSON object only. No markdown.\n\n" + prompt,
+        model=model,
+        temperature=temperature,
+        max_output_tokens=max_output_tokens,
+        response_mime_type="application/json",
+        timeout_sec=120,
+    )
+
+
+def generate_text(
+    prompt: str,
+    *,
+    model: str = DEFAULT_MODEL,
+    temperature: float = 0.0,
+    max_output_tokens: int = 2048,
+    timeout_sec: int = 180,
+) -> Dict[str, Any]:
+    """Free-form text generateContent (CausalCoT / debate)."""
+    return _generate_raw(
+        prompt,
+        model=model,
+        temperature=temperature,
+        max_output_tokens=max_output_tokens,
+        response_mime_type=None,
+        timeout_sec=timeout_sec,
+    )
+
+
+def _generate_raw(
+    prompt: str,
+    *,
+    model: str,
+    temperature: float,
+    max_output_tokens: int,
+    response_mime_type: Optional[str],
+    timeout_sec: int,
+) -> Dict[str, Any]:
+    """Shared generateContent helper. Returns redacted provenance + text."""
     key = _api_key()
+    gen_cfg: Dict[str, Any] = {
+        "temperature": temperature,
+        "maxOutputTokens": max_output_tokens,
+    }
+    if response_mime_type:
+        gen_cfg["responseMimeType"] = response_mime_type
     body = {
-        "contents": [
-            {
-                "role": "user",
-                "parts": [
-                    {
-                        "text": (
-                            "You answer causal identification questions. "
-                            "Output a single JSON object only. No markdown.\n\n"
-                            + prompt
-                        )
-                    }
-                ],
-            }
-        ],
-        "generationConfig": {
-            "temperature": temperature,
-            "maxOutputTokens": max_output_tokens,
-            "responseMimeType": "application/json",
-        },
+        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+        "generationConfig": gen_cfg,
     }
     raw = json.dumps(body, separators=(",", ":")).encode()
     req = urllib.request.Request(
@@ -92,7 +121,7 @@ def generate(
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=90) as resp:
+        with urllib.request.urlopen(req, timeout=timeout_sec) as resp:
             payload = resp.read()
             status = resp.status
     except urllib.error.HTTPError as e:
@@ -104,10 +133,26 @@ def generate(
             "text": "",
             "request_sha256": hashlib.sha256(raw).hexdigest(),
         }
+    except TimeoutError as e:
+        return {
+            "ok": False,
+            "status": 598,
+            "error": f"timeout:{e}",
+            "text": "",
+            "request_sha256": hashlib.sha256(raw).hexdigest(),
+        }
+    except Exception as e:  # noqa: BLE001 — network resilience
+        return {
+            "ok": False,
+            "status": 599,
+            "error": f"{type(e).__name__}:{e}",
+            "text": "",
+            "request_sha256": hashlib.sha256(raw).hexdigest(),
+        }
     data = json.loads(payload.decode())
     text = _extract_text(data)
-    if len(text) > MAX_OUTPUT_CHARS:
-        text = text[:MAX_OUTPUT_CHARS]
+    if len(text) > MAX_OUTPUT_CHARS * 4:
+        text = text[: MAX_OUTPUT_CHARS * 4]
     return {
         "ok": True,
         "status": status,

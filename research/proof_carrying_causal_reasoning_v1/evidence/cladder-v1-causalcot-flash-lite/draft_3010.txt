@@ -1,0 +1,20 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V2, X -> Y, V2 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+correlation
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = 1 | X = 1) vs P(Y = 1 | X = 0)  [or simply comparing $P(Y|X=1)$ and $P(Y|X=0)$]
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = 1) = 0.02; P(X = 0) = 0.98; P(X = 0, Y = 1) = 0.67; P(X = 1, Y = 1) = 0.01
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+- Chance of college admission when observing smoking:
+  $P(Y = 1 | X = 1) = \frac{P(X = 1, Y = 1)}{P(X = 1)} = \frac{0.01}{0.02} = 0.5$ (or 50%).
+- Chance of college admission when observing nonsmoking:
+  $P(Y = 1 | X = 0) = \frac{P(X = 0, Y = 1)}{P(X = 0)} = \frac{0.67}{0.98} \approx 0.6836$ (or ~68.4%).
+- Comparing the two: $0.5 < 0.6836$. Thus, the chance of college admission is *smaller* (not larger) when observing smoking.
+
+FINAL: no

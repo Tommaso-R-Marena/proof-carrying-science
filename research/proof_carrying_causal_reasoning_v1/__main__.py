@@ -60,6 +60,25 @@ def main(argv: list[str] | None = None) -> int:
     cll.add_argument("--per-rung", type=int, default=12)
     cll.add_argument("--seed", type=int, default=20251118)
     cll.add_argument("--min-interval", type=float, default=12.0)
+    clc = sub.add_parser(
+        "cladder-certified",
+        help="PCCR-certified CLadder yes/no solver (full-set SOTA challenge)",
+    )
+    clc.add_argument("--data-dir", type=Path, required=True)
+    clc.add_argument("--out", type=Path, required=True)
+    clc.add_argument("--limit", type=int, default=None)
+    clcot = sub.add_parser(
+        "cladder-causalcot",
+        help="CausalCoT (+ optional critic) CLadder NL sample via Gemini",
+    )
+    clcot.add_argument("--data-dir", type=Path, required=True)
+    clcot.add_argument("--out", type=Path, required=True)
+    clcot.add_argument("--model", default="gemini-3.5-flash-lite")
+    clcot.add_argument("--critic-model", default="gemini-3.5-flash-lite")
+    clcot.add_argument("--no-critic", action="store_true")
+    clcot.add_argument("--per-rung", type=int, default=12)
+    clcot.add_argument("--seed", type=int, default=20251118)
+    clcot.add_argument("--min-interval", type=float, default=8.0)
 
     args = p.parse_args(argv)
 
@@ -199,6 +218,41 @@ def main(argv: list[str] | None = None) -> int:
                 str(args.min_interval),
             ]
         )
+
+    if args.cmd == "cladder-certified":
+        from research.proof_carrying_causal_reasoning_v1.external.cladder_certified_solver import (
+            main as certified_main,
+        )
+
+        argv = ["--data-dir", str(args.data_dir), "--out", str(args.out)]
+        if args.limit is not None:
+            argv.extend(["--limit", str(args.limit)])
+        return certified_main(argv)
+
+    if args.cmd == "cladder-causalcot":
+        from research.proof_carrying_causal_reasoning_v1.external.cladder_causalcot import (
+            main as causalcot_main,
+        )
+
+        argv = [
+            "--data-dir",
+            str(args.data_dir),
+            "--out",
+            str(args.out),
+            "--model",
+            args.model,
+            "--critic-model",
+            args.critic_model,
+            "--per-rung",
+            str(args.per_rung),
+            "--seed",
+            str(args.seed),
+            "--min-interval",
+            str(args.min_interval),
+        ]
+        if args.no_critic:
+            argv.append("--no-critic")
+        return causalcot_main(argv)
 
     return 2
 

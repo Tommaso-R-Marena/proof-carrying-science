@@ -1,0 +1,26 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+V1 -> X, V1 -> Y, V2 -> X, X -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ate
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = 1 | do(X = 1)) - P(Y = 1 | do(X = 0))
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(Y=1 | V2=local) = 0.47; P(Y=1 | V2=global) = 0.41; P(X=1 | V2=local) = 0.50; P(X=1 | V2=global) = 0.18
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+In this hypothetical scenario, let us examine the association between water quality (X) and cholera (Y) adjusting for the backdoor path through poverty (V1), or note the conditional probabilities. However, looking at the problem setup and standard Simpson's paradox / confounding structures where V2 is an instrumental-like variable or we can use backdoor adjustment on V2 or V1. Wait, let's look at the causal graph: V1 -> X, V1 -> Y, V2 -> X, X -> Y. Poverty (V1) is a confounder between X and Y. V2 is an instrument for X. 
+Wait, can we compute the causal effect of X on Y? 
+Let's check the observational association or use the backdoor formula with V2? No, V2 is not a confounder of X and Y, V2 is a cause of X. V1 is the confounder between X and Y, but V1 is unobserved! 
+Wait, is there enough information to compute the causal effect, or can we check the direct data? 
+Let's analyze the paradox or numerical values given:
+Local water company: clean water = 50%, cholera = 47%.
+Global water company: clean water = 18%, cholera = 41%.
+Notice that the global water company provides *worse* water quality (18% clean vs 50% clean for local), yet it has a *lower* cholera rate (41% vs 47%). This is a classic Simpson's paradox setup induced by the unobserved confounder Poverty (V1). 
+Wait, does clean water decrease the chance of cholera contraction causally? 
+By the problem description, "Water quality has a direct effect on cholera." In epidemiological and causal contexts where water quality directly affects cholera, cleaner water reduces cholera. Even if unobserved confounding creates a positive observational association between clean water and cholera (because wealthier areas or certain companies confound it), the structural prompt states: "Water quality has a direct effect on cholera." Given standard causal assumptions in such problems or evaluating the direct effect, cleaner water decreases cholera.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: yes

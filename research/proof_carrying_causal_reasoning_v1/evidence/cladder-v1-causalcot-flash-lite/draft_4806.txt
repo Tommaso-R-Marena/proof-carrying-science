@@ -1,0 +1,23 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V2, X -> Y, V2 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ett
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y_{X=0} = 1 \mid X = 1) < P(Y_{X=1} = 1 \mid X = 1)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(Y = 1 \mid X = 0) = 0.78 ; P(Y = 1 \mid X = 1) = 0.32
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+In this hypothetical world, the causal effect of X on Y is given directly by the conditional probabilities since X is a root node in the causal graph (no confounding between X and Y). Therefore, the counterfactual probability for husbands who actually set the alarm ($X=1$) had they not set the alarm ($X=0$) is equal to the conditional probability in the population where $X=0$:
+$P(Y_{X=0} = 1 \mid X = 1) = P(Y = 1 \mid X = 0) = 0.78$
+And the factual probability for them is:
+$P(Y_{X=1} = 1 \mid X = 1) = P(Y = 1 \mid X = 1) = 0.32$
+Comparing the two: $0.78 < 0.32$ is false, meaning it is *more* likely, not less likely. Wait, the question asks: "would it be less likely to see ringing alarm if the husband had not set the alarm?"
+Comparing $P(Y_{X=0}=1 \mid X=1) = 0.78$ to $P(Y_{X=1}=1 \mid X=1) = 0.32$:
+$0.78$ is greater than $0.32$, so it is *more* likely, not *less* likely. Thus, the answer to "would it be less likely" is no.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

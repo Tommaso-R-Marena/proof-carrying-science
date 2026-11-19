@@ -1,0 +1,21 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+V1 -> V3, V1 -> X, X -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+marginal
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = true)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = true) = 0.59; P(X = false) = 1 - 0.59 = 0.41; P(Y = true | X = false) = 0.47; P(Y = true | X = true) = 0.82
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+By the law of total probability:
+P(Y = true) = P(Y = true | X = true) * P(X = true) + P(Y = true | X = false) * P(X = false)
+P(Y = true) = 0.82 * 0.59 + 0.47 * 0.41
+P(Y = true) = 0.4838 + 0.1927 = 0.6765
+Since 0.6765 > 0.5, kwox is more likely than not kwox overall.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: yes

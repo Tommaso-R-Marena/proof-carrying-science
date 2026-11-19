@@ -1,0 +1,22 @@
+To answer the question based strictly on the provided conditions and causal relationships, let's follow the step-by-step instructions:
+
+**Step 1) Extract the causal graph:**
+Based on the text ("Zuph has a direct effect on jyka and glimx. Jyka has a direct effect on glimx"), the edges are:
+X -> V2, X -> Y, V2 -> Y
+
+**Step 2) Identify the query type:**
+The question asks "Would an individual is glimx if zuph instead of not zuph?", which evaluates a counterfactual contrast for an individual. 
+Query type: det-counterfactual
+
+**Step 3) Translate the query to a formal estimand:**
+$Y_{X=1} (\text{or } Y_x)$ vs $Y_{X=0} (\text{or } Y_{x'})$
+More specifically, the query asks about the counterfactual outcome of glimx ($Y$) under the intervention of zuph ($X$).
+
+**Step 4) Collect available probabilities from the text:**
+The text provides qualitative causal relationships (causes), but no numerical probabilities. However, the system is fully specified by the structural causal model implied by the text.
+
+**Step 5) Solve the estimand with causal inference:**
+Since zuph ($X$) has a direct effect on glimx ($Y$), changing zuph from "not zuph" to "zuph" will directly change the outcome of glimx according to the causal mechanism. Thus, the counterfactual value of glimx changes when zuph is set to occur ("zuph instead of not zuph").
+
+**Step 6) On the last line, write exactly:**
+FINAL: yes
