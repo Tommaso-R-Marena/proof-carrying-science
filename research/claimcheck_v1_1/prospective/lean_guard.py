@@ -107,7 +107,7 @@ def make_guarded_lean(directory: Path, real_lean: str, memory_limit_mb: int, log
         raise ValueError("memory limit must be positive")
     config = {"real_lean": str(Path(real_lean).resolve()), "memory_limit_mb": int(memory_limit_mb),
               "log": str(Path(log_path).resolve()), "poll_seconds": float(poll_seconds)}
-    path = Path(directory) / "lean-guarded"
+    path = Path(directory).resolve() / "lean-guarded"         # absolute: the frozen kernel call runs Lean from a temporary directory
     path.write_text(TEMPLATE.format(python=sys.executable, config=json.dumps(config)), encoding="utf-8")
     path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     return path

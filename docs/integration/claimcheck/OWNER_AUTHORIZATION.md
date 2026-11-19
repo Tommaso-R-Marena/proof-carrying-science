@@ -1,4 +1,24 @@
-# Owner decision package: ClaimCheck integration (final pre-admission pass, 2026-11-18)
+# Owner decision package: ClaimCheck integration (final pre-admission pass, 2026-11-18; decisions of 2026-11-19 recorded)
+
+**Recorded on 2026-11-19 (owner's statements).**
+
+* The C3, C4, C5 and D4 fixes are accepted as the proposed internal-research baseline, subject to
+  final source review, and are not to be reverted.
+* The core `main` ruleset requires `verified-public-integration`, the site `main` ruleset requires
+  `site-full-gate`, and neither has a bypass actor.
+* Part C of the feasibility study only is authorised.
+* Draft 3 stays unapproved.
+
+**Prepared for the next steps:**
+
+* [`INDEPENDENT_REVIEW_CHECKLIST.md`](INDEPENDENT_REVIEW_CHECKLIST.md): independent review of C1 and
+  D1–D3;
+* [`OWNER_EXECUTION_CHECKLIST.md`](OWNER_EXECUTION_CHECKLIST.md): one block per decision;
+* [`ORACLE_SWITCH_ISOLATION.md`](ORACLE_SWITCH_ISOLATION.md): the development switches, and the
+  isolation needed before a public release;
+* [`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md): disposition L1 to L3;
+* [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md): which gates bind on every pull request; retained-source
+  tag protection (T1).
 
 Each decision below is separate: approving one does not approve another. **Nothing here has been
 applied, merged, deployed, tagged or approved by the assistant.** The three pull requests (core 212,
@@ -95,9 +115,21 @@ verify by hand in the rulesets".
    * The Gemini price is unset, so paid Gemini requests are refused.
 7. **Aristotle:** the available tools offer no enforceable per-run spending limit. The first run
    exceeded its allowance (92 credits billed against 50, promotional, no paid charge).
-8. **Licensing:** whether the providers' terms permit keeping and publishing the 35 recorded model
-   outputs is open.
-9. **Red checks by design** until you decide:
+8. **Licensing:** there are 45 recorded model outputs, not 35; the audit had missed the 10
+   development responses. On the providers' terms:
+   * Gemini (23): redistribution is supported.
+   * Nemotron (21): not established (NVIDIA's trial terms: internal testing and evaluation, not
+     production).
+   * Cohere (1): not permitted.
+
+   All 45 are already readable on the public draft branch. Decide L1–L3 before C1
+   ([`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md)).
+9. **Gates that bind less than they appear to** ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "Which
+    gates bind"):
+    * The core retained-source gate runs only on pull requests that touch integration paths.
+    * The site's retained-source and `public/` gate is not a required check.
+    * Options C2b and D2b address these.
+10. **Red checks by design** until you decide:
    * core: `source-policy` and `verified-public-integration` (C1);
    * site: `beginner-browser`, `lean-learning-browser` and `original-pr-ancestry-and-production-preservation` (D1, D2), and `site-full-gate`, which requires `lean-learning-browser` to pass.
 
@@ -129,8 +161,8 @@ verify by hand in the rulesets".
 1. **C1:** fix the commit to admit, run the consistency check, then regenerate with `--emit` and
    compare digests with the PR description. Create the retained commit exactly as recorded, and
    create and push its tag. Commit the four control files as one reviewed commit.
-2. **C2:** add `claimcheck-required` after C1. Verify both rulesets by hand.
-3. **C3 to C5, D4:** accept each, or revert its commit.
+2. **C2:** add `claimcheck-required` after C1. Rulesets: required checks and bypass confirmed by you on 2026-11-19; still open are T1 (tag ruleset), C2b and D2b (`REQUIRED_CHECKS.md`).
+3. **C3 to C5, D4:** accepted on 2026-11-19 as the internal-research baseline, subject to final source review.
 4. **D1 to D3:** apply patches 01 to 03; for D2, create the retained commit and push its tag.
    Deploying the page is a separate decision.
 5. **R1:** choose the research route.
@@ -142,7 +174,7 @@ verify by hand in the rulesets".
      re-fetching pool articles;
    * set provider-side hard limits;
    * approval freezes the protocol by digest.
-8. **Licensing** of the recorded model outputs.
+8. **Licensing** of the recorded model outputs: L1 to L3, before C1.
 9. **Merges and deployment.**
 
 The prospective decisions in detail: [`../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md`](../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md)

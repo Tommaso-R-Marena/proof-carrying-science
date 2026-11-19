@@ -2,8 +2,9 @@
 
 **A recommendation. No ruleset, required check, workflow trigger of an existing gate, or bypass
 setting has been changed.** Rulesets are repository settings only the owner can change, and the tools
-available to this work cannot read them. The "documented" state below is what the repositories' own
-documents record; confirm it in **Settings → Rules → Rulesets** before acting.
+available to this work cannot read them. On 2026-11-19 the owner confirmed the required checks of
+both `main` rulesets and the absence of bypass actors (below). What remains to confirm is listed in
+"The live rulesets".
 
 ## What was checked
 
@@ -11,7 +12,7 @@ documents record; confirm it in **Settings → Rules → Rulesets** before actin
 | --- | --- | --- |
 | workflow triggers and job names, both repositories | parsed every workflow on the draft PR heads | inventory below |
 | the names GitHub actually reports | check runs on core PR 212 (head `c526d05c`) and site PR 149 (head `272579f`) | names equal the job names; matrix jobs carry their parameters, e.g. `portability-ubuntu-24.04-py3.13` |
-| the live rulesets | not readable here | **owner to confirm** |
+| the live rulesets | not readable here | **confirmed by the owner on 2026-11-19**: core requires `verified-public-integration`, site requires `site-full-gate`, no bypass actors |
 
 Documented required checks: core `verified-public-integration` (strict aggregate) and `source-policy`
 (`docs/HOSTED_CONTRIBUTION_CI.md`, 2026-10-09); site `site-full-gate`
@@ -102,22 +103,117 @@ check and changes no ruleset. `claim-check-page` (the browser journey with the r
 stays a supplementary, path-scoped check; if the owner wants it required too, give it the same
 change-detection aggregate as the core workflow first.
 
-## What to verify by hand in the rulesets
+## The live rulesets: confirmed by the owner on 2026-11-19
 
-The tools used for this work list branches and say only whether one is protected: on 2026-11-18
-core `main` (`bc78660b`) and site `main` (`e8136625`) were both reported protected. Please check in
-**Settings → Rules → Rulesets** of each repository:
+The tools used for this work cannot read rulesets. They report only whether a branch is protected
+(both `main` branches are). The owner checked the rulesets and stated, on 2026-11-19:
 
-* **core `main`:** required checks include `verified-public-integration` and `source-policy`; none
-  of `repository-integrity`, `python-assurance`, `lean-kernel`, `v06-byte-contract`,
-  `verified-integration` or `required-gate` is required (they are skipped, i.e. passing, on every
-  pull request); no retired Cloudflare or CircleCI context is required; pull requests, resolved
-  conversations, linear history, no force-push or deletion; no bypass actor.
-* **site `main`:** `site-full-gate` is required; `claim-check-page` is not (path-filtered); the same
-  pull-request, linear-history and no-bypass settings.
-* After C1: add `claimcheck-required` (GitHub Actions) to core `main`.
-* Tags: whether a rule restricts who may create `pcs-source-intake/*` tags (the retained-source
-  tags are owner-held).
+* the active **core `main`** ruleset requires **`verified-public-integration`**;
+* the active **site `main`** ruleset requires **`site-full-gate`**;
+* neither has a configured **bypass actor**.
+
+What this implies, from the workflows:
+
+* `verified-public-integration` fails unless every prerequisite succeeded, `source-policy` included.
+  So the source-admission gate is enforced through the required aggregate even if `source-policy`
+  is not listed separately.
+* `site-full-gate` runs the complete website gate (`npm run ci:zero-minutes`). With patch 03 (D3) it
+  also runs ClaimCheck's tests.
+
+Not covered by the owner's statement, and still to confirm when convenient:
+
+* that none of the six core jobs skipped on every pull request is required;
+* that no retired Cloudflare or CircleCI context is required;
+* the repository's default workflow-token permission. Two core workflows
+  (`build-verifier-artifacts.yml`, `product-hardening.yml`) declare no `permissions:` and so receive
+  the default (**Settings → Actions → General → Workflow permissions**; "Read repository contents"
+  is the safe setting);
+* the retained-source tags (next section).
+
+After C1: add `claimcheck-required` (GitHub Actions) to core `main` (decision C2).
+
+## Which gates bind on every pull request (found 2026-11-19)
+
+With the required checks the owner confirmed, source authority is enforced as follows:
+
+| Gate | Core | Site |
+| --- | --- | --- |
+| reviewed manifest of every tracked file (`research/integration_v2/reconcile.py --require-committed`, V22, V23 after C1) | runs in `source-policy` on every pull request; **binding**, through the required `verified-public-integration` | no equivalent manifest |
+| retained-source lineage and exact non-control bytes (`scripts/check_reconciled_prs.py`) | runs only in `model-assurance-studio-research.yml`, which is **path-filtered** (integration paths) and **not required** | runs on every pull request as `original-pr-ancestry-and-production-preservation`; **not required** |
+| site `public/` tree equals protected `main` (same script, site mode) | not applicable | same job as above; **not required** |
+| complete website gate (`npm run ci:zero-minutes`, including the reading-help verifier of D1) | not applicable | `site-full-gate`; **binding** |
+
+**Consequences.**
+
+* On the core, widening the admitted tree needs a change to the manifest, which is pinned in
+  `reconcile.py` and so is protected. The retained commit and its tag (C1) add a lineage check that
+  runs only when integration files change; the control commit of C1 itself triggers it.
+* On the site, the retained-source rule, and the rule that the whole `public/` tree (the deployed
+  tree) equals `main`, bind only if `original-pr-ancestry-and-production-preservation` is required.
+  As confirmed, it is advisory. `site-full-gate` pins some public files through its own checks (for
+  example the reading-help verifier, which is why D1 is needed). But no required check enforces the
+  whole-tree rule.
+
+Options for the owner, separate decisions in [`OWNER_EXECUTION_CHECKLIST.md`](OWNER_EXECUTION_CHECKLIST.md):
+
+* **D2b:** require `original-pr-ancestry-and-production-preservation` on site `main`, after D2.
+  Before D2 it would block PR 149, which is its purpose.
+* **C2b:** add `python scripts/check_reconciled_prs.py --core "$PWD"` to the `source-policy` job.
+  That is a protected workflow change, needed because a path-filtered job cannot be required. With
+  it, the core's retained-source rule binds on every pull request too.
+
+## Retained-source tags: what protects them, and what is not confirmed
+
+**Not confirmed.** Whether a tag ruleset restricts the creation, update or deletion of
+`pcs-source-intake/*` tags cannot be read with the tools available here. What could be checked on
+2026-11-19:
+
+| | Core | Site |
+| --- | --- | --- |
+| tag the gate names | `pcs-source-intake/core-open-prs-v1-20261105` | `pcs-source-intake/site-open-prs-v1-20261105` |
+| exists, and points at the commit the gate pins | yes, `0b521f39…` | yes, `d35e2b5e…` |
+| kind | annotated tag object `2823ceb2…`, unsigned, created by the owner on 2026-11-05 | annotated tag object `9cc9b06b…`, unsigned, created by the owner on 2026-11-05 |
+| collaborators with write access | the owner only (admin) | the owner only (admin) |
+| other `pcs-source-intake/*` tags | `historical-v22-objects-20261105` (not named by the gate) | none |
+
+**What the gates trust.** `scripts/check_reconciled_prs.py` holds the retained commit's 40-hex ID in
+its own (protected) source. It requires `refs/tags/<tag>^{commit}` to equal that ID: "A mutable
+branch/tag name is not trusted in place of its exact object ID." So a tag cannot widen source
+authority:
+
+* a moved tag fails the gate;
+* a deleted tag fails the gate;
+* a look-alike tag is ignored;
+* a squatted future tag name (created before the owner creates the real one) blocks the owner's
+  step and fails the gate, but admits nothing.
+
+The admission dry runs test the moved-tag case (core negative control `the_tag_points_elsewhere`;
+site `tag_points_at_another_commit`). Authority comes from the commit ID inside the protected gate,
+which changes only through a reviewed control commit under the `main` ruleset.
+
+**What tag protection adds:** availability and an intact audit trail. Without a tag rule, any actor
+with contents-write access could delete or move a retained-source tag and so break every pull
+request's gate until the owner restores it. Such actors are:
+
+* the owner;
+* an installed GitHub App with write access, such as the one that pushes this work's branches;
+* a workflow token with `contents: write`, such as the site's scheduled `proof-source-sync.yml`,
+  which runs only code from protected `main`.
+
+The tag is also not signed, so its tagger is not cryptographically attested. The commit ID is the
+attestation that matters.
+
+**Sufficient? Recommended configuration** (owner decision T1 in
+[`OWNER_EXECUTION_CHECKLIST.md`](OWNER_EXECUTION_CHECKLIST.md)): a tag ruleset on
+`refs/tags/pcs-source-intake/*`, enforcement active, with:
+
+* "Restrict creations", "Restrict updates" and "Restrict deletions";
+* a bypass list holding only the repository-admin role, or empty, temporarily relaxed by the owner
+  when a new retained-source tag is created;
+* optionally, signing new retained-source tags.
+
+With that ruleset, and with the commit IDs pinned in the gates, the retained-source mechanism is
+protected against widening (by the pins) and against disruption (by the ruleset).
 
 ## Consequences
 
