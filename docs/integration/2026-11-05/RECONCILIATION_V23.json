@@ -63,7 +63,7 @@
         "scripts/check_reconciled_prs.py",
         "docs/integration/2026-11-05/README_AUDIT.json"
       ],
-      "reason": "ESG external bake-off vs JailbreakBench, ProtectAI, Gemini moderator; Windows-safe evidence.",
+      "reason": "ComposedStack Lean rank-4 + multi-track dominance vs JBB/ProtectAI/Gemini; uniquely undominated on suite.",
       "production_authority_changed": false,
       "formal_root_changed": false
     }
@@ -64724,7 +64724,7 @@
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
       "mode": "100644",
-      "sha256": "1e9fef1c8e230ffee1ad4f60cbe4772436093c6e9b7b81cf7cd4974b929fd1b0"
+      "sha256": "71188167c1b84dffad14d84075cb376d4010ef50bdbfaafb83335eccc8f525df"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
       "mode": "100644",
@@ -73564,7 +73564,7 @@
     },
     "research/README.md": {
       "mode": "100644",
-      "sha256": "0ab62147503eb50539c78ca303e67279f20ab8e5ba829a9980bcb6ccd528958b"
+      "sha256": "f5b1f38be8b2fea7806a208ee38bb2b8d18f615f40dab1a4eeaeabe92ff98b67"
     },
     "research/abstraction-repair-v2/EVIDENCE_SHA256.json": {
       "mode": "100644",
@@ -87560,7 +87560,7 @@
     },
     "research/evolving_safety_gate_v1/README.md": {
       "mode": "100644",
-      "sha256": "10daa9b2afbf1a7eca2704900ae42a2ec8f5c653855e9bec85a2f0573f4a3203"
+      "sha256": "a65f272cb53c82970bad3172cbef3879bd9c7a2334c4b63e4c67f2c33c216151"
     },
     "research/evolving_safety_gate_v1/RESULTS.md": {
       "mode": "100644",
@@ -87569,6 +87569,10 @@
     "research/evolving_safety_gate_v1/RESULTS_EXTERNAL.md": {
       "mode": "100644",
       "sha256": "d9917ede5f03b3ac6089322c1116a12a26ed28a7218b8027715fc6826ee5a15e"
+    },
+    "research/evolving_safety_gate_v1/RESULTS_SOTA.md": {
+      "mode": "100644",
+      "sha256": "3157aae7519f09d6b614cc206cef18d76dff3684bba403e47ce8164e85e17c18"
     },
     "research/evolving_safety_gate_v1/__init__.py": {
       "mode": "100644",
@@ -87580,11 +87584,23 @@
     },
     "research/evolving_safety_gate_v1/catalog.py": {
       "mode": "100644",
-      "sha256": "3f003c488e652e2701dc44e1e75958d2414c58b9103e08241e8500f474ee9b3c"
+      "sha256": "5f0df3a3987251078709a1dc48b2c64893629f88a8573c9e2c824c961b3531c0"
     },
     "research/evolving_safety_gate_v1/evidence/external-bakeoff-v1/SOURCES.json": {
       "mode": "100644",
       "sha256": "75b3f1cd6720c98767382a86ee1a9b7296dd29c415367418d14bf43b0cf87ca0"
+    },
+    "research/evolving_safety_gate_v1/evidence/external-bakeoff-v1/dominance/dominance.json": {
+      "mode": "100644",
+      "sha256": "b2340e00fd515626524b59ce010c529559fe1351fe6b55d6aff204cf6ba14d28"
+    },
+    "research/evolving_safety_gate_v1/evidence/external-bakeoff-v1/dominance/gemini_jbb_cache.json": {
+      "mode": "100644",
+      "sha256": "6739ce11d82d5e1d762b5b9509bc8123160aa20dc1acfdf485890fe85d1f10ce"
+    },
+    "research/evolving_safety_gate_v1/evidence/external-bakeoff-v1/dominance/track_a_rows.json": {
+      "mode": "100644",
+      "sha256": "ed2910932c58720418978aac466247c855c8c691e250b99152652280488c8c6e"
     },
     "research/evolving_safety_gate_v1/evidence/external-bakeoff-v1/live-transfer/episodes/instruction_boundary__jbb-b-0/episode.json": {
       "mode": "100644",
@@ -87728,7 +87744,7 @@
     },
     "research/evolving_safety_gate_v1/evolve.py": {
       "mode": "100644",
-      "sha256": "d93db7587bb598b590419696a2c20b967c407b409f950126c2f20ddc3311d704"
+      "sha256": "4cbc7294845de8ec7786da743f4c9349adb3297fb9354ea84f53e1e7640d410a"
     },
     "research/evolving_safety_gate_v1/external_bench/__init__.py": {
       "mode": "100644",
@@ -87737,6 +87753,14 @@
     "research/evolving_safety_gate_v1/external_bench/baselines.py": {
       "mode": "100644",
       "sha256": "5aae3cb8a6133b64849d4297e00f8ddf34f476052e097625128c50d0b35141d1"
+    },
+    "research/evolving_safety_gate_v1/external_bench/composed.py": {
+      "mode": "100644",
+      "sha256": "2fd20b1bd866c80445a056a026a7524c33a5999fa45352e725657c0a2b2863e0"
+    },
+    "research/evolving_safety_gate_v1/external_bench/dominance.py": {
+      "mode": "100644",
+      "sha256": "287ac4899a92944a4ba30b34d92bf19c5ee42360d7b71da483b8dea2e4637f27"
     },
     "research/evolving_safety_gate_v1/external_bench/live_transfer.py": {
       "mode": "100644",
@@ -87760,11 +87784,11 @@
     },
     "research/evolving_safety_gate_v1/formal/EvolvingSafetyGate.lean": {
       "mode": "100644",
-      "sha256": "e8a5fb7101feb24cf0ac9ed55898675821658f52728a03d2564c72ae6292d026"
+      "sha256": "2a1ff2119a2fb0e0f1e9c1dd27360668633b006c59bdf0b6a5ca87f84859ed22"
     },
     "research/evolving_safety_gate_v1/formal_check.py": {
       "mode": "100644",
-      "sha256": "6b802bcc8e62c8ee059a3024ab0d683848861a83bb8ee1d9ab935f1c912f26b0"
+      "sha256": "d1d0218dbdd75dc3a469d0faf3b3b6fe5f5bf9f986adbac65c71be3231de9af3"
     },
     "research/evolving_safety_gate_v1/hard_suite.py": {
       "mode": "100644",
@@ -87776,7 +87800,7 @@
     },
     "research/evolving_safety_gate_v1/test_evolve.py": {
       "mode": "100644",
-      "sha256": "60d1592c3ff9cb79b84c6afb29dcac93967df1e88841bc028acefd97ecb49cf7"
+      "sha256": "e6df5504092dd01a77af19a6d497ee2cb23f616b758216e0d00ac9ab5da8eb3d"
     },
     "research/experimental-calibration-v1/ALL_ESTIMATORS_ADDENDUM.json": {
       "mode": "100644",

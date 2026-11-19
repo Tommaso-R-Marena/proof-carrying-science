@@ -24,7 +24,7 @@ class TestFormal(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             m = check_formal(Path(td) / "formal")
             self.assertTrue(m["kernel_checked"])
-            self.assertEqual(len(m["theorems"]), 17)
+            self.assertEqual(len(m["theorems"]), 21)
             for axs in m["axiom_closures"].values():
                 self.assertTrue(set(axs) <= {"propext", "Quot.sound"})
 
@@ -35,6 +35,15 @@ class TestCatalog(unittest.TestCase):
         self.assertFalse(formal_admissible("correctingGuard"))
         self.assertTrue(formal_admissible("jointDetectingGuard"))
         self.assertTrue(formal_admissible("ensembleProbe"))
+        self.assertTrue(formal_admissible("composedStack"))
+        self.assertGreater(
+            __import__(
+                "research.evolving_safety_gate_v1.catalog", fromlist=["detect_rank"]
+            ).detect_rank("composedStack"),
+            __import__(
+                "research.evolving_safety_gate_v1.catalog", fromlist=["detect_rank"]
+            ).detect_rank("ensembleProbe"),
+        )
 
     def test_mutations_can_promote_to_ensemble(self):
         parent = next(c for c in SEED_CANDIDATES if c.id == "joint-v1")

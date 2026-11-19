@@ -2,11 +2,10 @@
 # Evolving Safety Gate (research only)
 
 A fail-closed admission lattice over safety *mechanisms*. Mechanisms that factor
-through the guarded tool channel alone are never admitted. Joint-channel
-detectors, joint-detecting correcting guards, and ensemble probes (joint +
-stealth note probes) are admissible. Evolution may only retain a successor that
-dominates its parent on the formal detectability order — never by silently
-falling back to channel-1-only scoring.
+through the guarded tool channel alone are never admitted. Joint detectors,
+ensemble probes, and composed stacks (ensemble ∪ content/injection specialists)
+are admissible. Evolution may only retain a successor that dominates its parent
+on the formal detectability order.
 
 This file does not import production PCS authority and does not claim general
 alignment, recursive self-improvement, or frontier-model guarantees.
@@ -22,6 +21,7 @@ inductive Mechanism where
   | correctingGuard
   | jointDetectingGuard
   | ensembleProbe
+  | composedStack
   deriving DecidableEq, Repr, Inhabited
 
 /-- Whether the mechanism can separate the constructive Assurance-Mirage pair. -/
@@ -31,6 +31,7 @@ def detectsConstructiveMirage : Mechanism → Bool
   | .correctingGuard => false
   | .jointDetectingGuard => true
   | .ensembleProbe => true
+  | .composedStack => true
 
 /-- Formal admission bit: must detect the constructive mirage. -/
 def admissible (m : Mechanism) : Bool :=
@@ -51,6 +52,9 @@ theorem joint_detecting_guard_admissible : admissible .jointDetectingGuard = tru
 theorem ensemble_probe_admissible : admissible .ensembleProbe = true := by
   decide
 
+theorem composed_stack_admissible : admissible .composedStack = true := by
+  decide
+
 /-- Detectability order used as the formal fitness coordinate. -/
 def detectRank : Mechanism → Nat
   | .channel1Only => 0
@@ -58,6 +62,7 @@ def detectRank : Mechanism → Nat
   | .jointChannel => 1
   | .jointDetectingGuard => 2
   | .ensembleProbe => 3
+  | .composedStack => 4
 
 /-- Strict formal domination bit. -/
 def dominates (a b : Mechanism) : Bool :=
@@ -83,6 +88,14 @@ theorem ensemble_dominates_channel1 :
     dominates .ensembleProbe .channel1Only = true := by
   decide
 
+theorem composed_dominates_ensemble :
+    dominates .composedStack .ensembleProbe = true := by
+  decide
+
+theorem composed_dominates_channel1 :
+    dominates .composedStack .channel1Only = true := by
+  decide
+
 /-- Evolution may retain `succ` over `parent` only if it dominates. -/
 def retainable (parent succ : Mechanism) : Bool :=
   dominates succ parent
@@ -93,6 +106,10 @@ theorem retain_joint_over_channel1 :
 
 theorem retain_ensemble_over_joint :
     retainable .jointDetectingGuard .ensembleProbe = true := by
+  decide
+
+theorem retain_composed_over_ensemble :
+    retainable .ensembleProbe .composedStack = true := by
   decide
 
 /-- Channel-1 successors of an admissible parent are never retainable. -/
@@ -121,11 +138,11 @@ theorem nonadmissible_never_dominates_admissible (a b : Mechanism)
   cases a <;> cases b <;>
     simp [dominates, detectRank, admissible, detectsConstructiveMirage] at hA hB ⊢
 
-/-- Finite catalog completeness for the five reviewed classes. -/
+/-- Finite catalog completeness for the six reviewed classes. -/
 theorem catalog_exhaustive (m : Mechanism) :
     m = .channel1Only ∨ m = .jointChannel ∨
     m = .correctingGuard ∨ m = .jointDetectingGuard ∨
-    m = .ensembleProbe := by
+    m = .ensembleProbe ∨ m = .composedStack := by
   cases m <;> simp
 
 end EvolvingSafetyGate

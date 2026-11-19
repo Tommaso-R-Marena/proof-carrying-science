@@ -118,7 +118,9 @@ def run_evolution(
         next_pop: list[Candidate] = []
         seen: set[str] = set()
         for c in population:
-            if c.id in {"joint-v1", "ensemble-v1"} or (champion and c.id == champion.id):
+            if c.id in {"joint-v1", "ensemble-v1", "composed-v1"} or (
+                champion and c.id == champion.id
+            ):
                 if c.id not in seen:
                     next_pop.append(c)
                     seen.add(c.id)

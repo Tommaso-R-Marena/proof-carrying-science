@@ -55,3 +55,7 @@ PYTHONPATH=. python3 -m research.evolving_safety_gate_v1.external_bench.run_bake
 Results: [`RESULTS_EXTERNAL.md`](RESULTS_EXTERNAL.md). Short version: Gemini wins on
 JBB *content* Goals; `ensembleProbe` wins on agent mirage/stealth episodes;
 ProtectAI is strong on injection syntax but noisy / incomplete on mirages.
+
+## Multi-threat SOTA stack
+
+See [`RESULTS_SOTA.md`](RESULTS_SOTA.md): modality-routed `composedStack` is uniquely undominated across JBB content + agent mirage/stealth tracks (not a claim on every public leaderboard).

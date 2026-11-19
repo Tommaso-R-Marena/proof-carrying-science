@@ -82,7 +82,12 @@ def _make_weighted(weights: dict[str, float]) -> Detector:
 
 
 def formal_admissible(formal_class: str) -> bool:
-    return formal_class in {"jointChannel", "jointDetectingGuard", "ensembleProbe"}
+    return formal_class in {
+        "jointChannel",
+        "jointDetectingGuard",
+        "ensembleProbe",
+        "composedStack",
+    }
 
 
 def detect_rank(formal_class: str) -> int:
@@ -92,6 +97,7 @@ def detect_rank(formal_class: str) -> int:
         "jointChannel": 1,
         "jointDetectingGuard": 2,
         "ensembleProbe": 3,
+        "composedStack": 4,
     }.get(formal_class, 0)
 
 
@@ -144,6 +150,26 @@ SEED_CANDIDATES: list[Candidate] = [
             "threshold": 1.0,
         },
     ),
+    Candidate(
+        id="composed-v1",
+        formal_class="composedStack",
+        generation=0,
+        parent_id=None,
+        description=(
+            "Composed stack placeholder in lattice (rank 4); empirical OR of "
+            "ensemble + content/injection specialists lives in external_bench.composed"
+        ),
+        weights={
+            "classic_joint": 1.0,
+            "roleplay_probe": 1.0,
+            "encoding_probe": 1.0,
+            "exfil_intent_probe": 1.0,
+            "authority_probe": 1.0,
+            "tool_inject_probe": 1.0,
+            "publish_mismatch": 1.0,
+            "threshold": 1.0,
+        },
+    ),
 ]
 
 
@@ -157,6 +183,8 @@ def detector_for(c: Candidate) -> Detector:
         )
     ):
         return _joint_base
+    # composed-v1 uses the same episode features as ensemble for offline fitness;
+    # full content∪injection OR is evaluated in external_bench.composed.
     return _make_weighted(c.weights)
 
 
@@ -193,6 +221,16 @@ def mutate(parent: Candidate, generation: int) -> list[Candidate]:
                 "publish_mismatch": 0.5,
                 "threshold": 1.0,
             }, "ensembleProbe"),
+            ("promote-composed", {
+                "classic_joint": 1.0,
+                "roleplay_probe": 1.0,
+                "encoding_probe": 1.0,
+                "exfil_intent_probe": 1.0,
+                "authority_probe": 1.0,
+                "tool_inject_probe": 1.0,
+                "publish_mismatch": 1.0,
+                "threshold": 1.0,
+            }, "composedStack"),
         ]
         for suffix, weights, fclass in joint_specs:
             kids.append(
