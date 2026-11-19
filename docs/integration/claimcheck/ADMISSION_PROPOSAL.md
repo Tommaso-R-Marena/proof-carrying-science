@@ -80,8 +80,15 @@ follow from it. On the dry-run control commit, unmodified:
 Rejected, as they must be (each alteration made on top of the control commit): an unlisted extra
 file; an edited admitted file; an edited successor manifest; an edited predecessor manifest (V22); an
 edited frozen benchmark result; an edited existing production file (`pcs/__init__.py`); a gate
-control file edited after the control commit; the retained-source entry retargeted and committed; the
-retained tag pointing at another commit.
+control file edited after the control commit and left uncommitted; the retained-source entry
+retargeted and committed; the retained tag pointing at another commit. Since 2026-11-19 the dry run
+also rejects the tag pointing at the other design's commit (same tree) and the tag deleted.
+
+**Not rejected, by the gate's design:** the same gate control file edited **and committed**. The
+manifest gate treats its own sources as trusted configuration, and the retained-source gate lists
+them as controls. So a committed edit to `research/integration_v2/reconcile.py` or
+`test_reconcile.py` passes both gates (`h1b/h1b-adversarial.json`, test 9). Review of the control
+commit's diff, the pre-merge gate-definition check, or G1 is what catches it.
 
 The placeholder tag and the worktree are deleted at the end. Nothing was pushed.
 
