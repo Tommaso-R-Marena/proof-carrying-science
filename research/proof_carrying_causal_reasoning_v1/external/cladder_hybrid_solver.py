@@ -1,12 +1,7 @@
-"""Neuro-symbolic CLadder solver: NL cue parse + PCCR certificates.
+"""Legacy hybrid CLadder oracle-assisted regression (Protocol C).
 
-Uses only the natural-language ``question`` / ``given_info`` / ``background``
-plus the linked Bernoulli SCM (via ``model_id`` → meta-models), which is the
-standard neuro-symbolic setup on CLadder (formal model available; NL carries
-polarity). Does **not** read the gold ``answer`` field.
-
-LLM optional: when ``--llm-model`` is set, Gemini extracts linguistic slots;
-otherwise a template cue parser is used (fast, offline, free-tier friendly).
+Text and optional model proposals are supplemented with generator query slots,
+published values and formal models. Use blind_eval for blinded evaluation.
 """
 
 from __future__ import annotations
@@ -25,7 +20,6 @@ from research.proof_carrying_causal_reasoning_v1.external.cladder_bridge import 
     models_index,
 )
 from research.proof_carrying_causal_reasoning_v1.external.cladder_certified_solver import (
-    PUBLISHED,
     _ate_like_code,
     _correlation_code,
     _ett_code,
@@ -322,7 +316,8 @@ def evaluate(
     n_ok = sum(1 for r in rows if r["correct"])
     overall = n_ok / n if n else 0.0
     return {
-        "kind": "cladder_hybrid_nl_pccr",
+        "kind": "cladder_oracle_assisted_hybrid",
+        "protocol": "C",
         "llm_model": llm_model,
         "n": n,
         "n_correct": n_ok,
@@ -338,15 +333,7 @@ def evaluate(
         },
         "source_counts": dict(Counter(str(r["source"]).split(":")[0] for r in rows)),
         "failures": [r for r in rows if not r["correct"]][:30],
-        "published_llm_sota": PUBLISHED,
-        "delta_pp_vs_published": {
-            k: round(100 * overall - v, 2) for k, v in PUBLISHED.items()
-        },
-        "claims": {
-            "beats_qwen3_crawdad": overall * 100 > PUBLISHED["Qwen3 (CRAwDAD final)"],
-            "neuro_symbolic": True,
-            "reads_gold_answer": False,
-        },
+        "claims": {"uses_generator_slots_and_groundtruth": True},
     }
 
 
@@ -389,16 +376,14 @@ def main(argv: Optional[List[str]] = None) -> int:
                 "accuracy": payload["accuracy"],
                 "overall_pct": payload["overall_pct"],
                 "n": payload["n"],
-                "delta_pp_vs_Qwen3_CRAwDAD": payload["delta_pp_vs_published"][
-                    "Qwen3 (CRAwDAD final)"
-                ],
+                "protocol": "C",
                 "by_rung": payload["by_rung"],
                 "wrote": str(path),
             },
             indent=2,
         )
     )
-    return 0 if payload["accuracy"] >= 0.8941 else 1
+    return 0
 
 
 if __name__ == "__main__":

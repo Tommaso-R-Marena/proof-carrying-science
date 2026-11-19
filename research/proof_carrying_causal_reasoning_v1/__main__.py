@@ -61,8 +61,8 @@ def main(argv: list[str] | None = None) -> int:
     cll.add_argument("--seed", type=int, default=20251118)
     cll.add_argument("--min-interval", type=float, default=12.0)
     clc = sub.add_parser(
-        "cladder-certified",
-        help="PCCR-certified CLadder yes/no solver (full-set SOTA challenge)",
+        "cladder-oracle-assisted", aliases=["cladder-certified"],
+        help="Protocol C: CLadder generator regression using hidden metadata and target values",
     )
     clc.add_argument("--data-dir", type=Path, required=True)
     clc.add_argument("--out", type=Path, required=True)
@@ -219,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
             ]
         )
 
-    if args.cmd == "cladder-certified":
+    if args.cmd in ("cladder-oracle-assisted", "cladder-certified"):
         from research.proof_carrying_causal_reasoning_v1.external.cladder_certified_solver import (
             main as certified_main,
         )

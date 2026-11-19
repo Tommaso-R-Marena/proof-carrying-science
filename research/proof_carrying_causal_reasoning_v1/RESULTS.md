@@ -184,68 +184,39 @@ Evidence: `evidence/gemini-3.5-flash-lite-v5-cf/`.
 
 Local measurement only — not a frontier SOTA claim.
 
-## CLadder SOTA challenge — PCCR-certified solver (full 10,112)
+## CLadder evaluation by information available to the predictor
 
-**Result: 10112/10112 = 100.0%** yes/no accuracy on CLadder v1.5 balanced.
+| Protocol | Correct | Incorrect | Abstained | Coverage | Accuracy among answers | Correct / all |
+|---|---:|---:|---:|---:|---:|---:|
+| A · visible text, deterministic marginal rule | 423 | 2 | 9,687 | 4.20% | 99.53% | 4.18% |
+| B · declared binary SCM and ATE question | 1,422 | 0 | 8,690 | 14.06% | 100% | 14.06% |
+| C · oracle-assisted generator regression | 10,112 | 0 | 0 | 100% | 100% | 100% |
 
-| Method | Overall | Protocol |
-|--------|--------:|----------|
-| GPT-4 (published) | 62.03% | LLM NL |
-| GPT-4 + CausalCoT | 70.40% | LLM NL |
-| Qwen3 + CRAwDAD debate | 89.41% | multi-agent LLM |
-| Human expert (reported) | 94.8% | human |
-| **PCCR-certified solver** | **100.0%** | symbolic + CLadder semantics |
+All rows use the same exposed 10,112-question release. Protocol A recognized a restricted
+marginal-probability template. Protocol B evaluated every supported ATE request with
+two rational interventional sums. The independent Python replayer accepted 1,422
+certificates. Its verdict assumes the declared graph, mechanisms and interpretation
+of the estimand. It does not validate their relationship to the original story.
 
-Evidence: `evidence/cladder-v1-certified-sota/`  
-Method: recompute estimands with PCCR (ATE/ETT/NDE/NIE/…) when the
-serialized SCM matches; apply CLadder’s open-source polarity/treated/result
-yes/no rules from `causalNLP/cladder`. When serialized CPT vs live-model GT
-diverges (known marginal/arrowhead issue), pin the published meta GT for the
-*numeric* effect then still apply the polarity rule (never reads `answer`).
+Protocol C copied the published deterministic counterfactual bit 1,422 times,
+filled missing effects from ground truth 948 times, and overrode computed effects
+922 times. The remaining cases used generator slots or generator-provided adjustment
+information. The older 100% result therefore measures generator correspondence.
+Its purported advantage over natural-language LLMs is withdrawn. The archived
+`evidence/cladder-v1-certified-sota/` directory preserves the original bytes,
+including the superseded interpretation. The legacy hybrid evaluator can also
+consume these hidden fields. Both legacy reports are classified as Protocol C.
 
-**Honest framing:** this beats published *LLM* SOTA by using a certificate-carrying
-causal engine on the formal models CLadder ships — not by out-prompting CRAwDAD
-in a pure-LLM debate. That is the intended breakthrough class (proof-carrying),
-and it clears the 89.41% bar by **+10.6 pp** on the full set.
+The historical 36-question model samples each recorded 24 correct answers.
+The vanilla prompts included background, given information and question text.
+The CausalCoT prompts additionally exposed model variable-name mappings.
+The two samples share questions, and model releases and availability can change.
+Their sampling and prompt protocols differ from published full-census scores.
+The frozen historical samples are in `evidence/cladder-v1-llm-sota-sample/`
+and `evidence/cladder-v1-causalcot-flash-lite/`.
 
-### Free-tier Gemini access note (new project key)
-
-Probed with a fresh API key: `gemini-4-*`, `gemini-*-pro*`, and non-lite Flash
-(`gemini-flash-latest`, `gemini-3.5/3.6/3.8-flash`) returned **429 quota** or
-**503 high demand**. Reachable free-tier text models were **`gemini-3.5-flash-lite`**
-/ **`gemini-flash-lite-latest`** only.
-
-CausalCoT (Jin-style) with `gemini-3.5-flash-lite` on the same stratified n=36:
-**66.67%** (R1 75 / R2 67 / R3 58) — above GPT-4’s published overall, below
-CausalCoT/CRAwDAD. Evidence: `evidence/cladder-v1-causalcot-flash-lite/`.
-
-## CLadder LLM accuracy vs published SOTA (v1.5 protocol)
-
-Honest clarification: the earlier CLadder work matched the **structural oracle
-engine** (ATE/ETT), which is *not* an LLM leaderboard comparison.
-
-This section is the **natural-language yes/no** protocol from Jin et al.
-(NeurIPS 2023), run on a free-tier-limited stratified sample.
-
-Evidence: `evidence/cladder-v1-llm-sota-sample/`  
-Model: `gemini-3.5-flash-lite`, vanilla single-call yes/no, 12 questions × 3 rungs
-(n=36), seed `20251118`, ≥12s between calls.
-
-| Method | Overall | R1 | R2 | R3 | Notes |
-|--------|--------:|---:|---:|---:|-------|
-| Random (published) | 49.27 | 50.28 | 48.40 | 49.12 | full set |
-| GPT-4 (published) | 62.03 | 63.01 | 62.82 | 60.55 | full set |
-| GPT-4 + CausalCoT (published) | 70.40 | 83.35 | 67.47 | 62.05 | full set |
-| Qwen3 + CRAwDAD debate (published) | 89.41 | 96.24 | 93.51 | 80.35 | full set; multi-agent |
-| **Gemini-3.5-flash-lite (this sample)** | **66.67** | **75.0** | **66.7** | **58.3** | n=36; Wilson 95% CI ≈ [50%, 80%] |
-
-Findings:
-- Sample point estimate is **above GPT-4**, **below CausalCoT**, and **far below**
-  CRAwDAD dual-agent SOTA — with wide CI (small n).
-- Rung ordering matches the paper (harder at rung 3).
-- This does **not** claim PCCR (or Gemini-lite) beats SOTA on the full 10k.
-- PCCR’s distinct contribution remains **proof-carrying certificates** when the
-  DAG/SCM is explicit, not NL leaderboard SOTA.
+[Blinding, splits, failure analysis and independent replay](BLIND_EVALUATION.md).
+[Finite response models and sharp counterfactual bounds](FINITE_RESPONSE.md).
 
 ## Non-claims
 

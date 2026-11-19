@@ -1,15 +1,7 @@
-"""PCCR-certified CLadder yes/no solver (beats LLM-only SOTA).
+"""Protocol C: CLadder oracle-assisted generator regression.
 
-Uses:
-  - PCCR twin-network / interventional estimands for numeric queries
-  - CLadder's open-source query semantics (polarity/treated/result → yes/no)
-    from ``causalNLP/cladder`` (Jin et al., NeurIPS 2023)
-
-This is **not** an LLM. It is a symbolic causal engine evaluated on the same
-10,112-question CLadder v1.5 balanced set that LLM methods report on.
-
-Non-claims: does not claim an LLM beat CRAwDAD under identical prompting;
-claims a certificate-carrying solver exceeds published LLM overall accuracy.
+The predictor consumes generator slots and may use published ground truth,
+including direct counterfactual answer bits. See blind_eval for protocols A/B.
 """
 
 from __future__ import annotations
@@ -32,14 +24,6 @@ from research.proof_carrying_causal_reasoning_v1.external.cladder_bridge import 
     models_index,
     scm_from_cladder_params,
 )
-
-PUBLISHED = {
-    "GPT-4": 62.03,
-    "GPT-4 + CausalCoT": 70.40,
-    "Qwen3 (CRAwDAD final)": 89.41,
-    "Human expert (reported)": 94.8,
-}
-
 
 def _yn(code: int) -> str:
     return "yes" if int(code) > 0 else "no"
@@ -137,7 +121,6 @@ def solve_question(
 ) -> Dict[str, Any]:
     meta = question.get("meta") or {}
     qt = str(meta.get("query_type") or "")
-    gold = str(question.get("answer") or "").lower()
     polarity = meta.get("polarity")
     treated = meta.get("treated")
     result = meta.get("result")
@@ -235,18 +218,31 @@ def solve_question(
             else:
                 source = f"no_rule:{qt}"
 
-    correct = pred == gold if pred is not None else False
     return {
         "question_id": question.get("question_id"),
         "query_type": qt,
         "rung": meta.get("rung"),
         "graph_id": meta.get("graph_id") or (model or {}).get("graph_id"),
         "pred": pred,
-        "gold": gold,
-        "correct": correct,
         "source": source,
         "effect": effect,
     }
+
+
+def _information_source(source: str) -> str:
+    if source == "det_cf_groundtruth_bit":
+        return "direct_counterfactual_bit"
+    if "meta_gt_over_pccr_delta" in source:
+        return "override_computed"
+    if "meta_groundtruth_fallback" in source:
+        return "missing_effect_fallback"
+    if source == "backadj_polarity_flipped":
+        return "backadj_slot_or_gold_set"
+    if source == "collider_bias_polarity_rule":
+        return "collider_slot_rule"
+    if ":pccr_" in source:
+        return "scm_with_generator_slots"
+    return "other"
 
 
 def evaluate_certified(
@@ -265,6 +261,8 @@ def evaluate_certified(
         mid = (q.get("meta") or {}).get("model_id")
         model = models_by_id.get(int(mid)) if mid is not None else None
         row = solve_question(q, model)
+        row["gold"] = str(q["answer"]).lower()
+        row["correct"] = row["pred"] == row["gold"]
         rows.append(row)
         by_qt[str(row["query_type"])]["n"] += 1
         by_qt[str(row["query_type"])]["correct"] += int(row["correct"])
@@ -287,7 +285,8 @@ def evaluate_certified(
         }
 
     return {
-        "kind": "cladder_pccr_certified_solver",
+        "kind": "cladder_oracle_assisted_regression",
+        "protocol": "C",
         "n": n,
         "n_correct": n_ok,
         "accuracy": overall,
@@ -295,26 +294,13 @@ def evaluate_certified(
         "by_query_type": acc(by_qt),
         "by_rung": acc(by_rung),
         "source_counts": dict(by_source),
+        "information_sources": dict(Counter(_information_source(row["source"]) for row in rows)),
         "failures": [r for r in rows if not r["correct"]][:40],
-        "published_llm_sota": PUBLISHED,
-        "delta_pp_vs_published": {
-            k: round(100.0 * overall - v, 2) for k, v in PUBLISHED.items()
-        },
         "claims": {
-            "beats_published_llm_sota_overall": overall * 100 > PUBLISHED["Qwen3 (CRAwDAD final)"],
-            "method": "PCCR estimands + CLadder open-source yes/no semantics",
-            "not_an_llm": True,
-            "uses_question_meta_linguistic_slots": True,
-            "uses_scm_params_from_cladder_meta_models": True,
-            "full_10112": limit is None,
+            "uses_generator_slots": True,
+            "uses_published_target_values": True,
+            "scope": "generator correspondence",
         },
-        "notes": [
-            "Linguistic slots (polarity/treated/result/flipped) come from CLadder "
-            "question metadata — the same slots the generator used to verbalize "
-            "the NL question. Estimands prefer PCCR recomputation over stored GT.",
-            "This is the fair comparison class of symbolic/DoVerifier-style solvers, "
-            "not CRAwDAD's pure-LLM debate protocol.",
-        ],
     }
 
 
@@ -345,9 +331,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                 "accuracy": payload["accuracy"],
                 "overall_pct": payload["overall_pct"],
                 "n": payload["n"],
-                "delta_pp_vs_Qwen3_CRAwDAD": payload["delta_pp_vs_published"][
-                    "Qwen3 (CRAwDAD final)"
-                ],
+                "protocol": "C",
                 "by_rung": payload["by_rung"],
                 "failures": len(payload["failures"]),
                 "wrote": str(path),

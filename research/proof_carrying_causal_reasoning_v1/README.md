@@ -10,34 +10,24 @@ on executable finite SCMs and real programs.**
 | Branch | `feature/proof-carrying-causal-reasoning-v1-9178` |
 | Status | draft research — do not merge into production authority |
 
-## Why this is different
+## Research scope
 
-Existing LLM causal benchmarks (CausalBench, CLadder, CARL-GT) and symbolic
-checkers (DoVerifier) mostly score string/expression agreement. PCCR closes a
-stronger loop:
+The package checks conditional causal claims against declared finite SCMs.
+Its backdoor, front-door, instrumental-variable and counterfactual examples
+exercise exact arithmetic, explicit assumptions and rejected claims. The
+original task battery supplies a task-specific identifiability flag. Its
+verdicts alone cannot establish a general identification procedure.
 
-1. **Claim** — model emits a structured causal claim (JSON schema).
-2. **Identify** — independent backdoor / front-door / IV / counterfactual check
-   (auto-synthesizer available for simple patterns).
-3. **Intervene / abduct** — exact rational `do(·)` or twin-network
-   counterfactuals on a finite binary SCM; optional noise-bit enumeration on
-   real Python programs whose dataflow *is* the graph.
-4. **Certify or countermodel** — accept only under declared assumptions; otherwise
-   fail closed with reasons (wrong adjustment, collider, non-identifiability,
-   association≠effect, CF≠do trap, positivity failure, numeric mismatch).
-5. **Epistemic ceiling** — a valid certificate never escalates to empirical
-   causation or production PCS authority.
+The external CLadder evaluation now separates three information sets.
+On all 10,112 questions the offline text-only rule answered 425 and got 423
+right. Supplying structured binary mechanisms and an ATE query yielded 1,422
+independently checked certificates. The historical 10,112/10,112 score used
+generator metadata and published target values. We withdraw its comparison with
+natural-language leaderboard results. [Protocols, limits and replay](BLIND_EVALUATION.md).
 
-Breakthrough (v1.5): exact twin-network `P(Y_x | evidence)` with certificates
-that reject confusing the counterfactual with the interventional law under
-confounding (T11: `7/20 ≠ 3/8`). Externally validated against **CLadder**
-(NeurIPS 2023): **5520/5520** Bernoulli models match published ATE+ETT
-groundtruth (twin-network ETT); **3950/3950** supported question estimands
-match (see `evidence/cladder-v1-oracle/`).
-
-This does **not** claim a new general theorem of causality, frontier-model SOTA,
-or that Lean proves full backdoor soundness for arbitrary SCMs. Lean checks
-concrete finite graph obligations used by the suite.
+The Lean extension gives finite-model intervention consistency and sharp
+binary-response bounds for the randomized-trial construction.
+[Theorems and executable checks](FINITE_RESPONSE.md).
 
 ## Quick start
 

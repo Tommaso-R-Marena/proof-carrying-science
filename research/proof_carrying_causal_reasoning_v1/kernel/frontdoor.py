@@ -58,7 +58,7 @@ def _directed_paths(graph: CausalDAG, src: str, dst: str) -> list[list[str]]:
         if cur == dst and len(path) > 1:
             paths.append(list(path))
             return
-        for c in graph.children(cur):
+        for c in sorted(graph.children(cur)):
             if c in path:
                 continue
             path.append(c)

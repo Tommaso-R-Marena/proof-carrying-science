@@ -95,7 +95,7 @@ def find_backdoor_paths(graph: CausalDAG, treatment: str, outcome: str) -> list[
     if treatment not in graph.nodes or outcome not in graph.nodes:
         raise GraphError("unknown treatment or outcome")
     adj: dict[str, list[tuple[str, str]]] = {n: [] for n in graph.nodes}
-    for u, v in graph.edges:
+    for u, v in sorted(graph.edges):
         adj[u].append((v, "→"))
         adj[v].append((u, "←"))
 
