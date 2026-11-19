@@ -202,6 +202,6 @@ verify by hand in the rulesets".
 8. **Licensing** of the recorded model outputs: L1 to L3, before C1.
 9. **Merges and deployment.**
 
-The prospective decisions in detail: [`../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md`](../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md)
+The prospective decisions in detail: [`../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md`](../../../research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md)
 (section 14, the feasibility study; section 15, the summary). The decision register:
-[`../../research/claimcheck_v1_1/OWNER_DECISIONS.md`](../../research/claimcheck_v1_1/OWNER_DECISIONS.md).
+[`../../research/claimcheck_v1_1/OWNER_DECISIONS.md`](../../../research/claimcheck_v1_1/OWNER_DECISIONS.md).
