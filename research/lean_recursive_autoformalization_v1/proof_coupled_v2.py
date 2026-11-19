@@ -55,6 +55,8 @@ DEFAULT_PROOF_TARGETS = (
     "dup_ext_zero",
     "ext_is_equal_to",
     "dup_ext_is_equal",
+    "ext_surface_itself",
+    "ext_surface_sum",
 )
 
 

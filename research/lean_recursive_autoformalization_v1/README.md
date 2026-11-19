@@ -88,6 +88,17 @@ rule removals are rejected and ignored; formalization-only expansions are
 repaired by combining a proof-expanding rule. Measured: 3/5 rejects repaired,
 adversarial removal blocked, rising fitting proved on accepts.
 
+## External generalization
+
+```bash
+PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.external_generalization \
+  --output research/lean_recursive_autoformalization_v1/results/external_generalization
+```
+
+Axes: sealed lean-learning-v2 formalization + finals prove, OOD paraphrases,
+OOD/SVB fail-closed abstention. Measured: 10/10 exact IR, 15/15 OOD supported,
+0 SVB false accepts, 5/6 final proves.
+
 ## Conflict avoidance
 
 Stay inside `research/lean_recursive_autoformalization_v1/`. Do not edit open-PR

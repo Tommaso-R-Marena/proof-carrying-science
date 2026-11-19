@@ -72,7 +72,7 @@ def test_corpus_tampering_detected(tmp_path: Path) -> None:
     tasks_path = tmp_path / "tasks.json"
     good_sha = protocol["tasks_sha256"]
     items = verify_tasks_binding(tasks_path, good_sha)
-    assert len(items) == 28
+    assert len(items) == 31
     raw = json.loads(tasks_path.read_text())
     raw["items"][0]["english"] = "TAMPERED STATEMENT THAT SHOULD FAIL BINDING."
     tasks_path.write_text(json.dumps(raw, indent=2, sort_keys=True) + "\n")

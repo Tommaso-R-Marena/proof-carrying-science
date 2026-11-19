@@ -26,7 +26,8 @@ def corpus():
 def test_new_rules_in_catalog():
     assert "rule_zero_word" in RULE_IDS
     assert "rule_is_equal_to" in RULE_IDS
-    assert len(RULE_IDS) == 8
+    assert len(RULE_IDS) == 9
+    assert "rule_surface_paraphrase" in RULE_IDS
 
 
 def test_corpus_includes_new_extension_items(corpus):
@@ -35,7 +36,9 @@ def test_corpus_includes_new_extension_items(corpus):
     assert "ext_is_equal_to" in ids
     assert "dup_ext_zero" in ids
     assert "dup_ext_is_equal" in ids
-    assert len(corpus) == 28
+    assert "ext_surface_itself" in ids
+    assert "ext_surface_sum" in ids
+    assert len(corpus) == 31
 
 
 def test_fitting_excludes_holdout(corpus):

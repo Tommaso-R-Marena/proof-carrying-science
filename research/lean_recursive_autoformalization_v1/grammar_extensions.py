@@ -49,6 +49,11 @@ RULE_CATALOG: tuple[tuple[str, str], ...] = (
         "rule_is_equal_to",
         '"is equal to" → =',
     ),
+    (
+        "rule_surface_paraphrase",
+        "Surface paraphrases → canonical controlled quantifier English "
+        "(every/itself, trailing for-all, sum-of, holds-clauses, bare zero)",
+    ),
 )
 
 RULE_IDS: tuple[str, ...] = tuple(rule_id for rule_id, _ in RULE_CATALOG)
@@ -74,19 +79,10 @@ def _replace_atomic_english(body: str) -> str:
     return text
 
 
-def _try_unique_exists(source: str) -> dict[str, Any] | None:
-    text = source.strip().rstrip(".")
-    match = re.fullmatch(
-        r"There exists a unique (natural number|integer) "
-        r"([A-Za-z][A-Za-z0-9_]*) such that (.+)",
-        text,
-        re.I,
-    )
-    if not match:
-        return None
-    domain = {"natural number": "Nat", "integer": "Int"}[match[1].lower()]
-    name = match[2]
-    body_en = match[3].strip()
+def _unique_exists_from_parts(
+    source: str, domain_words: str, name: str, body_en: str
+) -> dict[str, Any]:
+    domain = {"natural number": "Nat", "integer": "Int"}[domain_words.lower()]
     alt = "m" if name != "m" else "k"
     body_alt = re.sub(rf"\b{re.escape(name)}\b", alt, body_en)
     body_lean = _replace_atomic_english(body_en)
@@ -125,6 +121,32 @@ def _try_unique_exists(source: str) -> dict[str, Any] | None:
             "reason": str(ex),
             "extension_rule": "rule_unique_exists",
         }
+
+
+def _try_unique_exists(source: str) -> dict[str, Any] | None:
+    text = source.strip().rstrip(".")
+    match = re.fullmatch(
+        r"There exists a unique (natural number|integer) "
+        r"([A-Za-z][A-Za-z0-9_]*) such that (.+)",
+        text,
+        re.I,
+    )
+    if match:
+        return _unique_exists_from_parts(source, match[1], match[2], match[3].strip())
+    # Paraphrase: "There is a unique natural number equal to zero"
+    match = re.fullmatch(
+        r"There is a unique (natural number|integer) equal to (.+)",
+        text,
+        re.I,
+    )
+    if match:
+        rhs = match[2].strip()
+        if rhs.lower() == "zero":
+            rhs = "0"
+        return _unique_exists_from_parts(
+            source, match[1], "n", f"n equals {rhs}"
+        )
+    return None
 
 
 def _rewrite_neither_nor(body: str) -> str:
@@ -226,10 +248,118 @@ def _try_distinct_forall(source: str) -> dict[str, Any] | None:
         }
 
 
+def _try_surface_paraphrase(source: str) -> str | None:
+    """Map finite surface paraphrases to canonical controlled English.
+
+    Returns rewritten English or None. Does not call formalize (caller does).
+    Fail-closed: only exact authored paraphrase patterns.
+    """
+    text = source.strip().rstrip(".")
+
+    # "Every natural number equals itself."
+    if re.fullmatch(r"Every natural number equals itself", text, re.I):
+        return "For all natural numbers n, n equals n."
+
+    # "Zero is equal to zero." / "Zero equals zero."
+    if re.fullmatch(r"Zero (?:is equal to|equals) zero", text, re.I):
+        return "For all natural numbers n, zero equals zero."
+
+    # "n plus zero equals n for every natural number n."
+    match = re.fullmatch(
+        r"([A-Za-z][A-Za-z0-9_]*) plus zero equals \1 for every natural number \1",
+        text,
+        re.I,
+    )
+    if match:
+        n = match[1]
+        return f"For all natural numbers {n}, {n} plus zero equals {n}."
+
+    # "The sum of n and 0 equals n for all natural numbers n."
+    match = re.fullmatch(
+        r"The sum of ([A-Za-z][A-Za-z0-9_]*) and 0 equals \1 for all natural numbers \1",
+        text,
+        re.I,
+    )
+    if match:
+        n = match[1]
+        return f"For all natural numbers {n}, {n} + 0 equals {n}."
+
+    # "Whenever A holds, B holds, for all propositions A and B."
+    match = re.fullmatch(
+        r"Whenever ([A-Za-z][A-Za-z0-9_]*) holds, ([A-Za-z][A-Za-z0-9_]*) holds, "
+        r"for all propositions \1 and \2",
+        text,
+        re.I,
+    )
+    if match:
+        a, b = match[1], match[2]
+        return f"For all propositions {a} and {b}, whenever {a}, {b}."
+
+    # "A is true exactly when B is true for propositions A and B."
+    match = re.fullmatch(
+        r"([A-Za-z][A-Za-z0-9_]*) is true exactly when ([A-Za-z][A-Za-z0-9_]*) is true "
+        r"for propositions \1 and \2",
+        text,
+        re.I,
+    )
+    if match:
+        a, b = match[1], match[2]
+        return f"For all propositions {a} and {b}, {a} exactly when {b}."
+
+    # "Neither P nor Q holds for all propositions P and Q."
+    match = re.fullmatch(
+        r"Neither ([A-Za-z][A-Za-z0-9_]*) nor ([A-Za-z][A-Za-z0-9_]*) holds "
+        r"for all propositions \1 and \2",
+        text,
+        re.I,
+    )
+    if match:
+        p, q = match[1], match[2]
+        return f"For all propositions {p} and {q}, neither {p} nor {q}."
+
+    # "Any two distinct naturals a and b satisfy a equals a."
+    match = re.fullmatch(
+        r"Any two distinct naturals ([A-Za-z][A-Za-z0-9_]*) and ([A-Za-z][A-Za-z0-9_]*) "
+        r"satisfy (.+)",
+        text,
+        re.I,
+    )
+    if match:
+        a, b, body = match[1], match[2], match[3].strip()
+        return f"For all distinct natural numbers {a} and {b}, {body}."
+
+    return None
+
+
 def apply_extensions(source: str, rules: frozenset[str]) -> dict[str, Any] | None:
     """Attempt rule-gated rewrites. Return a formalize-like dict or None to fall through."""
     if type(source) is not str or not source.strip():
         return None
+
+    # Surface paraphrases first (may unlock other gated rules on the rewrite).
+    if "rule_surface_paraphrase" in rules:
+        rewritten = _try_surface_paraphrase(source)
+        if rewritten is not None and rewritten.strip().rstrip(".") != source.strip().rstrip("."):
+            # Recurse without re-applying paraphrase to the same string.
+            inner_rules = frozenset(rules)  # keep all rules for body extensions
+            hit = apply_extensions(rewritten, inner_rules - {"rule_surface_paraphrase"})
+            if hit is not None:
+                hit = dict(hit)
+                hit["extension_rules"] = list(
+                    dict.fromkeys(
+                        ["rule_surface_paraphrase", *(hit.get("extension_rules") or [])]
+                    )
+                )
+                hit["paraphrase_canonical"] = rewritten
+                hit["semantic_authorization"] = False
+                return hit
+            result = formalize(rewritten)
+            if result.get("status") in {"supported", "ambiguous"}:
+                result = dict(result)
+                result["extension_rules"] = ["rule_surface_paraphrase"]
+                result["paraphrase_canonical"] = rewritten
+                result["semantic_authorization"] = False
+                return result
 
     if "rule_unique_exists" in rules:
         hit = _try_unique_exists(source)

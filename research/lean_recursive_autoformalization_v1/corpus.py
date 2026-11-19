@@ -28,7 +28,7 @@ PACKAGE = "research/lean_recursive_autoformalization_v1"
 
 
 def _raw_items() -> list[dict[str, Any]]:
-    """Hand-authored finite corpus (~28 items) across capability classes."""
+    """Hand-authored finite corpus (~31 items) across capability classes."""
     items: list[dict[str, Any]] = []
 
     # --- Base supported (no extension rules) ---
@@ -116,6 +116,20 @@ def _raw_items() -> list[dict[str, Any]]:
             "ext_is_equal_to",
             "For all natural numbers n, n is equal to n.",
             ["rule_is_equal_to"],
+            "validation",
+            1,
+        ),
+        (
+            "ext_surface_itself",
+            "Every natural number equals itself.",
+            ["rule_surface_paraphrase"],
+            "seed",
+            0,
+        ),
+        (
+            "ext_surface_sum",
+            "The sum of n and 0 equals n for all natural numbers n.",
+            ["rule_surface_paraphrase"],
             "validation",
             1,
         ),
@@ -244,6 +258,15 @@ def _raw_items() -> list[dict[str, Any]]:
             "supported",
             "extension_supported",
             ["rule_is_equal_to"],
+            "holdout",
+            2,
+        ),
+        (
+            "dup_ext_surface",
+            "n plus zero equals n for every natural number n.",
+            "supported",
+            "extension_supported",
+            ["rule_surface_paraphrase", "rule_plus_times_words", "rule_zero_word"],
             "holdout",
             2,
         ),

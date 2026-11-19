@@ -55,6 +55,24 @@ Measured:
 - rising fitting proved on accept events; fitting form/proof loss → **0**
 - Repair strategy that recovered partial failures: `combine_with_proof_expander`
 
+### External generalization (rigorous offline suite)
+
+`external_generalization.py` — strongest multi-axis offline suite in-workspace
+(miniF2F/FormL4 absent). After `rule_surface_paraphrase` + unique-exists
+paraphrase fixes:
+
+| Axis | Result |
+| --- | --- |
+| Sealed lean-learning-v2 formalization (10 supported) | **10/10 exact IR** |
+| lean-learning-v2 negatives (6) | **6/6 status match** |
+| OOD surface paraphrases (15) | **15/15 supported** |
+| OOD abstain controls | **0 false accepts** |
+| Real SVB evaluation claims (fail-closed) | **0 false accepts** |
+| lean-learning-v2 final IR prove | **5/6 verified** |
+
+All research generalization gates passed. Not unrestricted English; SVB axis
+is abstention fail-closed, not SVB label accuracy.
+
 ## What was built
 
 | Artifact | Role |

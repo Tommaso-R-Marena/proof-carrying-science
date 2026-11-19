@@ -77,6 +77,7 @@ PROOF_EXPANDING_RULES: tuple[str, ...] = (
     "rule_plus_times_words",
     "rule_zero_word",
     "rule_is_equal_to",
+    "rule_surface_paraphrase",
     "rule_distinct_forall",  # holdout-heavy; may still help dual if fitting items appear
 )
 
