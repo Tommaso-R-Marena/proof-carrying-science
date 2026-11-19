@@ -211,10 +211,73 @@ design and cannot merge, which is what D2b is for.
 So **every website change then needs a retained-source admission** (new retained commit, tag and gate
 patch), the same regime the core manifest already imposes. Without D2b, those rules stay advisory.
 
-**Caveat:** the workflow is itself a control file of the site gate. A pull request that edited it, for
-example by adding `if:` to skip the job (a skipped required job counts as passing), would weaken the
-check. Such a change shows in the diff; review every change to that file. The site has no
-`CODEOWNERS` file.
+**Caveat:** the workflow is itself a control file of the site gate. A pull request that edits it can
+make the check vacuous. See the next section, which also proposes the smallest protection (G1).
+
+### D2b: can a pull request make the required check vacuous? (checked 2026-11-19)
+
+**Yes, by editing its own workflow.**
+
+* GitHub runs a `pull_request` workflow from the pull request's merge commit ("`GITHUB_SHA` is the
+  SHA of the merge commit on the merge branch"; docs, *Events that trigger workflows*). So a pull
+  request that edits `.github/workflows/open-pr-reconciliation.yml` gets a passing
+  `original-pr-ancestry-and-production-preservation` without the gate running: it can replace the
+  two gate commands with `true`, or add `if: false` (a skipped required job counts as passing). It
+  can also add a new workflow with a job of the same name.
+* The ruleset's "expected source" (GitHub Actions, integration 15368) restricts which app reports the
+  check, not which workflow file produces it. Every workflow reports through that app.
+* The rule that would pin the workflow, *Require workflows to pass before merging* (a workflow file at
+  a fixed ref of a fixed repository), "can be configured at the organization or enterprise level"
+  (docs, *Available rules for rulesets*, Enterprise Cloud edition). These are personal-account
+  repositories. The repository-level list of rules does not include it, although the REST
+  description has a `workflows` rule type.
+* The site gate lists the workflow among its control files (`CONTROLS` in
+  `scripts/check_reconciled_prs.py`). Controls are excluded from the tree comparison, so the gate
+  itself does not notice a changed workflow.
+* The same holds in the core for `source-policy` inside `verified-public-integration`. V23 pins the
+  workflow's bytes there, but the step that compares them runs from the same workflow the pull
+  request controls.
+
+**How material.** Only the owner, the sole collaborator, can merge, and a workflow change shows in
+the diff. The check protects against a pull request that leaves its workflow alone, which covers
+ordinary mistakes. It does not protect against one that edits it: a green check then proves only
+that some GitHub Actions job of that name passed under a workflow the pull request controls. That
+weakens the statement "every merged change passed the retained-source gate". Material in principle;
+limited in practice by who can merge.
+
+**Smallest effective additional protection.**
+
+1. **Procedural (recommended now; no change).** Before merging any pull request, run in the core:
+
+   ```
+   git diff --name-only origin/main...<head> -- .github/workflows scripts/check_reconciled_prs.py \
+     scripts/test_reconciled_prs.py docs/reconciliation/OPEN_PRS.json research/integration_v2 \
+     docs/integration/2026-11-05 docs/integration/2026-11-14
+   ```
+
+   In the site, the first four paths. Any output means the pull request changes the definition of a
+   gate and needs its own protected decision. This is in the owner execution checklist.
+2. **Enforced (optional): G1, a gate-definition guard** (protected: one workflow on `main` and one
+   required check). The proposals are `g1/gate-definition-guard.core.yml` and
+   `g1/gate-definition-guard.site.yml`.
+   * It is a `pull_request_target` workflow. GitHub runs the copy on the default branch ("This event
+     runs in the context of the default branch of the base repository, rather than in the context of
+     the merge commit"), so a pull request cannot change what it runs.
+   * It reads the pull request's commits as data (file names only) and executes nothing from them.
+     Its token is read-only and it uses no secret.
+   * It fails when the pull request changes any workflow or any file that defines a gate.
+   * Required as `gate-definition-unchanged`, it never stays pending: it has no path filter.
+   * Consequence: every gate change (C1, C2b, D2, later admissions) merges only through your
+     recorded ruleset bypass. That is the intended meaning.
+   * Tested on scratch repositories (2026-11-19). An unrelated change passes. In both repositories an
+     edited workflow, an added workflow, an edited gate script and an edited registry fail; in the
+     core, an edited manifest or an edited `reconcile.py` fail too.
+   * **Residual risk, not verifiable here.** GitHub does not document how a required check is decided
+     when two workflows report jobs with the same name. A pull request could add a workflow with a
+     job named `gate-definition-unchanged`. G1 itself would then fail, because a workflow was added.
+     But if GitHub accepted the later of two same-named results, the imitation could mask it. Before
+     relying on G1, test this in a scratch repository: a failing `pull_request_target` job and a
+     same-named `pull_request` job that passes later. Merging must stay blocked.
 
 ### T1: retained-source tag rulesets (both repositories)
 
@@ -246,6 +309,40 @@ REST equivalent (`POST /repos/<owner>/<repo>/rulesets`; check the role ID in the
 
 **What it does not do:** sign tags, or change what the gates trust. They keep comparing the tag's
 target with the commit ID compiled into them.
+
+### T1 and D2b checked against GitHub's published REST API description (2026-11-19)
+
+* **Source:** GitHub's REST API description (`github/rest-api-description`,
+  `descriptions/api.github.com/api.github.com.json`), version 1.1.4, downloaded 2026-11-19, SHA-256
+  `6d9bbb20d8865b01464028937f2403954ad46598b4ebd3513dcb1a15b1a84aa7`.
+* **T1 validates** against the request schema of `POST /repos/{owner}/{repo}/rulesets` (JSON Schema,
+  every `$ref` inlined):
+  * `target` is one of `branch`, `tag`, `push`;
+  * the rule types `creation`, `update`, `deletion` and `non_fast_forward` exist;
+  * `actor_type` `RepositoryRole` and `bypass_mode` `always` are allowed.
+* **The check is not vacuous:** four malformed variants are rejected (unknown target, unknown rule,
+  unknown actor type, unknown bypass mode).
+* **Role ID.** `actor_id` is required for `RepositoryRole`, but the description does not list role
+  IDs. `5` for the repository-admin role is the commonly used value, not documented there. Choose
+  "Repository admin" in the UI rather than relying on the number. The docs make "Repository admins,
+  organization owners, and enterprise owners" and "the maintain or write role" eligible for bypass.
+* **Availability:** rulesets are available "in public repositories with GitHub Free". Both
+  repositories are public.
+* **`update`:** its optional parameter `update_allows_fetch_and_merge` concerns branches; omit it for
+  tags.
+* **D2b validates** too: a `required_status_checks` rule with
+  `{"context": "original-pr-ancestry-and-production-preservation", "integration_id": 15368}` and
+  `strict_required_status_checks_policy`. A `PUT` replaces the whole ruleset, so it must carry every
+  existing rule as well. The UI path avoids that.
+* **Existing tags stay usable.** The rules restrict creating, updating and deleting matching refs
+  ("Only allow users with bypass permission to create matching refs", and likewise for update and
+  deletion). Nothing restricts reading or fetching. The gates read tags with
+  `git rev-parse refs/tags/<tag>^{commit}` after a full fetch, which a ruleset does not affect.
+  Creating a ruleset changes no tag. On 2026-11-19 the tags were: core
+  `core-open-prs-v1-20261105` → `0b521f39…`, site `site-open-prs-v1-20261105` → `d35e2b5e…`.
+* **Not verifiable here:** the live behaviour; no tool here can read or write rulesets. After
+  installing, check that the tag list is unchanged, and that a push of a `pcs-source-intake/*` tag
+  by anyone but you is refused.
 
 ## Retained-source tags: what protects them, and what is not confirmed
 

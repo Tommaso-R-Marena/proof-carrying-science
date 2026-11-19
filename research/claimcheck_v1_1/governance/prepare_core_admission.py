@@ -1,7 +1,7 @@
 """Prepare and DRY-RUN the source admission of the ClaimCheck files.  Changes nothing protected.
 
     python -m research.claimcheck_v1_1.governance.prepare_core_admission --out docs/integration/claimcheck \
-        [--pytest-python PY] [--emit DIR]
+        [--pytest-python PY] [--emit DIR] [--history clean|development]
 
 The protected gate (research/integration_v2/reconcile.py) pins the exact set and bytes of tracked
 files to a reviewed manifest whose digest is compiled into the gate, and scripts/check_reconciled_prs.py
@@ -28,6 +28,15 @@ name.  --emit DIR writes the proposed control files (V23 included) under DIR, ou
 
 The successor is bound to the source commit it was generated from.  After any further commit it
 must be generated again; the report names the commit.
+
+Retained history (owner decision H1).  `--history clean` (H1-b, proposed): the retained commit's first
+parent is a snapshot commit with the source commit's exact tree on the protected main commit the
+branch is based on, so the tag keeps no commit of the source branch reachable (in particular not the
+commits that added the withheld model responses).  `--history development` (H1-a, the original
+design): its first parent is the source commit itself, so the tag keeps the branch's whole history
+reachable.  In both, the second parent is the previous intake, the tree is the source commit's tree,
+and the gates check exactly the same things; only the commit ID the owner pins differs.  Neither
+removes anything from existing pull-request refs or clones.
 """
 from __future__ import annotations
 
@@ -60,6 +69,13 @@ ADDED_FILES = (".github/workflows/pcs-claimcheck-v1.yml",)
 # files the dry run and the audit rewrite; a commit that changes only these after the commit they describe adds no source
 EVIDENCE = {"docs/integration/claimcheck/dry-run.json", "docs/integration/claimcheck/ADMISSION_CENSUS.json",
             "docs/integration/claimcheck/proposed-control-changes.patch", "docs/integration/claimcheck/ADMISSION_AUDIT.json"}
+# H1-b: the protected main commit the source branch is based on; the snapshot's only parent (pinned, like V22_COMMIT)
+PROTECTED_MAIN = V22_COMMIT
+RETAINED_MESSAGE = "Retained qualified source: previous intake plus ClaimCheck sidecar (proposed; tree identical to the source commit)"
+SNAPSHOT_MESSAGE = ("ClaimCheck admitted source snapshot (proposed): the exact tree of reviewed source commit {head}, on protected main "
+                    "{main}. Clean history: no commit of the source branch is an ancestor.")
+CLEAN_MESSAGE = ("Retained qualified source: previous intake plus ClaimCheck sidecar (proposed; clean history; tree identical to reviewed "
+                 "source commit {head})")
 FIXED = {"GIT_AUTHOR_NAME": "PCS admission dry run", "GIT_AUTHOR_EMAIL": "dry-run@example.invalid", "GIT_COMMITTER_NAME": "PCS admission dry run",
          "GIT_COMMITTER_EMAIL": "dry-run@example.invalid", "GIT_AUTHOR_DATE": "2026-11-14T00:00:00Z", "GIT_COMMITTER_DATE": "2026-11-14T00:00:00Z"}
 
@@ -136,6 +152,46 @@ def replace_once(text: str, old: str, new: str) -> str:
     return text.replace(old, new)
 
 
+def retained_commit(cwd: Path, head: str, history: str = "clean") -> dict:
+    """The proposed retained source commit for `head`, written with `git commit-tree` (objects only, no ref).
+
+    development (H1-a): parents [head, previous intake].
+    clean (H1-b): a snapshot commit S with head's tree and the single parent PROTECTED_MAIN, then parents [S, previous intake].
+    Deterministic: fixed identity, date and messages."""
+    tree = git(cwd, "rev-parse", f"{head}^{{tree}}")
+    if history == "development":
+        commit = git(cwd, "commit-tree", tree, "-p", head, "-p", OLD_INTAKE, "-m", RETAINED_MESSAGE, env=FIXED)
+        return {"history": "development", "commit": commit, "tree": tree, "parents": [head, OLD_INTAKE], "source_commit": head}
+    if history != "clean":
+        raise ValueError(f"unknown retained history design {history!r}")
+    if subprocess.run(["git", "merge-base", "--is-ancestor", PROTECTED_MAIN, head], cwd=cwd, capture_output=True).returncode != 0:
+        raise SystemExit(f"the source commit is not based on the pinned protected main commit {PROTECTED_MAIN}")
+    snapshot = git(cwd, "commit-tree", tree, "-p", PROTECTED_MAIN, "-m", SNAPSHOT_MESSAGE.format(head=head, main=PROTECTED_MAIN), env=FIXED)
+    commit = git(cwd, "commit-tree", tree, "-p", snapshot, "-p", OLD_INTAKE, "-m", CLEAN_MESSAGE.format(head=head), env=FIXED)
+    return {"history": "clean", "commit": commit, "tree": tree, "parents": [snapshot, OLD_INTAKE], "source_commit": head,
+            "snapshot": {"commit": snapshot, "tree": tree, "parents": [PROTECTED_MAIN]}}
+
+
+def history_review(cwd: Path, head: str, retained: dict) -> dict:
+    """Review-time facts about the retained commit that the gate does not check (it accepts either design)."""
+    from .retained_history import is_ancestor, reach, withheld_blobs
+    reg = json.loads(show(cwd, head, "docs/reconciliation/OPEN_PRS.json"))
+    core = next(r for r in reg["repositories"] if r["repository"].endswith("/proof-carrying-science"))
+    required = [core["protected"]["main"], *[p["head"] for p in core["original_open_prs"]], OLD_INTAKE]
+    r = retained["commit"]
+    facts = {"design": retained["history"],
+             "tree_equals_source_tree": git(cwd, "rev-parse", f"{r}^{{tree}}") == git(cwd, "rev-parse", f"{head}^{{tree}}"),
+             "no_file_differs_from_source": subprocess.run(["git", "diff", "--quiet", head, r], cwd=cwd).returncode == 0,
+             "registry_main_original_pr_heads_and_previous_intake_are_ancestors": all(is_ancestor(cwd, c, r) for c in required),
+             "source_commit_is_an_ancestor": is_ancestor(cwd, head, r)}
+    if retained["history"] == "clean":
+        s = retained["snapshot"]["commit"]
+        facts["snapshot_changes_exactly_what_the_source_branch_changes"] = (
+            git(cwd, "diff", "--name-status", PROTECTED_MAIN, s) == git(cwd, "diff", "--name-status", PROTECTED_MAIN, head))
+    facts.update(reach(cwd, r, [PROTECTED_MAIN, OLD_INTAKE], withheld_blobs(cwd, search_from=head)))
+    return facts
+
+
 def build(src: Path, head: str, intake: str, tag: str, v22: dict, v22_raw: bytes, added: dict) -> dict:
     """The control commit's files for one tag name: {path: bytes}.  Reads the originals from the source commit."""
     files: dict[str, bytes] = {}
@@ -206,6 +262,8 @@ def main(argv=None) -> int:
     ap.add_argument("--pytest-python", default=sys.executable,
                     help="a Python with pytest installed, for research/integration_v2/test_reconcile.py in the throw-away worktree")
     ap.add_argument("--emit", help="also write the proposed control files (V23 included) under this directory, outside the tree")
+    ap.add_argument("--history", choices=("clean", "development"), default="clean",
+                    help="retained commit design: clean (H1-b, proposed) or development (H1-a, the original design)")
     args = ap.parse_args(argv)
     out = ROOT / args.out
     out.mkdir(parents=True, exist_ok=True)
@@ -255,12 +313,16 @@ def main(argv=None) -> int:
             key = "/".join(n.split("/")[:3]) if n.startswith("research/") else n.split("/")[0] + "/" + (n.split("/")[1] if "/" in n else "")
             census["by_directory"][key] = census["by_directory"].get(key, 0) + 1
         # ---- (5) the retained source commit: depends only on the source commit -------------------------
-        tree = git(wt, "rev-parse", f"{head}^{{tree}}")
-        intake = git(wt, "commit-tree", tree, "-p", head, "-p", OLD_INTAKE, "-m",
-                     "Retained qualified source: previous intake plus ClaimCheck sidecar (proposed; tree identical to the source commit)", env=FIXED)
-        report["proposed_retained_source_commit"] = {"commit": intake, "tree": tree, "parents": [head, OLD_INTAKE], "proposed_tag": PROPOSED_TAG,
-                                                     "reproducible_with": "git commit-tree <tree> -p <source commit> -p <previous intake> with the fixed identity and date in this script",
+        retained = retained_commit(wt, head, args.history)
+        intake = retained["commit"]
+        how = ("git commit-tree <tree> -p <source commit> -p <previous intake>" if args.history == "development" else
+               "git commit-tree <tree> -p <protected main> (the snapshot), then git commit-tree <tree> -p <snapshot> -p <previous intake>")
+        report["retained_history_design"] = {"development": "H1-a (original): first parent is the source commit",
+                                             "clean": "H1-b (proposed): first parent is a snapshot on protected main"}[args.history]
+        report["proposed_retained_source_commit"] = {**retained, "proposed_tag": PROPOSED_TAG,
+                                                     "reproducible_with": how + ", with the fixed identity, date and messages in this script",
                                                      "tag_created": False}
+        report["retained_history_review"] = history_review(wt, head, retained)
         # ---- the proposal (real tag name; no ref) and the dry run (placeholder tag name) ---------------
         proposal = build(wt, head, intake, PROPOSED_TAG, v22, v22_raw, added)
         dry = build(wt, head, intake, DRY_TAG, v22, v22_raw, added)
@@ -319,6 +381,11 @@ def main(argv=None) -> int:
         reset()
         git(ROOT, "tag", "-f", "-a", DRY_TAG, head, "-m", "dry run, wrong target", env=FIXED)
         neg["the_tag_points_elsewhere"] = retained_gate(wt)
+        other = retained_commit(wt, head, "development" if args.history == "clean" else "clean")["commit"]
+        git(ROOT, "tag", "-f", "-a", DRY_TAG, other, "-m", "dry run, same tree, other design", env=FIXED)
+        neg["the_tag_points_to_the_other_design_with_the_same_tree"] = retained_gate(wt)
+        subprocess.run(["git", "tag", "-d", DRY_TAG], cwd=ROOT, capture_output=True)
+        neg["the_tag_is_deleted"] = retained_gate(wt)
         report["negative_controls"] = {k: {"rejected": not v["passed"], "error": v["error"]} for k, v in neg.items()}
         # ---- what the owner would review ----------------------------------------------------------------
         reset()
@@ -332,7 +399,15 @@ def main(argv=None) -> int:
             write(Path(args.emit), proposal)
             report["emitted_to"] = "a directory outside the tree (--emit)"
         (out / "ADMISSION_CENSUS.json").write_text(json.dumps(census, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-        report["all_as_expected"] = (not changed and not outside and report["gate_on_the_protected_v22_commit"]["passed"]
+        hr = report["retained_history_review"]
+        history_ok = (hr["tree_equals_source_tree"] and hr["no_file_differs_from_source"]
+                      and hr["registry_main_original_pr_heads_and_previous_intake_are_ancestors"]
+                      and (args.history == "development" or (not hr["source_commit_is_an_ancestor"] and not hr["output_commits_reachable"]
+                                                             and not hr["withheld_blobs_reachable"]
+                                                             and hr["commits_beyond_protected_history"] == 2
+                                                             and hr["snapshot_changes_exactly_what_the_source_branch_changes"])))
+        report["retained_history_as_designed"] = history_ok
+        report["all_as_expected"] = (history_ok and not changed and not outside and report["gate_on_the_protected_v22_commit"]["passed"]
                                      and report["dry_run_tested_the_proposal"]["only_the_tag_name_and_its_consequent_digests_differ"]
                                      and report["gate_with_successor"]["passed"] and report["gate_with_successor"]["prs_checked"] == 72
                                      and report["retained_source_gate_with_successor"]["passed"]

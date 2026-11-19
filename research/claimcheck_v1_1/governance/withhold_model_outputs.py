@@ -16,6 +16,11 @@ reason, prompt digest, token usage and the SHA-256 and length of the model text,
 * every identifying field of the original, and the original file's digest and size;
 * the reason, and where the original is kept.
 
+The cache key is kept as `cache_key`, not `key`. The frozen v1 cache lookup
+(`claimcheck_v1.providers.complete`) serves any file whose `key` matches and then reads its text; a
+stub with `key` would be served and crash the reader. Under `cache_key` the lookup misses, and with
+network use off the frozen code reports "no cached response" and leaves that arm out.
+
 It refuses to run without `--decision`, and it never touches Git history, frozen files or files
 outside `results/*/model_responses/`. The originals must first be archived privately by the owner;
 the stub's digest lets anyone with the archive verify it. Not run by the assistant.
@@ -26,6 +31,7 @@ import argparse
 import glob
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -51,28 +57,53 @@ def group(model: str) -> str:
     raise SystemExit(f"unknown model {model!r}: classify it before any disposition")
 
 
+KEEP = ("group", "provider", "model", "key", "prompt_sha256", "usage", "finish", "original_sha256", "original_bytes", "text_sha256",
+        "text_characters", "request_identifier", "recorded_in_commit", "recorded_in_repository_utc", "provider_terms", "status")
+
+
+def first_recorded(path: str) -> tuple[str | None, str | None]:
+    """The commit that first added the file, and its commit time.  The client recorded no generation time, so this is an
+    upper bound on when the response was generated."""
+    try:
+        rows = subprocess.check_output(["git", "log", "--diff-filter=A", "--format=%H %cI", "--", path], cwd=ROOT, text=True).split("\n")
+    except (OSError, subprocess.CalledProcessError):
+        return None, None
+    rows = [r for r in rows if r.strip()]
+    if not rows:
+        return None, None
+    commit, when = rows[-1].split(" ", 1)
+    return commit, when
+
+
 def records() -> list[dict]:
     out = []
     for name in sorted(glob.glob(str(ROOT / PATTERN))):
         raw = Path(name).read_bytes()
         d = json.loads(raw)
-        if d.get("withheld"):
-            out.append({"path": str(Path(name).relative_to(ROOT)), "withheld": True, **{k: d[k] for k in ("group", "model", "original_sha256")}})
+        rel = str(Path(name).relative_to(ROOT))
+        if d.get("withheld"):                                      # a provenance stub: it carries every inventoried field
+            out.append({"path": rel, "withheld": True, **{k: d.get(STUB_NAME.get(k, k)) for k in KEEP}, "split": Path(name).parts[-3],
+                        "action": TERMS[d["group"]]["action"]})
             continue
         text = (d.get("text") or "").encode("utf-8")
         g = group(d.get("model", ""))
-        out.append({"path": str(Path(name).relative_to(ROOT)), "group": g, "provider": d.get("provider"), "model": d.get("model"),
+        commit, when = first_recorded(rel)
+        out.append({"path": rel, "group": g, "provider": d.get("provider"), "model": d.get("model"),
                     "key": d.get("key"), "prompt_sha256": d.get("prompt_sha256"), "usage": d.get("usage"), "finish": d.get("finish"),
                     "original_sha256": hashlib.sha256(raw).hexdigest(), "original_bytes": len(raw),
                     "text_sha256": hashlib.sha256(text).hexdigest(), "text_characters": len(text.decode("utf-8")),
+                    "request_identifier": d.get("id") or d.get("request_id") or "not recorded by the client",
+                    "recorded_in_commit": commit, "recorded_in_repository_utc": when,
                     "split": Path(name).parts[-3], **{k: v for k, v in TERMS[g].items()}})
     return out
 
 
+# the frozen cache lookup serves a file whose "key" matches; a stub must not match (module docstring)
+STUB_NAME = {"key": "cache_key"}
+
+
 def stub(rec: dict, decision: str) -> dict:
-    keep = ("group", "provider", "model", "key", "prompt_sha256", "usage", "finish", "original_sha256", "original_bytes", "text_sha256",
-            "text_characters", "provider_terms", "status")
-    return {"withheld": True, **{k: rec[k] for k in keep},
+    return {"withheld": True, **{STUB_NAME.get(k, k): rec[k] for k in KEEP},
             "reason": "Rights to redistribute this model output are not established (see docs/integration/claimcheck/MODEL_OUTPUT_LICENSING.md).",
             "original": "kept privately by the owner; verify a copy against original_sha256",
             "decision": decision}

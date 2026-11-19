@@ -104,7 +104,27 @@ def test_require_committed_runs_the_retained_source_gate(monkeypatch):
 
 # the source-policy steps that run before the gate in CI (pcs-public-full-verification.yml), as far as they run locally
 CI_STEPS_BEFORE_THE_GATE = (["scripts/check_repository_integrity.py"], ["scripts/check_research_platform_evidence.py"],
-                            ["scripts/check_mathlib_v4_evidence.py"], ["-m", "compileall", "-q", "pcs", "scripts", "tests"])
+                            ["scripts/check_mathlib_v4_evidence.py"], ["-m", "compileall", "-q", "pcs", "scripts", "tests"],
+                            ["scripts/check_pr_contributions.py"])
+REQUIRED_WORKFLOW = ".github/workflows/pcs-public-full-verification.yml"
+
+
+def required_path_static_check(cwd: Path) -> dict:
+    """The workflow that feeds the required check, read as text (unchanged by C2b): the gate cannot be skipped silently."""
+    text = (cwd / REQUIRED_WORKFLOW).read_text(encoding="utf-8")
+    on = text.split("\npermissions:", 1)[0]
+    policy = text.split("\n  source-policy:\n", 1)[1].split("\n  core-full-gate:\n", 1)[0]
+    aggregate = text.split("\n  verified-public-integration:\n", 1)[1]
+    checks = {
+        "runs_on_every_pull_request_to_main_without_a_path_filter": "pull_request:\n    branches: [main]" in on and "paths" not in on,
+        "source_policy_runs_on_the_public_repository": "if: ${{ github.event.repository.private == false }}" in policy
+                                                        and policy.count("if:") == 2,      # the job condition and one PR-only step
+        "full_history_and_tags_are_checked_out": "fetch-depth: 0" in policy,
+        "the_manifest_gate_runs_with_require_committed": "run: python -m research.integration_v2.reconcile --require-committed" in policy,
+        "the_aggregate_needs_source_policy": "needs: [source-policy," in aggregate and "if: ${{ always()" in aggregate,
+        "the_aggregate_rejects_a_skipped_or_failed_source_policy": 'test "$SOURCE_POLICY" = success' in aggregate,
+    }
+    return {**checks, "passed": all(checks.values())}
 
 
 def apply_c2b(gate_text: str, test_text: str) -> tuple[str, str]:
@@ -135,6 +155,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", required=True)
     ap.add_argument("--pytest-python", default=sys.executable)
+    ap.add_argument("--history", choices=("clean", "development"), default="clean", help="C1's retained commit design (H1-b clean, or H1-a)")
     args = ap.parse_args(argv)
     out = P.ROOT / args.out
     out.mkdir(parents=True, exist_ok=True)
@@ -152,9 +173,9 @@ def main(argv=None) -> int:
         v22 = json.loads(v22_raw)
         tracked = set(P.git(wt, "ls-files", "-z").split("\0")) - {""}
         added = {n: P.identity(wt, n) for n in sorted(tracked - set(v22["snapshot"]) - set(v22["control_paths"]))}
-        tree = P.git(wt, "rev-parse", f"{head}^{{tree}}")
-        intake = P.git(wt, "commit-tree", tree, "-p", head, "-p", P.OLD_INTAKE, "-m",
-                       "Retained qualified source: previous intake plus ClaimCheck sidecar (proposed; tree identical to the source commit)", env=P.FIXED)
+        retained = P.retained_commit(wt, head, args.history)       # C1 as proposed: H1-b clean history unless told otherwise
+        intake = retained["commit"]
+        report["c1_retained_commit"] = {k: retained[k] for k in ("history", "commit", "parents")}
         c1 = P.build(wt, head, intake, P.DRY_TAG, v22, v22_raw, added)
         P.write(wt, c1)
         P.git(wt, "add", "-A")
@@ -183,8 +204,9 @@ def main(argv=None) -> int:
         report["retained_source_gate_tests_with_c2b"] = P.suite([sys.executable, "scripts/test_reconciled_prs.py"], wt)
         # ---- no false failure: the CI steps before the gate leave no untracked file ----------------------
         steps = {}
+        ci_env = {**__import__("os").environ, "GITHUB_REPOSITORY": "Tommaso-R-Marena/proof-carrying-science", "GITHUB_BASE_SHA": P.PROTECTED_MAIN}
         for step in CI_STEPS_BEFORE_THE_GATE:
-            proc = subprocess.run([sys.executable, *step], cwd=wt, capture_output=True, text=True)
+            proc = subprocess.run([sys.executable, *step], cwd=wt, capture_output=True, text=True, env=ci_env)
             steps[" ".join(step)] = proc.returncode
         untracked = P.git(wt, "status", "--porcelain", "--untracked-files=all")
         report["ci_steps_before_the_gate"] = {"exit_codes": steps, "untracked_files_left": untracked.splitlines()[:10],
@@ -213,6 +235,7 @@ def main(argv=None) -> int:
              lambda: probe.write_text("not committed\n", encoding="utf-8"),
              lambda: probe.unlink())
         report["negative_controls"] = neg
+        report["required_path_static_check"] = required_path_static_check(wt)
         report["notes"] = {
             "annotated_tag_not_enforced": "the gate resolves refs/tags/<tag>^{commit}; a lightweight tag at the right commit also passes. "
                                           "Authority rests on the commit ID compiled into the gate, not on the tag object.",
@@ -223,6 +246,7 @@ def main(argv=None) -> int:
                                      and not report["ci_steps_before_the_gate"]["untracked_files_left"]
                                      and report["ci_steps_before_the_gate"]["gate_after_them"]["passed"]
                                      and all(v["c1_alone_passes"] and v["c1_plus_c2b_rejects"] for v in neg.values())
+                                     and report["required_path_static_check"]["passed"]
                                      and changed == sorted([P.GATE, P.GATE_TEST]))
     finally:
         subprocess.run(["git", "tag", "-d", P.DRY_TAG], cwd=P.ROOT, capture_output=True)

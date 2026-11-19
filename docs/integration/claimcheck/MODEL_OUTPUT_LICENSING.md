@@ -157,6 +157,7 @@ What withholding changes, and what it does not:
 | --- | --- |
 | frozen evidence | **none.** Neither freeze record pins these files; the frozen results, receipts, bundles and replays are unchanged and still verify |
 | tests | **none.** No test reads the raw responses (checked) |
+| tools that read the cache | the frozen cache reader (`claimcheck_v1.providers.complete`) serves any file whose `key` matches and then reads its text. A stub that kept `key` would have been served and crashed the held-out analysis (a step of the ClaimCheck CI), the development evaluation and the demonstration (`KeyError: 'text'`; found 2026-11-19 before anything was applied). The stub now keeps the key as `cache_key`: the reader sees a cache miss and leaves that arm out (`tests/test_withholding_stub.py`). Measured effect: section 7 |
 | reproducibility | regenerating the Nemotron arm offline needs the private archive. Affected: the development evaluation (`dev_arms.json`), the prospective demonstration, bundle export and the development half of the capacity run. Their committed results stay as they are |
 | derived proposals | the parsed readings inside receipts, bundles and results stay. Removing them would invalidate frozen results. They consist mostly of the article's own words and of field choices, and their status follows L2(a) |
 | admission | the stubs are what C1 admits. Decide L1 to L3 first, then regenerate the evidence |
@@ -197,6 +198,14 @@ What withholding changes, and what it does not:
   Nemotron and Cohere outputs pending clarification.
 * Nothing is to be applied while the capacity run reads the original caches, nor before the owner
   confirms the final archival and replacement plan.
+* Later the same day: preparation of the withholding is authorised, and replacing the 22 files by
+  provenance stubs is supported **after a verified private archive**. The sequence: finish the
+  capacity study's cache-dependent work; identify the 22 files; archive them privately, outside every
+  public repository and artifact location; verify each against its SHA-256; confirm the archive can
+  be recovered; replace with the governed tool; run the regression suites; record the effect on
+  offline reproducibility; regenerate the admission evidence. **If no genuinely private destination
+  can be established and verified, stop before altering the originals and name the minimal owner
+  action.** Status: section 7.
 
 ## 5. Reachability after C1: the retained-source tag keeps the originals reachable
 
@@ -222,6 +231,9 @@ Consequently:
 * only two things would avoid that new reference: building the retained commit on a source commit
   without this branch's history (H1-b below), or rewriting history (H1-c). Neither is proposed for
   execution; both need your authorisation, and H1-b changes the retained-source design.
+* **Update (2026-11-19):** H1-b is now designed, implemented in the admission tooling and tested
+  ([`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md)). It avoids the new reference. It does not remove
+  the originals from pull request 212 or 216, or from clones.
 
 ## 6. Before C1: provider clarification (P1) and historical exposure (H1)
 
@@ -262,3 +274,55 @@ Consequently:
 3. If NVIDIA declines, or has not answered when you are otherwise ready for C1, choose between H1-a
    and H1-b. H1-b is the smallest step that avoids adding a protected public reference.
 4. Withhold the Cohere output under any option.
+
+## 7. Archive and withholding: status (2026-11-19)
+
+| Step | Status |
+| --- | --- |
+| 1. capacity study's cache-dependent work | done: the isolated reruns and both further configurations finished before anything else read or changed the cache |
+| 2. the 22 files | identified from the inventory: 21 Nemotron (4 development, 17 held-out) and 1 Cohere (development); paths and digests in `model_outputs_inventory.json` |
+| 3. private archive | **not established.** See below |
+| 4. verification against the inventory | done on a private copy inside this session's container: 22 of 22 match |
+| 5. recoverability | done on that copy: read back, every digest recomputed, complete |
+| 6. replacement with the governed tool | **not done**: stopped before altering the originals, as instructed |
+| 7. provenance kept in the stubs | prepared: provider, model, cache key (as `cache_key`), prompt digest, usage, finish reason, digests and sizes of the original and of its text, the commit and time the file was first recorded, request identifier (not recorded by the client), terms, reason |
+| 8. regression suites | measured in a throw-away worktree with the stubs applied (below) |
+| 9. effect on offline reproducibility | measured (below) |
+| 10. admission evidence | **not regenerated**: it follows step 6 |
+
+**Why no private archive.** The archive must be private, outside every public repository and artifact
+location, and recoverable. Nothing available to this session meets all three:
+
+* this session's container is private, but it is reclaimed when the session ends: a copy there is
+  not an archive;
+* no folder on one of your computers is attached to this session (checked 2026-11-19: none listed);
+* every other destination this session can write to is either public (the repositories, artifact
+  pages) or an external service (Google Drive, e-mail), which you excluded.
+
+**What was done instead.** `research/claimcheck_v1_1/governance/archive_model_outputs.py` builds the
+archive from Git history: a deterministic tar holding the 22 original files and a manifest. It
+verifies every file against the inventory, reads the archive back, and checks that it is complete.
+On a private copy in the container (directory 0700, files 0600, outside the repository), it reported:
+
+* 22 files (N 21, C 1), all matching the inventory's SHA-256;
+* archive SHA-256 `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3`;
+* manifest SHA-256 `377f07114a09984c51d805e7a9a71dea24450726b9fdf673b2f9354c7644c569`;
+* rebuilt byte for byte, with the same digest, from three different commits that carry the inventory.
+
+That copy disappears with the container and does not count as the archive.
+
+**The minimal owner action** (one of):
+
+1. On a machine you control, from a clone of this repository at the pull request 212 head:
+   `python3 -m research.claimcheck_v1_1.governance.archive_model_outputs --out <a private directory outside the clone>`.
+   It must print `"recoverable_and_complete": true` and the archive SHA-256 above. Keep the archive
+   privately, and tell me it is held.
+2. Or attach a folder of one of your computers to this session (Claude desktop app: Settings,
+   Claude Code, Remote Control) and authorise writing the archive there.
+3. Or name another private destination you authorise.
+
+After your confirmation, steps 6 to 10 follow:
+
+* `withhold_model_outputs --apply --groups N,C --decision "<reference>"`, as one commit;
+* the suites;
+* the admission evidence regenerated at the new head.

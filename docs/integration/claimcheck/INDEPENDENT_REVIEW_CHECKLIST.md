@@ -46,7 +46,7 @@ admission, `S` changes. Every value below must then be regenerated and this revi
 | C1.3 | **Manifest integrity**, by code separate from the generator | `python -m research.claimcheck_v1_1.governance.review_v23_manifest --emit /tmp/c1-emit --head H` | `consistent: true`; all 10 checks (see below) |
 | C1.4 | **Exact digests** of the four control files | `sha256sum /tmp/c1-emit/docs/integration/2026-11-14/RECONCILIATION_V23.json /tmp/c1-emit/research/integration_v2/reconcile.py /tmp/c1-emit/research/integration_v2/test_reconcile.py /tmp/c1-emit/scripts/check_reconciled_prs.py` | each equals the PR description's value for `H` |
 | C1.5 | The control files change only what they must | `git diff --no-index <(git show H:research/integration_v2/reconcile.py) /tmp/c1-emit/research/integration_v2/reconcile.py`, and the same for the other two files | as listed in "The expected hunks" below |
-| C1.6 | **Retained-source ancestry** | the `commit-tree` command in `ADMISSION_PROPOSAL.md`, step 4, with `H`; then the ancestry commands below | the printed ID equals `proposed_retained_source_commit.commit` in `/tmp/c1/dry-run.json` and the PR description |
+| C1.6 | **Retained-source ancestry** | the `commit-tree` commands in `ADMISSION_PROPOSAL.md`, step 4, with `H`, for the design you approve under H1 (H1-b: two commands); then the ancestry commands below | the printed ID equals `proposed_retained_source_commit.commit` in `/tmp/c1/dry-run.json` and the PR description; `/tmp/c1/dry-run.json` reports `retained_history_as_designed: true` |
 | C1.7 | **Tag security, before creation** | `git ls-remote --tags origin 'refs/tags/pcs-source-intake/core-claimcheck-v1-20261114'` | prints nothing (the name is not squatted) |
 | C1.8 | Negative controls | in `/tmp/c1/dry-run.json`: `negative_controls` | all nine `rejected: true`; `dry_run_tested_the_proposal.only_the_tag_name_and_its_consequent_digests_differ: true` |
 | C1.9 | The protected suites pass with the successor | in `/tmp/c1/dry-run.json`: `gate_tests_on_the_successor`, `retained_source_gate_tests_on_the_successor` | 75 passed; OK (13 tests, including the whole-tree squash) |
@@ -86,10 +86,22 @@ admission, `S` changes. Every value below must then be regenerated and this revi
 succeed:
 
 * `git rev-parse R^{tree}` equals `git rev-parse H^{tree}`;
-* `git rev-parse R^1` is `H`, and `git rev-parse R^2` is `0b521f39af99f5856b69dfcc25bc274ec9dc804a`;
+* `git rev-parse R^2` is `0b521f39af99f5856b69dfcc25bc274ec9dc804a`;
 * `git merge-base --is-ancestor bc78660b5fac857fce3873eb6cda0445d1903da1 R`;
 * for each head of PRs 196 and 197 in `docs/reconciliation/OPEN_PRS.json`:
-  `git merge-base --is-ancestor <head> R`.
+  `git merge-base --is-ancestor <head> R`;
+* **H1-b:** with `S = R^1`:
+  * `git rev-parse S^{tree}` equals `H^{tree}`;
+  * `git rev-list --parents -n 1 S` lists exactly one parent, `bc78660b5fac857fce3873eb6cda0445d1903da1`;
+  * `git merge-base --is-ancestor H R` **fails**;
+  * `git rev-list R --not bc78660b5fac857fce3873eb6cda0445d1903da1 0b521f39af99f5856b69dfcc25bc274ec9dc804a`
+    prints exactly `R` and `S`;
+  * none of the three commits that added the recorded responses is an ancestor:
+    `git merge-base --is-ancestor <c> R` fails for `f17649ca`, `dbe31d72` and `87900a17`;
+  * no withheld response is reachable. In Python:
+    `retained_history.reach(".", R, [bc78660b…, 0b521f39…], retained_history.withheld_blobs(".", search_from="H"))`
+    reports `withheld_blobs_reachable: []`;
+* **H1-a:** `git rev-parse R^1` is `H`.
 
 **Widening review (C1).** Each item must be answered "no", with the reason.
 
@@ -101,7 +113,8 @@ succeed:
 | Could a tag admit anything? | no: the gate compares the tag's target with the commit ID compiled into it (`REQUIRED_CHECKS.md`, "Retained-source tags") |
 | Does anything bind less than it appears to? | **yes, and it is documented**. On the core, the retained-source gate runs only when integration paths change (path-filtered workflow, not required). The binding control on every pull request is the V23 manifest, through `source-policy` and `verified-public-integration` (`REQUIRED_CHECKS.md`, "Which gates bind"; decision C2b) |
 | Does the admitted tree contain material whose redistribution is not established? | **yes**: the recorded model outputs; decide L1 to L3 first (`MODEL_OUTPUT_LICENSING.md`) |
-| Does the retained commit keep withheld material reachable? | **yes, as designed**. Its first parent `H` reaches the three commits that added the recorded outputs (`f17649ca`, `dbe31d72`, `87900a17`), so the public tag keeps them reachable even after stubs and a squash merge. Decide H1 (and P1) before C1; with H1-b, check that the retained commit's first parent has protected `main` as parent and does not reach those commits |
+| Does the retained commit keep withheld material reachable? | **under H1-a, yes, as designed**: its first parent `H` reaches the three commits that added the recorded outputs (`f17649ca`, `dbe31d72`, `87900a17`), so the public tag keeps them reachable even after stubs and a squash merge. **Under H1-b, no**: the C1.6 commands show it. Neither design removes them from pull requests 212 and 216, or from clones (`H1B_CLEAN_HISTORY.md`) |
+| Could H1-b let a different tree or history be pinned than the one reviewed? | no: the commit ID fixes tree and parents; `check_admission_consistency` rebuilds it from `H` and compares; the gate checks the same things under both designs, and a substituted commit, moved or deleted tag, or broken ancestry fails (`h1b/h1b-adversarial.json`) |
 | Does V23's own text say anything the owner may not want permanent? | its `reviewer` field reads "PROPOSED by an AI assistant for the owner's review; not reviewed, not approved". Keep it as honest provenance, or change it in the generator and regenerate (which changes every digest) |
 
 ## 3. D1 to D3: website

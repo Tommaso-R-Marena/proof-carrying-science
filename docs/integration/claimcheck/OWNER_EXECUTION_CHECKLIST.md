@@ -10,14 +10,17 @@ Order:
 * **Core:** L1–L3, P1 and H1, then T1 (recommended), then C1, then C2 (and optionally C2b), then
   R1.
 * **Website:** D1 and D3, then regenerate, then D2 (and optionally D2b).
-* **Both:** merge and deployment are separate decisions after these.
+* **Both, optional:** G1, the gate-definition guard, at any time; it changes how every later gate
+  change is merged.
+* **Both:** merge and deployment are separate decisions after these. Before any merge, run the
+  gate-definition check in "Before every merge" below.
 
 Any change to the branch after the evidence was generated (an L decision, D1, D3) changes the
 source commit. The evidence must then be regenerated and reviewed again.
 
 ## Before admission
 
-### L1–L3. Recorded model outputs ([`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md), section 4)
+### L1–L3. Recorded model outputs ([`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md), sections 4 and 7)
 * **Recommended:**
   * L1 keep the 23 Gemini outputs, with provenance in `model_outputs_inventory.json`;
   * L2 and L3: withhold the 21 Nemotron outputs and the 1 Cohere output from further publication.
@@ -26,13 +29,26 @@ source commit. The evidence must then be regenerated and reviewed again.
   * ask NVIDIA (L2(a)), and restore the originals if permitted;
   * squash-merge PR 212 only;
   * no history rewrite.
-* **Steps:**
-  1. Archive the 22 originals and check them against `original_sha256`.
-  2. Run `python -m research.claimcheck_v1_1.governance.withhold_model_outputs --apply --groups N,C --decision "<reference>"`
+* **Authorised (2026-11-19):** preparation, and the replacement after a verified private archive.
+* **Status:** the capacity study's cache-dependent work is finished. The archive tool is verified on a
+  private container copy: 22 of 22 files match, archive SHA-256 `91acf4ff…69a3`. That copy is not an
+  archive: the container is disposable. No genuinely private, durable destination is available to
+  this session, so the originals are unchanged.
+* **Your action (A1), one of:**
+  * run `python3 -m research.claimcheck_v1_1.governance.archive_model_outputs --out <private dir>` on
+    a machine you control. It must print `"recoverable_and_complete": true` and archive SHA-256
+    `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3`. Keep the archive privately
+    and confirm;
+  * or attach a computer folder to this session for the archive;
+  * or name another private destination you authorise.
+* **Steps after your confirmation:**
+  1. Run `python -m research.claimcheck_v1_1.governance.withhold_model_outputs --apply --groups N,C --decision "<reference>"`
      and commit the result.
+  2. Run the suites and `withholding_effect`.
   3. Regenerate the admission evidence.
 * **Effect:** no frozen file and no test is affected. Regenerating the Nemotron arm offline then
-  needs your archive. This is an ordinary commit, but it changes the census.
+  needs your archive. The measured effect on every offline tool is in `withholding/withholding-effect.json`
+  (`MODEL_OUTPUT_LICENSING.md`, section 7). This is an ordinary commit, but it changes the census.
 * **Not before:** the capacity run has finished reading the original caches, and you have confirmed
   the final archival and replacement plan (owner, 2026-11-19).
 * **What it does not do:** withdraw public access. The originals stay reachable through PR 212,
@@ -42,18 +58,22 @@ source commit. The evidence must then be regenerated and reviewed again.
 ### P1. Provider clarification (NVIDIA), before C1
 * **Decision:** whether to ask NVIDIA if research outputs obtained through trial access may be
   published (suggested wording: `MODEL_OUTPUT_LICENSING.md`, section 6).
-* **Who sends it:** you; this work contacts no provider.
+* **Who sends it:** you; this work contacts no provider. Draft for your review:
+  [`P1_NVIDIA_REQUEST_DRAFT.md`](P1_NVIDIA_REQUEST_DRAFT.md).
+* **Not a prerequisite** for the capacity study, non-protected preparation or H1-b.
 * **Outcome:** decides between H1-a and H1-b, and whether the 21 Nemotron originals may be restored.
 
-### H1. Historical exposure, before C1 (`MODEL_OUTPUT_LICENSING.md`, section 6)
-* **H1-a:** accept the existing exposure; C1 as designed.
-* **H1-b:** build the retained commit on a new commit with the admitted tree and protected `main` as
-  its parent, so the tag does not reference this branch's output-containing history. This changes
-  the retained-source design: the tooling changes and the dry run is regenerated. Needs
-  authorisation.
+### H1. Historical exposure: which retained commit C1 pins ([`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md))
+* **H1-b (recommended):** the retained commit's first parent is a snapshot with the admitted tree on
+  protected `main` (`bc78660b`), so the tag keeps no commit of this branch reachable. Implemented in
+  the tooling (`prepare_core_admission --history clean`, the default) and tested: 12 adversarial
+  tests (`h1b/h1b-adversarial.json`). The gates are unchanged and check the same things.
+  * **Cost:** the protected tag retains the reviewed tree, not the branch's development history.
+  * **What it does not do:** remove anything from pull requests 212 and 216, or from clones.
+* **H1-a (fallback):** the original design; the tag keeps the whole branch reachable, including the
+  commits that added the recorded responses.
 * **H1-c:** rewrite history. Not recommended.
-* **Recommended:** decide after P1's answer. If there is no permission, H1-b is the smallest step
-  that avoids adding a protected public reference.
+* **Authorises:** which of the two designs C1 pins. Nothing is created by this decision itself.
 
 ### T1. Retained-source tag ruleset ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "Retained-source tags")
 * **Authorises:** in each repository, the tag ruleset specified in
@@ -62,8 +82,11 @@ source commit. The evidence must then be regenerated and reviewed again.
   * Restrict creations, updates and deletions;
   * Block force pushes;
   * bypass only for the repository-admin role.
+* **Checked against GitHub's published REST description** (2026-11-19): the body validates and four
+  malformed variants are rejected (`REQUIRED_CHECKS.md`). Choose "Repository admin" in the UI rather
+  than relying on the role number `5`, which the description does not document.
 * **Verify:** listing tags still shows the two existing intake tags at `0b521f39…` (core) and
-  `d35e2b5e…` (site).
+  `d35e2b5e…` (site). A push of a `pcs-source-intake/*` tag by anyone but you is refused.
 * **Undo:** delete the ruleset.
 
 ## Core
@@ -85,8 +108,10 @@ source commit. The evidence must then be regenerated and reviewed again.
      It must report `all_as_expected: true`. The V23 digest, the control-file digests and the
      retained commit must equal the PR description for `H`, and
      `review_v23_manifest --emit D2 --head H` must report `consistent: true`.
-  3. Create the retained commit with the exact command in `ADMISSION_PROPOSAL.md` (fixed identity,
-     date and message). Its ID must equal `proposed_retained_source_commit.commit` in `D1/dry-run.json`.
+  3. Create the retained commit with the exact commands in `ADMISSION_PROPOSAL.md`, step 4, for the
+     design chosen under H1 (fixed identity, date and messages; two commands under H1-b). Its ID must
+     equal `proposed_retained_source_commit.commit` in `D1/dry-run.json`, and the dry run must report
+     `retained_history_as_designed: true`.
   4. Check that the tag name is free:
      `git ls-remote --tags origin 'refs/tags/pcs-source-intake/core-claimcheck-v1-20261114'` prints
      nothing. Then run
@@ -182,6 +207,10 @@ new values.
 * **Undo before merge:** delete the tag and drop the control commit.
 
 ### D2b (optional). Require `original-pr-ancestry-and-production-preservation` on site `main` (ruleset)
+* **Caveat (verified 2026-11-19):** a pull request that edits its own workflow can make this check
+  pass without the gate running (`REQUIRED_CHECKS.md`, "D2b: can a pull request make the required
+  check vacuous?"). The same holds for every required check in both repositories. Smallest protection:
+  the gate-definition check before every merge (below), or G1.
 * **Authorises:** adding exactly that check, with the source GitHub Actions, to the active site
   `main` ruleset ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "D2b"). It runs on every pull request
   and so can never stay pending.
@@ -189,6 +218,29 @@ new values.
   rule.
 * **Consequence:** every later website change needs a retained-source admission.
 * **Undo:** remove it from the ruleset.
+
+### G1 (optional, both repositories). Gate-definition guard (protected: one workflow on `main` and one required check)
+* **Authorises:** committing `docs/integration/claimcheck/g1/gate-definition-guard.<repo>.yml` to
+  `.github/workflows/` on `main`, through a reviewed pull request, and then adding
+  `gate-definition-unchanged` (GitHub Actions) to the `main` ruleset.
+* **What it does:** a `pull_request_target` job, defined on `main` only, fails whenever a pull
+  request changes any workflow or a gate-defining file. It reads the pull request as data and runs
+  nothing from it; the token is read-only and no secret is used.
+* **Consequence:** every later gate change (C1, C2b, D2 and later admissions) merges only through
+  your recorded ruleset bypass.
+* **Before relying on it:** check in a scratch repository how GitHub decides a required check when two
+  workflows report the same job name (`REQUIRED_CHECKS.md`, "G1").
+* **Undo:** remove the check from the ruleset, then remove the workflow.
+
+## Before every merge (no change; recommended now)
+
+Run, from a full clone:
+
+* core: `git diff --name-only origin/main...<head> -- .github/workflows scripts/check_reconciled_prs.py scripts/test_reconciled_prs.py docs/reconciliation/OPEN_PRS.json research/integration_v2 docs/integration/2026-11-05 docs/integration/2026-11-14`;
+* site: `git diff --name-only origin/main...<head> -- .github/workflows scripts/check_reconciled_prs.py scripts/test_reconciled_prs.py docs/reconciliation/OPEN_PRS.json`.
+
+Any output means the pull request changes the definition of a gate. Merge it only as its own
+approved protected change.
 
 ## After all of the above (separate decisions)
 
