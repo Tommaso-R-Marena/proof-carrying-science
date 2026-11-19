@@ -184,6 +184,34 @@ Evidence: `evidence/gemini-3.5-flash-lite-v5-cf/`.
 
 Local measurement only — not a frontier SOTA claim.
 
+## CLadder LLM accuracy vs published SOTA (v1.5 protocol)
+
+Honest clarification: the earlier CLadder work matched the **structural oracle
+engine** (ATE/ETT), which is *not* an LLM leaderboard comparison.
+
+This section is the **natural-language yes/no** protocol from Jin et al.
+(NeurIPS 2023), run on a free-tier-limited stratified sample.
+
+Evidence: `evidence/cladder-v1-llm-sota-sample/`  
+Model: `gemini-3.5-flash-lite`, vanilla single-call yes/no, 12 questions × 3 rungs
+(n=36), seed `20251118`, ≥12s between calls.
+
+| Method | Overall | R1 | R2 | R3 | Notes |
+|--------|--------:|---:|---:|---:|-------|
+| Random (published) | 49.27 | 50.28 | 48.40 | 49.12 | full set |
+| GPT-4 (published) | 62.03 | 63.01 | 62.82 | 60.55 | full set |
+| GPT-4 + CausalCoT (published) | 70.40 | 83.35 | 67.47 | 62.05 | full set |
+| Qwen3 + CRAwDAD debate (published) | 89.41 | 96.24 | 93.51 | 80.35 | full set; multi-agent |
+| **Gemini-3.5-flash-lite (this sample)** | **66.67** | **75.0** | **66.7** | **58.3** | n=36; Wilson 95% CI ≈ [50%, 80%] |
+
+Findings:
+- Sample point estimate is **above GPT-4**, **below CausalCoT**, and **far below**
+  CRAwDAD dual-agent SOTA — with wide CI (small n).
+- Rung ordering matches the paper (harder at rung 3).
+- This does **not** claim PCCR (or Gemini-lite) beats SOTA on the full 10k.
+- PCCR’s distinct contribution remains **proof-carrying certificates** when the
+  DAG/SCM is explicit, not NL leaderboard SOTA.
+
 ## Non-claims
 
 - Not production PCS authority

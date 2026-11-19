@@ -50,6 +50,16 @@ def main(argv: list[str] | None = None) -> int:
     cl.add_argument("--atol-questions", type=float, default=1e-4)
     cl.add_argument("--limit-models", type=int, default=None)
     cl.add_argument("--limit-questions", type=int, default=None)
+    cll = sub.add_parser(
+        "cladder-llm",
+        help="CLadder NL yes/no LLM accuracy sample (compare to published SOTA)",
+    )
+    cll.add_argument("--data-dir", type=Path, required=True)
+    cll.add_argument("--out", type=Path, required=True)
+    cll.add_argument("--model", default="gemini-3.5-flash-lite")
+    cll.add_argument("--per-rung", type=int, default=12)
+    cll.add_argument("--seed", type=int, default=20251118)
+    cll.add_argument("--min-interval", type=float, default=12.0)
 
     args = p.parse_args(argv)
 
@@ -167,6 +177,28 @@ def main(argv: list[str] | None = None) -> int:
         if args.limit_questions is not None:
             argv.extend(["--limit-questions", str(args.limit_questions)])
         return cladder_main(argv)
+
+    if args.cmd == "cladder-llm":
+        from research.proof_carrying_causal_reasoning_v1.external.cladder_llm_eval import (
+            main as cladder_llm_main,
+        )
+
+        return cladder_llm_main(
+            [
+                "--data-dir",
+                str(args.data_dir),
+                "--out",
+                str(args.out),
+                "--model",
+                args.model,
+                "--per-rung",
+                str(args.per_rung),
+                "--seed",
+                str(args.seed),
+                "--min-interval",
+                str(args.min_interval),
+            ]
+        )
 
     return 2
 
