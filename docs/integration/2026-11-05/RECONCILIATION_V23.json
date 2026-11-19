@@ -47,7 +47,7 @@
     "trace_required_census": 45,
     "v23_pccr_admission": {
       "package": "research/proof_carrying_causal_reasoning_v1/",
-      "files_admitted": 306,
+      "files_admitted": 332,
       "draft_research_only": true,
       "production_authority": false,
       "notes": "Proof-carrying causal reasoning research package (claim\u2192identify\u2192intervene/bounds/counterfactual certificates; external CLadder oracle evidence). Explicit non-claims retained in package README/RESULTS."
@@ -64704,7 +64704,7 @@
       "mode": "100644"
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
-      "sha256": "bf18424c645bdfdd364b759012cdccd41a9d059782cec56760a19d49f52991e4",
+      "sha256": "418f68e4a5bd427bd0a0b7352c16b7d4bfb4af716a636bc0daa9c9a643f8c16d",
       "mode": "100644"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
@@ -85051,12 +85051,20 @@
       "sha256": "487611a491663498acc5ceeb162013c7b0a3b2b4d6dec56e5031a3711b1ef0f3",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/BLIND_EVALUATION.md": {
+      "sha256": "d4519842876ee722ae36afdbc9d95a2cdc10e073910ca1e3354e4bee5f60fb99",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/FINITE_RESPONSE.md": {
+      "sha256": "d339902ab9fa86c45507a07f453272cbe93a223d2d6127ed715ebe99a51aa188",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/README.md": {
-      "sha256": "c9d01fc279daf63637344bf3a0781418edcf1a078fb32ef377fae9c665537444",
+      "sha256": "fb032c73060a6b7a986d9e71f71deded2c8e1c7bc1c31be6f5183ddbbfc3d08f",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/RESULTS.md": {
-      "sha256": "c60f06b75d1692e51b82b4b6c03d6505a96c172c7c702200367f06fd85c145d4",
+      "sha256": "2e084b81e788664f2720fbddc99180db176fbe44737d097e74548d988e457817",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/__init__.py": {
@@ -85064,7 +85072,7 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/__main__.py": {
-      "sha256": "3413388ddef9f6288d122f7ec5f169c2b764e7960ed8071ffb0d8a9b0227109c",
+      "sha256": "7b71cd1fd8152083e4284fc9fdf1a7c43fd0b3db43b148c92a0f14776b9f60a0",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-causalcot-flash-lite/SHA256SUMS": {
@@ -86035,6 +86043,14 @@
       "sha256": "d6e891f57af4e94edc7bab9a1b248a0ba425bee35454cb099b075e43c17e9e9d",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/external/blind_eval.py": {
+      "sha256": "2348fd320bd07804cd130ba7fa829e9aa7b509c9ddacc60387fa7805ab77ea72",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/external/blind_predict.py": {
+      "sha256": "007b3579e71348dc910b06a4552fc72d9a9194bbe50d19b20708e2a76d677c93",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/external/cladder_bridge.py": {
       "sha256": "58dfb015a8f8ebe5a263bb3751a696fc0ed666bf7122ff7bfa8df274a124c521",
       "mode": "100644"
@@ -86044,15 +86060,19 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/external/cladder_certified_solver.py": {
-      "sha256": "8d90d1627a49279ea534d1ab0dc995a4eac8fbb39aa853d03161b5b5f4a86a18",
+      "sha256": "fac3af2161eb3ed3677f43836f3b45782e61d067379a7104c1f045d8f7d73a94",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/external/cladder_hybrid_solver.py": {
-      "sha256": "f420c0cfcc74e1fb249315532df8644aac3c966e5c449e317e32ea51a7448a59",
+      "sha256": "9ae03448dd8eabdc9d8b7b0dc54276fa882f359bb33b5fbcb6911529e81b20b0",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/external/cladder_llm_eval.py": {
       "sha256": "e20490307de2c44243fee009afe7791f9521a6c6e01840a76306a3d0b5df8b6c",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/external/finite_replay.py": {
+      "sha256": "febfede54845fff6304cdb00d35e33e9664ae86f7c33f296d7bf4ddc8ce0037f",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/external/run_cladder_eval.py": {
@@ -86080,7 +86100,7 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/d_separation.py": {
-      "sha256": "26dec7f5567ad2819c0cb48626faf6e7591bc1e69547aa785426d9865e6edbeb",
+      "sha256": "2a7b1a4dfed91ef504e67f30aec0d9dae7a1729a21ec55b8056a7ccb2237afff",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/dag.py": {
@@ -86088,7 +86108,7 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/frontdoor.py": {
-      "sha256": "515071df53a0b95b225aab17e755858872b6674397a3a40f710d18e54b6b6522",
+      "sha256": "6bf8913fd778002c6ce7d5f8bc3bc4102d7ee0266794239f96a37eda4fe2ba53",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/identify.py": {
@@ -86100,15 +86120,19 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/kernel/scm.py": {
-      "sha256": "e9921be36cbc8a3691f3e8797408f756c357136f1a663c3709914bf39bff3707",
+      "sha256": "3f03e1ce085abb5426426a695eae0cba801cab1cd431a3dc42bc083294757509",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/lean/.gitignore": {
       "sha256": "fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/lean/CheckResponseBounds.lean": {
+      "sha256": "aaeab4011a807ca4b0d8a233f3e81b1db572e34d927a91479bb274a0b6912855",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr.lean": {
-      "sha256": "27d9c3aba0414f9f262ce6dcc591bde0fc9db1c57b9bce23f2d8c5b8b9aed219",
+      "sha256": "bad79380c2a696ffde24aa29b2811c471c042ea3da56531e2cf351aef7563e26",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/Basic.lean": {
@@ -86133,6 +86157,10 @@
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/DoCalc.lean": {
       "sha256": "8c0315835d44cfc226b4e5a0b01bbdda91a24e6f351b22f3e52103c99d9a3cff",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/FiniteResponse.lean": {
+      "sha256": "e09e87b26404dea7eac20a4d5764528d256b8e77c555ea7d6cc84f94f8033eda",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/FrontDoorInd.lean": {
@@ -86171,6 +86199,14 @@
       "sha256": "33a61061b083649d01fbb921e3a9cad2348a466c2e7c8cece60b8ffddb1e87b7",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/lean/PcsPccr/SharpResponseBounds.lean": {
+      "sha256": "a270ca9174d5d86f12bcd95d04808209bc2f90669090554b4a806f2f8b8921ca",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/lean/ResponseAxioms.lean": {
+      "sha256": "444865b248c61906900d330e7163c8b430fc863478e44e11963929c2967aba92",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/lean/lake-manifest.json": {
       "sha256": "e33df9ae3c6293089fb5e4f632529bc66b733f2abab2ce2d5f08b07234d2a5c5",
       "mode": "100644"
@@ -86193,6 +86229,58 @@
     },
     "research/proof_carrying_causal_reasoning_v1/programs/pipeline.py": {
       "sha256": "74ebeec46906920b73f000c989aa8e9413feaaa894a49146f1eaaa5fbf68428b",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/FRONTIER.md": {
+      "sha256": "4b040f0bdcbe0dd82f94f309bf63ad6f56aa204ee288858a86da61424c2b1998",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/benchmark_frontier.py": {
+      "sha256": "cfa36cd8a96c6a029689fab294710287fdc9f76634a0ea8cedb5f6f85534c44f",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/blind_protocols/A.report.json": {
+      "sha256": "4f398154313643516a1e40c5a52fb5fabe0e4a3a2be7d7b1ba46a0d7951c6195",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/blind_protocols/A.rows.json.gz": {
+      "sha256": "35f944da0493103059e32b7b7f8b389816dbeee9037fee3429cc77c1f2a77612",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/blind_protocols/B.report.json": {
+      "sha256": "30692cf5f16b4fcebb8c7a3eb22be7a0d5df26cd36f002e75c2c2c9202db118f",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/blind_protocols/B.rows.json.gz": {
+      "sha256": "f471acb67db60c3135b2189904fc8fac34addae8f42d1a8c4abd5b97c1f27931",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/blind_protocols/C.sources.json": {
+      "sha256": "fb5b4f55666709686c25e19e27068d0e931736d95b4290371447c23f3c936c46",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/frontier-results.json": {
+      "sha256": "1ad8d320e3cd58a0d7f3da4eebebfdc6d2c0cefd7f8aa0c2f9f65ab9525e9be0",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/live_blind/README.md": {
+      "sha256": "f59672791099a7fe83ab81d7131e31ee43eac3ad549a15b9bfe50352b003dd1a",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/live_blind/attempt.json": {
+      "sha256": "7221d4e3da9fcaa343a3e7bb0b556889472ceb797531f5c5113c66914f2d9e72",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/live_blind/frozen.sha256": {
+      "sha256": "5b69ab3869b2e085125270e77dff353274e09fc9bfffb79836ad9a8903d652b7",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/live_blind/pilot.py": {
+      "sha256": "0d5ed4f894608ad9ce830a77e32374ccbfbc99dcd7ff26a221a47f38e7c5f6eb",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/qualification/live_blind/score.json": {
+      "sha256": "cfd969ad3837ccc24a4e79cc71e97f17f9a34e089bfa7bcc8399aed293a697a6",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/results/qualified-v1/results.json": {
@@ -86243,6 +86331,14 @@
       "sha256": "2a4f51c201ec69e08cdbe01cd347efe8cbc40da228ff285a9a59c4908a6a0bc3",
       "mode": "100755"
     },
+    "research/proof_carrying_causal_reasoning_v1/scripts/replay_blind_protocols.py": {
+      "sha256": "3b051fd4e2dd483219d2de077f910f3ce275574ab7a523b04399e6013412198e",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/scripts/replay_response_bounds.py": {
+      "sha256": "9e581011b2001bb832c9f8d031384f41655c5656668f5eb93510407fe1f60109",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/tasks/__init__.py": {
       "sha256": "bf8da37c2f1adaec1bf7b8f44b4537d44b7e6ed97036d60d84013400b70c9fb3",
       "mode": "100644"
@@ -86255,6 +86351,10 @@
       "sha256": "c1aaf0ce43bbf275e2d8ac4c3e40874ac0071aa8ff2c5a9d7fb76e8e2ff3d32e",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/tests/test_blind_protocols.py": {
+      "sha256": "bf22b599d404c3bccf4aaa0d13e7b74e3b5a2d01177e010d3d1d1bd734a125fc",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/tests/test_cladder_bridge.py": {
       "sha256": "5da63aff9a9abbd098450d163728d034ed17a553a3a3ada75245aed251c0296f",
       "mode": "100644"
@@ -86265,6 +86365,10 @@
     },
     "research/proof_carrying_causal_reasoning_v1/tests/test_frontdoor_bridge.py": {
       "sha256": "a65ec889f05ffd1968ca18b8c7267e4450b9f365ed8d8bfa8dd94f865fb6ca63",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/tests/test_frontier.py": {
+      "sha256": "e098c4204bf77da4852bd8bb6a165043d7c563102c8777f080780f43d27c8bb9",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/tests/test_instrument.py": {
