@@ -257,21 +257,12 @@ def run(*, output: Path, model: str = DEFAULT_MODEL, forml4_n: int = 6, minif2f_
                 "basic"
             ],
             "our_sample": our_forml4,
-            "verdict": (
-                "PGRA zero-shot does not autoformalize FormL4/Mathlib English (by design). "
-                "Gemini-flash-lite produces Lean-looking output often, but without Mathlib "
-                "compile we cannot claim PDA-parity; soft reference match remains far below "
-                "PDA RFT+Verifier ~46% basic compile SOTA."
-            ),
+            "verdict": "Token overlap is descriptive. The benchmark and scoring procedures differ.",
         },
         "minif2f_autoformalization": {
             "published_SOTA_pass8_approx": "Kimina-Autoformalizer ~92%; LongCat ~99-100%",
             "our_sample": our_mini,
-            "verdict": (
-                "Our gated PGRA path zero-shot rate is ~0% on miniF2F informal (correct fail-closed). "
-                "Raw Gemini autoformalization soft-match is not competitive with ~92%+ SOTA "
-                "autoformalizers; proving SOTA (~84-93% pass@32) is a separate axis we do not claim."
-            ),
+            "verdict": "This metric measures lexical overlap. No matched semantic or proof evaluation was run.",
         },
     }
 

@@ -90,39 +90,9 @@ accepts **4/4**. Remaining free-tier RPM/RPD is **not** returned by the API —
 see AI Studio for project `171569345899`; this run used ~21 flash-lite calls
 (~8–10% of a typical 500 RPD flash-lite day including setup probes).
 
-### SOTA comparison (FormL4 + miniF2F)
+### External statement evaluation
 
-`sota_comparison.py` compares against published numbers (PDA arXiv:2406.01940;
-miniF2F autoformalization / proving leaderboards).
-
-**FormL4 (greedy compile % published vs our subset proxy):**
-
-| Method | Basic | Notes |
-| --- | ---: | --- |
-| GPT-4-Turbo | 1.47% | PDA Table 2 compile |
-| **PDA RFT+Verifier SOTA** | **46.28%** | PDA paper |
-| PGRA zero-shot (n=8) | **0%** | fail-closed by design |
-| Gemini-3.1-flash-lite raw AF (n=8) | soft-F1≥0.5 **12.5%** (mean F1 0.36) | proxy; no Mathlib compile |
-
-**miniF2F:** Autoformalization SOTA ~92–100% pass@8; proving SOTA ~84–93% pass@32.
-Our gated zero-shot **0%**. Raw Gemini lexical soft-F1 looks high on n=8 but is
-**not** verified SOTA parity. Proving SOTA is a different axis (gold formal given).
-
-**Finding (earlier soft-match proxy):** gated PGRA alone is not a Mathlib AF SOTA.
-
-### Competitive SOTA push (Kimina + Mathlib + Gemini repair)
-
-External components: Kimina-Autoformalizer-7B GGUF, Mathlib v4.28 compile oracle,
-Gemini-3.1-flash-lite few-shot/repair (`sota_competitive.py`).
-
-| Benchmark | Published SOTA | This stack |
-| --- | ---: | ---: |
-| FormL4 Basic compile % | PDA **46.28%** (n=970) | **63.75%** (n=80 combined; head 75%, next-40 52.5%) |
-| miniF2F AF (compile proxy) | Kimina ~**92.2%** pass@8 | **87.5%** (14/16) |
-
-**Finding:** On FormL4-basic compile success, the ensemble **beats published PDA
-SOTA by ~17pp** on an 80-problem slice. miniF2F compile proxy is near Kimina’s
-reported AF band. Still research-only; not full 970 / not proving pass@32.
+The historical 51/80 FormL4 score measures compilation after up to several candidates per task. Two compiler successes changed the mathematical claim. The published PDA 46.28% result covers the complete 970-item Basic split, with a different system and budget. The original ranking and the miniF2F parity suggestion are withdrawn. Historical artifacts retain their recorded values. The analysis of candidate counts, source checking and replay instructions is in the [statement evaluation audit](STATEMENT_EVALUATION.md).
 
 ## What was built
 
@@ -146,7 +116,7 @@ reported AF band. Still research-only; not full 970 / not proving pass@32.
 - **v2 proof-coupled:** proved `3→12`; rising
 - **v3 dual:** fitting proved `2→6`; holdout proved nondecreasing; rising fitting certified
 - **Lean:** research package typechecks under Lean 4.28.0; wire CLI returns ACCEPT
-- **Source census:** V23 whole-tree reconcile `--require-committed` passes locally
+- **Source census:** The original report recorded V23 admission for its reviewed baseline. Later research additions require their own review.
 - **V7 census:** 38 ProofGated modules restored
 
 ## Non-claims
@@ -163,19 +133,19 @@ reported AF band. Still research-only; not full 970 / not proving pass@32.
 export PATH="$HOME/.elan/bin:$HOME/.local/bin:$PATH"
 cd proof-carrying-science
 PYTHONPATH=. python3 -m pytest research/lean_recursive_autoformalization_v1/tests -q
-rm -rf research/lean_recursive_autoformalization_v1/results
+out=$(mktemp -d)
 PYTHONPATH=research/lean_recursive_autoformalization_v1:. python3 -m recursive_loop \
-  --output research/lean_recursive_autoformalization_v1/results
+  --output "$out/v1"
 PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.proof_coupled_v2 \
-  --output research/lean_recursive_autoformalization_v1/results/proof_coupled_v2
+  --output "$out/proof_coupled_v2"
 PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.dual_recursive_v3 \
-  --output research/lean_recursive_autoformalization_v1/results/dual_v3 --no-harvest
+  --output "$out/dual_v3" --no-harvest
 cd research/lean_recursive_autoformalization_v1/lean && lake build
 ```
 
 ## Source census successor
 
 Reviewed combined-source contract successor
-`docs/integration/2026-11-05/RECONCILIATION_V23.json` admits the PGRA research
+`docs/integration/2026-11-05/RECONCILIATION_V23.json` records the then-reviewed PGRA research
 tree while freezing V22/V21/V20 predecessors unchanged. V7 module discovery
 remains 38.

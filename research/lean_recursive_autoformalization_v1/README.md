@@ -43,9 +43,9 @@ this research package.
 - **v1:** 8 accepted generations; certified `13→…→28`; final loss `0`
 - **v2:** proved `3→5→7→8→10→12` (`rising_proved`)
 - **v3:** fitting proved `2→6`; holdout proved nondecreasing; holdout never gates
-- 38 pytest cases passed
+- 53 pytest cases passed on the original PR head
 - Lean gate modules typecheck on Lean 4.28.0 under `lean/`
-- V7 ProofGated census remains 38; V23 source census admits this tree
+- The original research report recorded a V7 ProofGated census of 38 and V23 admission for its reviewed baseline
 
 ## Reproduction
 
@@ -53,9 +53,9 @@ this research package.
 export PATH="$HOME/.elan/bin:$HOME/.local/bin:$PATH"
 cd /path/to/proof-carrying-science
 PYTHONPATH=. python3 -m pytest research/lean_recursive_autoformalization_v1/tests -q
-rm -rf research/lean_recursive_autoformalization_v1/results
+out=$(mktemp -d)
 PYTHONPATH=research/lean_recursive_autoformalization_v1:. python3 -m recursive_loop \
-  --output research/lean_recursive_autoformalization_v1/results
+  --output "$out"
 cd research/lean_recursive_autoformalization_v1/lean && lake build
 ```
 
@@ -112,19 +112,11 @@ Uses facebookresearch/miniF2F informal + FormL4 (PDA) samples under free-tier
 soft caps. Measured: miniF2F/FormL4 zero-shot 0; LLM mostly abstains; bridge
 unrestricted→controlled **4/4** gated. API does not expose remaining quota.
 
-## SOTA comparison
+## Statement elaboration and source faithfulness
 
-```bash
-export GEMINI_API_KEY=...
-PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.sota_comparison \
-  --output research/lean_recursive_autoformalization_v1/results/sota_comparison \
-  --forml4-n 8 --minif2f-n 8
-```
+On the first 80 historical FormL4 Basic questions, 28 first candidates and 51 candidates after retries were recorded as compiling. A review found two meaning changes among the 51 successes. The 80 cases and model budgets differ from PDA’s published evaluation on 970 questions. The historical comparison cannot establish a ranking. A fresh controlled-grammar census produced zero candidates on all 970 questions.
 
-Earlier soft-match proxy was not competitive. Competitive stack
-(`sota_competitive.py`: Kimina GGUF + Mathlib compile + Gemini repair) reaches
-**FormL4-basic 63.75% compile (n=80) > PDA 46.28%**, and miniF2F compile proxy
-**87.5% (n=16)** near Kimina AF SOTA.
+The [finite reference receiver](FINITE_REFERENCE.md) supplies a separate constructive equivalence check for Boolean formulas. The statement checker accepts a bounded arithmetic and propositional fragment. Given a separately supplied reference, it checks definitional equality in Lean, then attempts a proof and records its axiom dependencies. See the [evaluation audit and replay instructions](STATEMENT_EVALUATION.md).
 
 ## Conflict avoidance
 
