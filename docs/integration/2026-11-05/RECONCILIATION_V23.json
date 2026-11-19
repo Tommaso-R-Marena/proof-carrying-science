@@ -47,10 +47,10 @@
     "trace_required_census": 45,
     "v23_pccr_admission": {
       "package": "research/proof_carrying_causal_reasoning_v1/",
-      "files_admitted": 125,
+      "files_admitted": 134,
       "draft_research_only": true,
       "production_authority": false,
-      "notes": "Proof-carrying causal reasoning research package (claim\u2192identify\u2192intervene/bounds/counterfactual certificates). Explicit non-claims retained in package README/RESULTS."
+      "notes": "Proof-carrying causal reasoning research package (claim\u2192identify\u2192intervene/bounds/counterfactual certificates; external CLadder oracle evidence). Explicit non-claims retained in package README/RESULTS."
     }
   },
   "control_paths": [
@@ -64704,7 +64704,7 @@
       "mode": "100644"
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
-      "sha256": "a16032d2203886f920d2d137dfa47c879385250c93d71f57823a861cf20c8e1f",
+      "sha256": "bf18424c645bdfdd364b759012cdccd41a9d059782cec56760a19d49f52991e4",
       "mode": "100644"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
@@ -85052,11 +85052,11 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/README.md": {
-      "sha256": "46eeb4a1aa10f06e18b268f72d48fa7aae15f7e45b59a7eb86df4b2e71725a8c",
+      "sha256": "c9d01fc279daf63637344bf3a0781418edcf1a078fb32ef377fae9c665537444",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/RESULTS.md": {
-      "sha256": "c96d34da9b116adb6a162bfc3f023f95fac93d8d37288f88059d0df591c6984d",
+      "sha256": "ebfb4db16e37f28ba302af4641e2b2d9a93553787ca82e900b3fd4c9500ea6ac",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/__init__.py": {
@@ -85064,7 +85064,27 @@
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/__main__.py": {
-      "sha256": "70202ff8f1e1cc028dbb7bea639d7c7a18a1fca7f15284bba718e1d5eb162c25",
+      "sha256": "75960840f0e5e0e6ada1dee61e3ff0b10107e7a48c1bc4c84af5b64b8ce679af",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-oracle/PROVENANCE.json": {
+      "sha256": "626b3f2b11cbec1b143cd3739c69cc9bee567ab2288b13a4421073443adc9346",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-oracle/cladder_oracle_eval.json": {
+      "sha256": "50345b865ed3df241921253089f69e95f76c2d2ec55fcdcff5a5e5b3b5bfb4bf",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-oracle/cladder_oracle_eval.sha256": {
+      "sha256": "a7c21657fe2a8edd586eecf53ac493fdcac3c69dd643270ce566a3ed21d87b02",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-oracle/exact_fraction_crosscheck.json": {
+      "sha256": "d97327868ccaa28319215d16c7c193e532b01ffdea27a1a1473a4e28f8cd89af",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-oracle/exact_fraction_crosscheck.sha256": {
+      "sha256": "901445e40c648bb614ba926c232b6eba20950cc70228b1c52bed16d4cf5b97e5",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/evidence/gemini-3.1-flash-lite-t09/call_T09.json": {
@@ -85339,6 +85359,18 @@
       "sha256": "072a4a4c97690292b8063e74641446649270f48fc7a22969ee839c22c1efb2b8",
       "mode": "100644"
     },
+    "research/proof_carrying_causal_reasoning_v1/external/__init__.py": {
+      "sha256": "d6e891f57af4e94edc7bab9a1b248a0ba425bee35454cb099b075e43c17e9e9d",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/external/cladder_bridge.py": {
+      "sha256": "58dfb015a8f8ebe5a263bb3751a696fc0ed666bf7122ff7bfa8df274a124c521",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/external/run_cladder_eval.py": {
+      "sha256": "cb280282aae651a1ff740d49493dc512ae0b795dfc0d4945dedc5d2793c09d77",
+      "mode": "100644"
+    },
     "research/proof_carrying_causal_reasoning_v1/gemini_eval.py": {
       "sha256": "518d250a1ef294eb893856a95b330af472d710db82df5446874f74112f6887e1",
       "mode": "100644"
@@ -85533,6 +85565,10 @@
     },
     "research/proof_carrying_causal_reasoning_v1/tests/test_adversarial.py": {
       "sha256": "c1aaf0ce43bbf275e2d8ac4c3e40874ac0071aa8ff2c5a9d7fb76e8e2ff3d32e",
+      "mode": "100644"
+    },
+    "research/proof_carrying_causal_reasoning_v1/tests/test_cladder_bridge.py": {
+      "sha256": "5da63aff9a9abbd098450d163728d034ed17a553a3a3ada75245aed251c0296f",
       "mode": "100644"
     },
     "research/proof_carrying_causal_reasoning_v1/tests/test_counterfactual.py": {
@@ -91044,8 +91080,8 @@
       "mode": "100644"
     },
     "research/scientific_receiver_v1/tests/test_host.py": {
-      "mode": "100644",
-      "sha256": "46916b52b9bfa2443a71ea106fd8fe891c626a1df5318eb347a65b6e1aa25a8a"
+      "sha256": "46916b52b9bfa2443a71ea106fd8fe891c626a1df5318eb347a65b6e1aa25a8a",
+      "mode": "100644"
     },
     "research/scientific_receiver_v1/tests/test_reference.py": {
       "sha256": "e5de62cba85202a4472cd6a9235b2e53c23d5779f96a3e189cfd341f9a2ac302",

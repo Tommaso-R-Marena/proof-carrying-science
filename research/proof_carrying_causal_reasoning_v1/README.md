@@ -30,7 +30,10 @@ stronger loop:
 
 Breakthrough (v1.5): exact twin-network `P(Y_x | evidence)` with certificates
 that reject confusing the counterfactual with the interventional law under
-confounding (T11: `7/20 ≠ 3/8`).
+confounding (T11: `7/20 ≠ 3/8`). Externally validated against **CLadder**
+(NeurIPS 2023): **5520/5520** Bernoulli models match published ATE+ETT
+groundtruth (twin-network ETT); **3950/3950** supported question estimands
+match (see `evidence/cladder-v1-oracle/`).
 
 This does **not** claim a new general theorem of causality, frontier-model SOTA,
 or that Lean proves full backdoor soundness for arbitrary SCMs. Lean checks
@@ -44,6 +47,15 @@ python -m research.proof_carrying_causal_reasoning_v1 list-tasks
 python -m research.proof_carrying_causal_reasoning_v1 all \
   --out research/proof_carrying_causal_reasoning_v1/results/local-run
 bash research/proof_carrying_causal_reasoning_v1/scripts/check_all.sh
+```
+
+External CLadder oracle (requires extracted `cladder-v1.zip` from
+[causalNLP/cladder](https://github.com/causalNLP/cladder)):
+
+```bash
+python -m research.proof_carrying_causal_reasoning_v1 cladder \
+  --zip /path/to/cladder-v1.zip \
+  --out research/proof_carrying_causal_reasoning_v1/evidence/cladder-v1-oracle-rerun
 ```
 
 Lean (optional, after `source scripts/activate_lean_428.sh`):

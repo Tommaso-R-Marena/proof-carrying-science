@@ -39,6 +39,17 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--tasks", nargs="*", default=None)
     g.add_argument("--min-interval", type=float, default=8.0)
     g.add_argument("--max-requests", type=int, default=12)
+    cl = sub.add_parser(
+        "cladder",
+        help="External CLadder (NeurIPS 2023) oracle match for ATE/ETT/etc.",
+    )
+    cl.add_argument("--zip", type=Path, default=None)
+    cl.add_argument("--data-dir", type=Path, default=None)
+    cl.add_argument("--out", type=Path, required=True)
+    cl.add_argument("--atol-models", type=float, default=1e-6)
+    cl.add_argument("--atol-questions", type=float, default=1e-4)
+    cl.add_argument("--limit-models", type=int, default=None)
+    cl.add_argument("--limit-questions", type=int, default=None)
 
     args = p.parse_args(argv)
 
@@ -138,6 +149,24 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
         return 0
+
+    if args.cmd == "cladder":
+        from research.proof_carrying_causal_reasoning_v1.external.run_cladder_eval import (
+            main as cladder_main,
+        )
+
+        argv = ["--out", str(args.out)]
+        if args.zip:
+            argv.extend(["--zip", str(args.zip)])
+        if args.data_dir:
+            argv.extend(["--data-dir", str(args.data_dir)])
+        argv.extend(["--atol-models", str(args.atol_models)])
+        argv.extend(["--atol-questions", str(args.atol_questions)])
+        if args.limit_models is not None:
+            argv.extend(["--limit-models", str(args.limit_models)])
+        if args.limit_questions is not None:
+            argv.extend(["--limit-questions", str(args.limit_questions)])
+        return cladder_main(argv)
 
     return 2
 

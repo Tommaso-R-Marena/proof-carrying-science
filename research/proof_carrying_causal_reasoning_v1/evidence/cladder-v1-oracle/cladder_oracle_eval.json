@@ -1,0 +1,145 @@
+{
+  "benchmark": "CLadder",
+  "breakthrough_claim": {
+    "models_ok": true,
+    "not_claimed": [
+      "natural-language LLM accuracy on CLadder prompts",
+      "production PCS authority",
+      "general continuous/nonparametric identification"
+    ],
+    "questions_ok": true,
+    "statement": "PCCR twin-network ETT and interventional ATE match the external CLadder Bernoulli oracle to numerical tolerance on all evaluated models"
+  },
+  "citation": "Jin et al., CLadder, NeurIPS 2023",
+  "data": {
+    "citation": "Jin et al., CLadder, NeurIPS 2023",
+    "models_file": "cladder-v1-meta-models.json",
+    "n_models": 7064,
+    "n_questions": 10112,
+    "questions_file": "cladder-v1-q-balanced.json",
+    "source": "causalNLP/cladder",
+    "zip_sha256": "9fdae052b1ebe4ee6a19fdfb3e1eb88a381c7345df394cea524bcce97e2349b3"
+  },
+  "elapsed_seconds": 4.16861367225647,
+  "models": {
+    "accuracy": 1.0,
+    "atol": 1e-06,
+    "by_graph": {
+      "IV": {
+        "fail": 0,
+        "ok": 800
+      },
+      "chain": {
+        "fail": 0,
+        "ok": 560
+      },
+      "collision": {
+        "fail": 0,
+        "ok": 680
+      },
+      "confounding": {
+        "fail": 0,
+        "ok": 680
+      },
+      "diamond": {
+        "fail": 0,
+        "ok": 560
+      },
+      "diamondcut": {
+        "fail": 0,
+        "ok": 320
+      },
+      "fork": {
+        "fail": 0,
+        "ok": 680
+      },
+      "frontdoor": {
+        "fail": 0,
+        "ok": 320
+      },
+      "mediation": {
+        "fail": 0,
+        "ok": 920
+      }
+    },
+    "exclude_graphs": [
+      "arrowhead"
+    ],
+    "failures": [],
+    "kind": "cladder_model_oracle",
+    "max_ate_diff": 7.771561172376096e-16,
+    "max_ett_diff": 1.6653345369377348e-15,
+    "n_evaluated": 5520,
+    "n_excluded_graphs": 920,
+    "n_fail": 0,
+    "n_ok": 5520,
+    "n_skip": 624,
+    "notes": [
+      "Primary gate: Bernoulli models excluding arrowhead (params CPT serialization does not regenerate CLadder live-model GT on that family).",
+      "ETT is computed via PCCR twin-network counterfactuals."
+    ],
+    "ok": true
+  },
+  "ok": true,
+  "package": "proof_carrying_causal_reasoning_v1",
+  "questions": {
+    "accuracy": 1.0,
+    "atol": 0.0001,
+    "by_query_type": {
+      "ate": {
+        "fail": 0,
+        "ok": 1264,
+        "skip": 158
+      },
+      "correlation": {
+        "fail": 0,
+        "ok": 1264,
+        "skip": 158
+      },
+      "ett": {
+        "fail": 0,
+        "ok": 1106,
+        "skip": 158
+      },
+      "nde": {
+        "fail": 0,
+        "ok": 158,
+        "skip": 158
+      },
+      "nie": {
+        "fail": 0,
+        "ok": 158,
+        "skip": 632
+      }
+    },
+    "failures": [],
+    "gate_on": [
+      "ate",
+      "correlation",
+      "ett",
+      "nde",
+      "nie"
+    ],
+    "gated_accuracy": 1.0,
+    "gated_n_fail": 0,
+    "gated_n_ok": 3950,
+    "kind": "cladder_question_oracle",
+    "n_evaluated": 3950,
+    "n_fail": 0,
+    "n_ok": 3950,
+    "n_scanned_matching_types": 5214,
+    "n_skip": 1264,
+    "notes": [
+      "Primary gate is causal estimands (ate/ett/nde/nie/correlation).",
+      "CLadder stored P(Y=1) can disagree with law-of-total-probability on its own serialized params; marginal is optional/diagnostic."
+    ],
+    "ok": true,
+    "query_types": [
+      "ate",
+      "correlation",
+      "ett",
+      "nde",
+      "nie"
+    ]
+  }
+}

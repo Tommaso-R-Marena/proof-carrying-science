@@ -150,6 +150,25 @@ on finite binary Markovian SCMs with shared Unif[0,1] exogenous noise.
 
 Unit tests: **52/52** pass. Qualified snapshot: `results/qualified-v5/`.
 
+## External benchmark: CLadder (NeurIPS 2023)
+
+Evidence: `evidence/cladder-v1-oracle/` (zip SHA-256 pinned in `PROVENANCE.json`).
+
+PCCR interventional ATE and **twin-network ETT** were checked against CLadder's
+published Bernoulli oracle (`cladder-v1-meta-models.json` + balanced questions).
+
+| Gate | Result |
+|------|--------|
+| Model ATE+ETT vs CLadder GT (atol `1e-6`) | **5520 / 5520** (acc **1.0**) |
+| Graphs covered | IV, chain, collision, confounding, diamond, diamondcut, fork, frontdoor, mediation |
+| Question estimands `ate/ett/nde/nie/correlation` | **3950 / 3950** (acc **1.0**) |
+| Exact Fraction kernel ↔ float twin-network (200 confounders) | **200 / 200** |
+| Excluded | `arrowhead` (serialized `params` CPTs do not regenerate CLadder live-model GT) |
+
+This is an **external oracle match**, not an LLM leaderboard score on CLadder NL
+prompts. It validates that the v1.5 counterfactual breakthrough agrees with an
+independent community benchmark's causal engine on ATE and ETT.
+
 ## Non-claims
 
 - Not production PCS authority
