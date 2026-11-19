@@ -112,6 +112,18 @@ Uses facebookresearch/miniF2F informal + FormL4 (PDA) samples under free-tier
 soft caps. Measured: miniF2F/FormL4 zero-shot 0; LLM mostly abstains; bridge
 unrestricted→controlled **4/4** gated. API does not expose remaining quota.
 
+## SOTA comparison
+
+```bash
+export GEMINI_API_KEY=...
+PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.sota_comparison \
+  --output research/lean_recursive_autoformalization_v1/results/sota_comparison \
+  --forml4-n 8 --minif2f-n 8
+```
+
+vs PDA FormL4 SOTA (~46% basic compile) and miniF2F AF SOTA (~92%+): **not
+competitive** on coverage. PGRA is fail-closed controlled-grammar certification.
+
 ## Conflict avoidance
 
 Stay inside `research/lean_recursive_autoformalization_v1/`. Do not edit open-PR

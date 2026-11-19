@@ -90,6 +90,28 @@ accepts **4/4**. Remaining free-tier RPM/RPD is **not** returned by the API —
 see AI Studio for project `171569345899`; this run used ~21 flash-lite calls
 (~8–10% of a typical 500 RPD flash-lite day including setup probes).
 
+### SOTA comparison (FormL4 + miniF2F)
+
+`sota_comparison.py` compares against published numbers (PDA arXiv:2406.01940;
+miniF2F autoformalization / proving leaderboards).
+
+**FormL4 (greedy compile % published vs our subset proxy):**
+
+| Method | Basic | Notes |
+| --- | ---: | --- |
+| GPT-4-Turbo | 1.47% | PDA Table 2 compile |
+| **PDA RFT+Verifier SOTA** | **46.28%** | PDA paper |
+| PGRA zero-shot (n=8) | **0%** | fail-closed by design |
+| Gemini-3.1-flash-lite raw AF (n=8) | soft-F1≥0.5 **12.5%** (mean F1 0.36) | proxy; no Mathlib compile |
+
+**miniF2F:** Autoformalization SOTA ~92–100% pass@8; proving SOTA ~84–93% pass@32.
+Our gated zero-shot **0%**. Raw Gemini lexical soft-F1 looks high on n=8 but is
+**not** verified SOTA parity. Proving SOTA is a different axis (gold formal given).
+
+**Finding:** On real external benchmarks we are **not** competitive with FormL4 /
+miniF2F autoformalization SOTA. PGRA’s strength is fail-closed certified
+expansion on a controlled grammar, not Mathlib/olympiad autoformalization coverage.
+
 ## What was built
 
 | Artifact | Role |
