@@ -41,6 +41,13 @@ class Summary(unittest.TestCase):
         self.assertEqual(s["candidate_supported_size_bytes"]["median"], 2000)
         self.assertFalse(s["overall"]["c7_limits_hold"])            # half the runs did not complete
 
+    def test_a_process_the_system_killed_is_a_failure_recorded_as_such(self):
+        write(self.dir / "runs.jsonl", [syn(100, "median", True, digest="a"), syn(200, "median", False, digest="k")])
+        write(self.dir / "guard.jsonl", [{"event": "finished", "obligation_sha256": "a", "peak_rss_mb": 1024.0, "stopped_for_memory": False, "exit": 0},
+                                         {"event": "finished", "obligation_sha256": "k", "peak_rss_mb": 7290.0, "stopped_for_memory": False, "exit": -9}])
+        o = C.summarise(self.dir)["synthetic"]["overall"]
+        self.assertEqual((o["runs"], o["completed"], o["killed_by_system"], o["stopped_for_memory"]), (2, 1, 1, 0))
+
     def test_c7_holds_only_when_every_limit_holds(self):
         write(self.dir / "runs.jsonl", [{**syn(100 + i, "count", True, seconds=5.0), "phase": "development", "document": "d:original"}
                                         for i in range(20)])

@@ -196,6 +196,42 @@ def rerun_killed(out: Path, real_lean: str) -> list[dict]:
     return results_out
 
 
+def safer_configuration(out: Path, real_lean: str, memory_limit_mb: int = 6 * 1024, peak_floor_gb: float = 5.0) -> list[dict]:
+    """A safer configuration, evaluated separately: two workers whose limits together fit the memory available
+    (default 2 x 6 GiB = 12 GiB < 13.35 GiB).  Re-runs every synthetic case whose peak under the documented
+    configuration exceeded `peak_floor_gb` (below that, a 6 GiB limit cannot change the outcome), with its own
+    guard log, into `safer_<limit>/`.  The documented-configuration results are not changed."""
+    from ...claimcheck_v1.lean import check_items
+    from ...claimcheck_v1.oracle import evaluate
+    from ...claimcheck_v1.spec import ClaimSpec
+    from ..perf.benchmark import table
+    from .lean_guard import make_guarded_lean
+    s = summarise(out)
+    cases = [(r["rows"], stat) for stat, runs in s["synthetic"]["runs_by_statistic"].items() for r in runs
+             if (r["peak_gb"] or 0) > peak_floor_gb]
+    sdir = out / f"safer_{memory_limit_mb // 1024}gib"
+    sdir.mkdir(exist_ok=True)
+    os.environ["PCS_CLAIMCHECK_LEAN"] = str(make_guarded_lean(sdir, real_lean, memory_limit_mb, sdir / "guard.jsonl"))
+    done = {r["key"] for r in _read(sdir / "runs.jsonl")}
+
+    def one(job):
+        rows, stat = job
+        key = f"safer:{rows}:{stat}"
+        if key in done:
+            return
+        data = table(rows)
+        spec = ClaimSpec(stat, "1", None if stat == "count" else "x", "y" if stat == "pearson" else None)
+        rec = check_items(data, [(spec, ("", "NA"), Fraction(1), evaluate(data, spec, ("", "NA"), Fraction(1)))], timeout=TIMEOUT_S)[0]
+        _append(sdir / "runs.jsonl", {"phase": "safer", "key": key, "statistic": stat, "rows": rows, "table_bytes": len(data),
+                                      "memory_limit_mb": memory_limit_mb, "workers": WORKERS, "seconds": rec.get("batch_seconds"),
+                                      "kernel_accepted": bool(rec.get("kernel_accepted")), "detail": str(rec.get("detail", ""))[:200],
+                                      "obligation_sha256": rec.get("obligation_sha256")})
+
+    with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+        list(pool.map(one, cases))
+    return _read(sdir / "runs.jsonl")
+
+
 def _pct(values: list[float], q: float) -> float | None:
     if not values:
         return None
@@ -211,9 +247,12 @@ def summarise(out: Path) -> dict:
     for g in guard:
         peak[g["obligation_sha256"]] = max(peak.get(g["obligation_sha256"], 0.0), g["peak_rss_mb"])
     stopped = {g["obligation_sha256"] for g in guard if g.get("stopped_for_memory")}
+    # the operating system killed the process (exit -9 without a guard stop): the configuration exceeded the memory available
+    killed = {g["obligation_sha256"] for g in guard if g.get("exit") == -9 and not g.get("stopped_for_memory")}
     for r in runs:
         r["peak_gb"] = round(peak[r["obligation_sha256"]] / 1024, 2) if r.get("obligation_sha256") in peak else None
         r["stopped_for_memory"] = r.get("obligation_sha256") in stopped
+        r["killed_by_system"] = r.get("obligation_sha256") in killed
 
     def block(rs: list[dict]) -> dict:
         secs = [r["seconds"] for r in rs if r["seconds"] is not None]
@@ -223,6 +262,7 @@ def summarise(out: Path) -> dict:
              "median_seconds": round(statistics.median(secs), 2) if secs else None, "p95_seconds": _pct(secs, 0.95),
              "max_seconds": max(secs) if secs else None, "max_peak_gb": max(peaks) if peaks else None,
              "stopped_for_memory": sum(1 for r in rs if r["stopped_for_memory"]),
+             "killed_by_system": sum(1 for r in rs if r["killed_by_system"]),
              "timed_out": sum(1 for r in rs if "timed out" in r["detail"]), "kernel_hours": round(sum(secs) / 3600, 3)}
         b["c7_limits_hold"] = bool(rs and b["median_seconds"] is not None and b["median_seconds"] <= C7["max_median_seconds_per_claim"]
                                    and b["p95_seconds"] <= C7["max_p95_seconds_per_claim"]
@@ -244,7 +284,7 @@ def summarise(out: Path) -> dict:
     by_stat_size = {}
     for r in syn:
         by_stat_size.setdefault(r["statistic"], []).append({k: r[k] for k in ("rows", "table_bytes", "seconds", "peak_gb", "kernel_accepted",
-                                                                               "stopped_for_memory", "detail")})
+                                                                               "stopped_for_memory", "killed_by_system", "detail")})
     for v in by_stat_size.values():
         v.sort(key=lambda x: x["rows"])
     dev_by_stat = {}
@@ -308,6 +348,7 @@ def main(argv=None) -> int:
     ap.add_argument("--lean", default=None, help="the real Lean 4.28.0 executable (default: lean on PATH)")
     ap.add_argument("--summarise", action="store_true")
     ap.add_argument("--rerun-killed", action="store_true", help="re-run, one at a time, the runs the operating system killed")
+    ap.add_argument("--safer-configuration", action="store_true", help="re-run the memory-sensitive synthetic cases at 2 x 6 GiB")
     args = ap.parse_args(argv)
     args.out = args.out.resolve()
     args.out.mkdir(parents=True, exist_ok=True)
@@ -320,6 +361,11 @@ def main(argv=None) -> int:
     real = args.lean or shutil.which("lean")
     if not real:
         raise SystemExit("Lean 4.28.0 not found")
+    if args.safer_configuration:
+        for key in ("GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENROUTER_API_KEY"):
+            os.environ.pop(key, None)
+        print(json.dumps(safer_configuration(args.out, real), indent=1))
+        return 0
     if args.rerun_killed:
         for key in ("GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENROUTER_API_KEY"):
             os.environ.pop(key, None)
