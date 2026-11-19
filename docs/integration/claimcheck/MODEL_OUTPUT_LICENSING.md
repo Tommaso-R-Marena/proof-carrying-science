@@ -119,3 +119,65 @@ So rights in the N and C outputs depend on the model and provider terms.
   evidence. It is not recommended unless a provider asks for it.
 * **Effect on C1.** L2 (b) and L3 each change the admitted tree. They would be ordinary commits on
   the branch, before the evidence is regenerated and before C1.
+
+## 4. Recommended disposition, for the owner's decision (2026-11-19)
+
+The aim is to publish nothing further whose rights are unresolved, without losing provenance and
+without touching history or frozen evidence. Nothing below has been done.
+
+**L1, Gemini (23 files): keep.** Their provenance is recorded in
+[`model_outputs_inventory.json`](model_outputs_inventory.json), one row per file:
+
+* the SHA-256 and size;
+* the model, finish reason, prompt digest and token usage;
+* the SHA-256 and length of the text, but not the text;
+* the applicable terms and status.
+
+**L2, Nemotron (21 files), and L3, Cohere (1 file): withhold from further publication, with
+provenance kept.**
+
+1. The owner first archives the 22 original files privately, for example in a private repository
+   or an encrypted archive, and checks each against `original_sha256` in the inventory.
+2. On the owner's recorded decision, the 22 files are replaced in the branch by provenance stubs.
+   This is one ordinary commit, made with
+   `python -m research.claimcheck_v1_1.governance.withhold_model_outputs --apply --groups N,C --decision "<reference>"`.
+   * Each stub keeps the path, the provider and model, the cache key, the prompt digest, the usage,
+     the finish reason, the digest and size of the original and of its text, the terms, and the
+     reason.
+   * Nothing outside `results/*/model_responses/` changes.
+3. In parallel, ask NVIDIA whether publishing research outputs obtained through trial access is
+   permitted (L2(a)). If it is, the 21 originals can be restored from the archive in a later
+   commit; the digests prove they are the same bytes.
+4. The Cohere response is an empty answer (`{"claims": []}"`) and no result uses it. Withholding it
+   rather than deleting it keeps its record.
+
+What withholding changes, and what it does not:
+
+| | Effect |
+| --- | --- |
+| frozen evidence | **none.** Neither freeze record pins these files; the frozen results, receipts, bundles and replays are unchanged and still verify |
+| tests | **none.** No test reads the raw responses (checked) |
+| reproducibility | regenerating the Nemotron arm offline needs the private archive. Affected: the development evaluation (`dev_arms.json`), the prospective demonstration, bundle export and the development half of the capacity run. Their committed results stay as they are |
+| derived proposals | the parsed readings inside receipts, bundles and results stay. Removing them would invalidate frozen results. They consist mostly of the article's own words and of field choices, and their status follows L2(a) |
+| admission | the stubs are what C1 admits. Decide L1 to L3 first, then regenerate the evidence |
+
+**What public Git history means.**
+
+* The 22 originals have been readable since 2026-11-10/11 in the public branch, in commits
+  `f17649ca`, `dbe31d72` and `87900a17`. GitHub keeps every commit of an open or closed pull
+  request reachable through the pull request itself (`refs/pull/212/head`). Clones and forks made
+  since are outside anyone's control.
+* Replacing the files stops further publication in the admitted tree, in any release, and in
+  `main`. The last point holds only if PR 212 is **squash-merged**, which is the repositories'
+  linear-history practice. A merge commit or a rebase-merge would carry the earlier commits, and so
+  the originals, into `main`'s history for good.
+* Withdrawing what has already been exposed would need three things:
+  * a rewrite of the branch's history, which needs your authorisation and conflicts with
+    preserving historical evidence;
+  * a request to GitHub Support to purge cached views and pull-request references;
+  * acceptance that existing clones are unaffected.
+
+  This is **not recommended** unless a provider asks for it.
+
+**Recommendation in one line:** L1 keep; L2 withhold now and ask NVIDIA (restore if permitted); L3
+withhold; squash-merge only; no history rewrite.

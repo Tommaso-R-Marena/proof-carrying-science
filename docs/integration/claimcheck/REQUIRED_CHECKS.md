@@ -162,6 +162,91 @@ Options for the owner, separate decisions in [`OWNER_EXECUTION_CHECKLIST.md`](OW
   That is a protected workflow change, needed because a path-filtered job cannot be required. With
   it, the core's retained-source rule binds on every pull request too.
 
+## Proposed changes C2b, D2b and T1 (exact; none applied)
+
+### C2b: the core retained-source gate in the required path (protected code, two control files)
+
+`reconcile.py --require-committed` already runs in `source-policy` on every pull request. With C2b it
+also runs `scripts/check_reconciled_prs.py --core` in a separate process, with `PYTHONOPTIMIZE`
+removed so its assertions cannot be stripped. It fails the source contract if that gate fails.
+
+| | |
+| --- | --- |
+| files changed | `research/integration_v2/reconcile.py` (+26 −1 lines), `research/integration_v2/test_reconcile.py` (+25 lines, one test) |
+| unchanged | workflows, manifests, pinned files, retained commits, rulesets |
+| order | after C1. It edits C1's versions of the two files, which are control paths of both gates, so it is its own control commit with no manifest change |
+| patch and dry run | `python -m research.claimcheck_v1_1.governance.prepare_c2b --out docs/integration/claimcheck/c2b --pytest-python <python>` writes `proposed-c2b.patch` and `c2b-dry-run.json` |
+| negative controls | the manifest gate alone passes, and C2b rejects: the retained tag deleted; the tag pointing at another commit; an untracked file in the working tree |
+| no false failure | the `source-policy` steps that run before the gate leave no untracked file; `__pycache__` is ignored |
+| caveats | annotated tags are not enforced (a lightweight tag at the right commit passes), and authority rests on the commit ID in the gate. Every workflow that runs `reconcile --require-committed` checks out full history with tags |
+
+### D2b: require the website's retained-source and public-tree check (ruleset)
+
+**The change, in the site repository:** Settings → Rules → Rulesets → the active ruleset that
+targets `main` (the one requiring `site-full-gate`) → **Require status checks to pass** → **Add
+checks** → `original-pr-ancestry-and-production-preservation`, with the source **GitHub Actions** →
+Save. Leave every other setting as it is, including whether branches must be up to date.
+
+REST equivalent (`PUT /repos/Tommaso-R-Marena/proof-carrying-science-site/rulesets/<id>`): add
+`{"context": "original-pr-ancestry-and-production-preservation", "integration_id": 15368}` to the
+`required_status_checks` parameters. `15368` is the GitHub Actions app; confirm it in the UI's source
+field.
+
+**Why it cannot stay pending:**
+
+* the job is in `.github/workflows/open-pr-reconciliation.yml`, which triggers on every
+  `pull_request` with no `paths` filter;
+* the job has no `if:`;
+* so it reports on every pull request;
+* the file is identical on `main` and on the PR 149 head (checked 2026-11-19).
+
+**When:** at any time after D2's control commit is on PR 149. Before that, PR 149 fails the check by
+design and cannot merge, which is what D2b is for.
+
+**Consequence:** every later site pull request must keep:
+
+* the non-control files equal to the retained intake's tree;
+* `public/` equal to the intake's `public/` (patch 02).
+
+So **every website change then needs a retained-source admission** (new retained commit, tag and gate
+patch), the same regime the core manifest already imposes. Without D2b, those rules stay advisory.
+
+**Caveat:** the workflow is itself a control file of the site gate. A pull request that edited it, for
+example by adding `if:` to skip the job (a skipped required job counts as passing), would weaken the
+check. Such a change shows in the diff; review every change to that file. The site has no
+`CODEOWNERS` file.
+
+### T1: retained-source tag rulesets (both repositories)
+
+**In each repository:** Settings → Rules → Rulesets → New ruleset → **New tag ruleset**:
+
+* name `Retained-source tags (owner only)`, enforcement **Active**;
+* **Bypass list:** Repository admin role, "Always allow". You are the only admin of each repository
+  (collaborators listed 2026-11-19);
+* **Target tags:** include by pattern `pcs-source-intake/*`;
+* **Rules:** Restrict creations, Restrict updates, Restrict deletions, Block force pushes.
+
+REST equivalent (`POST /repos/<owner>/<repo>/rulesets`; check the role ID in the UI):
+
+```json
+{"name": "Retained-source tags (owner only)", "target": "tag", "enforcement": "active",
+ "bypass_actors": [{"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always"}],
+ "conditions": {"ref_name": {"include": ["refs/tags/pcs-source-intake/*"], "exclude": []}},
+ "rules": [{"type": "creation"}, {"type": "update"}, {"type": "deletion"}, {"type": "non_fast_forward"}]}
+```
+
+**Effect:**
+
+* The existing intake tags can no longer be deleted or moved except by you: core
+  `core-open-prs-v1-20261105` and `historical-v22-objects-20261105`, site
+  `site-open-prs-v1-20261105`.
+* The new tags of C1 and D2 can be created only by you.
+* Installed apps (including the one that pushes this work) and workflow tokens can neither create,
+  move nor delete them.
+
+**What it does not do:** sign tags, or change what the gates trust. They keep comparing the tag's
+target with the commit ID compiled into them.
+
 ## Retained-source tags: what protects them, and what is not confirmed
 
 **Not confirmed.** Whether a tag ruleset restricts the creation, update or deletion of

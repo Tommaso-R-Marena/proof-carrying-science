@@ -16,18 +16,30 @@ source commit. The evidence must then be regenerated and reviewed again.
 
 ## Before admission
 
-### L1–L3. Recorded model outputs ([`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md))
-* **L1 Gemini (23 files):** keep, adding a provenance note.
-* **L2 Nemotron (21 files):** choose (a) obtain confirmation, then keep; (b) replace the texts with
-  digests before C1; or (c) keep as is.
-* **L3 Cohere (1 file):** remove before C1.
-* **Effect:** L2(b) and L3 are ordinary commits on the branch. Each changes the census, so
-  regenerate the evidence afterwards.
+### L1–L3. Recorded model outputs ([`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md), section 4)
+* **Recommended:**
+  * L1 keep the 23 Gemini outputs, with provenance in `model_outputs_inventory.json`;
+  * L2 and L3: withhold the 21 Nemotron outputs and the 1 Cohere output from further publication.
+    Replace them by provenance stubs, after you have archived the originals privately and checked
+    them against the inventory's digests;
+  * ask NVIDIA (L2(a)), and restore the originals if permitted;
+  * squash-merge PR 212 only;
+  * no history rewrite.
+* **Steps:**
+  1. Archive the 22 originals and check them against `original_sha256`.
+  2. Run `python -m research.claimcheck_v1_1.governance.withhold_model_outputs --apply --groups N,C --decision "<reference>"`
+     and commit the result.
+  3. Regenerate the admission evidence.
+* **Effect:** no frozen file and no test is affected. Regenerating the Nemotron arm offline then
+  needs your archive. This is an ordinary commit, but it changes the census.
 
 ### T1. Retained-source tag ruleset ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "Retained-source tags")
-* **Authorises:** in each repository, a tag ruleset on `refs/tags/pcs-source-intake/*` with
-  "Restrict creations", "Restrict updates" and "Restrict deletions", and a bypass list holding only
-  the repository-admin role.
+* **Authorises:** in each repository, the tag ruleset specified in
+  [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "T1":
+  * pattern `pcs-source-intake/*`;
+  * Restrict creations, updates and deletions;
+  * Block force pushes;
+  * bypass only for the repository-admin role.
 * **Verify:** listing tags still shows the two existing intake tags at `0b521f39…` (core) and
   `d35e2b5e…` (site).
 * **Undo:** delete the ruleset.
@@ -85,11 +97,19 @@ source commit. The evidence must then be regenerated and reviewed again.
   pull request) and is not left pending.
 * **Undo:** remove it from the ruleset.
 
-### C2b (optional). Make the core retained-source gate bind on every pull request (protected workflow)
-* **Authorises:** a reviewed change adding `python scripts/check_reconciled_prs.py --core "$PWD"` to
-  the `source-policy` job of `pcs-public-full-verification.yml`.
-* **Not prepared:** a patch and dry run would be prepared on request.
-* **Why:** today that gate runs only on pull requests that touch integration paths.
+### C2b (optional). Make the core retained-source gate bind on every pull request (protected code)
+* **Authorises:** one control commit after C1 applying `docs/integration/claimcheck/c2b/proposed-c2b.patch`:
+  * `reconcile.py --require-committed`, already in the required `source-policy` path, also runs the
+    retained-source gate;
+  * two control files change; no workflow, manifest or ruleset.
+
+  Specification: [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "C2b".
+* **Before:** regenerate with `prepare_c2b` at the commit after C1. The dry run must report
+  `all_as_expected: true`: the negative controls (tag deleted, tag moved, untracked file) pass under
+  C1 alone and are rejected with C2b.
+* **Verify:** on the control commit, `source-policy` and `verified-public-integration` pass, and the
+  gate's output includes `retained_source.passed: true`.
+* **Undo:** revert the control commit.
 
 ### R1. Research assurance branch (PR 216)
 * **Decision:** confirm the route. Recommended: a separate V24 successor after C1 is merged, built by
@@ -140,8 +160,12 @@ new values.
 * **Undo before merge:** delete the tag and drop the control commit.
 
 ### D2b (optional). Require `original-pr-ancestry-and-production-preservation` on site `main` (ruleset)
+* **Authorises:** adding exactly that check, with the source GitHub Actions, to the active site
+  `main` ruleset ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "D2b"). It runs on every pull request
+  and so can never stay pending.
 * **Why:** after D2, it is the only check that enforces the `public/` anchor and the retained-source
   rule.
+* **Consequence:** every later website change needs a retained-source admission.
 * **Undo:** remove it from the ruleset.
 
 ## After all of the above (separate decisions)
