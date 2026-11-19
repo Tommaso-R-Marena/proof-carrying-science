@@ -44,6 +44,17 @@ expansions **`52 → 18`** with proved count preserved (`6→6`).
 Lean `ProofGatedProofCoupled.lean` specializes the formalization gate to
 proved/unproved certificates with `accept_sound` and strict-loss theorems.
 
+### Continual self-repair (breakthrough)
+
+`continual_self_repair.py` closes the one-shot gap: on REJECT it diagnoses,
+repairs, re-gates, and CAS-promotes only on ACCEPT (HEAD unchanged otherwise).
+
+Measured:
+- **4 accepts**, **3 repair accepts**, **1 adversarial removal rejected**
+- self-repair rate **0.6** (`repairs_succeeded / rejects_seen`)
+- rising fitting proved on accept events; fitting form/proof loss → **0**
+- Repair strategy that recovered partial failures: `combine_with_proof_expander`
+
 ## What was built
 
 | Artifact | Role |

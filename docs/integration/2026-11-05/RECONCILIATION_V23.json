@@ -63092,6 +63092,13 @@
       "library_expansions": 18,
       "proved_preserved": true,
       "lean_module": "PCS.V2.ProofGatedProofCoupled"
+    },
+    "pgra_continual_self_repair": {
+      "accepts": 4,
+      "repairs_succeeded": 3,
+      "adversarial_rejected": 1,
+      "self_repair_rate": 0.6,
+      "rising_fitting_proved_on_accepts": true
     }
   },
   "control_paths": [
@@ -64783,7 +64790,7 @@
       "mode": "100644"
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
-      "sha256": "450f285e98eebd6835403eedd8b1a7b5a4430e2f8961b0af39442cdfdce98c9e",
+      "sha256": "9f28c9949429477b36224b71dd24f458995434510c4b649adaba217fc53ce2e6",
       "mode": "100644"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
@@ -82403,11 +82410,11 @@
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/README.md": {
-      "sha256": "07b9ff701b1e9de7e6132e70c171707ce166601b6f61edffc91186a89aa97b63",
+      "sha256": "deb9d85bf7e563fd0964f7fbb6bfc6c1780e97dfe88a0a2b327d757726289092",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/REPORT.md": {
-      "sha256": "3903e85c3931b41e1642f9bcb5379a739981153ef5621eaff3d23e688d38c84e",
+      "sha256": "11d0121897f9a9e04788cc7f81825624c38eece3b168e206348f62e4b0cbbef2",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/__init__.py": {
@@ -82416,6 +82423,10 @@
     },
     "research/lean_recursive_autoformalization_v1/capability.py": {
       "sha256": "170d6e28b7843200181e25c1443fbb4bb9c5ea777f81958fb0995c6aed7254fb",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/continual_self_repair.py": {
+      "sha256": "95932410cadeee115e9b4bda99fcf926e0fb07299a83b3b61f2ec25d89775477",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/corpus.py": {
@@ -82484,6 +82495,82 @@
     },
     "research/lean_recursive_autoformalization_v1/results/SHA256.json": {
       "sha256": "f76c06833ed677b8372f55d8a608b2d95ed1244b546c3181d967f5f1aa999376",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/SHA256.json": {
+      "sha256": "c8be66343002f58b1780b5fb084a52f0099f085a7729ba1abded2a128f9f5fc1",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/continual_self_repair_summary.json": {
+      "sha256": "ed25cdc63565b8161b09552d3b8bfbc7be798ef4e9d0c6bd68785c002114402b",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/episode-01-accept.json": {
+      "sha256": "91cdfcec38d3bb4f19163f8ec46893c1b57b4cc0c0af276c4f9817e1e78077ae",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/episode-03-repair-accept.json": {
+      "sha256": "5ec7f1c81ccbb1f42b4d896a14473ca91c7845c13b249bf616cf2718f93456e1",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/episode-04-repair-accept.json": {
+      "sha256": "24874fbfa3ffefc99d931d72b9a14d550fc1af71d4b2dc30904cadcd6f16be02",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/episode-05-repair-accept.json": {
+      "sha256": "463367e6ea9165aa185577d61dfa01550836a879a198da8035d5a5c5afd2535a",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/journal.json": {
+      "sha256": "de53e8c3a9813f36eb2c0d5831f8a4a5484110a5138b5c63929aa67a4c3d4793",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/.lock": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/GENESIS.json": {
+      "sha256": "322546a54dcbc9bc2268c90b7d5a27602698603bb686caeb33c02ddfa7e431ec",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/HEAD.json": {
+      "sha256": "0455ee1ae7bb5c37b808c28fec70f8e2308b57fe444d95afb4886406615cf0af",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/blobs/2050263451e32047c6dabb8b4eec2b192e9c9793a4a73266383dc205c39ef180.pgra": {
+      "sha256": "fef953f03a403ddebf5cbf609d50b877cf4646de7dcae955ddfe65f701910f0f",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/blobs/837d3ceae887a8c091e9105072ce2aef284ea0d992ed998c019e39051da06a76.pgra": {
+      "sha256": "9a838486b0a67fd434546a6af373e97acc06fdfb44b50de5a7a7b6d9fc7b4c2c",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/blobs/952f228e6f167a4743062112d14dc3a1a0ed34938f1d031d9c7b84e1b1891252.pgra": {
+      "sha256": "6aade1813c006702ec038b6414ead77915b6a69b2694a1494a86361366cfdbca",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/blobs/9e707ec5f8a299835bee0eb1c78e41c25726f2317e452763a5e73548b7d59fa6.pgra": {
+      "sha256": "3f5b2709db44c7d3962d753bf528ea39a321f37c9f66cbb7fcd81a212b44ab85",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/blobs/bf1de97191eae2a837fa31b78f5f71d6e294a830e203c63eaf78d2bb65e0c86a.pgra": {
+      "sha256": "ab9a14be9fd6beecff3d5fae848e4fdd3fef1536c6257b7569b0aacb0f500be5",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/receipts/00000001.json": {
+      "sha256": "809dab1d1281c08ba802cf946d2016ea360ff3eb0eed135921d6193707f8a7cd",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/receipts/00000002.json": {
+      "sha256": "7e215e2587d66c3a95cefbd4aaf295518521bacd7c9caa351cb922332de4597a",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/receipts/00000003.json": {
+      "sha256": "79dc882fc182fecc5f2863cb737f0d899b68e0ef533838911569244898cc3359",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store/receipts/00000004.json": {
+      "sha256": "55e580a1a9ef122dc8e65165be2e376afe1e19119de14ea6cb5263caa22e64b5",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/results/dual_v3/SHA256.json": {
@@ -82672,6 +82759,10 @@
     },
     "research/lean_recursive_autoformalization_v1/tests/test_pgra_adversarial.py": {
       "sha256": "ae13bf025553a67298cb69acd4dac8d7fa145de9282be52214cf811e0e849e4d",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/tests/test_pgra_continual_self_repair.py": {
+      "sha256": "966fccfebfc43fc79af7ece6b6f4860a22b5da48bb5be4ed6b1e96cc751401b4",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/tests/test_pgra_dual_v3.py": {

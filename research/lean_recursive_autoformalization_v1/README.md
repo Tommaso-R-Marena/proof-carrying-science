@@ -80,6 +80,14 @@ proofs (alpha-deduped) and re-searches under `reuse_priority`; measured
 expansions fell `52→18` with proved count preserved. Lean module
 `ProofGatedProofCoupled.lean` proves the proof-status gate soundness.
 
+## Continual self-repair
+
+`continual_self_repair.py` is the breakthrough controller: propose → dual-gate →
+on REJECT diagnose → repair → re-gate → CAS-promote only on ACCEPT. Illegal
+rule removals are rejected and ignored; formalization-only expansions are
+repaired by combining a proof-expanding rule. Measured: 3/5 rejects repaired,
+adversarial removal blocked, rising fitting proved on accepts.
+
 ## Conflict avoidance
 
 Stay inside `research/lean_recursive_autoformalization_v1/`. Do not edit open-PR
