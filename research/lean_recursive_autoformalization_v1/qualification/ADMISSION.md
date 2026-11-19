@@ -1,0 +1,9 @@
+# When do the receipts suffice?
+
+`Admission.lean` asks whether receipts justify either an interpreted model result or a recorded observation about a particular subject. A subject must bind the source, interpreted statement, assumptions and inputs. The checker requires source review and a checked model result for the same subject. A recorded observation requires observation evidence for that subject. Neither rule consumes a proposal or typechecking receipt as a substitute. Evidence custody and truthful receipt issuance are premises.
+
+The soundness theorem quantifies over every interpretation consistent with the receipts. The converse constructs the least such interpretation. Any missing required receipt therefore yields a concrete counterinterpretation, even when all other receipts are truthful. The restriction theorem proves that deleting receipts cannot produce a newly admitted conclusion. The executable negative cases cover proof transfer across different subjects and conflation of computation with empirical observation.
+
+From this directory run `lean Admission.lean` under Lean 4.28.0. All three audited declarations use only propext and Quot.sound. For the causal branch the model component would be an SCM calculation conditional on its assumptions. For a gate it could characterize one rule over an observation domain. For translation it could be an equivalence check against a chosen reference. None of the three implementations issues these generic receipts. This is a standalone research specification.
+
+Proof-carrying code already separates evidence production from consumer checking. This calculus applies that established principle to distinct evidence kinds and gives a small completeness result for its chosen rules. It supplies no general novelty or priority claim. [Necula, Proof-Carrying Code (POPL 1997)](https://doi.org/10.1145/263699.263712)
