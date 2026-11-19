@@ -95,16 +95,20 @@ def synthetic(out: Path) -> None:
         list(pool.map(one, todo))
 
 
-def development(out: Path) -> None:
+def development(out: Path, max_documents: int | None = None) -> None:
     from ...claimcheck_v1.pipeline import verify_many
     from ...claimcheck_v1.tools.analyze import arm_proposals
     from ..dev.common import SPLITS, documents
     runs = out / "runs.jsonl"
-    done = {r["document"] for r in _read(runs) if r["phase"] == "development"}
+    done = {r["document"] for r in _read(runs) if r["phase"] == "development-document-done"}
+    started = 0
     for split, results in SPLITS.items():
         for doc in documents(split):
             if doc.key in done:
                 continue
+            if max_documents is not None and started >= max_documents:
+                return
+            started += 1
             arms = arm_proposals(doc, results)                      # cached proposals only; no network
             seen, props = set(), []
             for arm, proposals in arms.items():
@@ -347,6 +351,7 @@ def main(argv=None) -> int:
     ap.add_argument("--phase", choices=("synthetic", "development", "both"), default="both")
     ap.add_argument("--lean", default=None, help="the real Lean 4.28.0 executable (default: lean on PATH)")
     ap.add_argument("--summarise", action="store_true")
+    ap.add_argument("--max-documents", type=int, default=None, help="development phase: at most this many documents in this invocation (resumable)")
     ap.add_argument("--rerun-killed", action="store_true", help="re-run, one at a time, the runs the operating system killed")
     ap.add_argument("--safer-configuration", action="store_true", help="re-run the memory-sensitive synthetic cases at 2 x 6 GiB")
     args = ap.parse_args(argv)
@@ -382,7 +387,7 @@ def main(argv=None) -> int:
     if args.phase in ("synthetic", "both"):
         synthetic(args.out)
     if args.phase in ("development", "both"):
-        development(args.out)
+        development(args.out, args.max_documents)
     return 0
 
 

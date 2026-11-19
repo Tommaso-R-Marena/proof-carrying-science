@@ -101,6 +101,7 @@ succeed:
 | Could a tag admit anything? | no: the gate compares the tag's target with the commit ID compiled into it (`REQUIRED_CHECKS.md`, "Retained-source tags") |
 | Does anything bind less than it appears to? | **yes, and it is documented**. On the core, the retained-source gate runs only when integration paths change (path-filtered workflow, not required). The binding control on every pull request is the V23 manifest, through `source-policy` and `verified-public-integration` (`REQUIRED_CHECKS.md`, "Which gates bind"; decision C2b) |
 | Does the admitted tree contain material whose redistribution is not established? | **yes**: the recorded model outputs; decide L1 to L3 first (`MODEL_OUTPUT_LICENSING.md`) |
+| Does the retained commit keep withheld material reachable? | **yes, as designed**. Its first parent `H` reaches the three commits that added the recorded outputs (`f17649ca`, `dbe31d72`, `87900a17`), so the public tag keeps them reachable even after stubs and a squash merge. Decide H1 (and P1) before C1; with H1-b, check that the retained commit's first parent has protected `main` as parent and does not reach those commits |
 | Does V23's own text say anything the owner may not want permanent? | its `reviewer` field reads "PROPOSED by an AI assistant for the owner's review; not reviewed, not approved". Keep it as honest provenance, or change it in the generator and regenerate (which changes every digest) |
 
 ## 3. D1 to D3: website

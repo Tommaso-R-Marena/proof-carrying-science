@@ -167,10 +167,13 @@ What withholding changes, and what it does not:
   `f17649ca`, `dbe31d72` and `87900a17`. GitHub keeps every commit of an open or closed pull
   request reachable through the pull request itself (`refs/pull/212/head`). Clones and forks made
   since are outside anyone's control.
-* Replacing the files stops further publication in the admitted tree, in any release, and in
-  `main`. The last point holds only if PR 212 is **squash-merged**, which is the repositories'
-  linear-history practice. A merge commit or a rebase-merge would carry the earlier commits, and so
-  the originals, into `main`'s history for good.
+* Replacing the files keeps the originals out of the admitted tree, out of any release built from
+  it, and out of `main`'s own history, but only if PR 212 is **squash-merged**. A merge commit or a
+  rebase-merge would carry the earlier commits into `main`'s history.
+* **It does not remove public access to them.** Neither the stubs, nor a squash merge, nor deleting
+  the branch does. The originals stay reachable through PR 212, through the research PR 216 (which
+  merges this branch), and through existing clones. Under C1 as designed, they also stay reachable
+  through the retained-source tag (section 5).
 * Withdrawing what has already been exposed would need three things:
   * a rewrite of the branch's history, which needs your authorisation and conflicts with
     preserving historical evidence;
@@ -179,5 +182,83 @@ What withholding changes, and what it does not:
 
   This is **not recommended** unless a provider asks for it.
 
-**Recommendation in one line:** L1 keep; L2 withhold now and ask NVIDIA (restore if permitted); L3
-withhold; squash-merge only; no history rewrite.
+**Recommendation in one line:**
+
+* L1: keep.
+* L2: withhold and ask NVIDIA; restore if permitted.
+* L3: withhold.
+* Squash-merge only, and no history rewrite.
+* Before C1, decide P1 and H1 (section 6). The withholding limits further publication; it does not
+  withdraw what is public.
+
+**Owner's position (2026-11-19):**
+
+* L1 to L3 are supported in principle: retain the Gemini outputs with provenance, and withhold the
+  Nemotron and Cohere outputs pending clarification.
+* Nothing is to be applied while the capacity run reads the original caches, nor before the owner
+  confirms the final archival and replacement plan.
+
+## 5. Reachability after C1: the retained-source tag keeps the originals reachable
+
+* **The retained commit's ancestry.** The retained commit that C1 creates has two parents: the
+  admitted commit `H` and the previous intake `0b521f39` (`ADMISSION_PROPOSAL.md`, step 4). Its
+  first parent, `H`, has the whole history of this branch as ancestors. That includes the three
+  commits that added the recorded outputs, checked on 2026-11-19:
+  * `f17649ca`: 10 files;
+  * `dbe31d72`: 14 files;
+  * `87900a17`: 21 files.
+* **The tag.** The annotated tag `pcs-source-intake/core-claimcheck-v1-20261114` points at the
+  retained commit, so it makes that history permanently reachable from a public ref. T1 would also
+  make the tag undeletable except by you.
+* **The gate.** It checks that the original PR heads are ancestors of the retained commit, through
+  the previous intake. It does not require this branch's own history.
+
+Consequently:
+
+* the stubs (L2, L3), a squash merge and deleting the branch each leave the originals publicly
+  reachable;
+* C1 as designed adds a durable, protected public reference to them, beyond PR 212's own references
+  (which GitHub keeps in any case);
+* only two things would avoid that new reference: building the retained commit on a source commit
+  without this branch's history (H1-b below), or rewriting history (H1-c). Neither is proposed for
+  execution; both need your authorisation, and H1-b changes the retained-source design.
+
+## 6. Before C1: provider clarification (P1) and historical exposure (H1)
+
+**What is exposed.**
+
+* 21 Nemotron outputs: 173,455 characters of model text, structured readings that quote open-licence
+  articles;
+* 1 Cohere output: 15 characters, an empty answer;
+* readable since 2026-11-10/11 on a public branch;
+* the 23 Gemini outputs (40,255 characters) are covered by their terms.
+
+**P1, provider clarification: warranted, before C1, for NVIDIA.**
+
+* **Why:** C1, and T1 if adopted, would turn the existing exposure into a durable, protected public
+  reference. Knowing whether NVIDIA permits publishing research outputs obtained through trial
+  access decides whether that matters.
+* **Who acts:** you, or someone you designate; nothing is sent by this work. A question that sends
+  no confidential data: "We used the NVIDIA API Catalog trial endpoint for
+  `nemotron-3-ultra-550b-a55b` (through OpenRouter's free route) in November 2026 for a research
+  evaluation. May we publish the model's outputs, structured readings of published open-access
+  articles, in a public research repository, given the trial terms' 'internal testing and
+  evaluation' wording?"
+* **Cohere:** a clarification is not warranted for the content, which is an empty answer. The
+  benchmarking clause concerns the use itself; no further Cohere use is planned.
+
+**H1, historical exposure, as a separate decision before C1:**
+
+| Option | What it does | Consequences |
+| --- | --- | --- |
+| **H1-a**: accept the existing exposure | C1 as designed, with the withholding stubs | the originals stay reachable through PR 212, PR 216, clones and the retained-source tag. This is honest and preserves evidence. It suits the case where NVIDIA permits publication, or where you judge the risk acceptable |
+| **H1-b**: a retained commit without this branch's history | build the retained commit on a new commit with the admitted tree, whose parent is protected `main`, instead of on `H`; its second parent stays `0b521f39` | the tag no longer references the output-containing commits. PR 212's own references still do, so this limits the exposure and withdraws nothing. It changes the retained-source design: `prepare_core_admission` and the review checklist change, and the dry run is regenerated. **Needs your authorisation** |
+| **H1-c**: rewrite history | force-push the branches without the originals, and ask GitHub Support to purge cached pull-request references | the only route that withdraws from GitHub; clones are unaffected. It conflicts with preserving historical evidence, and it affects PR 216, which merges this branch. **Not recommended** unless a provider asks for it |
+
+**Recommendation:**
+
+1. Send P1 now.
+2. If NVIDIA permits publication, choose H1-a and restore the Nemotron originals.
+3. If NVIDIA declines, or has not answered when you are otherwise ready for C1, choose between H1-a
+   and H1-b. H1-b is the smallest step that avoids adding a protected public reference.
+4. Withhold the Cohere output under any option.

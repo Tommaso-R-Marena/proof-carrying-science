@@ -124,6 +124,11 @@ verify by hand in the rulesets".
 
    All 45 are already readable on the public draft branch. Decide L1–L3 before C1
    ([`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md)).
+
+   Withholding stubs and a squash merge do not remove public access. The retained commit's first
+   parent reaches the commits that added the outputs, so under C1 as designed the public tag keeps
+   them reachable. Decide P1 (NVIDIA clarification) and H1 (historical exposure) before C1
+   (sections 5 and 6).
 9. **Gates that bind less than they appear to** ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "Which
     gates bind"):
     * The core retained-source gate runs only on pull requests that touch integration paths.

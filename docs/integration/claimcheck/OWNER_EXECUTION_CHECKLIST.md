@@ -7,7 +7,8 @@ owner's explicit authorisation of that block. The independent review
 
 Order:
 
-* **Core:** L1–L3, then T1 (recommended), then C1, then C2 (and optionally C2b), then R1.
+* **Core:** L1–L3, P1 and H1, then T1 (recommended), then C1, then C2 (and optionally C2b), then
+  R1.
 * **Website:** D1 and D3, then regenerate, then D2 (and optionally D2b).
 * **Both:** merge and deployment are separate decisions after these.
 
@@ -32,6 +33,27 @@ source commit. The evidence must then be regenerated and reviewed again.
   3. Regenerate the admission evidence.
 * **Effect:** no frozen file and no test is affected. Regenerating the Nemotron arm offline then
   needs your archive. This is an ordinary commit, but it changes the census.
+* **Not before:** the capacity run has finished reading the original caches, and you have confirmed
+  the final archival and replacement plan (owner, 2026-11-19).
+* **What it does not do:** withdraw public access. The originals stay reachable through PR 212,
+  PR 216, clones and, under C1 as designed, the retained-source tag (`MODEL_OUTPUT_LICENSING.md`,
+  section 5). See P1 and H1.
+
+### P1. Provider clarification (NVIDIA), before C1
+* **Decision:** whether to ask NVIDIA if research outputs obtained through trial access may be
+  published (suggested wording: `MODEL_OUTPUT_LICENSING.md`, section 6).
+* **Who sends it:** you; this work contacts no provider.
+* **Outcome:** decides between H1-a and H1-b, and whether the 21 Nemotron originals may be restored.
+
+### H1. Historical exposure, before C1 (`MODEL_OUTPUT_LICENSING.md`, section 6)
+* **H1-a:** accept the existing exposure; C1 as designed.
+* **H1-b:** build the retained commit on a new commit with the admitted tree and protected `main` as
+  its parent, so the tag does not reference this branch's output-containing history. This changes
+  the retained-source design: the tooling changes and the dry run is regenerated. Needs
+  authorisation.
+* **H1-c:** rewrite history. Not recommended.
+* **Recommended:** decide after P1's answer. If there is no permission, H1-b is the smallest step
+  that avoids adding a protected public reference.
 
 ### T1. Retained-source tag ruleset ([`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "Retained-source tags")
 * **Authorises:** in each repository, the tag ruleset specified in
