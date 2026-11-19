@@ -37,8 +37,9 @@ def run(cwd: Path, *cmd: str) -> dict:
     return {"exit": proc.returncode, "last_line": tail[-1][:240] if tail else ""}
 
 
-def diff(a, b, path: str = "", out: list | None = None, limit: int = 40) -> list:
-    """Paths at which two JSON values differ (at most `limit`)."""
+def diff(a, b, path: str = "", out: list | None = None, limit: int = 40, recorded_only: bool = False) -> list:
+    """Paths at which JSON value `b` differs from `a` (at most `limit`).  With `recorded_only`, keys present only in `b`
+    are ignored: the question is then whether every value recorded in `a` is reproduced in `b`."""
     out = [] if out is None else out
     if len(out) >= limit:
         return out
@@ -46,13 +47,16 @@ def diff(a, b, path: str = "", out: list | None = None, limit: int = 40) -> list
         for k in sorted(set(a) | set(b)):
             if k == "seconds":
                 continue
-            if k not in a or k not in b:
-                out.append(f"{path}/{k}: only in {'stubbed' if k in b else 'baseline'}")
+            if k not in b:
+                out.append(f"{path}/{k}: missing from the new output")
+            elif k not in a:
+                if not recorded_only:
+                    out.append(f"{path}/{k}: only in the new output")
             else:
-                diff(a[k], b[k], f"{path}/{k}", out, limit)
+                diff(a[k], b[k], f"{path}/{k}", out, limit, recorded_only)
     elif isinstance(a, list) and isinstance(b, list) and len(a) == len(b):
         for i, (x, y) in enumerate(zip(a, b)):
-            diff(x, y, f"{path}[{i}]", out, limit)
+            diff(x, y, f"{path}[{i}]", out, limit, recorded_only)
     elif a != b:
         out.append(f"{path}: {json.dumps(a)[:80]} -> {json.dumps(b)[:80]}")
     return out
@@ -105,19 +109,27 @@ def main(argv=None) -> int:
                                "last_line_stubbed": stub[k]["last_line"]} for k in base}
         committed_arms = load(ROOT / "research/claimcheck_v1_1/dev/results/dev_arms.json")
         committed_demo = load(ROOT / "research/claimcheck_v1_1/prospective/DEMONSTRATION_ON_DEVELOPMENT_DATA.json")
+        committed_analysis = load(ROOT / "research/claimcheck_v1/benchmark/results/heldout/analysis.json")
         comparisons = {
+            "heldout_analysis_baseline_vs_committed": diff(committed_analysis, load(work / "out-baseline/analysis.json"), recorded_only=True),
             "heldout_analysis_stubbed_vs_baseline": diff(load(work / "out-baseline/analysis.json"), load(work / "out-stubbed/analysis.json")),
-            "dev_arms_baseline_vs_committed": diff(committed_arms, load(work / "out-baseline/dev_arms.json")),
-            "dev_arms_stubbed_vs_committed": diff(committed_arms, load(work / "out-stubbed/dev_arms.json")),
-            "demonstration_baseline_vs_committed": diff(committed_demo, load(work / "out-baseline/demo.json")),
-            "demonstration_stubbed_vs_committed": diff(committed_demo, load(work / "out-stubbed/demo.json")),
+            "dev_arms_baseline_vs_committed": diff(committed_arms, load(work / "out-baseline/dev_arms.json"), recorded_only=True),
+            "dev_arms_stubbed_vs_committed": diff(committed_arms, load(work / "out-stubbed/dev_arms.json"), recorded_only=True),
+            "demonstration_baseline_vs_committed": diff(committed_demo, load(work / "out-baseline/demo.json"), recorded_only=True),
+            "demonstration_stubbed_vs_committed": diff(committed_demo, load(work / "out-stubbed/demo.json"), recorded_only=True),
         }
+        kept = out / "outputs"                                     # derived counts only; no model text
+        for side in ("baseline", "stubbed"):
+            (kept / side).mkdir(parents=True, exist_ok=True)
+            for name in ("analysis.json", "dev_arms.json", "demo.json"):
+                if (work / f"out-{side}" / name).exists():
+                    shutil.copy(work / f"out-{side}" / name, kept / side / name)
         report["output_differences"] = {k: {"count_shown": len(v), "first": v[:12]} for k, v in comparisons.items()}
         report["summary"] = {
             "every_check_and_suite_passes_with_the_stubs": all(stub[k]["exit"] == 0 for k in ("freeze_check", "v1_offline_tests", "v1_1_offline_tests")),
             "tools_that_read_the_cache_still_run": all(stub[k]["exit"] == 0 for k in ("heldout_analysis", "development_evaluation", "demonstration")),
-            "baseline_reproduces_the_committed_results": not comparisons["dev_arms_baseline_vs_committed"]
-            and not comparisons["demonstration_baseline_vs_committed"],
+            "baseline_reproduces_every_recorded_value": not comparisons["dev_arms_baseline_vs_committed"]
+            and not comparisons["demonstration_baseline_vs_committed"] and not comparisons["heldout_analysis_baseline_vs_committed"],
             "results_that_change_without_the_originals": [k for k in ("heldout_analysis_stubbed_vs_baseline", "dev_arms_stubbed_vs_committed",
                                                                       "demonstration_stubbed_vs_committed") if comparisons[k]],
         }

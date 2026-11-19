@@ -806,6 +806,8 @@ Also resolve item 5 as recommended.
 
 ### 13.7 Before approval: a capacity run (no prospective data)
 
+**Done on 2026-11-19 (part C, as authorised): results in section 16.**
+
 Run the kernel under the exact configuration of step 4 on the synthetic sizes of `../perf` and on
 the eight development tables:
 
@@ -943,3 +945,136 @@ apart (adjudication plan, section 9).
 | 9 | C2a: count each printed number once per paper | yes / as drafted | owner's choice; yes is more conservative | at 60 papers with 4 exposed numbers per document C2a then fails even with no flag |
 | 10 | Re-list models; preliminary adjudication round; ethics submission for the usability study | authorise / wait | authorise; none of them touches a prospective paper | start of recruitment needs the owner's explicit authorisation |
 | 11 | Preliminary adjudication and operational feasibility study (section 14) | run first / commit to 120 now | **run first**; commit to 120 only if every go criterion of section 14 holds | about 20 person-hours and a few machine-hours before committing hundreds of hours; adjudicator recruitment needs authorisation |
+
+## 16. Kernel capacity study (part C): results, 2026-11-19
+
+Run as authorised (part C only): development and synthetic data, no prospective paper, no model
+call, under `lean_guard.py`. The full report is generated from the logs:
+[`capacity_2026-11-19/REPORT.md`](capacity_2026-11-19/REPORT.md); machine-readable:
+`capacity_2026-11-19/summary.json`. These are development-set findings. They enter no criterion,
+and draft 3 is neither changed nor frozen by them.
+
+**Reference machine:** 4 CPUs, 15.7 GiB physical memory, a 13.35 GiB memory domain shared by
+everything the session runs, no swap.
+
+| | Configuration | What it ran |
+| --- | --- | --- |
+| A | 2 workers, 7 GiB, 900 s, one claim per file (draft 3, step 4) | all 90 synthetic cases, and every distinct claim of the four v1 arms on the 19 development documents (1,194 runs) |
+| B | 1 worker, 7 GiB | the 3 obligations the operating system killed under A, one at a time |
+| C | 2 workers, 6 GiB | the 30 obligations whose peak under A exceeded 5 GiB (22 synthetic, 8 development) |
+| D | 1 worker, 7 GiB | the same 30 |
+
+**Every run, by outcome.** Only *accepted* establishes anything; every other outcome leaves the claim
+UNKNOWN.
+
+| | Runs | Accepted | Memory stop | System kill | Time limit | Recursion depth | Median / 95th pct / max s | Largest peak (GiB) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+| A, synthetic | 90 | 66 | 11 | 1 | 0 | 12 | 17.1 / 51.8 / 64.1 | 7.01 |
+| A, development | 1,194 | 1,147 | 17 | 3 | 0 | 27 | 17.6 / 25.4 / 178.2 | 7.01 |
+| B | 3 | 0 | 3 | 0 | 0 | 0 | 47.4 / – / 62.4 | 7.01 |
+| C | 30 | 3 | 24 | 0 | 0 | 3 | 38.9 / – / 48.1 | 6.04 |
+| D | 30 | 4 | 20 | 0 | 0 | 6 | 45.1 / – / 55.2 | 7.01 |
+
+* Not counted above, and reported apart: the session's 2-hour background limit interrupted one
+  development invocation. It left 33 finished and 2 unfinished guard records; that document was
+  re-run in full. Record validation passes.
+* Resource-related UNKNOWNs (memory stops, system kills, time limits) on the development claims: 20 of
+  1,194. Recursion-depth rejections: 27.
+
+**Memory safety on this machine** (rule fixed before C and D were run: the analytic worst case and the
+sampled working set both stay at least 1 GiB below the limit, and nothing is killed):
+
+* **A, 2 × 7 GiB: not safe.** The worst case is 14.14 GiB, above the 13.35 GiB domain. 4 of 1,284
+  runs were killed by the operating system, each while two high-memory runs coincided.
+* **B:** each killed obligation, run alone, is stopped by the guard at 7 GiB. Each needs more than
+  7 GiB, so on these data the kills changed no acceptance. They are still infrastructure failures: an
+  out-of-memory kill can also hit a run that would have succeeded.
+* **C, 2 × 6 GiB: safe**, narrowly. The worst case is 12.20 GiB against the 12.35 GiB that the
+  reserve allows; the sampled working set peaked at 11.78 GiB; nothing was killed. That holds only if
+  nothing else runs in the same memory domain.
+* **D, 1 × 7 GiB: safe**, with a worst case of 7.13 GiB.
+
+**Effects of worker count and memory limit.**
+
+* **Worker count, at 7 GiB:** one worker gives exactly A's outcomes, except that every system kill
+  becomes a guard stop. A run is about 5 % faster alone (median over the runs accepted in both).
+  Guard stops take about 45 s alone, and 48 to 51 s (up to 100 s) beside another heavy run.
+* **Limit, 6 against 7 GiB:** no development outcome changes, because every development obligation
+  above 5 GiB fails under both. On the synthetic grid one accepted case is lost: Pearson at
+  33,760 B, peak 6.19 GiB. Three depth failures at 59,952 B become memory stops; they stay UNKNOWN.
+* **Repeatability:** the same obligation run twice peaks within 9.1 MB and takes within 10.5 % of
+  the time (315 pairs). This supports carrying A's results over to C for cases that peaked at most
+  5 GiB.
+
+**C7 on the development claims (configuration A).**
+
+| | Runs | Completed | Median s | 95th pct s | Largest peak | C7's limits hold |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| within the candidate supported sizes | 991 | 100 % | 17.4 | 24.5 | 3.19 GiB | yes |
+| outside them | 203 | 76.9 % | 20.2 | 49.9 | 7.01 GiB | no |
+| all | 1,194 | 96.1 % | 17.6 | 25.4 | 7.01 GiB | yes, narrowly |
+
+All 47 failures are in one paper, `10_pmc5817150`, whose table has 617 rows: 75 of its 122 runs
+completed (61.5 %). Order statistics on many rows are what fail, not large tables as such: the two
+tables larger in bytes (28,005 and 33,339 B, with 100 and 351 rows) had no failure.
+
+**Candidate supported sizes** (largest synthetic table accepted with every smaller one accepted; only
+measured sizes: nothing beyond 2,800 rows, 59,952 B, is claimed):
+
+| Statistic | A: 2 × 7 GiB | C: 2 × 6 GiB | D: 1 × 7 GiB | Provisional in draft 3 |
+| --- | ---: | ---: | ---: | ---: |
+| count | 59,952 (largest tested) | 59,952 | 59,952 | 51,209 |
+| mean | 42,487 | 42,487 | 42,487 | 33,760 |
+| sd_sample | 42,487 | 42,487 | 42,487 | 33,760 |
+| pearson | 33,760 | **25,048** | 33,760 | 33,760 |
+| min | 12,377 | 12,377 | 12,377 | 8,219 |
+| median | 10,299 | 10,299 | 10,299 | 8,219 |
+
+**What limits what.**
+
+* **The checker, on any machine:**
+  * recursion depth: `min` from 700 rows; `mean` and `sd_sample` from 2,400 rows; `min` and `max` on
+    the 617-row development table. This is the frozen v1 encoding under Lean's default recursion
+    limit; more memory or time does not move it;
+  * memory growth: `median` needs more than 7 GiB from 600 rows and on the 617-row table; `pearson`
+    from 2,000 rows (from 1,600 at 6 GiB). Earlier measurements reached 10.2 GB for `median` at 800
+    rows under an 11 GB limit (section 4), so more memory moves this boundary only a little.
+* **The reference machine:** the system kills, because 2 × 7 GiB does not fit its 13.35 GiB domain.
+* **Time:** not binding. No run approached 900 s. The longest, 178 s, was a run slowed by memory
+  pressure just before a system kill.
+
+**60 and 120 papers.** Observed per development paper (original and planted copy, every distinct
+claim of the four arms): kernel time mean 0.586 h, median 0.421 h, maximum 1.449 h (8 papers).
+Projected wall time, assuming perfect packing and papers like the development ones (a projection,
+not a measurement):
+
+| | 2 workers | 1 worker |
+| --- | ---: | ---: |
+| 60 papers | 17.6 h (43.5 h if every paper were the slowest) | 35.2 h |
+| 120 papers | 35.2 h (86.9 h) | 70.4 h |
+
+* **Section 14's kernel criterion** (at most 60 h at 120 papers): met with two workers at the
+  observed mean; not met with one worker, nor if most papers were as heavy as the slowest.
+* **Replay (C4):** about 70 kernel-hours at 120 papers, or about 35 runner-hours with two workers per
+  runner. That is more than the 20 assumed in section 4. Twelve jobs of at most 5 h (60 runner-hours)
+  absorb an underestimate of about 1.7 times. The runner memory needed for 2 × 6 GiB (about
+  13.2 GiB available) was not measured here.
+
+**Is C7 realistically achievable?** Yes, as C7 is defined (within the supported sizes). Every such
+development claim completed, with wide margins: a median of 17 s against 60, a 95th percentile of
+25 s against 300, and a peak of 3.2 GiB against 7. The real constraint is coverage. Claims on large
+tables fall outside the supported sizes and are UNKNOWN for resource or depth reasons: 23 % of those
+development runs failed. A prospective sample with more long tables would lose coverage, not C7.
+
+**For your decision (draft 3 stays unapproved; nothing in it was changed):**
+
+1. **Configuration on the reference machine:** 2 workers at 6 GiB, with nothing else in the memory
+   domain. On a machine whose domain is at least 15.2 GiB (2 × 7 GiB plus overshoot, the driver and a
+   1 GiB reserve), the documented 2 × 7 GiB.
+2. **Supported sizes for C7:** the measured column of the chosen configuration (C or A above). Every
+   value is at or above draft 3's provisional one, except Pearson under 6 GiB (25,048 B).
+3. **Time limit:** 900 s can stay; no run came near it.
+4. **Plan:** about 35 h of kernel time for 120 papers with two workers, with a margin up to about
+   87 h, and 12 replay jobs.
+5. **Unaffected:** the other scientific decisions (sections 13.1 to 13.6) and the adjudication pilot
+   (parts A and B, prepared in `../adjudication/FEASIBILITY_STUDY.md`, not conducted).

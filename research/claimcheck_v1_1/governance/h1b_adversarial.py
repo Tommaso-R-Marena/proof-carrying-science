@@ -220,15 +220,46 @@ def main(argv=None) -> int:
         t8["predecessor_manifest_edited"] = P.gate(wt, "--require-committed")
         T["8_altered_predecessor_or_broken_ancestry_fails"] = {**t8, "passed": all(rejected(v) for v in t8.values())}
         reset()
-        # 9 ---------------------------------------------------------------------------------------------
-        t9 = {}
-        for name in (P.GATE, P.RETAINED, "scripts/test_reconciled_prs.py", P.V23):
+        # 9 --------------------------------------------------------------------------------------------
+        # Two kinds of control file.  Pinned ones (V23 pins their bytes; reconcile.py pins V23's digest) must be rejected when
+        # changed and committed.  The manifest gate's own sources are, by its documented design, "trusted checked-in
+        # configuration" (reconcile.py, _snapshot): a committed edit to them is not detectable by the gate it changes, nor by the
+        # retained-source gate, which lists them as controls.  The test records which kind behaves how, and whether the
+        # proposed gate-definition guard (G1) would flag each change.
+        def edit_commit(name: str) -> str:
             f = wt / name
-            f.write_bytes(f.read_bytes() + (b"\n" if name == P.V23 else b"\n# edited after the control commit\n"))
-            commit_all(wt, f"edit {name}")
-            t9[name] = P.gate(wt, "--require-committed")
+            f.write_bytes(f.read_bytes() + (b"\n" if name.endswith(".json") else b"\n# edited after the control commit\n"))
+            return commit_all(wt, f"edit {name}")
+
+        def g1_flags(commit: str) -> bool:      # the guard's own rule, from g1/gate-definition-guard.core.yml
+            return bool(P.git(wt, "diff", "--name-only", f"{P.PROTECTED_MAIN}...{commit}", "--", ".github/workflows", P.RETAINED,
+                              "scripts/test_reconciled_prs.py", "docs/reconciliation/OPEN_PRS.json", "research/integration_v2",
+                              "docs/integration/2026-11-05", "docs/integration/2026-11-14"))
+        pinned, trusted = {}, {}
+        for name in (P.RETAINED, "scripts/test_reconciled_prs.py", P.V23, P.V22, ".github/workflows/pcs-public-full-verification.yml"):
+            edit_commit(name)
+            pinned[name] = {"manifest_gate": P.gate(wt, "--require-committed")}
             reset()
-        T["9_changed_protected_control_file_fails"] = {**t9, "passed": all(rejected(v) for v in t9.values())}
+        for name in (P.GATE, P.GATE_TEST, "research/integration_v2/boundary.py", "research/integration_v2/__init__.py"):
+            c = edit_commit(name)
+            trusted[name] = {**gates(wt), "g1_guard_would_fail": g1_flags(c)}
+            reset()
+        f = wt / P.GATE
+        f.write_bytes(f.read_bytes() + b"\n# uncommitted\n")
+        uncommitted = P.gate(wt, "--require-committed")
+        reset()
+        pinned_ok = all(rejected(v["manifest_gate"]) for v in pinned.values())
+        trust_root = all(v["manifest_gate"]["passed"] and v["retained_source_gate"]["passed"] for v in trusted.values())
+        T["9_changed_protected_control_file_fails"] = {
+            "pinned_control_files_committed_edit": pinned, "pinned_control_files_rejected": pinned_ok,
+            "gate_source_files_committed_edit": trusted,
+            "gate_source_files_are_a_trust_root_neither_gate_detects": trust_root,
+            "g1_guard_would_flag_every_gate_source_edit": all(v["g1_guard_would_fail"] for v in trusted.values()),
+            "uncommitted_edit_of_the_gate_rejected": rejected(uncommitted),
+            "note": "Holds for every pinned control file. For the manifest gate's own sources it does not hold: neither gate can detect "
+                    "a committed edit to them (reconcile.py, _snapshot: 'trusted checked-in configuration'). This predates H1-b and is the "
+                    "same under H1-a; only review of the control commit, the pre-merge gate-definition check, or G1 catches it.",
+            "passed": pinned_ok and not trust_root}
         # 10 --------------------------------------------------------------------------------------------
         a, b = json.loads(files[P.V23]), json.loads(files_dev[P.V23])
         snap_diff = sorted(k for k in set(a["snapshot"]) | set(b["snapshot"]) if a["snapshot"].get(k) != b["snapshot"].get(k))
