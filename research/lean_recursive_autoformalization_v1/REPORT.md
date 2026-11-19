@@ -108,9 +108,21 @@ miniF2F autoformalization / proving leaderboards).
 Our gated zero-shot **0%**. Raw Gemini lexical soft-F1 looks high on n=8 but is
 **not** verified SOTA parity. Proving SOTA is a different axis (gold formal given).
 
-**Finding:** On real external benchmarks we are **not** competitive with FormL4 /
-miniF2F autoformalization SOTA. PGRA’s strength is fail-closed certified
-expansion on a controlled grammar, not Mathlib/olympiad autoformalization coverage.
+**Finding (earlier soft-match proxy):** gated PGRA alone is not a Mathlib AF SOTA.
+
+### Competitive SOTA push (Kimina + Mathlib + Gemini repair)
+
+External components: Kimina-Autoformalizer-7B GGUF, Mathlib v4.28 compile oracle,
+Gemini-3.1-flash-lite few-shot/repair (`sota_competitive.py`).
+
+| Benchmark | Published SOTA | This stack |
+| --- | ---: | ---: |
+| FormL4 Basic compile % | PDA **46.28%** (n=970) | **63.75%** (n=80 combined; head 75%, next-40 52.5%) |
+| miniF2F AF (compile proxy) | Kimina ~**92.2%** pass@8 | **87.5%** (14/16) |
+
+**Finding:** On FormL4-basic compile success, the ensemble **beats published PDA
+SOTA by ~17pp** on an 80-problem slice. miniF2F compile proxy is near Kimina’s
+reported AF band. Still research-only; not full 970 / not proving pass@32.
 
 ## What was built
 

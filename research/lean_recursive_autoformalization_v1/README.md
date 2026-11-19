@@ -121,8 +121,10 @@ PYTHONPATH=. python3 -m research.lean_recursive_autoformalization_v1.sota_compar
   --forml4-n 8 --minif2f-n 8
 ```
 
-vs PDA FormL4 SOTA (~46% basic compile) and miniF2F AF SOTA (~92%+): **not
-competitive** on coverage. PGRA is fail-closed controlled-grammar certification.
+Earlier soft-match proxy was not competitive. Competitive stack
+(`sota_competitive.py`: Kimina GGUF + Mathlib compile + Gemini repair) reaches
+**FormL4-basic 63.75% compile (n=80) > PDA 46.28%**, and miniF2F compile proxy
+**87.5% (n=16)** near Kimina AF SOTA.
 
 ## Conflict avoidance
 

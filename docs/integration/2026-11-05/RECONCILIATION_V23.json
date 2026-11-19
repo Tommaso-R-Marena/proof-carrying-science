@@ -63121,6 +63121,17 @@
       "minif2f_af_sota_approx": "~92%+",
       "ours_minif2f_zero_shot": 0.0,
       "verdict": "not_competitive_on_coverage"
+    },
+    "pgra_sota_competitive": {
+      "forml4_basic_n80_compile_pct": 63.75,
+      "pda_sota": 46.28,
+      "beats_pda": true,
+      "minif2f_compile_pct": 87.5,
+      "stack": [
+        "Kimina-GGUF",
+        "Mathlib-4.28",
+        "Gemini-repair"
+      ]
     }
   },
   "control_paths": [
@@ -64812,7 +64823,7 @@
       "mode": "100644"
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
-      "sha256": "9de3fe42ba06c77508ad5e229c45aae0d76257b35bb55978559a5b4ec50982b1",
+      "sha256": "e64dbb8968c27e97129a40c63148da2fafb87749d8271d00e63ea422c86ab1f7",
       "mode": "100644"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
@@ -82432,11 +82443,11 @@
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/README.md": {
-      "sha256": "5437d72ef26a2de94804eb2af878b3648c8f71729d4379f1b863d92bd98012e9",
+      "sha256": "dbf0df85988f84589b7082234a73b4fc53db392fb0685711949de086ed2f3275",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/REPORT.md": {
-      "sha256": "d64db580b2c56f094531559de24f41240fc2f68e2a64db7dff7c9d85066a6209",
+      "sha256": "5a65c535e469edf66ec708f8a387969d42a54a29bd11498f81b4269daf66a9bd",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/__init__.py": {
@@ -82599,6 +82610,10 @@
       "sha256": "49a5c0f5459c27423e6c308fd3bafcd94fe12bef09b631ef994a7e09a21aa0b1",
       "mode": "100644"
     },
+    "research/lean_recursive_autoformalization_v1/kimina_autoformalizer.py": {
+      "sha256": "2494a6cbd6c4ea11c58a182572888e6b23609adf0a3d3c8e760b96118af61cc6",
+      "mode": "100644"
+    },
     "research/lean_recursive_autoformalization_v1/lean/.gitignore": {
       "sha256": "bae47b5d67dcb46217092d57d0e91ec92c22e9ca132745dd1d42a5c609b7e4f9",
       "mode": "100644"
@@ -82621,6 +82636,10 @@
     },
     "research/lean_recursive_autoformalization_v1/lean/lean-toolchain": {
       "sha256": "db7bb24b756d745bbde83fe92718b51bd3625dae3701ba0f598d0eedcd3f3028",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/lean_compile_oracle.py": {
+      "sha256": "d5bc294e83a957cb6b0b014412493a81f955de8bc2e305e19372f99a8d1c57eb",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/proof_coupled_v2.py": {
@@ -82819,6 +82838,46 @@
       "sha256": "5fb6848cfe4fe6d93173e662d68bd8539ffd221ed28d7f9784d5bcb0d8c58407",
       "mode": "100644"
     },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/COMPARISON.md": {
+      "sha256": "744f2f42d769b93346675fa307fe266d63737ecbe9825241f219111cab5d069d",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/SHA256.json": {
+      "sha256": "c335ffa6007a9ef0d750e72270ebcaa490a10cc2bfd78865b6b950ee1b24db66",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/forml4_expand_40_79.json": {
+      "sha256": "8bf4f64187396b8cc3caf0f718ee2754cd50fa7c8d5b0cdcaff157a1d2889d3e",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/forml4_expand_partial.json": {
+      "sha256": "610c9a54fd1dc3cd796e5abac880756814be2cbd453a49fc075613e3e5781979",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/forml4_partial.json": {
+      "sha256": "96e028fd47fc096afff24f6f9f8f6f08f1f9d5ea5f5f828142b05c975c2ee514",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/forml4_repair_partial.json": {
+      "sha256": "c546ca89cc1993cb06b2b00b982c5ba2dc13c0ebe4033be378acc5a6ef6233e0",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/gemini_expand_ledger.json": {
+      "sha256": "18b593d8f0d191e3f55497af550482ef4122ef71080814fcd40ce726afc97c47",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/gemini_repair2_ledger.json": {
+      "sha256": "2ec799d636f88e3ec3f17e5d85ad98bc904237882c3141274d61babaa63bde4f",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/gemini_repair_ledger.json": {
+      "sha256": "b82682a5047dcfe57d6243a33ccaba5ee4466d3dd5943a0a513d2cb7eb1e0152",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/results/sota_competitive/sota_competitive_summary.json": {
+      "sha256": "8982e9b8d0b47998fb477296fedd04602b6cdd8f264ad7790da698db0091ea1a",
+      "mode": "100644"
+    },
     "research/lean_recursive_autoformalization_v1/results/store/.lock": {
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "mode": "100644"
@@ -82931,6 +82990,10 @@
       "sha256": "f87909c9f3ad8379087ad00f7772719858bdff8160d96d251bca9eaa3a420c62",
       "mode": "100644"
     },
+    "research/lean_recursive_autoformalization_v1/sota_competitive.py": {
+      "sha256": "0da82130d46330a4360fc04630a16768a58087af195a744d2bf9ac906a837beb",
+      "mode": "100644"
+    },
     "research/lean_recursive_autoformalization_v1/store.py": {
       "sha256": "5ffec019e8e2cf7eada4feb39eaa8d65cc7d4d26fa2c6d70dfc23edec8b9213b",
       "mode": "100644"
@@ -82965,6 +83028,10 @@
     },
     "research/lean_recursive_autoformalization_v1/tests/test_pgra_gate.py": {
       "sha256": "77581d9b1d525bb41ecd01ed24529b53d8de4898dfa1651a65b9f3023b896bca",
+      "mode": "100644"
+    },
+    "research/lean_recursive_autoformalization_v1/tests/test_pgra_lean_compile_oracle.py": {
+      "sha256": "18c3ec0771dbd4efb382f95e38f7f48aea0f627624d3435521bb30d6908f4a6d",
       "mode": "100644"
     },
     "research/lean_recursive_autoformalization_v1/tests/test_pgra_proof_coupled_v2.py": {
