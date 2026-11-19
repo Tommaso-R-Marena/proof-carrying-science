@@ -1,0 +1,61 @@
+{
+  "format": "pcs-evolving-safety-gate-formal-v1",
+  "source_sha256": "e8a5fb7101feb24cf0ac9ed55898675821658f52728a03d2564c72ae6292d026",
+  "staged_sha256": "0e0f9fe55ef5cb539bf1c5f68515ad6c5b128c7f9e21e841328aa3742ea723dd",
+  "olean_sha256": "73567598ebf5fcec6dfbe2391426ae20acb699dc2c28b96aeb4e8b1fe12b1229",
+  "theorems": [
+    "EvolvingSafetyGate.channel1_never_admissible",
+    "EvolvingSafetyGate.correcting_alone_never_admissible",
+    "EvolvingSafetyGate.joint_channel_admissible",
+    "EvolvingSafetyGate.joint_detecting_guard_admissible",
+    "EvolvingSafetyGate.ensemble_probe_admissible",
+    "EvolvingSafetyGate.joint_detecting_dominates_channel1",
+    "EvolvingSafetyGate.joint_detecting_dominates_correcting",
+    "EvolvingSafetyGate.joint_channel_dominates_channel1",
+    "EvolvingSafetyGate.ensemble_dominates_joint_detecting",
+    "EvolvingSafetyGate.ensemble_dominates_channel1",
+    "EvolvingSafetyGate.retain_joint_over_channel1",
+    "EvolvingSafetyGate.retain_ensemble_over_joint",
+    "EvolvingSafetyGate.never_retain_channel1_over_joint",
+    "EvolvingSafetyGate.admissible_iff_pos_rank",
+    "EvolvingSafetyGate.retained_stays_admissible",
+    "EvolvingSafetyGate.nonadmissible_never_dominates_admissible",
+    "EvolvingSafetyGate.catalog_exhaustive"
+  ],
+  "axiom_closures": {
+    "EvolvingSafetyGate.channel1_never_admissible": [],
+    "EvolvingSafetyGate.correcting_alone_never_admissible": [],
+    "EvolvingSafetyGate.joint_channel_admissible": [],
+    "EvolvingSafetyGate.joint_detecting_guard_admissible": [],
+    "EvolvingSafetyGate.ensemble_probe_admissible": [],
+    "EvolvingSafetyGate.joint_detecting_dominates_channel1": [],
+    "EvolvingSafetyGate.joint_detecting_dominates_correcting": [],
+    "EvolvingSafetyGate.joint_channel_dominates_channel1": [],
+    "EvolvingSafetyGate.ensemble_dominates_joint_detecting": [],
+    "EvolvingSafetyGate.ensemble_dominates_channel1": [],
+    "EvolvingSafetyGate.retain_joint_over_channel1": [],
+    "EvolvingSafetyGate.retain_ensemble_over_joint": [],
+    "EvolvingSafetyGate.never_retain_channel1_over_joint": [
+      "propext"
+    ],
+    "EvolvingSafetyGate.admissible_iff_pos_rank": [],
+    "EvolvingSafetyGate.retained_stays_admissible": [
+      "propext"
+    ],
+    "EvolvingSafetyGate.nonadmissible_never_dominates_admissible": [
+      "propext"
+    ],
+    "EvolvingSafetyGate.catalog_exhaustive": [
+      "propext"
+    ]
+  },
+  "permitted_axioms": [
+    "Quot.sound",
+    "propext"
+  ],
+  "kernel_checked": true,
+  "native_decide": false,
+  "sorry": false,
+  "production_authority": false,
+  "seconds": 60.212124
+}

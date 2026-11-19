@@ -16,13 +16,18 @@ THEOREMS = [
     "EvolvingSafetyGate.correcting_alone_never_admissible",
     "EvolvingSafetyGate.joint_channel_admissible",
     "EvolvingSafetyGate.joint_detecting_guard_admissible",
+    "EvolvingSafetyGate.ensemble_probe_admissible",
     "EvolvingSafetyGate.joint_detecting_dominates_channel1",
     "EvolvingSafetyGate.joint_detecting_dominates_correcting",
     "EvolvingSafetyGate.joint_channel_dominates_channel1",
+    "EvolvingSafetyGate.ensemble_dominates_joint_detecting",
+    "EvolvingSafetyGate.ensemble_dominates_channel1",
     "EvolvingSafetyGate.retain_joint_over_channel1",
+    "EvolvingSafetyGate.retain_ensemble_over_joint",
     "EvolvingSafetyGate.never_retain_channel1_over_joint",
     "EvolvingSafetyGate.admissible_iff_pos_rank",
     "EvolvingSafetyGate.retained_stays_admissible",
+    "EvolvingSafetyGate.nonadmissible_never_dominates_admissible",
     "EvolvingSafetyGate.catalog_exhaustive",
 ]
 PERMITTED = {"propext", "Quot.sound"}

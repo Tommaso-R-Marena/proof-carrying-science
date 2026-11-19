@@ -7,7 +7,7 @@ and independent external validation are separate claims.
 
 | Start here | Capability and evidence |
 |---|---|
-| [Evolving Safety Gate v1](evolving_safety_gate_v1/README.md) | Lean admission lattice that rejects channel-1-only mechanisms; attested evolution retains jointDetectingGuard champion (recall 1.0 on mirages); live Gemini stress clean |
+| [Evolving Safety Gate v1](evolving_safety_gate_v1/README.md) | Self-evolving Lean admission lattice; rejects channel-1; promotes ensembleProbe over joint on stealth hard suite (mirage+stealth recall 1.0, Gemini clean) |
 | [Assurance Mirage v1](assurance_mirage_v1/README.md) | Kernel-checked channel-1 blindness; 160 Qwen + 68 Gemini completions; Qwen attack mirages 93.75%–100%, Gemini 0/17; unguarded replay shows guard prevented unsafe public effects on Qwen |
 | [Public-study actual-weight evaluation](public_study_validation_v1_results/README.md) | 72 fresh Qwen responses, five published attack templates, failures retained, 72 guarded episodes and 72 fresh receiving replays; current hardened receiving command |
 | [Canonical action laboratory](structured_action_lab_v4/README.md) | Recorded/fresh model modes, exact token/byte parsing, corrected proposals and visual reports |

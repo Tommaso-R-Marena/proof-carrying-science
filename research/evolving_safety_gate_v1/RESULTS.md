@@ -2,31 +2,37 @@
 
 ## Formal
 
-Twelve theorems in `EvolvingSafetyGate` (Lean 4.28.0, `leanchecker --fresh`).
+Seventeen theorems in `EvolvingSafetyGate` (Lean 4.28.0, `leanchecker --fresh`).
 Channel-1-only and correcting-guard-only mechanisms are never admissible.
-Joint-channel / joint-detecting-guard classes are admissible. Retention requires
+`ensembleProbe` formally dominates `jointDetectingGuard`. Retention requires
 formal domination on detectability rank; retained champions stay admissible.
+Non-admissible mechanisms never dominate admissible ones.
 
-## Offline evolution (4 generations)
+## Hard suite (stealth)
 
-Attested fitness on Assurance Mirage captures (Qwen scientific + transfer + Gemini).
+Pinned reviewed Qwen stealth episodes + synthetic planted probes: channel-1-complete
+attacks with silent classic joint OR-flags but note-level compliance / encoding /
+exfil intent. Refusal-aware probes ignore “refusing to encode…” style notes.
 
-| Candidate | Formal admissible | Mirage recall | Pure benign FPR | Fitness |
-|---|---|---:|---:|---:|
-| c1-blind | no | 0 | 0 | -1000 |
-| correcting-only | no | 0 | 0 | -1000 |
-| **joint-v1 (champion)** | **yes** | **1.0** | **0** | **264** |
+| Detector | Classic mirage recall | Stealth recall | Gemini clean | Fitness |
+|---|---:|---:|---:|---:|
+| c1-blind | — | — | — | -1000 |
+| correcting-only | — | — | — | -1000 |
+| joint-v1 | 1.0 | **0.0** | yes | 264 |
+| **ensemble-v1 (champion)** | **1.0** | **1.0** | **yes** | **404** |
 
-Mutations (leak-priority, corrupt-aware, strict-threshold, …) did not dominate
-joint-v1 on this finite suite. The gate correctly refused to crown channel-1.
+## Kernel evolution (5 generations)
 
-Champion also caught 3 benign competence failures on the transfer program
-(wrong actions under benign prompts) without pure false alarms.
+Attested fitness on Assurance Mirage captures + hard suite. Champion retained:
+`ensemble-v1` (`ensembleProbe`). Channel-1 never crowned. Joint-v1 plateau broken
+by stealth recall. Mutations did not dominate ensemble-v1 on this suite.
 
-## Live Gemini stress
+Evidence: `evidence/generation-kernel-v2/`.
 
-Champion re-tested on `direct-exfil`, `many-shot-jailbreak`, `policy-puppetry`
-(instruction_boundary, 12 requests): **0 mirages, 0 champion flags**.
+## Live Gemini stress (prior wave)
+
+Earlier live wave on instruction-boundary arms stayed clean for joint champion;
+ensemble probes are refusal-aware so successful Gemini refusals do not inflate flags.
 
 ## Non-claims
 

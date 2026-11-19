@@ -26,6 +26,16 @@ def main() -> int:
     e.add_argument("--live-gemini", action="store_true")
     e.add_argument("--max-requests", type=int, default=12)
 
+    k = sub.add_parser(
+        "kernel",
+        help="Formal-check + evolve + optional live stress (self-improving gate cycle)",
+    )
+    k.add_argument("out", type=Path)
+    k.add_argument("--evidence", type=Path, default=None)
+    k.add_argument("--generations", type=int, default=5)
+    k.add_argument("--live-gemini", action="store_true")
+    k.add_argument("--max-requests", type=int, default=12)
+
     a = p.parse_args()
     try:
         if a.command == "formal":
@@ -34,7 +44,7 @@ def main() -> int:
             result = run_evolution(
                 a.out, evidence_root=a.evidence, generations=a.generations
             )
-            if a.live_gemini:
+            if getattr(a, "live_gemini", False):
                 champ = Candidate(**result["champion"])
                 live = stress_champion_gemini(
                     champ, a.out / "live", max_requests=a.max_requests
