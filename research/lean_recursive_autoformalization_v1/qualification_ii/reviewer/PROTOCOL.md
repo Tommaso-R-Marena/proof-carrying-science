@@ -1,0 +1,13 @@
+# Independent frozen checks
+
+The coordinator wrote 20 source items and explicit references in a separate directory before inspecting parser output. The implementation agent supplied the public wire schema and its supported family. The item SHA-256 is `489bfe29eab6173707db526cb3048732c49120b25fec24b209610c7f9dfdef1f`. The parser was locked at SHA-256 `b9c89e2570042125b8b9f322992f828a1e22c1c496468961a464c10d41cef0fb` before inspection of scores. Report every abstention. Use the same English for the Phase I baseline. The reference author and implementer are separate agents in the same research campaign, with no independent human gold standard.
+
+As an external transfer diagnostic, evaluate that locked parser on all 950 Random problems and all records actually present in the Real file of the pinned PDA checkout. Only `nl_problem` and `input` respectively are visible. The machine-readable files are the denominator. Exact file digests fix these inputs. Count syntactic coverage before looking at any formal reference. Successful parsing by itself has no semantic authority. No fitting, repair, model calls or sample-based inference.
+
+## Results and replay
+
+The 20 reviewer cases contain 16 expressible mathematical readings and four outside the interface. The parser proposed 13 contracts, all matching the corresponding reviewer references. Seven yielded kernel-checked validity and six yielded checked singleton counterexamples to validity. Three expressible paraphrases drew abstentions, as did all four out-of-scope inputs. The old parser proposed zero. This is a family-targeted diagnostic with references written by a second agent, and does not estimate unrestricted mathematical accuracy.
+
+On the separate Random and Real transfers, the new parser proposed zero contracts in 950 and 965 rows respectively. The baseline also proposed zero, including four Real rows its source validator rejected. These censuses give no evidence of improved coverage on those external splits. Dataset credit goes to the FormL4/PDA authors; this directory retains the external digests and derived counts.
+
+From the repository root, with Python 3.12.14 and Lean 4.28.0 on PATH, use `python -m research.lean_recursive_autoformalization_v1.qualification_ii.reviewer.replay` for the coordinator's fixtures. For the transfer census, run `python -m research.lean_recursive_autoformalization_v1.qualification_ii.reviewer.transfer PATH_TO_PDA/data/FormL4` at PDA commit `7f65d2c27e79239d754e08af2de84a4cea58acc7`. Compare with `results.json` and `transfer.json` respectively. The English parser was frozen separately; the shim appended later delegates only the reference/proof check.

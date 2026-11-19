@@ -1,0 +1,559 @@
+[
+  {
+    "family": "basic",
+    "id": "rm000",
+    "reference": {
+      "conclusion": {
+        "equal": [
+          {
+            "union": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "union": [
+              {
+                "var": "B"
+              },
+              {
+                "var": "A"
+              }
+            ]
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the union of A and B equals the union of B and A.",
+    "valid": true
+  },
+  {
+    "family": "basic",
+    "id": "rm001",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "inter": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "var": "A"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the intersection of A and B is a subset of A.",
+    "valid": true
+  },
+  {
+    "family": "basic",
+    "id": "rm002",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "var": "A"
+          },
+          {
+            "inter": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, A is a subset of the intersection of A and B.",
+    "valid": false
+  },
+  {
+    "family": "basic",
+    "id": "rm003",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "diff": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "var": "A"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the difference of A and B is a subset of A.",
+    "valid": true
+  },
+  {
+    "family": "basic",
+    "id": "rm004",
+    "reference": {
+      "conclusion": {
+        "equal": [
+          {
+            "compl": {
+              "var": "A"
+            }
+          },
+          {
+            "var": "B"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the complement of A equals B.",
+    "valid": false
+  },
+  {
+    "family": "basic",
+    "id": "rm005",
+    "reference": {
+      "conclusion": {
+        "equal": [
+          {
+            "inf": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "inter": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the infimum of A and B equals the intersection of A and B.",
+    "valid": true
+  },
+  {
+    "family": "basic",
+    "id": "rm006",
+    "reference": {
+      "conclusion": {
+        "equal": [
+          {
+            "sup": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "inter": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the supremum of A and B equals the intersection of A and B.",
+    "valid": false
+  },
+  {
+    "family": "basic",
+    "id": "rm007",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "empty": true
+          },
+          {
+            "var": "A"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the empty set is a subset of A.",
+    "valid": true
+  },
+  {
+    "family": "basic",
+    "id": "rm008",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "univ": true
+          },
+          {
+            "var": "A"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the universal set is a subset of A.",
+    "valid": false
+  },
+  {
+    "family": "basic",
+    "id": "rm009",
+    "reference": {
+      "conclusion": {
+        "equal": [
+          {
+            "inter": [
+              {
+                "var": "A"
+              },
+              {
+                "compl": {
+                  "var": "A"
+                }
+              }
+            ]
+          },
+          {
+            "empty": true
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, the intersection of A and the complement of A equals the empty set.",
+    "valid": true
+  },
+  {
+    "family": "conditional",
+    "id": "rm010",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "var": "A"
+          },
+          {
+            "var": "C"
+          }
+        ]
+      },
+      "premises": [
+        {
+          "subset": [
+            {
+              "var": "A"
+            },
+            {
+              "var": "B"
+            }
+          ]
+        },
+        {
+          "subset": [
+            {
+              "var": "B"
+            },
+            {
+              "var": "C"
+            }
+          ]
+        }
+      ],
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "source": "For all sets A, B and C, if A is a subset of B and B is a subset of C then A is a subset of C.",
+    "valid": true
+  },
+  {
+    "family": "conditional",
+    "id": "rm011",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "var": "C"
+          },
+          {
+            "var": "A"
+          }
+        ]
+      },
+      "premises": [
+        {
+          "subset": [
+            {
+              "var": "A"
+            },
+            {
+              "var": "B"
+            }
+          ]
+        },
+        {
+          "subset": [
+            {
+              "var": "B"
+            },
+            {
+              "var": "C"
+            }
+          ]
+        }
+      ],
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "source": "For all sets A, B and C, if A is a subset of B and B is a subset of C then C is a subset of A.",
+    "valid": false
+  },
+  {
+    "family": "conditional",
+    "id": "rm012",
+    "reference": {
+      "conclusion": {
+        "equal": [
+          {
+            "var": "A"
+          },
+          {
+            "var": "C"
+          }
+        ]
+      },
+      "premises": [
+        {
+          "subset": [
+            {
+              "var": "A"
+            },
+            {
+              "var": "B"
+            }
+          ]
+        },
+        {
+          "subset": [
+            {
+              "var": "B"
+            },
+            {
+              "var": "C"
+            }
+          ]
+        }
+      ],
+      "variables": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "source": "For all sets A, B and C, if A is a subset of B and B is a subset of C then A equals C.",
+    "valid": false
+  },
+  {
+    "family": "paraphrase",
+    "id": "rm013",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "union": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "union": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, every element of the union of A and B belongs to at least one of A and B.",
+    "valid": true
+  },
+  {
+    "family": "paraphrase",
+    "id": "rm014",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "inter": [
+              {
+                "var": "A"
+              },
+              {
+                "var": "B"
+              }
+            ]
+          },
+          {
+            "var": "B"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, whatever belongs to both A and B also belongs to B.",
+    "valid": true
+  },
+  {
+    "family": "paraphrase",
+    "id": "rm015",
+    "reference": {
+      "conclusion": {
+        "subset": [
+          {
+            "var": "A"
+          },
+          {
+            "var": "B"
+          }
+        ]
+      },
+      "premises": [],
+      "variables": [
+        "A",
+        "B"
+      ]
+    },
+    "source": "For any two sets A and B, there can be no member of A outside B.",
+    "valid": false
+  },
+  {
+    "family": "out_of_scope",
+    "id": "rm016",
+    "reference": null,
+    "source": "For any two sets A and B, the cardinality of A equals the cardinality of B.",
+    "valid": null
+  },
+  {
+    "family": "out_of_scope",
+    "id": "rm017",
+    "reference": null,
+    "source": "For any set A of integers, the sum of A is even.",
+    "valid": null
+  },
+  {
+    "family": "out_of_scope",
+    "id": "rm018",
+    "reference": null,
+    "source": "For any two sets A and B, A is close to B.",
+    "valid": null
+  },
+  {
+    "family": "out_of_scope",
+    "id": "rm019",
+    "reference": null,
+    "source": "For all sets A and B, A equals C.",
+    "valid": null
+  }
+]
