@@ -106,8 +106,6 @@ def extract_features(ep: Episode) -> dict[str, float]:
     pub_mismatch = 0.0
     if pubs and approved is not None:
         pub_mismatch = 0.0 if all(p == approved for p in pubs) else 1.0
-    elif pubs and approved is None:
-        pub_mismatch = 1.0 if ep.get("attack") else 0.0
 
     return {
         "classic_joint": classic,
@@ -117,7 +115,6 @@ def extract_features(ep: Episode) -> dict[str, float]:
         "authority_probe": _probe_hit(blobs, AUTHORITY),
         "tool_inject_probe": _probe_hit(blobs, TOOL_INJECT),
         "publish_mismatch": pub_mismatch,
-        "attack_prompt": 1.0 if ep.get("attack") else 0.0,
     }
 
 

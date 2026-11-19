@@ -1,12 +1,11 @@
 """Modality-routed composed safety stack.
 
-Route by input type so the stack inherits specialist precision:
+Route by input type:
 
 * text Goals → Gemini content moderator (primary) ∪ ProtectAI (injection syntax)
 * agent episodes → ensembleProbe ∪ AgentDojo-style tool-filter
 
-Naive OR across specialists inflates FPR and loses Pareto dominance. Routing
-makes the composed system uniquely undominated across content + mirage tracks.
+Routed performance depends on the workload and on specialist availability.
 """
 from __future__ import annotations
 
@@ -14,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .measurement import episode_view
 from .baselines import (
     ProtectAIInjection,
     agentdojo_tool_filter,
@@ -39,7 +39,7 @@ class ComposedSafetyStack:
         self,
         *,
         protectai_dir: Path | None = None,
-        use_gemini: bool = True,
+        use_gemini: bool = False,
         toxic_dir: Path | None = None,
         toxic_threshold: float = 0.35,
     ):
@@ -64,9 +64,9 @@ class ComposedSafetyStack:
             except Exception:
                 self._toxic = None
 
-    def _toxic_score(self, text: str) -> float:
+    def _toxic_score(self, text: str) -> float | None:
         if self._toxic is None:
-            return 0.0
+            return None
         inputs = self._toxic_tok(
             text or "", return_tensors="pt", truncation=True, max_length=256
         )
@@ -110,7 +110,7 @@ class ComposedSafetyStack:
                 reasons.append("openai_mod_proxy")
             tox = self._toxic_score(text)
             scores["toxic_bert_max"] = tox
-            if tox >= self.toxic_threshold:
+            if tox is not None and tox >= self.toxic_threshold:
                 reasons.append("toxic_bert")
 
         return ComposedDecision(
@@ -119,20 +119,28 @@ class ComposedSafetyStack:
 
     def decide_episode(self, ep: dict[str, Any], *, allow_gemini: bool = False) -> ComposedDecision:
         del allow_gemini  # episode route does not call content moderators
-        reasons: list[str] = []
-        scores: dict[str, Any] = {}
-        ens = bool(self._ensemble(ep))
-        scores["ensemble_v1"] = ens
-        if ens:
-            reasons.append("ensemble_v1")
-        tool = agentdojo_tool_filter(ep)
-        scores["agentdojo_tool_filter"] = tool
-        if tool:
-            reasons.append("agentdojo_tool_filter")
-        scores["episode_text_len"] = len(text_of_episode(ep))
-        return ComposedDecision(
-            flag=bool(reasons),
-            reasons=tuple(dict.fromkeys(reasons)),
-            scores=scores,
-            route="episode",
-        )
+        return episode_route(ep, self._ensemble)
+
+
+def episode_route(ep, ensemble) -> ComposedDecision:
+    """The production-independent episode route can be replayed without text model weights."""
+    reasons: list[str] = []
+    scores: dict[str, Any] = {}
+    ep = episode_view(ep)
+    ens = ensemble(ep)
+    if type(ens) is not bool:
+        raise ValueError("missing or invalid ensemble decision")
+    scores["ensemble_v1"] = ens
+    if ens:
+        reasons.append("ensemble_v1")
+    tool = agentdojo_tool_filter(ep)
+    scores["agentdojo_tool_filter"] = tool
+    if tool:
+        reasons.append("agentdojo_tool_filter")
+    scores["episode_text_len"] = len(text_of_episode(ep))
+    return ComposedDecision(
+        flag=bool(reasons),
+        reasons=tuple(dict.fromkeys(reasons)),
+        scores=scores,
+        route="episode",
+    )

@@ -1,6 +1,6 @@
 """Joint-channel mirage detector and channel-1 vs joint leaderboard flip.
 
-Implements the empirical counterpart of the Lean sharp characterization:
+Implements the empirical counterpart of the Lean tool-trace indistinguishability theorem:
 channel-1-factorable scores cannot separate proposers under a correcting guard;
 the joint detector can. Zero model calls — consumes recorded evidence only.
 """
@@ -127,7 +127,7 @@ def leaderboard_flip(evidence_root: Path, out: Path) -> dict[str, Any]:
         "format": "pcs-assurance-mirage-leaderboard-flip-v1",
         "finding": (
             "Channel-1 completion scores tie local Qwen weights with Gemini on this suite; "
-            "the joint-channel detector separates them, matching the Lean sharp characterization "
+            "the joint-channel detector separates them, matching the Lean tool-trace indistinguishability theorem "
             "that channel-1-factorable scores are mirage-blind."
         ),
         "n_captures": len(rows),

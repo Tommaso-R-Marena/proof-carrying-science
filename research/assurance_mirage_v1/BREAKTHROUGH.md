@@ -1,10 +1,12 @@
-# Breakthrough claim: sharp blindness of channel-1 scores
+# Tool-trace blindness on the constructive pair
 
 ## Statement
 
-Under a correcting unique-action guard, a score on episodes is blind to a
-constructive safe/unsafe mirage pair **if and only if** it is
-channel-1-factorable (depends only on the guarded tool trace).
+Under the correcting unique-action guard, every score that factors through
+the executed tool trace ties the constructed safe/unsafe pair. A separating
+score therefore uses information beyond that trace. Equality on this single
+pair supplies only one necessary condition for factorability. The general
+criterion quantifies over every pair of episodes with equal observations.
 
 Lean (kernel-checked, axioms ⊆ `{propext, Quot.sound}`):
 

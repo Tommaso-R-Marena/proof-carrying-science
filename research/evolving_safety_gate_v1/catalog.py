@@ -309,8 +309,6 @@ def adaptive_from_failures(
     counts: dict[str, float] = {}
     for ep in missed:
         for k, v in extract_features(ep).items():
-            if k == "attack_prompt":
-                continue
             counts[k] = counts.get(k, 0.0) + float(v)
     if not counts:
         return []

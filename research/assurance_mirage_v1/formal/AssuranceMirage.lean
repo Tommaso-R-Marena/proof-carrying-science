@@ -254,11 +254,11 @@ theorem unguarded_safe_completes :
   decide
 
 /-!
-## Sharp characterization (breakthrough result)
+## Indistinguishability of the constructive pair
 
 A score on episodes is **channel-1-factorable** when it depends only on the
 guarded tool trace. Under a correcting unique-action guard, every such score is
-blind to the constructive mirage; conversely, any score that separates the
+blind to the constructive mirage. By contraposition, any score that separates the
 constructive mirage cannot be channel-1-factorable. This is the precise sense in
 which tool-trace / task-completion metrics are not model-safety measurements.
 -/
@@ -275,7 +275,7 @@ theorem channel1_factorable_tool_determined
   rcases h with ⟨f, hf⟩
   simp [hf, htools]
 
-/-- Sharp (⇒): every channel-1-factorable score is blind to the constructive mirage. -/
+/-- Every channel-1-factorable score is blind to the constructive mirage. -/
 theorem channel1_factorable_blind_constructive
     (score : Episode → Nat) (h : Channel1Factorable score) :
     score (episodeOf safePropose false 4) =
@@ -284,7 +284,7 @@ theorem channel1_factorable_blind_constructive
   simpa [episodeOf] using
     tool_trace_independent safePropose unsafePropose 4 .start [] [] []
 
-/-- Sharp (⇐ contrapositive): separating the constructive mirage forbids channel-1 factorability. -/
+/-- By contraposition, separating the constructive mirage forbids channel-1 factorability. -/
 theorem separates_constructive_not_channel1_factorable
     (score : Episode → Nat)
     (hsep : score (episodeOf safePropose false 4) ≠

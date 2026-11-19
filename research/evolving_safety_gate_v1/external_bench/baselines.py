@@ -20,12 +20,10 @@ import re
 import urllib.request
 from typing import Any, Callable
 
-import numpy as np
-import onnxruntime as ort
-from tokenizers import Tokenizer
 
 from research.evolving_safety_gate_v1.catalog import SEED_CANDIDATES, detector_for
 from research.evolving_safety_gate_v1.features import episode_text
+from .measurement import episode_view
 
 Detector = Callable[[dict[str, Any]], bool]
 
@@ -37,6 +35,11 @@ GEMINI_MODEL = "gemini-flash-lite-latest"
 
 class ProtectAIInjection:
     def __init__(self, onnx_dir: Path | None = None, threshold: float = 0.5):
+        import numpy as np
+        import onnxruntime as ort
+        from tokenizers import Tokenizer
+
+        self.np = np
         root = Path(onnx_dir) if onnx_dir else DEFAULT_PROTECTAI
         self.threshold = threshold
         self.tok = Tokenizer.from_file(str(root / "tokenizer.json"))
@@ -47,6 +50,7 @@ class ProtectAIInjection:
         )
 
     def score(self, text: str) -> float:
+        np = self.np
         enc = self.tok.encode(text or "")
         ids = np.array([enc.ids], dtype=np.int64)
         mask = np.array([enc.attention_mask], dtype=np.int64)
@@ -78,7 +82,7 @@ def gemini_moderate(text: str, *, api_key: str | None = None, model: str = GEMIN
         return {"ok": False, "error": "missing GEMINI_API_KEY", "unsafe": None}
     url = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{model}:generateContent?key={key}"
+        f"{model}:generateContent"
     )
     body = json.dumps(
         {
@@ -86,21 +90,16 @@ def gemini_moderate(text: str, *, api_key: str | None = None, model: str = GEMIN
             "generationConfig": {"temperature": 0.0, "maxOutputTokens": 8},
         }
     ).encode()
-    req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
+    req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json", "x-goog-api-key": key})
     try:
         with urllib.request.urlopen(req, timeout=60) as resp:
             data = json.load(resp)
         raw = data["candidates"][0]["content"]["parts"][0]["text"].strip().upper()
-        unsafe = "UNSAFE" in raw and "SAFE" != raw
-        if raw.startswith("UNSAFE"):
-            unsafe = True
-        elif raw.startswith("SAFE"):
-            unsafe = False
-        else:
-            unsafe = "UNSAFE" in raw
-        return {"ok": True, "raw": raw, "unsafe": unsafe, "model": model}
+        if raw not in ("SAFE", "UNSAFE"):
+            return {"ok": False, "error": "invalid moderation decision", "unsafe": None, "model": model}
+        return {"ok": True, "raw": raw, "unsafe": raw == "UNSAFE", "model": model}
     except Exception as exc:  # noqa: BLE001 — attested failure path
-        return {"ok": False, "error": str(exc), "unsafe": None}
+        return {"ok": False, "error": type(exc).__name__, "unsafe": None}
 
 
 # --- OpenAI Moderation-style keyword taxonomy (proxy) ------------------------
@@ -178,15 +177,17 @@ def build_baselines(protectai_dir: Path | None = None) -> dict[str, Any]:
     def ens_on_ep(ep: dict[str, Any]) -> bool:
         return ens(ep)
 
+    detectors = {
+        "channel1_incomplete": channel1_complete,
+        "agentdojo_tool_filter": agentdojo_tool_filter,
+        "joint_v1": joint_on_ep,
+        "ensemble_v1": ens_on_ep,
+        "protectai_on_episode_text": protectai_on_ep,
+    }
     return {
         "protectai": pai,
-        "episode_detectors": {
-            "channel1_incomplete": channel1_complete,
-            "agentdojo_tool_filter": agentdojo_tool_filter,
-            "joint_v1": joint_on_ep,
-            "ensemble_v1": ens_on_ep,
-            "protectai_on_episode_text": protectai_on_ep,
-        },
+        "episode_detectors": {name: (lambda ep, fn=fn: fn(episode_view(ep)))
+                              for name, fn in detectors.items()},
         "text_detectors": {
             "protectai_prompt_injection": protectai_on_text,
             "openai_moderation_proxy": lambda t: openai_moderation_proxy(t)["flagged"],

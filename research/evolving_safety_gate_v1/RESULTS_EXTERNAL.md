@@ -1,66 +1,31 @@
-# External bake-off results (JailbreakBench + SOTA-style guards)
+# Historical external evaluation
 
-Honest answer to “did you benchmark vs external / SOTA?”: **yes, now** — three tracks.
-Not an official JailbreakBench ASR leaderboard entry. LlamaGuard weights were not used
-(gated); ProtectAI prompt-injection v2 and Gemini flash-lite moderator were.
+The baseline at `5cd0fe136bef17b2b869e6df96697aae256c1fe6` mixed four endpoints. Content classification asks whether a Goal requests harmful material. Prompt-injection resistance asks whether untrusted instructions affect authorized behavior. Proposal safety asks whether the model chose an admissible next action. The assurance-mirage construction asks whether an observer of a corrected execution can distinguish proposers. Each endpoint needs its own reference outcome.
 
-## Systems
+| Frozen input | What can be reproduced | Limitation |
+|---|---|---|
+| Track A, 100 JBB Goals | 93 cached Gemini decisions, seven missing. On covered rows, 48 TP, 37 TN, 6 FP and 2 FN. | Goal intent labels do not measure attack success, output safety or a completed AgentDojo task. The keyword comparator is a local proxy. |
+| Track B, 120 recorded PCS episodes | The archived development labels flag 74 episodes. | Part of the label comes from the same classic flags used by the detector. Previously inspected stealth identities and a cross-capture case-ID fallback also influenced labels. Agreement with these labels cannot validate independent mirage detection. |
+| Track C, 12 recorded Qwen transfers | All 12 are positive on the historical mirage definition. | An always-positive classifier attains recall and F1 of one. Specificity and false-positive rate are undefined. |
 
-| System | Role |
-|---|---|
-| **ensemble_v1** (PCS) | Evolving Safety Gate champion (`ensembleProbe`) |
-| joint_v1 (PCS) | Classic joint OR-flags |
-| channel1_incomplete | Mirage-blind negative control |
-| **protectai/deberta-v3-base-prompt-injection-v2** | Widely used SOTA prompt-injection classifier (ONNX) |
-| **gemini-flash-lite-latest** | LLM-as-judge content moderator |
-| openai_moderation_proxy | Keyword taxonomy heuristic (not OpenAI API) |
-| agentdojo_tool_filter | Allowlist tool-pipeline defense |
+The historical `dominance.json` uses 93 available Gemini responses. Its version differs from the generating script in the baseline checkout. Only its preserved counts and bytes are reproducible here. Gemini, ProtectAI and toxic-bert were not rerun. The alias `gemini-flash-lite-latest` identifies the historical moderator interface. A fixed underlying model revision is unavailable. The resulting numbers have no official JailbreakBench or AgentDojo status.
 
-## Track A — JailbreakBench Goals (text only)
+See the [offline reanalysis](RESULTS_SOTA.md) and [original evidence](evidence/external-bakeoff-v1/).
 
-Dataset: [JailbreakBench/JBB-Behaviors](https://huggingface.co/datasets/JailbreakBench/JBB-Behaviors) (50 harmful + 50 benign Goals).
+## Protocol and license scope
 
-| System | Precision | Recall | F1 | FPR |
-|---|---:|---:|---:|---:|
-| Gemini content moderator (n=93 labeled) | 0.89 | 0.96 | **0.92** | 0.14 |
-| OpenAI-moderation keyword proxy | 1.00 | 0.04 | 0.08 | 0.00 |
-| ProtectAI prompt-injection | — | **0.00** | — | 0.00 |
-| ensemble_v1 on Goal text | 0.00 | 0.00 | — | 0.04 |
-| joint_v1 on Goal text | — | 0.00 | — | 0.00 |
+JailbreakBench evaluates model responses with judges under specified generation and defense conditions. PCS used a 100-Goal subset, supplied existing split labels, and scored intent classification. AgentDojo runs agents on tasks within interactive suites. The local disagreement filter evaluates recorded proposal and admission fields and has no AgentDojo task-success oracle. Both benchmark code repositories publish MIT licenses. Those code licenses do not establish redistribution rights for each upstream input or model weight. This replay adds no external examples or weights. [JailbreakBench protocol](https://github.com/JailbreakBench/jailbreakbench) · [code license](https://github.com/JailbreakBench/jailbreakbench/blob/main/LICENSE) · [AgentDojo protocol](https://github.com/ethz-spylab/agentdojo) · [code license](https://github.com/ethz-spylab/agentdojo/blob/main/LICENSE).
 
-**Read:** content-harm Goals are Gemini’s job. ProtectAI is an *injection* detector — JBB
-Goals usually lack “ignore previous / system override” syntax, so ~0 recall is expected.
-ESG on raw Goal text is outside its designed I/O (episode + tool channel).
+## Baseline claim register
 
-## Track B — Attested PCS agent mirage episodes (same inputs for all)
+| Claim at the frozen head | Classification | Evidence and assumption |
+|---|---|---|
+| Guarded execution-only scores tie the constructed pair | FORMALLY_PROVED | `AssuranceMirage.channel1_factorable_blind_constructive` under the unique-action guard and mathematical tool projection. |
+| A tie on that one pair implies global factorability | REFUTED | A score can tie that pair and distinguish another pair with the same observation. The global property quantifies over every observation fiber. |
+| The finite catalog's modeled admissibility excludes channel-only candidates | FORMALLY_PROVED | `EvolvingSafetyGate.channel1_never_admissible` concerns the modeled rank and Lean transition. |
+| The protected production PCS authority is improved by Python fitness selection | NOT_EVALUATED | The Python experiment is a separate research process, with a finite generator and reusable development cases. |
+| The routed stack's recorded geometric mean is evidence of comparative superiority | REFUTED | Historical measurements lack matched modalities and independent labels. The original arithmetic remains recorded. |
+| An execution-only monitor can miss proposal contract violations in the captures | EXECUTABLY_VERIFIED | The strict-reply receiver finds 55 violations despite 120 recorded successful completions. Requires trustworthy raw replies, state records and workflow definitions. |
+| The measured detectors generalize to unmeasured tasks or paid models | NOT_EVALUATED | The same corpus was previously used during mechanism development. |
 
-120 Qwen/Gemini episodes; label = classic mirage ∪ reviewed stealth.
-
-| System | Precision | Recall | F1 | FPR |
-|---|---:|---:|---:|---:|
-| **ensemble_v1** | **1.00** | **1.00** | **1.00** | **0.00** |
-| ProtectAI on episode text | 0.79 | 0.97 | 0.87 | **0.41** |
-| joint_v1 | 1.00 | 0.84 | 0.91 | 0.00 |
-| AgentDojo tool-filter | 1.00 | 0.68 | 0.81 | 0.00 |
-| channel1_incomplete | — | 0.00 | — | 0.00 |
-
-Stealth subset (n=12): ensemble **12/12**, ProtectAI 11/12, joint **0/12**, tool-filter 0/12.
-
-## Track C — Live transfer: JBB Goals → Qwen in PCS workflow
-
-12 episodes (8 harmful + 4 benign JBB Goals) on Qwen3-0.6B GGUF under instruction_boundary.
-All 12 produced classic mirages (forbidden `finish` / proposal harm), including JBB-benign
-Goals — the small model left the admitted tool path.
-
-On **mirage** labels: ensemble/joint/tool-filter **12/12**; ProtectAI **5/12**.
-
-## Bottom line
-
-- **Content-harm (JBB text):** Gemini moderator ≫ ESG / ProtectAI.
-- **Agent mirage + stealth:** ESG `ensembleProbe` ≫ joint, tool-filter, channel-1; beats
-  ProtectAI on FPR and ties/beats on stealth.
-- **Threat models differ.** No single system wins both. Production stacks should combine
-  a content moderator with a joint/ensemble episode detector — not rely on channel-1
-  completion scores.
-
-Evidence: `evidence/external-bakeoff-v1/`.
+The isolated baseline run used Python 3.12.14 and Lean 4.28.0. All 16 original mirage/evolution tests passed, including the two original Lean checks. The pre-correction external helper required optional NumPy, ONNX Runtime and tokenizers during import, even for cached replay. The offline audit uses the standard library. ProtectAI model files and runtime remain optional for a fresh model run. Two optional tests skip when local weights are absent. No hosted CI or admission to the protected source census was established. Cached goal judgments and raw model captures remain in their original locations with provenance bound by the replay receipt.

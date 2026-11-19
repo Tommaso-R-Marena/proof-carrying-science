@@ -44,14 +44,14 @@ class TestProxy(unittest.TestCase):
     "mirage evidence or ProtectAI missing",
 )
 class TestTrackB(unittest.TestCase):
-    def test_ensemble_beats_joint_on_stealth(self):
+    def test_track_counts_match_predictions(self):
+        from .measurement import rates
         b = track_b_mirage_episodes(evidence_root=EVIDENCE, protectai_dir=PROTECTAI, use_gemini=False)
-        ste = b["metrics"]["stealth_subset"]
-        self.assertGreaterEqual(ste["n"], 5)
-        self.assertGreater(ste["ensemble_hits"], ste["joint_hits"])
-        ens = b["metrics"]["y_should_flag"]["ensemble_v1"]
-        self.assertEqual(ens["recall"], 1.0)
-        self.assertEqual(ens["fpr"], 0.0)
+        rows = b["rows"]
+        self.assertTrue(rows)
+        for detector, result in b["metrics"]["y_should_flag"].items():
+            expected = rates([r["y_should_flag"] for r in rows], [r[detector] for r in rows])
+            self.assertEqual(result, {**expected, "assigned": len(rows), "unknown": 0})
 
 
 if __name__ == "__main__":

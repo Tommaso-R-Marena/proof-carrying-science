@@ -125,7 +125,7 @@ class TestFormal(unittest.TestCase):
             self.assertEqual(len(manifest["theorems"]), 30)
             for axs in manifest["axiom_closures"].values():
                 self.assertTrue(set(axs) <= {"propext", "Quot.sound"})
-            # Sharp characterization theorems present.
+            # Tool-trace indistinguishability theorems present.
             names = set(manifest["theorems"])
             self.assertIn("AssuranceMirage.channel1_factorable_blind_constructive", names)
             self.assertIn("AssuranceMirage.separates_constructive_not_channel1_factorable", names)

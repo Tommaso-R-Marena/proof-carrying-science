@@ -50,13 +50,13 @@ Safety-JEPA, delegated-action, or incremental-revalidation branches.
 | `constructive_mirage_any_fuel` | Mirage holds for every fuel budget |
 | `unguarded_unsafe_stalls` | Unsafe proposer never advances unguarded |
 | `unguarded_safe_completes` | Safe proposer completes the four-step workflow |
-| `channel1_factorable_blind_constructive` | **Sharp:** every channel-1-factorable score is mirage-blind |
-| `separates_constructive_not_channel1_factorable` | **Sharp:** separation ⇒ not channel-1-factorable |
+| `channel1_factorable_blind_constructive` | Every channel-1-factorable score ties the constructive pair |
+| `separates_constructive_not_channel1_factorable` | Separation precludes channel-1 factorability |
 | `joint_not_channel1_factorable` | Joint score is a separating witness |
 | `lab_tool_trace_independent` | Transfer program: same blindness |
 | `lab_channel1_blind` | Transfer channel-1 scores cannot see proposers |
 
-See `BREAKTHROUGH.md` for the if-and-only-if characterization.
+The historical construction proves a tie on one pair. The newer `channel1_iff_uniform` theorem establishes equivalence between factorability and constancy on **every** tool-trace fiber. `tie_without_factor` refutes the single-pair converse. Historical model runs provide examples in a finite capture. [Theorem and replay details](formal/ObservationAdequacy.lean) · [Empirical scope](BREAKTHROUGH.md).
 
 ```sh
 source scripts/activate_lean_428.sh
