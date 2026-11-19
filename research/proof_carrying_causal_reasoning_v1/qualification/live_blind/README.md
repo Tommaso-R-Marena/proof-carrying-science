@@ -1,0 +1,7 @@
+# Blind CLadder text pilot
+
+A single free-tier Gemini 3.5 Flash Lite batch answered 6 of 12 sampled questions correctly (6/9 among answered, 3 abstentions). The six positive and six negative gold labels give the always-no baseline 6/12. This small batch supplies no evidence of an improvement over that baseline. One generation used 1,789 input and 114 output tokens, 1,903 total. No retries, demonstrations or per-item repairs. All 12 output IDs complied with the response format.
+
+The 12 smallest SHA-256 values of a fixed prefix concatenated with the public question ID selected the items from 10,112 rows. Selection used no labels or question types. Model metadata was used only to join the public background text. The request contained anonymous batch IDs, background, given information and each question. The scorer separately reads gold answers. The input is public and possible pretraining exposure is unknown. All items shared one context. These estimates describe the selected batch only.
+
+Use Python 3.12 from this directory. Extract the upstream CLadder v1 dataset release used by the branch's blind evaluation into DATA. `pilot.py` verifies both uncompressed SHA-256 digests. Run `sha256sum -c frozen.sha256` followed by `python3 pilot.py score DATA attempt.json | cmp - score.json` using Bash with pipefail. Scoring reconstructs the exact request and checks it against the receipt. Fresh generation is optional and costs quota. Gemini responses are observations, with no trusted authority. Dataset credit: Jin et al., CLadder, NeurIPS 2023, CausalNLP.
