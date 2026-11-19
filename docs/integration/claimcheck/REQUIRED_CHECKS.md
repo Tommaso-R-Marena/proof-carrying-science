@@ -180,6 +180,23 @@ removed so its assertions cannot be stripped. It fails the source contract if th
 | no false failure | the `source-policy` steps that run before the gate leave no untracked file; `__pycache__` is ignored |
 | caveats | annotated tags are not enforced (a lightweight tag at the right commit passes), and authority rests on the commit ID in the gate. Every workflow that runs `reconcile --require-committed` checks out full history with tags |
 
+**C2b dry run (2026-11-19, `c2b/c2b-dry-run.json`, patch `c2b/proposed-c2b.patch`, SHA-256
+`599e4614…3f73`): all as expected.** It ran on top of C1's dry-run control commit with the H1-b
+retained commit:
+
+* the gate passes on 72 PRs and reports `retained_source.passed: true`;
+* the protected suites pass: `test_reconcile.py`, 76 tests (75 plus the new one), and
+  `scripts/test_reconciled_prs.py`, OK;
+* the CI steps that run before the gate in `source-policy` leave no untracked file, including
+  `check_pr_contributions.py`; the gate passes after them;
+* three negative controls each pass under C1 alone and are rejected with C2b: the retained tag
+  deleted, the tag moved, an untracked file present;
+* the required workflow runs `source-policy` on every pull request to `main`, with full history and
+  tags, and its aggregate rejects a skipped or failed `source-policy`. A pull request can still edit
+  that workflow, or `reconcile.py` itself (D2b's caveat; H1-b test 9).
+
+The patch changes two files and adds 51 lines. Regenerate it at the commit after C1.
+
 ### D2b: require the website's retained-source and public-tree check (ruleset)
 
 **The change, in the site repository:** Settings → Rules → Rulesets → the active ruleset that

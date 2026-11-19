@@ -66,8 +66,10 @@ source commit. The evidence must then be regenerated and reviewed again.
 ### H1. Historical exposure: which retained commit C1 pins ([`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md))
 * **H1-b (recommended):** the retained commit's first parent is a snapshot with the admitted tree on
   protected `main` (`bc78660b`), so the tag keeps no commit of this branch reachable. Implemented in
-  the tooling (`prepare_core_admission --history clean`, the default) and tested: 12 adversarial
-  tests (`h1b/h1b-adversarial.json`). The gates are unchanged and check the same things.
+  the tooling (`prepare_core_admission --history clean`, the default) and tested
+  (`h1b/h1b-adversarial.json`): 11 of 12 adversarial tests pass. Test 9 fails under either design:
+  a committed edit to `reconcile.py` or `test_reconcile.py` passes both gates. The gates are
+  unchanged and check the same things.
   * **Cost:** the protected tag retains the reviewed tree, not the branch's development history.
   * **What it does not do:** remove anything from pull requests 212 and 216, or from clones.
 * **H1-a (fallback):** the original design; the tag keeps the whole branch reachable, including the
@@ -151,9 +153,12 @@ source commit. The evidence must then be regenerated and reviewed again.
   * two control files change; no workflow, manifest or ruleset.
 
   Specification: [`REQUIRED_CHECKS.md`](REQUIRED_CHECKS.md), "C2b".
+* **Dry run of 2026-11-19:** all as expected (`c2b/c2b-dry-run.json`; `REQUIRED_CHECKS.md`, "C2b").
 * **Before:** regenerate with `prepare_c2b` at the commit after C1. The dry run must report
   `all_as_expected: true`: the negative controls (tag deleted, tag moved, untracked file) pass under
   C1 alone and are rejected with C2b.
+* **Review:** C2b edits `reconcile.py`, which no gate can check (H1-b test 9). Read its diff line
+  by line.
 * **Verify:** on the control commit, `source-policy` and `verified-public-integration` pass, and the
   gate's output includes `retained_source.passed: true`.
 * **Undo:** revert the control commit.

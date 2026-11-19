@@ -25,8 +25,10 @@ be final: they are regenerated at the commit you admit, as before.
   they are the branch head and the previous intake.
 * **Why:** under H1-a the protected tag would keep the commits that added the withheld responses
   reachable for good.
-* **Evidence:** [`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md); `h1b/h1b-adversarial.json`
-  (12 tests); `tests/test_retained_history.py`.
+* **Evidence:** [`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md); `h1b/h1b-adversarial.json`;
+  `tests/test_retained_history.py`. 11 of the 12 tests pass. Test 9 fails for a reason that predates
+  H1-b: a committed edit to the manifest gate's own `reconcile.py` or `test_reconcile.py` passes both
+  gates, under either design.
 * **Assumptions:** the gates accept both designs and check the same things. The design is fixed by
   the commit ID you pin.
 * **Approving H1-b:** C1 pins the clean commit. The tag then keeps the reviewed tree, not the
