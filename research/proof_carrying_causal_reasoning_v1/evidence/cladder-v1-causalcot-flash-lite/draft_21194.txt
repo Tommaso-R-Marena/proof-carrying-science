@@ -1,0 +1,19 @@
+To determine whether Method 1 is more correct than Method 2, let's follow the step-by-step causal inference framework:
+
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> Y, V2 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+backadj
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+$P(Y | do(X=x))$ vs adjusting for V2: $P(Y | do(X=x)) = \sum_{v_2} P(Y | X=x, V_2=v_2) P(V_2=v_2)$
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+No specific numerical probabilities are given in the text, only the qualitative causal structure.
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+In the given causal graph, X and V2 are parents of Y. There is no backdoor path from X to V2 or from V2 to Y through X. Specifically, V2 does not confound the effect of X on Y because V2 is not a common cause of X and Y (there is no edge into X). Therefore, the marginal association between X and Y (Method 1) directly captures the total causal effect of X on Y without needing to condition on V2 (Method 2). Conditioning on V2 is not required for causal identification here, and looking at the correlation in general (Method 1) is sufficient and standard for the total effect. Thus, Method 1 is not "more correct" in a strictly necessary adjustment sense since both unadjusted and adjusted estimators identify the marginal effect when there is no confounding, but Method 1 is simpler and directly addresses the general relationship. However, standard practice for total causal effect does not strictly require blocking V2. 
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: yes

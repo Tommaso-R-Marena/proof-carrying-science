@@ -1,0 +1,2965 @@
+{
+  "claims": {
+    "empirical_causation_established": false,
+    "general_backdoor_soundness_proved_in_lean": false,
+    "local_exact_finite_evidence": true,
+    "production_authority": false
+  },
+  "controls": {
+    "kind": "control_suite",
+    "mismatches": [],
+    "n_controls": 27,
+    "n_mismatches": 0,
+    "n_tasks": 10,
+    "ok": true,
+    "rows": [
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T01",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{Z} P(Y|X=x,Z) P(Z)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "08e1f7ff03d604782aa9e1c53fd51b4f090b271b96902ee7c8987fdfde7d2c7e",
+          "claim": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T01",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "backdoor_estimate": "5/8",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z"
+              ]
+            ],
+            "p_do_1": "5/8",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 1/2 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "1/2",
+            "outcome": "Y",
+            "p_outcome_do": "5/8",
+            "p_outcome_obs": "3/4",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T01",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T01",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-Z-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "b2c32e1a83321d082c97fed16735b04689de27b408b6daddd441b8d15fb0803d",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T01",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z"
+              ]
+            ],
+            "p_do_1": "5/8",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 1/2 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "1/2",
+            "outcome": "Y",
+            "p_outcome_do": "5/8",
+            "p_outcome_obs": "3/4",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "unblocked backdoor paths remain: X-Z-Y"
+          ],
+          "task_id": "T01",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "T01",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{Z} P(Y|X=x,Z) P(Z)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "47ef29675c34225c0145468b86e0f875f2a341dd6a5a1a597ddcb5bb90e6b2ff",
+          "claim": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "asserts_association_equals_effect": true,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T01",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "backdoor_estimate": "5/8",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z"
+              ]
+            ],
+            "p_do_1": "5/8",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 1/2 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "1/2",
+            "outcome": "Y",
+            "p_outcome_do": "5/8",
+            "p_outcome_obs": "3/4",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "claim asserts association equals effect, but executable SCM shows association 1/2 \u2260 ATE 1/4",
+            "observational association 1/2 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+          ],
+          "task_id": "T01",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T02",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = P(Y|X=x)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "a69f9d8b4449d2bb1cfe38c57c48580d129af0c350cc4e81d6d07e773ffde8ef",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T02",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "backdoor_estimate": "5/8",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              []
+            ],
+            "p_do_1": "5/8",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "1/4",
+            "outcome": "Y",
+            "p_outcome_do": "5/8",
+            "p_outcome_obs": "5/8",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T02",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T02",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "M"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "adjustment set contains descendants of treatment: ['M']"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "61ab6da3b29bed3f220a4e71ad8ea9d240ef86d3635412170e954dbe13aaba40",
+          "claim": {
+            "adjustment_set": [
+              "M"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T02",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              []
+            ],
+            "p_do_1": "5/8",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "1/4",
+            "outcome": "Y",
+            "p_outcome_do": "5/8",
+            "p_outcome_obs": "5/8",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set contains descendants of treatment: ['M']"
+          ],
+          "task_id": "T02",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T03",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = P(Y|X=x)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "0d15903da822ebbc661f7c37ea3e6c38ee0d466086c690823a61a30137ead16d",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T03",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "0/1",
+            "backdoor_estimate": "1/3",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              []
+            ],
+            "p_do_1": "1/3",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": false,
+            "notes": [],
+            "observational_association": "0/1",
+            "outcome": "Y",
+            "p_outcome_do": "1/3",
+            "p_outcome_obs": "1/3",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T03",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T03",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "C"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "adjustment set contains descendants of treatment: ['C']"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "758c186d49cfa6c97d04271ed6b9a7322827630e6b6ba6b7ffafc2d71e23e372",
+          "claim": {
+            "adjustment_set": [
+              "C"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T03",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "0/1",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              []
+            ],
+            "p_do_1": "1/3",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": false,
+            "notes": [],
+            "observational_association": "0/1",
+            "outcome": "Y",
+            "p_outcome_do": "1/3",
+            "p_outcome_obs": "1/3",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set contains descendants of treatment: ['C']"
+          ],
+          "task_id": "T03",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T04",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = P(Y|X=x)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "71cf6123c424a554803717e305d3f3e637753e983ee25ea984b2c3f093d10e5b",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T04",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "backdoor_estimate": "11/20",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "U1"
+              ],
+              [
+                "U2"
+              ],
+              [
+                "C",
+                "U1"
+              ],
+              [
+                "C",
+                "U2"
+              ],
+              [
+                "U1",
+                "U2"
+              ],
+              [
+                "C",
+                "U1",
+                "U2"
+              ]
+            ],
+            "p_do_1": "11/20",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "1/5",
+            "outcome": "Y",
+            "p_outcome_do": "11/20",
+            "p_outcome_obs": "11/20",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T04",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T04",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "C"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-U1-C-U2-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "27a6fad5e2fee7b8e89bdc33ac85140152f1cce868c82619449de085beff8a9b",
+          "claim": {
+            "adjustment_set": [
+              "C"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T04",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "U1"
+              ],
+              [
+                "U2"
+              ],
+              [
+                "C",
+                "U1"
+              ],
+              [
+                "C",
+                "U2"
+              ],
+              [
+                "U1",
+                "U2"
+              ],
+              [
+                "C",
+                "U1",
+                "U2"
+              ]
+            ],
+            "p_do_1": "11/20",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "1/5",
+            "outcome": "Y",
+            "p_outcome_do": "11/20",
+            "p_outcome_obs": "11/20",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "unblocked backdoor paths remain: X-U1-C-U2-Y"
+          ],
+          "task_id": "T04",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T05",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z1",
+              "Z2"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{Z1,Z2} P(Y|X=x,Z1,Z2) P(Z1,Z2)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "8a7d3d269a109e82cf05e79c4f69e1ee2e11b79672dc54e5270d2f72da5a7c33",
+          "claim": {
+            "adjustment_set": [
+              "Z1",
+              "Z2"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T05",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "backdoor_estimate": "59/120",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z1",
+                "Z2"
+              ]
+            ],
+            "p_do_1": "59/120",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 772/2485 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "772/2485",
+            "outcome": "Y",
+            "p_outcome_do": "59/120",
+            "p_outcome_obs": "39/70",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T05",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T05",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z1"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-Z2-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "b57effdbe989cb9ca38ff290efdc4826c984c03007a9ac51279efe8dca97093b",
+          "claim": {
+            "adjustment_set": [
+              "Z1"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T05",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z1",
+                "Z2"
+              ]
+            ],
+            "p_do_1": "59/120",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 772/2485 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "772/2485",
+            "outcome": "Y",
+            "p_outcome_do": "59/120",
+            "p_outcome_obs": "39/70",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "unblocked backdoor paths remain: X-Z2-Y"
+          ],
+          "task_id": "T05",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "T05",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-Z2-Y; X-Z1-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "348e2311908396dd0e7231b7524b56d1195e0142aacd9f017189f027bf1a5092",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T05",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z1",
+                "Z2"
+              ]
+            ],
+            "p_do_1": "59/120",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 772/2485 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "772/2485",
+            "outcome": "Y",
+            "p_outcome_do": "59/120",
+            "p_outcome_obs": "39/70",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "unblocked backdoor paths remain: X-Z2-Y; X-Z1-Y"
+          ],
+          "task_id": "T05",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T06",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-U-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "2d6f52c9bf028d13fd6c1e3722f1dcb14ccee4acce547f3f0f5db33299ca77f3",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": false,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T06",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "identifiable": false,
+            "minimal_adjustment_sets": [],
+            "p_do_1": "11/20",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 9/20 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "9/20",
+            "outcome": "Y",
+            "p_outcome_do": "11/20",
+            "p_outcome_obs": "27/40",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "correctly recognized non-identifiability",
+            "unblocked backdoor paths remain: X-U-Y"
+          ],
+          "task_id": "T06",
+          "verdict": "not_identifiable"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T06",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-U-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "9b3a37a296552190f2cea5ce58379485deea5e0c38f1fc0d85c04cd582c55c0e",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T06",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "identifiable": false,
+            "minimal_adjustment_sets": [],
+            "p_do_1": "11/20",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 9/20 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "9/20",
+            "outcome": "Y",
+            "p_outcome_do": "11/20",
+            "p_outcome_obs": "27/40",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "target is not identifiable; claim overreached",
+            "unblocked backdoor paths remain: X-U-Y"
+          ],
+          "task_id": "T06",
+          "verdict": "not_identifiable"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "T06",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "U"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{U} P(Y|X=x,U) P(U)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "96f7cf6017ae480de68e4352ac28c12a18388eae0b5a9cb0088d8231e0a4b78b",
+          "claim": {
+            "adjustment_set": [
+              "U"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T06",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/5",
+            "backdoor_estimate": "11/20",
+            "identifiable": true,
+            "identifiable_from_observed_only": false,
+            "minimal_adjustment_sets": [
+              [
+                "U"
+              ]
+            ],
+            "p_do_1": "11/20",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 9/20 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "9/20",
+            "outcome": "Y",
+            "p_outcome_do": "11/20",
+            "p_outcome_obs": "27/40",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "adjustment set uses unobserved variable(s); not available in observational data",
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T06",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T07",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{Z} P(Y|X=x,Z) P(Z)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "9ac5faeb559099096f29c59f7863f4775bb221ac4bf9633980db946b97f59bd0",
+          "claim": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T07",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "backdoor_estimate": "113/240",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "M"
+              ],
+              [
+                "Z"
+              ],
+              [
+                "M",
+                "Z"
+              ]
+            ],
+            "p_do_1": "113/240",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 7/24 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "7/24",
+            "outcome": "Y",
+            "p_outcome_do": "113/240",
+            "p_outcome_obs": "119/240",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T07",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T07",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-Z-M-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "23c14e86c6e1d815b8b992369238865abcd0f67d5b6f08f07d03045a217c330a",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T07",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "M"
+              ],
+              [
+                "Z"
+              ],
+              [
+                "M",
+                "Z"
+              ]
+            ],
+            "p_do_1": "113/240",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 7/24 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "7/24",
+            "outcome": "Y",
+            "p_outcome_do": "113/240",
+            "p_outcome_obs": "119/240",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "unblocked backdoor paths remain: X-Z-M-Y"
+          ],
+          "task_id": "T07",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "T07",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Y"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "adjustment set must not contain treatment or outcome"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "48d1fe62460a2e4feeaa4ee1d4846b8ef017d5c636a731668680824557e6ecbd",
+          "claim": {
+            "adjustment_set": [
+              "Y"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T07",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "1/4",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "M"
+              ],
+              [
+                "Z"
+              ],
+              [
+                "M",
+                "Z"
+              ]
+            ],
+            "p_do_1": "113/240",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [
+              "observational association 7/24 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "7/24",
+            "outcome": "Y",
+            "p_outcome_do": "113/240",
+            "p_outcome_obs": "119/240",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set must not contain treatment or outcome"
+          ],
+          "task_id": "T07",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "T08",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{Z} P(Y|X=x,Z) P(Z)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "59ae273fe650833e9b50b89b62cb2cf10d3afb6dd7b6cb5cc0b80df255de8c2d",
+          "claim": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T08",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "0/1",
+            "backdoor_estimate": "2/5",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z"
+              ]
+            ],
+            "p_do_1": "2/5",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": false,
+            "notes": [
+              "observational association 3/8 differs from ATE 0/1 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "3/8",
+            "outcome": "Y",
+            "p_outcome_do": "2/5",
+            "p_outcome_obs": "5/8",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "T08",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "T08",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "Y",
+            "reasons": [
+              "unblocked backdoor paths remain: X-Z-Y"
+            ],
+            "treatment": "X",
+            "valid": false
+          },
+          "certificate_sha256": "f61cfc1c067c786a3d7ebbd8bf8ef862d2a60dabc77bfc9e5dd149941d01656b",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T08",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "0/1",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z"
+              ]
+            ],
+            "p_do_1": "2/5",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": false,
+            "notes": [
+              "observational association 3/8 differs from ATE 0/1 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "3/8",
+            "outcome": "Y",
+            "p_outcome_do": "2/5",
+            "p_outcome_obs": "5/8",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "unblocked backdoor paths remain: X-Z-Y"
+          ],
+          "task_id": "T08",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "T08",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(Y|do(X=x)) = \u03a3_{Z} P(Y|X=x,Z) P(Z)",
+            "outcome": "Y",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "X",
+            "valid": true
+          },
+          "certificate_sha256": "6a47b05b98f209c70845bbe5540b9cd7793ec4983155994cbc58aa29853f4db1",
+          "claim": {
+            "adjustment_set": [
+              "Z"
+            ],
+            "asserts_association_equals_effect": true,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "Y",
+            "schema_version": 1,
+            "task_id": "T08",
+            "treatment": "X"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "0/1",
+            "backdoor_estimate": "2/5",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [
+                "Z"
+              ]
+            ],
+            "p_do_1": "2/5",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": false,
+            "notes": [
+              "observational association 3/8 differs from ATE 0/1 (correlation \u2260 causation under this SCM)"
+            ],
+            "observational_association": "3/8",
+            "outcome": "Y",
+            "p_outcome_do": "2/5",
+            "p_outcome_obs": "5/8",
+            "treatment": "X",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "claim asserts association equals effect, but executable SCM shows association 3/8 \u2260 ATE 0/1",
+            "observational association 3/8 differs from ATE 0/1 (correlation \u2260 causation under this SCM)"
+          ],
+          "task_id": "T08",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "P01",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(latency|do(feature_flag=x)) = P(latency|feature_flag=x)",
+            "outcome": "latency",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "feature_flag",
+            "valid": true
+          },
+          "certificate_sha256": "fe48b884fed25c61d3adbad74707b2688db2eea0191fbd413e80c3a0fbda83ab",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "latency",
+            "schema_version": 1,
+            "task_id": "P01",
+            "treatment": "feature_flag"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "-1/4",
+            "backdoor_estimate": "3/8",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "load"
+              ],
+              [
+                "traffic"
+              ],
+              [
+                "load",
+                "traffic"
+              ]
+            ],
+            "p_do_1": "3/8",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "-1/4",
+            "outcome": "latency",
+            "p_outcome_do": "3/8",
+            "p_outcome_obs": "3/8",
+            "treatment": "feature_flag",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "P01",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "P01",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "cache_hit"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "latency",
+            "reasons": [
+              "adjustment set contains descendants of treatment: ['cache_hit']"
+            ],
+            "treatment": "feature_flag",
+            "valid": false
+          },
+          "certificate_sha256": "7866d1e108f892b65740fb46bb309327b6c52627e60afbd24b601b24ab48857e",
+          "claim": {
+            "adjustment_set": [
+              "cache_hit"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "latency",
+            "schema_version": 1,
+            "task_id": "P01",
+            "treatment": "feature_flag"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "-1/4",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "load"
+              ],
+              [
+                "traffic"
+              ],
+              [
+                "load",
+                "traffic"
+              ]
+            ],
+            "p_do_1": "3/8",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "-1/4",
+            "outcome": "latency",
+            "p_outcome_do": "3/8",
+            "p_outcome_obs": "3/8",
+            "treatment": "feature_flag",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set contains descendants of treatment: ['cache_hit']"
+          ],
+          "task_id": "P01",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "P01",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "latency"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "latency",
+            "reasons": [
+              "adjustment set must not contain treatment or outcome"
+            ],
+            "treatment": "feature_flag",
+            "valid": false
+          },
+          "certificate_sha256": "e63f2b7e2dabc6b5b73b831696dae8ae21a0d8cac46ad13df08111872c075f8c",
+          "claim": {
+            "adjustment_set": [
+              "latency"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "latency",
+            "schema_version": 1,
+            "task_id": "P01",
+            "treatment": "feature_flag"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "-1/4",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "load"
+              ],
+              [
+                "traffic"
+              ],
+              [
+                "load",
+                "traffic"
+              ]
+            ],
+            "p_do_1": "3/8",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "-1/4",
+            "outcome": "latency",
+            "p_outcome_do": "3/8",
+            "p_outcome_obs": "3/8",
+            "treatment": "feature_flag",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set must not contain treatment or outcome"
+          ],
+          "task_id": "P01",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 0,
+        "expected_accept_pattern": true,
+        "task_id": "P02",
+        "verdict": {
+          "accepted": true,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": "P(pass|do(flaky=x)) = P(pass|flaky=x)",
+            "outcome": "pass",
+            "reasons": [
+              "backdoor criterion satisfied under declared assumptions"
+            ],
+            "treatment": "flaky",
+            "valid": true
+          },
+          "certificate_sha256": "9a781d07fe42a592535225d2c64af44a1d2eff0b60b8fab61cde838032038103",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "pass",
+            "schema_version": 1,
+            "task_id": "P02",
+            "treatment": "flaky"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "-11/36",
+            "backdoor_estimate": "19/36",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "load"
+              ]
+            ],
+            "p_do_1": "19/36",
+            "proposed_set_valid": true
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "-11/36",
+            "outcome": "pass",
+            "p_outcome_do": "19/36",
+            "p_outcome_obs": "19/36",
+            "treatment": "flaky",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "identification certificate accepted under declared assumptions"
+          ],
+          "task_id": "P02",
+          "verdict": "identified_under_assumptions"
+        }
+      },
+      {
+        "control_index": 1,
+        "expected_accept_pattern": false,
+        "task_id": "P02",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "retry"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "pass",
+            "reasons": [
+              "adjustment set contains descendants of treatment: ['retry']"
+            ],
+            "treatment": "flaky",
+            "valid": false
+          },
+          "certificate_sha256": "d4a98810959b9a5c0d4b570d0da3e6d4eab744b07f131d99c5c28c93d0d8189a",
+          "claim": {
+            "adjustment_set": [
+              "retry"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "pass",
+            "schema_version": 1,
+            "task_id": "P02",
+            "treatment": "flaky"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "-11/36",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "load"
+              ]
+            ],
+            "p_do_1": "19/36",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "-11/36",
+            "outcome": "pass",
+            "p_outcome_do": "19/36",
+            "p_outcome_obs": "19/36",
+            "treatment": "flaky",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set contains descendants of treatment: ['retry']"
+          ],
+          "task_id": "P02",
+          "verdict": "invalid_claim"
+        }
+      },
+      {
+        "control_index": 2,
+        "expected_accept_pattern": false,
+        "task_id": "P02",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": {
+            "adjustment_set": [
+              "pass"
+            ],
+            "assumptions": [
+              "dag_is_correct_causal_graph",
+              "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+              "acyclicity",
+              "consistency_Yx_equals_Y_when_X_x",
+              "graphical_markov_condition",
+              "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+            ],
+            "formula": null,
+            "outcome": "pass",
+            "reasons": [
+              "adjustment set must not contain treatment or outcome"
+            ],
+            "treatment": "flaky",
+            "valid": false
+          },
+          "certificate_sha256": "93f9d5c0698aa19dccc5e86cb5adc11e0dd941678cf6ead6e84f4c61a3af0161",
+          "claim": {
+            "adjustment_set": [
+              "pass"
+            ],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": true,
+            "claimed_p_do": null,
+            "outcome": "pass",
+            "schema_version": 1,
+            "task_id": "P02",
+            "treatment": "flaky"
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "ground_truth": {
+            "ate": "-11/36",
+            "identifiable": true,
+            "minimal_adjustment_sets": [
+              [],
+              [
+                "load"
+              ]
+            ],
+            "p_do_1": "19/36",
+            "proposed_set_valid": false
+          },
+          "intervention": {
+            "effect_exists": true,
+            "notes": [],
+            "observational_association": "-11/36",
+            "outcome": "pass",
+            "p_outcome_do": "19/36",
+            "p_outcome_obs": "19/36",
+            "treatment": "flaky",
+            "treatment_value": 1
+          },
+          "production_authority": false,
+          "reasons": [
+            "proposed adjustment set fails the backdoor criterion",
+            "adjustment set must not contain treatment or outcome"
+          ],
+          "task_id": "P02",
+          "verdict": "invalid_claim"
+        }
+      }
+    ]
+  },
+  "ok": true,
+  "oracle": {
+    "kind": "oracle_sanity",
+    "ok": true,
+    "rows": [
+      {
+        "association": "1/2",
+        "ate": "1/4",
+        "details": [
+          {
+            "adjustment_set": [
+              "Z"
+            ],
+            "backdoor_valid": true,
+            "estimate": "5/8",
+            "match": true,
+            "truth": "5/8"
+          }
+        ],
+        "notes": [
+          "observational association 1/2 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+        ],
+        "ok": true,
+        "task_id": "T01"
+      },
+      {
+        "association": "1/4",
+        "ate": "1/4",
+        "details": [
+          {
+            "adjustment_set": [],
+            "backdoor_valid": true,
+            "estimate": "5/8",
+            "match": true,
+            "truth": "5/8"
+          }
+        ],
+        "notes": [],
+        "ok": true,
+        "task_id": "T02"
+      },
+      {
+        "association": "0",
+        "ate": "0",
+        "details": [
+          {
+            "adjustment_set": [],
+            "backdoor_valid": true,
+            "estimate": "1/3",
+            "match": true,
+            "truth": "1/3"
+          }
+        ],
+        "notes": [],
+        "ok": true,
+        "task_id": "T03"
+      },
+      {
+        "association": "1/5",
+        "ate": "1/5",
+        "details": [
+          {
+            "adjustment_set": [],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          },
+          {
+            "adjustment_set": [
+              "U1"
+            ],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          },
+          {
+            "adjustment_set": [
+              "U2"
+            ],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          },
+          {
+            "adjustment_set": [
+              "C",
+              "U1"
+            ],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          },
+          {
+            "adjustment_set": [
+              "C",
+              "U2"
+            ],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          },
+          {
+            "adjustment_set": [
+              "U1",
+              "U2"
+            ],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          },
+          {
+            "adjustment_set": [
+              "C",
+              "U1",
+              "U2"
+            ],
+            "backdoor_valid": true,
+            "estimate": "11/20",
+            "match": true,
+            "truth": "11/20"
+          }
+        ],
+        "notes": [],
+        "ok": true,
+        "task_id": "T04"
+      },
+      {
+        "association": "772/2485",
+        "ate": "1/5",
+        "details": [
+          {
+            "adjustment_set": [
+              "Z1",
+              "Z2"
+            ],
+            "backdoor_valid": true,
+            "estimate": "59/120",
+            "match": true,
+            "truth": "59/120"
+          }
+        ],
+        "notes": [
+          "observational association 772/2485 differs from ATE 1/5 (correlation \u2260 causation under this SCM)"
+        ],
+        "ok": true,
+        "task_id": "T05"
+      },
+      {
+        "full_graph_minimal_sets": [
+          [
+            "U"
+          ]
+        ],
+        "note": "observed-only non-identifiable; full-graph minimal sets require U",
+        "ok": true,
+        "task_id": "T06"
+      },
+      {
+        "association": "7/24",
+        "ate": "1/4",
+        "details": [
+          {
+            "adjustment_set": [
+              "M"
+            ],
+            "backdoor_valid": true,
+            "estimate": "113/240",
+            "match": true,
+            "truth": "113/240"
+          },
+          {
+            "adjustment_set": [
+              "Z"
+            ],
+            "backdoor_valid": true,
+            "estimate": "113/240",
+            "match": true,
+            "truth": "113/240"
+          },
+          {
+            "adjustment_set": [
+              "M",
+              "Z"
+            ],
+            "backdoor_valid": true,
+            "estimate": "113/240",
+            "match": true,
+            "truth": "113/240"
+          }
+        ],
+        "notes": [
+          "observational association 7/24 differs from ATE 1/4 (correlation \u2260 causation under this SCM)"
+        ],
+        "ok": true,
+        "task_id": "T07"
+      },
+      {
+        "association": "3/8",
+        "ate": "0",
+        "details": [
+          {
+            "adjustment_set": [
+              "Z"
+            ],
+            "backdoor_valid": true,
+            "estimate": "2/5",
+            "match": true,
+            "truth": "2/5"
+          }
+        ],
+        "notes": [
+          "observational association 3/8 differs from ATE 0/1 (correlation \u2260 causation under this SCM)"
+        ],
+        "ok": true,
+        "task_id": "T08"
+      },
+      {
+        "association": "-1/4",
+        "ate": "-1/4",
+        "details": [
+          {
+            "adjustment_set": [],
+            "backdoor_valid": true,
+            "estimate": "3/8",
+            "match": true,
+            "truth": "3/8"
+          },
+          {
+            "adjustment_set": [
+              "load"
+            ],
+            "backdoor_valid": true,
+            "estimate": "3/8",
+            "match": true,
+            "truth": "3/8"
+          },
+          {
+            "adjustment_set": [
+              "traffic"
+            ],
+            "backdoor_valid": true,
+            "estimate": "3/8",
+            "match": true,
+            "truth": "3/8"
+          },
+          {
+            "adjustment_set": [
+              "load",
+              "traffic"
+            ],
+            "backdoor_valid": true,
+            "estimate": "3/8",
+            "match": true,
+            "truth": "3/8"
+          }
+        ],
+        "notes": [],
+        "ok": true,
+        "task_id": "P01"
+      },
+      {
+        "association": "-11/36",
+        "ate": "-11/36",
+        "details": [
+          {
+            "adjustment_set": [],
+            "backdoor_valid": true,
+            "estimate": "19/36",
+            "match": true,
+            "truth": "19/36"
+          },
+          {
+            "adjustment_set": [
+              "load"
+            ],
+            "backdoor_valid": true,
+            "estimate": "19/36",
+            "match": true,
+            "truth": "19/36"
+          }
+        ],
+        "notes": [],
+        "ok": true,
+        "task_id": "P02"
+      }
+    ]
+  },
+  "package": "proof_carrying_causal_reasoning_v1",
+  "tasks": [
+    {
+      "ate": "1/4",
+      "domain": "epidemiology-toy",
+      "graph": {
+        "edges": [
+          [
+            "X",
+            "Y"
+          ],
+          [
+            "Z",
+            "X"
+          ],
+          [
+            "Z",
+            "Y"
+          ]
+        ],
+        "nodes": [
+          "X",
+          "Y",
+          "Z"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [
+          "Z"
+        ]
+      ],
+      "notes": [
+        "backdoor via {Z}",
+        "ATE \u2260 observational association"
+      ],
+      "outcome": "Y",
+      "task_id": "T01",
+      "title": "Confounded treatment effect",
+      "treatment": "X"
+    },
+    {
+      "ate": "1/4",
+      "domain": "mechanisms-toy",
+      "graph": {
+        "edges": [
+          [
+            "M",
+            "Y"
+          ],
+          [
+            "X",
+            "M"
+          ]
+        ],
+        "nodes": [
+          "M",
+          "X",
+          "Y"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        []
+      ],
+      "notes": [
+        "empty set is valid; {M} is invalid (descendant)"
+      ],
+      "outcome": "Y",
+      "task_id": "T02",
+      "title": "Pure mediation (total effect)",
+      "treatment": "X"
+    },
+    {
+      "ate": "0",
+      "domain": "selection-toy",
+      "graph": {
+        "edges": [
+          [
+            "X",
+            "C"
+          ],
+          [
+            "Y",
+            "C"
+          ]
+        ],
+        "nodes": [
+          "C",
+          "X",
+          "Y"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        []
+      ],
+      "notes": [
+        "ATE=0; empty adjustment; {C} opens collider"
+      ],
+      "outcome": "Y",
+      "task_id": "T03",
+      "title": "Collider bias trap",
+      "treatment": "X"
+    },
+    {
+      "ate": "1/5",
+      "domain": "epidemiology-toy",
+      "graph": {
+        "edges": [
+          [
+            "U1",
+            "C"
+          ],
+          [
+            "U1",
+            "X"
+          ],
+          [
+            "U2",
+            "C"
+          ],
+          [
+            "U2",
+            "Y"
+          ],
+          [
+            "X",
+            "Y"
+          ]
+        ],
+        "nodes": [
+          "C",
+          "U1",
+          "U2",
+          "X",
+          "Y"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [],
+        [
+          "U1"
+        ],
+        [
+          "U2"
+        ],
+        [
+          "C",
+          "U1"
+        ],
+        [
+          "C",
+          "U2"
+        ],
+        [
+          "U1",
+          "U2"
+        ],
+        [
+          "C",
+          "U1",
+          "U2"
+        ]
+      ],
+      "notes": [
+        "empty set valid; {C} invalid"
+      ],
+      "outcome": "Y",
+      "task_id": "T04",
+      "title": "M-bias",
+      "treatment": "X"
+    },
+    {
+      "ate": "1/5",
+      "domain": "epidemiology-toy",
+      "graph": {
+        "edges": [
+          [
+            "X",
+            "Y"
+          ],
+          [
+            "Z1",
+            "X"
+          ],
+          [
+            "Z1",
+            "Y"
+          ],
+          [
+            "Z2",
+            "X"
+          ],
+          [
+            "Z2",
+            "Y"
+          ]
+        ],
+        "nodes": [
+          "X",
+          "Y",
+          "Z1",
+          "Z2"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [
+          "Z1",
+          "Z2"
+        ]
+      ],
+      "notes": [
+        "minimal set is {Z1,Z2}"
+      ],
+      "outcome": "Y",
+      "task_id": "T05",
+      "title": "Two independent confounders",
+      "treatment": "X"
+    },
+    {
+      "ate": "1/5",
+      "domain": "latent-confounding",
+      "graph": {
+        "edges": [
+          [
+            "U",
+            "X"
+          ],
+          [
+            "U",
+            "Y"
+          ],
+          [
+            "X",
+            "Y"
+          ]
+        ],
+        "nodes": [
+          "U",
+          "X",
+          "Y"
+        ]
+      },
+      "identifiable": false,
+      "minimal_adjustment_sets": [
+        [
+          "U"
+        ]
+      ],
+      "notes": [
+        "identifiable if U observed; NOT identifiable from {X,Y} alone",
+        "models that claim empty-set identification fail"
+      ],
+      "outcome": "Y",
+      "task_id": "T06",
+      "title": "Unobserved confounding (non-identifiable from {X,Y})",
+      "treatment": "X"
+    },
+    {
+      "ate": "1/4",
+      "domain": "mechanisms-toy",
+      "graph": {
+        "edges": [
+          [
+            "M",
+            "Y"
+          ],
+          [
+            "X",
+            "Y"
+          ],
+          [
+            "Z",
+            "M"
+          ],
+          [
+            "Z",
+            "X"
+          ]
+        ],
+        "nodes": [
+          "M",
+          "X",
+          "Y",
+          "Z"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [
+          "M"
+        ],
+        [
+          "Z"
+        ],
+        [
+          "M",
+          "Z"
+        ]
+      ],
+      "notes": [
+        "{Z} and {M} both valid backdoor sets on this graph; empty invalid",
+        "M is not a descendant of X (common cause Z)"
+      ],
+      "outcome": "Y",
+      "task_id": "T07",
+      "title": "Fork into mediator and treatment",
+      "treatment": "X"
+    },
+    {
+      "ate": "0",
+      "domain": "spurious-correlation",
+      "graph": {
+        "edges": [
+          [
+            "Z",
+            "X"
+          ],
+          [
+            "Z",
+            "Y"
+          ]
+        ],
+        "nodes": [
+          "X",
+          "Y",
+          "Z"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [
+          "Z"
+        ]
+      ],
+      "notes": [
+        "ATE=0; {Z} required; association \u2260 0"
+      ],
+      "outcome": "Y",
+      "task_id": "T08",
+      "title": "Association without causation",
+      "treatment": "X"
+    },
+    {
+      "ate": "-1/4",
+      "domain": "program-systems",
+      "graph": {
+        "edges": [
+          [
+            "cache_hit",
+            "latency"
+          ],
+          [
+            "feature_flag",
+            "cache_hit"
+          ],
+          [
+            "load",
+            "latency"
+          ],
+          [
+            "traffic",
+            "cache_hit"
+          ],
+          [
+            "traffic",
+            "load"
+          ]
+        ],
+        "nodes": [
+          "cache_hit",
+          "feature_flag",
+          "latency",
+          "load",
+          "traffic"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [],
+        [
+          "load"
+        ],
+        [
+          "traffic"
+        ],
+        [
+          "load",
+          "traffic"
+        ]
+      ],
+      "notes": [
+        "program-grounded DAG",
+        "executable_program_ate=-7/16",
+        "scm_ate=-1/4",
+        "SCM mechanisms approximate the program; identification uses the DAG"
+      ],
+      "outcome": "latency",
+      "task_id": "P01",
+      "title": "Request-routing feature flag \u2192 latency",
+      "treatment": "feature_flag"
+    },
+    {
+      "ate": "-11/36",
+      "domain": "program-systems",
+      "graph": {
+        "edges": [
+          [
+            "flaky",
+            "pass"
+          ],
+          [
+            "flaky",
+            "retry"
+          ],
+          [
+            "load",
+            "retry"
+          ],
+          [
+            "retry",
+            "pass"
+          ]
+        ],
+        "nodes": [
+          "flaky",
+          "load",
+          "pass",
+          "retry"
+        ]
+      },
+      "identifiable": true,
+      "minimal_adjustment_sets": [
+        [],
+        [
+          "load"
+        ]
+      ],
+      "notes": [
+        "program-grounded CI system",
+        "executable_program_ate=-3/16",
+        "empty or {load} may be valid; {retry} is a descendant/mediator"
+      ],
+      "outcome": "pass",
+      "task_id": "P02",
+      "title": "CI flaky tests \u2192 pass rate",
+      "treatment": "flaky"
+    }
+  ]
+}

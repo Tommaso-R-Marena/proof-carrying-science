@@ -1,0 +1,317 @@
+"""Exact rational finite binary SCMs with executable do-interventions."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from fractions import Fraction
+from itertools import product
+from typing import Callable, Dict, Iterable, Mapping, Optional, Tuple
+
+from .dag import CausalDAG, GraphError
+from .backdoor import verify_backdoor_set
+from .frontdoor import verify_frontdoor_set
+
+
+Mechanism = Callable[[Mapping[str, int]], Fraction]
+# mechanism returns P(V=1 | parents); V is Bernoulli.
+
+
+@dataclass(frozen=True, slots=True)
+class InterventionResult:
+    treatment: str
+    treatment_value: int
+    outcome: str
+    p_outcome_do: Fraction
+    p_outcome_obs: Optional[Fraction]
+    observational_association: Optional[Fraction]
+    effect_exists: bool
+    notes: Tuple[str, ...]
+
+    def to_dict(self) -> dict:
+        return {
+            "treatment": self.treatment,
+            "treatment_value": self.treatment_value,
+            "outcome": self.outcome,
+            "p_outcome_do": _frac(self.p_outcome_do),
+            "p_outcome_obs": None if self.p_outcome_obs is None else _frac(self.p_outcome_obs),
+            "observational_association": (
+                None
+                if self.observational_association is None
+                else _frac(self.observational_association)
+            ),
+            "effect_exists": self.effect_exists,
+            "notes": list(self.notes),
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class BinarySCM:
+    """Finite binary SCM: each variable is Bernoulli given parents.
+
+    Exact factorization over binary variables with rational probabilities.
+    Interventions mutilate mechanisms for treated variables.
+    """
+
+    graph: CausalDAG
+    mechanisms: Mapping[str, Mechanism]
+
+    def __post_init__(self) -> None:
+        if set(self.mechanisms) != set(self.graph.nodes):
+            raise GraphError("mechanisms must cover exactly the graph nodes")
+
+    def joint(self, assignment: Mapping[str, int]) -> Fraction:
+        p = Fraction(1)
+        for node in self.graph.topological_order():
+            parents = {k: assignment[k] for k in self.graph.parents(node)}
+            q = self.mechanisms[node](parents)
+            if not (Fraction(0) <= q <= Fraction(1)):
+                raise GraphError(f"mechanism for {node} outside [0,1]")
+            bit = assignment[node]
+            p *= q if bit == 1 else (1 - q)
+        return p
+
+    def observational_table(self) -> Dict[Tuple[int, ...], Fraction]:
+        nodes = self.graph.topological_order()
+        table: Dict[Tuple[int, ...], Fraction] = {}
+        for bits in product([0, 1], repeat=len(nodes)):
+            a = dict(zip(nodes, bits))
+            table[bits] = self.joint(a)
+        total = sum(table.values(), Fraction(0))
+        if total != 1:
+            raise GraphError(f"joint does not sum to 1 (got {total})")
+        return table
+
+    def p_obs(self, evidence: Mapping[str, int]) -> Fraction:
+        """Sum out processed variables as soon as their last child has used them.
+
+        At each step, masses is the marginal over the current frontier for
+        prefixes consistent with the observed bits. The complete joint table
+        remains available through observational_table for independent replay.
+        """
+        order = self.graph.topological_order()
+        for node in evidence:
+            if node not in self.graph.nodes:
+                raise KeyError(node)
+        parents = {node: tuple(sorted(self.graph.parents(node))) for node in order}
+        last_use = {node: i for i, node in enumerate(order)}
+        for i, node in enumerate(order):
+            for parent in parents[node]:
+                last_use[parent] = i
+
+        frontier = ()
+        masses = {(): Fraction(1)}
+        for i, node in enumerate(order):
+            # Validate even unreachable rows, as the full enumerator does.
+            mechanism = {}
+            for bits in product((0, 1), repeat=len(parents[node])):
+                q = self.mechanisms[node](dict(zip(parents[node], bits)))
+                if not 0 <= q <= 1:
+                    raise GraphError(f"mechanism for {node} outside [0,1]")
+                mechanism[bits] = q
+            coords = tuple(frontier.index(p) for p in parents[node])
+            live = tuple(j for j, name in enumerate(frontier) if last_use[name] > i)
+            keep_node = last_use[node] > i
+            updated = {}
+            for state, mass in masses.items():
+                q = mechanism[tuple(state[j] for j in coords)]
+                retained = tuple(state[j] for j in live)
+                for bit, prob in ((0, 1 - q), (1, q)):
+                    if prob == 0 or (node in evidence and evidence[node] != bit):
+                        continue
+                    key = retained + (bit,) if keep_node else retained
+                    updated[key] = updated.get(key, 0) + mass * prob
+            masses = updated
+            frontier = tuple(frontier[j] for j in live) + ((node,) if keep_node else ())
+        return masses.get((), Fraction(0))
+
+    def conditional(self, query: Mapping[str, int], evidence: Mapping[str, int]) -> Fraction:
+        joint_ev = self.p_obs(evidence)
+        if joint_ev == 0:
+            raise GraphError("conditioning on zero-probability event (positivity failure)")
+        if any(k in evidence and evidence[k] != v for k, v in query.items()):
+            return Fraction(0)
+        merged = dict(evidence)
+        merged.update(query)
+        return self.p_obs(merged) / joint_ev
+
+    def intervene(self, do: Mapping[str, int]) -> "BinarySCM":
+        """Return SCM after do(V=v) for each V in do: fix mechanism to constant."""
+        for k in do:
+            if k not in self.graph.nodes:
+                raise GraphError(f"unknown intervention target {k!r}")
+            if do[k] not in (0, 1):
+                raise GraphError("binary interventions only")
+        new_graph = self.graph.mutilate(do.keys())
+        new_mechs: Dict[str, Mechanism] = {}
+        for node, mech in self.mechanisms.items():
+            if node in do:
+                val = do[node]
+                new_mechs[node] = (lambda _parents, v=val: Fraction(v))
+            else:
+                new_mechs[node] = mech
+        return BinarySCM(graph=new_graph, mechanisms=new_mechs)
+
+    def interventional_expectation(
+        self,
+        outcome: str,
+        do: Mapping[str, int],
+    ) -> Fraction:
+        """Exact P(outcome=1 | do(...)) by marginalizing the intervened SCM."""
+        if outcome not in self.graph.nodes:
+            raise GraphError("unknown outcome")
+        intervened = self.intervene(do)
+        return intervened.p_obs({outcome: 1})
+
+    def observational_expectation(
+        self,
+        outcome: str,
+        evidence: Mapping[str, int],
+    ) -> Fraction:
+        return self.conditional({outcome: 1}, evidence)
+
+    def ate(self, treatment: str, outcome: str) -> Fraction:
+        """Average treatment effect: E[Y|do(X=1)] - E[Y|do(X=0)]."""
+        return self.interventional_expectation(outcome, {treatment: 1}) - self.interventional_expectation(
+            outcome, {treatment: 0}
+        )
+
+    def backdoor_estimate(
+        self,
+        treatment: str,
+        outcome: str,
+        treatment_value: int,
+        z: Iterable[str],
+    ) -> Optional[Fraction]:
+        """Compute the backdoor functional on the observational law; None if positivity fails."""
+        Z = list(z)
+        check = verify_backdoor_set(self.graph, treatment, outcome, Z)
+        if not check.valid:
+            raise GraphError("backdoor set invalid; refuse estimation")
+        try:
+            if not Z:
+                return self.observational_expectation(outcome, {treatment: treatment_value})
+            # Σ_z P(Y=1|X=x,Z=z) P(Z=z)
+            total = Fraction(0)
+            for bits in product([0, 1], repeat=len(Z)):
+                z_assign = dict(zip(Z, bits))
+                pz = self.p_obs(z_assign)
+                if pz == 0:
+                    continue
+                ev = dict(z_assign)
+                ev[treatment] = treatment_value
+                if self.p_obs(ev) == 0:
+                    return None  # positivity failure
+                total += self.observational_expectation(outcome, ev) * pz
+            return total
+        except GraphError:
+            return None
+
+    def frontdoor_estimate(
+        self,
+        treatment: str,
+        outcome: str,
+        treatment_value: int,
+        mediators: Iterable[str],
+    ) -> Optional[Fraction]:
+        """Front-door functional; None on positivity failure."""
+        M = list(mediators)
+        check = verify_frontdoor_set(self.graph, treatment, outcome, M)
+        if not check.valid:
+            raise GraphError("front-door set invalid; refuse estimation")
+        try:
+            # Σ_m P(M=m|X=x) Σ_{x'} P(Y=1|X=x',M=m) P(X=x')
+            total = Fraction(0)
+            px1 = self.p_obs({treatment: 1})
+            px0 = self.p_obs({treatment: 0})
+            for bits in product([0, 1], repeat=len(M)):
+                m_assign = dict(zip(M, bits))
+                # P(M=m | X=x)
+                ev_x = dict(m_assign)
+                ev_x[treatment] = treatment_value
+                if self.p_obs({treatment: treatment_value}) == 0:
+                    return None
+                try:
+                    p_m_given_x = self.conditional(m_assign, {treatment: treatment_value})
+                except GraphError:
+                    return None
+                inner = Fraction(0)
+                for xv, px in ((0, px0), (1, px1)):
+                    if px == 0:
+                        continue
+                    ev = dict(m_assign)
+                    ev[treatment] = xv
+                    if self.p_obs(ev) == 0:
+                        return None
+                    inner += self.observational_expectation(outcome, ev) * px
+                total += p_m_given_x * inner
+            return total
+        except GraphError:
+            return None
+
+    def analyze_effect(
+        self,
+        treatment: str,
+        outcome: str,
+        treatment_value: int = 1,
+    ) -> InterventionResult:
+        p_do = self.interventional_expectation(outcome, {treatment: treatment_value})
+        p_do0 = self.interventional_expectation(outcome, {treatment: 0})
+        notes: list[str] = []
+        try:
+            p_obs = self.observational_expectation(outcome, {treatment: treatment_value})
+        except GraphError as exc:
+            p_obs = None
+            notes.append(f"observational conditional undefined: {exc}")
+        try:
+            p_obs0 = self.observational_expectation(outcome, {treatment: 0})
+            assoc = (
+                None
+                if p_obs is None
+                else (p_obs - p_obs0)
+            )
+        except GraphError:
+            assoc = None
+            notes.append("observational association undefined")
+        effect = p_do - p_do0
+        if assoc is not None and assoc != effect:
+            notes.append(
+                f"observational association {_frac(assoc)} differs from ATE {_frac(effect)} "
+                "(correlation ≠ causation under this SCM)"
+            )
+        return InterventionResult(
+            treatment=treatment,
+            treatment_value=treatment_value,
+            outcome=outcome,
+            p_outcome_do=p_do,
+            p_outcome_obs=p_obs,
+            observational_association=assoc,
+            effect_exists=effect != 0,
+            notes=tuple(notes),
+        )
+
+
+def _frac(x: Fraction) -> str:
+    return f"{x.numerator}/{x.denominator}"
+
+
+def bernoulli(p: Fraction) -> Mechanism:
+    return lambda _parents: p
+
+
+def logistic_from_parents(
+    weights: Mapping[str, Fraction],
+    bias: Fraction,
+) -> Mechanism:
+    """Affine-Bernoulli: clip(bias + Σ w_i parent_i) into [0,1] as exact Fraction."""
+
+    def mech(parents: Mapping[str, int]) -> Fraction:
+        s = bias
+        for k, w in weights.items():
+            s += w * parents[k]
+        if s < 0:
+            return Fraction(0)
+        if s > 1:
+            return Fraction(1)
+        return Fraction(s)
+
+    return mech

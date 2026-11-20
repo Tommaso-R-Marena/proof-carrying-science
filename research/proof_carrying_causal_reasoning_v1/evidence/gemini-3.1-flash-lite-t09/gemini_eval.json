@@ -1,0 +1,100 @@
+{
+  "claims": {
+    "api_key_not_stored": true,
+    "empirical_causation_established": false,
+    "frontier_sota": false,
+    "local_measurement_only": true,
+    "production_authority": false,
+    "rate_limited": true
+  },
+  "evaluation": {
+    "accuracy": 0.0,
+    "kind": "model_evaluation",
+    "n_accepted": 0,
+    "n_tasks": 1,
+    "rows": [
+      {
+        "claim": {
+          "adjustment_set": [],
+          "asserts_association_equals_effect": null,
+          "asserts_identifiable": false,
+          "claimed_p_do": null,
+          "outcome": "",
+          "schema_version": 1,
+          "strategy": "backdoor",
+          "task_id": "T09",
+          "treatment": ""
+        },
+        "raw": "{\n  \"treatment\": \"X\",\n  \"outcome\": \"Y\",\n  \"asserts_identifiable\": true,\n  \"strategy\": \"frontdoor\",\n  \"adjustment_set\": [\"M\"],\n  \"claimed_p_do\": \"sum_m P(M|X) * sum_x' P(Y|x', M) * P(x')\",\n  \"asserts_association_equals_effect\": false\n}",
+        "task_id": "T09",
+        "verdict": {
+          "accepted": false,
+          "assumptions": [
+            "dag_is_correct_causal_graph",
+            "causal_sufficiency_no_latent_confounders_among_modeled_vars",
+            "acyclicity",
+            "consistency_Yx_equals_Y_when_X_x",
+            "graphical_markov_condition",
+            "positivity_P(X=x|Z=z)>0_for_all_z_with_P(Z=z)>0"
+          ],
+          "backdoor": null,
+          "certificate_sha256": "9efcdd7cf6b1aec10be3a556b0ad4b7faa96b719c976f67a05bc02908ae9bca6",
+          "claim": {
+            "adjustment_set": [],
+            "asserts_association_equals_effect": null,
+            "asserts_identifiable": false,
+            "claimed_p_do": null,
+            "outcome": "",
+            "schema_version": 1,
+            "strategy": "backdoor",
+            "task_id": "T09",
+            "treatment": ""
+          },
+          "empirical_causation_established": false,
+          "epistemic_ceiling": "identified_under_assumptions_only",
+          "frontdoor": null,
+          "ground_truth": {
+            "identifiable": true
+          },
+          "intervention": null,
+          "production_authority": false,
+          "reasons": [
+            "could not parse structured causal claim JSON"
+          ],
+          "task_id": "T09",
+          "verdict": "malformed"
+        }
+      }
+    ]
+  },
+  "max_requests": 1,
+  "min_interval_sec": 10.0,
+  "model": "gemini-3.1-flash-lite",
+  "n_calls": 1,
+  "provenance": [
+    {
+      "attempt": 1,
+      "error": null,
+      "finish_reason": "STOP",
+      "model": "gemini-3.1-flash-lite",
+      "ok": true,
+      "request_sha256": "6a1a1a53c27010b94bf1a53c4fff8c572095e8cdefc6b616e40cfd90a24ac485",
+      "response_sha256": "c2efb28ce14ef11a5dd8706ba9181694d2fd923ad6daf89df814c04eb71d99de",
+      "status": 200,
+      "task_id": "T09",
+      "usage": {
+        "candidatesTokenCount": 99,
+        "promptTokenCount": 207,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 207
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 306
+      }
+    }
+  ],
+  "provider": "google-generativelanguage"
+}

@@ -1,0 +1,17 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+V1 -> X, V1 -> Y, X -> V3, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+backadj
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y | do(X = x)) = \sum_{v1} P(Y | X = x, V1 = v1) P(V1 = v1)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+None (qualitative causal graph only)
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Method 1 looks at the general correlation P(Y | X), which is confounded because V1 affects both X and Y (V1 -> X and V1 -> Y). Method 2 looks at the correlation case by case according to V1 (conditioning on V1), which blocks the backdoor path V1 -> X and V1 -> Y. Therefore, controlling for V1 (Method 2) is necessary to find the true causal effect of X on Y, making Method 1 incorrect as the sole approach for the causal effect.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

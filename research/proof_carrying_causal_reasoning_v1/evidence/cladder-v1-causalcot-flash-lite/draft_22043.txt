@@ -1,0 +1,13 @@
+Step 1) Extract the causal graph: V1 -> V3, V1 -> X, V3 -> Y, X -> Y.
+
+Step 2) Identify the query type: collider_bias.
+
+Step 3) Translate the query to a formal estimand: $P(Y \mid X)$ vs $P(Y \mid X, V3)$.
+
+Step 4) Collect available probabilities from the text: structural causal model implied by the graph where V3 is a mediator on the path from V1 to Y, and X is a cause of Y sharing a common cause V1 with V3. Specifically, V3 is a mediator/collider depending on the conditioning, but here V3 is on a directed path from V1 to Y, and X also affects Y. Wait, V3 is affected by V1, and X is affected by V1. Thus, V1 is a common cause of V3 and X. When we condition on V3 (Method 2), V3 is a mediator, but V1 is a confounder between V3 and Y. More importantly, V3 is on the path between V1 and Y, but V1 also causes X. Controlling for V3 (or looking case by case according to V3) blocks the backdoor path $X \leftarrow V1 \to V3 \to Y$ only if V1 is controlled, but controlling for V3 *itself* (or a descendant/mediator) when assessing the direct effect might be related to mediation (NIE/NDE), but the question asks: "To understand how xevo affects gyzp, is it more correct to use Method 1 than Method 2?" 
+Method 1 looks at the total association (or total effect if no confounding, but here V1 confounds X and Y because V1 -> X and V1 -> V3 -> Y). Wait, V1 causes X and V3. V3 causes Y. X causes Y. So V1 is a confounder between X and Y because V1 -> X and V1 -> V3 -> Y. 
+If V1 is a confounder, then $X \to Y$ is confounded by V1. Method 1 gives the total association $P(Y \mid X)$, which is biased by V1. Method 2 conditions on V3. Since V3 is on the backdoor path $X \leftarrow V1 \to V3 \to Y$, conditioning on V3 blocks the backdoor path through V1! Therefore, Method 2 (controlling for V3) actually blocks the confounding from V1, whereas Method 1 does not. Wait, is Method 2 more correct? Method 1 looks at the correlation in general (marginal correlation, which is confounded). Method 2 looks at the correlation case by case according to V3 (which blocks the backdoor path $X \leftarrow V1 \to V3 \to Y$). Thus Method 2 adjusts for the confounding, making Method 1 *less* correct than Method 2. The question asks: "is it more correct to use the Method 1 than Method 2?" The answer is no, because Method 1 suffers from confounding bias (or fails to isolate the path properly / fails to block the backdoor path via V1).
+
+Step 5) Solve the estimand: Method 1 leaves the backdoor path $X \leftarrow V1 \to V3 \to Y$ open, confounding the effect of X on Y. Method 2 conditions on V3, blocking this backdoor path. Therefore, Method 1 is not more correct than Method 2.
+
+Step 6) FINAL: no

@@ -1,0 +1,975 @@
+{
+  "accuracy": 0.6666666666666666,
+  "by_rung": {
+    "1": {
+      "accuracy": 0.75,
+      "correct": 9,
+      "n": 12
+    },
+    "2": {
+      "accuracy": 0.6666666666666666,
+      "correct": 8,
+      "n": 12
+    },
+    "3": {
+      "accuracy": 0.5833333333333334,
+      "correct": 7,
+      "n": 12
+    }
+  },
+  "claims": {
+    "api_key_not_stored": true,
+    "full_10112_eval": false,
+    "protocol": "CausalCoT multi-step + optional critic (CRAwDAD-inspired)"
+  },
+  "comparison": {
+    "delta_pp_vs_published": {
+      "DeepSeek-R1 (CRAwDAD final)": -20.78,
+      "GPT-3.5": 14.49,
+      "GPT-4": 4.64,
+      "GPT-4 + CausalCoT": -3.73,
+      "Qwen3 (CRAwDAD final)": -22.74,
+      "Qwen3 (CRAwDAD initial)": -17.49,
+      "random": 17.4
+    },
+    "our_overall_pct": 66.67
+  },
+  "critic_model": null,
+  "data": {
+    "citation": "Jin et al., CLadder, NeurIPS 2023",
+    "models_file": "cladder-v1-meta-models.json",
+    "n_models": 7064,
+    "n_questions": 10112,
+    "questions_file": "cladder-v1-q-balanced.json",
+    "source": "causalNLP/cladder"
+  },
+  "kind": "cladder_causalcot_critic",
+  "model": "gemini-3.5-flash-lite",
+  "n": 36,
+  "n_correct": 24,
+  "published_sota_reference": {
+    "dataset": "CLadder v1.5",
+    "methods": {
+      "DeepSeek-R1 (CRAwDAD final)": {
+        "overall": 87.45,
+        "rung1": 94.62,
+        "rung2": 89.06,
+        "rung3": 80.04
+      },
+      "GPT-3.5": {
+        "overall": 52.18,
+        "rung1": 51.8,
+        "rung2": 54.78,
+        "rung3": 50.32
+      },
+      "GPT-4": {
+        "overall": 62.03,
+        "rung1": 63.01,
+        "rung2": 62.82,
+        "rung3": 60.55
+      },
+      "GPT-4 + CausalCoT": {
+        "overall": 70.4,
+        "rung1": 83.35,
+        "rung2": 67.47,
+        "rung3": 62.05
+      },
+      "Qwen3 (CRAwDAD final)": {
+        "overall": 89.41,
+        "rung1": 96.24,
+        "rung2": 93.51,
+        "rung3": 80.35
+      },
+      "Qwen3 (CRAwDAD initial)": {
+        "overall": 84.16,
+        "rung1": 93.77,
+        "rung2": 89.8,
+        "rung3": 71.53
+      },
+      "random": {
+        "overall": 49.27,
+        "rung1": 50.28,
+        "rung2": 48.4,
+        "rung3": 49.12
+      }
+    },
+    "notes": [
+      "CRAwDAD numbers are on CLadder (paper Table 1); dual-agent debate, not single-call.",
+      "This harness evaluates a single Gemini call with a yes/no instruction (vanilla)."
+    ],
+    "source": "Jin et al., CLadder, NeurIPS 2023, Table 2 (v1.5); CRAwDAD arXiv:2511.22854 Table 1"
+  },
+  "rows": [
+    {
+      "correct": true,
+      "draft_sha256": "de93cfb8564103b4af047b78f1228fa8fcf0287e134561c3277e2bc0624e62f8",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ett",
+      "question_id": 8329,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 1081,
+        "promptTokenCount": 353,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 353
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1434
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "be1f6e2c2355c8e5a20bb7e8966fb0c0d77b6c944aaeb7c82972d16f56bf3cf9",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 27738,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 403,
+        "promptTokenCount": 342,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 342
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 745
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "6513912de6ef312d05b14d597e178a28884ea39fee3f9ab4db2a60509b0214fa",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 12170,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 494,
+        "promptTokenCount": 307,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 307
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 801
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "1c67b47c960a383d89708da7704776edf92bffdc97f90ed14b411bde032ead7e",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ett",
+      "question_id": 27731,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 1079,
+        "promptTokenCount": 437,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 437
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1516
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "91efb6a1976351f58cabb0e9b62d3e3fbf0afc292efccd9cc30bd5e611f48e1d",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 29776,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 469,
+        "promptTokenCount": 345,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 345
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 814
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "a8a91e249fe712276bbf6643b57231e9e77acbeb79dba9114981f9ff1ae692af",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "backadj",
+      "question_id": 22043,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 756,
+        "promptTokenCount": 336,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 336
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1092
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "d24a15c7fa009883546365bfb5cb9de7941bf735b240bc0d37b1f85f9a4423df",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 4806,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 582,
+        "promptTokenCount": 311,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 311
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 893
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "cc10d4253eb1d0c9ca87b0e3ad1c8bd988d2d0b5758b4bee0c4426e51aa92015",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 736,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 470,
+        "promptTokenCount": 320,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 320
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 790
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "9d921a385a417d04e0f2f9e1fce1be7ebd5e1f4b280cc04bde3328d89c4b5a87",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 24792,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 502,
+        "promptTokenCount": 314,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 314
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 816
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "f1122fc85083a7a3520900182f29d4c179a2ca86fe5bf1ddd42a2a9573380fcc",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 20089,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 706,
+        "promptTokenCount": 329,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 329
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1035
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "0df2267cb17fa0df6d3989e612b31008ed9e8f2165c9354906f28abbc5923cbd",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 9610,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 391,
+        "promptTokenCount": 298,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 298
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 689
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "3c96369cf505730431772c17eefe254b9d354a5dc5bce77243dc015cb4308f66",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 25686,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 420,
+        "promptTokenCount": 325,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 325
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 745
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "bd6761fff425b02ad41fc70d424bd4af1bdfe4bca245f3a25114f609b2bbe9ea",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 26236,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 1255,
+        "promptTokenCount": 427,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 427
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1682
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "aab1caa8419ca0dcd78038f2576b4509e88ee71e88fe0d5c19e00f1aa023626b",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "correlation",
+      "question_id": 5213,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 593,
+        "promptTokenCount": 358,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 358
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 951
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "62ca071224daa5fd8f381bb0a1ef314de8594a46f1a1904a55416ee4459a3ab6",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 23521,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 362,
+        "promptTokenCount": 312,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 312
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 674
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "c90123c934ad48602b670de1629e190c69ae3aef1633112c9ab441085e30249b",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 26624,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 856,
+        "promptTokenCount": 318,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 318
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1174
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "aa5521461b1a4874141e88c1b77fc7b796b1a4aaccace9b2d60d520f6dfb4373",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 30918,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 366,
+        "promptTokenCount": 292,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 292
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 658
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "180eb252307c5af12846406028cf4d5aa1853c450883be9e9f3f663f5be02ce3",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 20789,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 513,
+        "promptTokenCount": 315,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 315
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 828
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "042f67f56069bbe8ccdb7e4fad104643c4ddb719d0c5bb4c637bbe4f7387ecc6",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "backadj",
+      "question_id": 21194,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 486,
+        "promptTokenCount": 313,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 313
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 799
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "5b6299c0e4b0ab6b25111a4db33022c55d0d8985b29d85950ff405e7dacec0fe",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "backadj",
+      "question_id": 28876,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 346,
+        "promptTokenCount": 344,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 344
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 690
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "cd07804af7a17f077cac79f0a9090f49dc318f4c14a7ea528c49f51d46ac52f4",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "marginal",
+      "question_id": 27702,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 445,
+        "promptTokenCount": 342,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 342
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 787
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "69971c1fa835a3e6115457911b571da83ee1b794a92347236593f5e4f86e699c",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 28278,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 383,
+        "promptTokenCount": 296,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 296
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 679
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "ba8dc3aef39f703ebf3d6a1a24be311a943a8a3898eb9284f10f7c559127e4bd",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 9467,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 735,
+        "promptTokenCount": 363,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 363
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1098
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "e00f31f8f697a6a8e9a65269f5cbd6d79155a096fd326987ff724786307984de",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "marginal",
+      "question_id": 21996,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 430,
+        "promptTokenCount": 334,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 334
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 764
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "bb22951c9073c3ce50d8ff22399bc5a7186977591acb9988e9fd191a469c39c2",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 24725,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 357,
+        "promptTokenCount": 300,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 300
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 657
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "0207bb4ff84508bc72d29fe2123787962f4b302242d06f72b05e5d59f30c6602",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "backadj",
+      "question_id": 590,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 792,
+        "promptTokenCount": 323,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 323
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1115
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "8f968ac1bd02205cdc4705069ee4c5ec65a331dce5d5c85e226ef575a9c25d6d",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 11619,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 412,
+        "promptTokenCount": 334,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 334
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 746
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "7226ab454d551cfcd95425004ef1443dbfc3bbf0224c68fe043b5e2855955752",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 25118,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 780,
+        "promptTokenCount": 392,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 392
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1172
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "f9310bc7156088b0fe8b65c0246defaf0e0e1216246164d96a04074b3da4b5bd",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "nde",
+      "question_id": 14542,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 1236,
+        "promptTokenCount": 513,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 513
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1749
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "a3235537e9576739776f7b43bbff57cd61f25577e3ae1bce319aca996eb96d75",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ate",
+      "question_id": 25072,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 285,
+        "promptTokenCount": 326,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 326
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 611
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "d96f89d8a4f210a62055e151bbd88adb730411e5466d4a66fb0a180316fa9e2e",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 22421,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 406,
+        "promptTokenCount": 339,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 339
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 745
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "00e98bbbdaf7c15307da65f73e91d148840fd455b53c300a99038779b29eefc5",
+      "gold": "yes",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 23606,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 393,
+        "promptTokenCount": 316,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 316
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 709
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "ec7da3b97c860e372db10941fe93f9f11ae1c65ec8880c6957846f13f7ef0dcf",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "exp_away",
+      "question_id": 2677,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 358,
+        "promptTokenCount": 364,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 364
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 722
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "9da7dc13915e520c905419ce5781f35559699ec7f83069d5cf25d7885920e02b",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ate",
+      "question_id": 28342,
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 653,
+        "promptTokenCount": 362,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 362
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1015
+      }
+    },
+    {
+      "correct": false,
+      "draft_sha256": "492aa71e07c5dcf7619f5ce2b4a40e15ee6ce9ef117d683be47e540f0a0cb216",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 10134,
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 850,
+        "promptTokenCount": 295,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 295
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 1145
+      }
+    },
+    {
+      "correct": true,
+      "draft_sha256": "54a3d1463a80a0f27b2e01b29931425495f64d0efc728067b85329b63f847b8d",
+      "gold": "no",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "correlation",
+      "question_id": 3010,
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 469,
+        "promptTokenCount": 294,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 294
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 763
+      }
+    }
+  ],
+  "sample": {
+    "n": 36,
+    "per_rung": 12,
+    "question_ids": [
+      8329,
+      27738,
+      12170,
+      27731,
+      29776,
+      22043,
+      4806,
+      736,
+      24792,
+      20089,
+      9610,
+      25686,
+      26236,
+      5213,
+      23521,
+      26624,
+      30918,
+      20789,
+      21194,
+      28876,
+      27702,
+      28278,
+      9467,
+      21996,
+      24725,
+      590,
+      11619,
+      25118,
+      14542,
+      25072,
+      22421,
+      23606,
+      2677,
+      28342,
+      10134,
+      3010
+    ],
+    "seed": 20251118
+  }
+}

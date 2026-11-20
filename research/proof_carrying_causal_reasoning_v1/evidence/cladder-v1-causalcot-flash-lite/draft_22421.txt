@@ -1,0 +1,21 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V3, X -> V2, V2 -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+marginal
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = 1)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = 1) = 0.88; P(X = 0) = 0.12; P(Y = 1 | X = 0) = 0.31; P(Y = 1 | X = 1) = 0.36
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Using the law of total probability over X:
+P(Y = 1) = P(Y = 1 | X = 1) * P(X = 1) + P(Y = 1 | X = 0) * P(X = 0)
+P(Y = 1) = 0.36 * 0.88 + 0.31 * 0.12
+P(Y = 1) = 0.3168 + 0.0372 = 0.354
+
+Since P(Y = 1) = 0.354, the probability of xevu is 35.4%, which is less than 50% (less likely than not xevu).
+
+FINAL: yes

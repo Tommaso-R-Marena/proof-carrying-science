@@ -1,0 +1,31 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V3, X -> V2, V2 -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+det-counterfactual
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+$Y_{X=1}$
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+From the problem description, having a brother ($X=1$) causes getting smallpox ($V2=1$) and no vaccine reaction ($V3=0$). Having smallpox ($V2=1$) or severe vaccination reaction ($V3=1$) causes smallpox survival ($Y$). Since $X=1$ leads to $V2=1$ and $V3=0$, and $V2=1$ causes survival ($Y$), the individual survives. Wait, the query asks "Would the person dies from smallpox if having a brother instead of not having a brother?"
+Let's re-read carefully: "having a brother causes having smallpox and no vaccine reaction. having smallpox or severe vaccination reaction causes smallpox survival."
+Wait, "having smallpox or severe vaccination reaction causes smallpox survival" means having smallpox causes survival? Or does it mean surviving smallpox? Usually, "smallpox survival" means whether they survive or die. If $V2=1$ (getting smallpox) and $V3=0$ (no vaccine reaction), does having smallpox cause survival?
+Let's check the wording: "having smallpox or severe vaccination reaction causes smallpox survival." If $V2=1$ (having smallpox) is true, then smallpox survival is true (i.e., they survive, meaning they do *not* die).
+Wait, if they survive, do they die from smallpox? No.
+Let's trace:
+$X = 1$ (having a brother)
+$V2 = 1$ (getting smallpox)
+$V3 = 0$ (no vaccine reaction)
+Since $V2 = 1$ (having smallpox), the condition "having smallpox or severe vaccination reaction" is met ($V2=1 \lor V3=1$ is true). This causes "smallpox survival" to be true.
+Thus, the person survives smallpox, meaning they do *not* die from smallpox.
+Therefore, the answer to "Would the person dies from smallpox..." is no.
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+$X=1 \implies V2=1, V3=0$.
+$V2=1 \lor V3=1 = 1 \lor 0 = 1$.
+$Y$ (smallpox survival) = 1.
+Dies from smallpox = $Y = 0$, which is false.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

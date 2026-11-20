@@ -1,0 +1,1249 @@
+{
+  "accuracy": 0.6666666666666666,
+  "answer_balance_gold": {
+    "no": 22,
+    "yes": 14
+  },
+  "by_query_type": {
+    "ate": {
+      "accuracy": 0.75,
+      "correct": 6,
+      "n": 8
+    },
+    "backadj": {
+      "accuracy": 0.5,
+      "correct": 2,
+      "n": 4
+    },
+    "correlation": {
+      "accuracy": 0.5,
+      "correct": 1,
+      "n": 2
+    },
+    "det-counterfactual": {
+      "accuracy": 0.6,
+      "correct": 3,
+      "n": 5
+    },
+    "ett": {
+      "accuracy": 0.6666666666666666,
+      "correct": 4,
+      "n": 6
+    },
+    "exp_away": {
+      "accuracy": 1.0,
+      "correct": 1,
+      "n": 1
+    },
+    "marginal": {
+      "accuracy": 0.7777777777777778,
+      "correct": 7,
+      "n": 9
+    },
+    "nde": {
+      "accuracy": 0.0,
+      "correct": 0,
+      "n": 1
+    }
+  },
+  "by_rung": {
+    "1": {
+      "accuracy": 0.75,
+      "correct": 9,
+      "n": 12
+    },
+    "2": {
+      "accuracy": 0.6666666666666666,
+      "correct": 8,
+      "n": 12
+    },
+    "3": {
+      "accuracy": 0.5833333333333334,
+      "correct": 7,
+      "n": 12
+    }
+  },
+  "claims": {
+    "api_key_not_stored": true,
+    "frontier_sota": false,
+    "full_10112_eval": false,
+    "local_measurement_stratified_sample": true,
+    "protocol": "vanilla yes/no single call (not CausalCoT / not multi-agent debate)",
+    "rate_limited": true
+  },
+  "comparison": {
+    "delta_pp_vs_published": {
+      "DeepSeek-R1 (CRAwDAD final)": -20.78,
+      "GPT-3.5": 14.49,
+      "GPT-4": 4.64,
+      "GPT-4 + CausalCoT": -3.73,
+      "Qwen3 (CRAwDAD final)": -22.74,
+      "Qwen3 (CRAwDAD initial)": -17.49,
+      "random": 17.4
+    },
+    "interpretation": "Positive delta means this sample scored higher than the published full-set overall for that method \u2014 sample variance applies; this is not a claim of beating SOTA on the full 10k.",
+    "our_overall_pct": 66.67
+  },
+  "comparison_table": [
+    {
+      "delta_pp_sample_minus_published": -20.78,
+      "method": "DeepSeek-R1 (CRAwDAD final)",
+      "published_overall_pct": 87.45,
+      "this_sample_gemini_pct": 66.67
+    },
+    {
+      "delta_pp_sample_minus_published": 14.49,
+      "method": "GPT-3.5",
+      "published_overall_pct": 52.18,
+      "this_sample_gemini_pct": 66.67
+    },
+    {
+      "delta_pp_sample_minus_published": 4.64,
+      "method": "GPT-4",
+      "published_overall_pct": 62.03,
+      "this_sample_gemini_pct": 66.67
+    },
+    {
+      "delta_pp_sample_minus_published": -3.73,
+      "method": "GPT-4 + CausalCoT",
+      "published_overall_pct": 70.4,
+      "this_sample_gemini_pct": 66.67
+    },
+    {
+      "delta_pp_sample_minus_published": -22.74,
+      "method": "Qwen3 (CRAwDAD final)",
+      "published_overall_pct": 89.41,
+      "this_sample_gemini_pct": 66.67
+    },
+    {
+      "delta_pp_sample_minus_published": -17.49,
+      "method": "Qwen3 (CRAwDAD initial)",
+      "published_overall_pct": 84.16,
+      "this_sample_gemini_pct": 66.67
+    },
+    {
+      "delta_pp_sample_minus_published": 17.4,
+      "method": "random",
+      "published_overall_pct": 49.27,
+      "this_sample_gemini_pct": 66.67
+    }
+  ],
+  "data": {
+    "citation": "Jin et al., CLadder, NeurIPS 2023",
+    "models_file": "cladder-v1-meta-models.json",
+    "n_models": 7064,
+    "n_questions": 10112,
+    "questions_file": "cladder-v1-q-balanced.json",
+    "source": "causalNLP/cladder"
+  },
+  "error_summary": {
+    "by_query_type": {
+      "ate": 2,
+      "backadj": 2,
+      "correlation": 1,
+      "det-counterfactual": 2,
+      "ett": 2,
+      "marginal": 2,
+      "nde": 1
+    },
+    "by_rung": {
+      "1": 3,
+      "2": 4,
+      "3": 5
+    },
+    "n_errors": 12,
+    "parse_failures": 0
+  },
+  "honest_findings": [
+    "Prior PCCR CLadder work matched the structural oracle engine (ATE/ETT), not LLM NL accuracy.",
+    "This run is a stratified 36-question vanilla yes/no Gemini-3.5-flash-lite sample (12/rung), not the full 10,112.",
+    "Sample accuracy 66.67% (95% Wilson CI [50.3%, 79.8%]).",
+    "Point estimate sits between published GPT-4 (62.03%) and GPT-4+CausalCoT (70.40%) overalls; well below CRAwDAD dual-agent SOTA (~89%).",
+    "Rung difficulty ordering matches the paper (R1>R2>R3).",
+    "PCCR certificates are not an LLM SOTA method; they provide machine-checkable ID when the SCM/graph is explicit."
+  ],
+  "kind": "cladder_llm_yes_no",
+  "min_interval_sec": 12.0,
+  "model": "gemini-3.5-flash-lite",
+  "n": 36,
+  "n_correct": 24,
+  "n_parsed": 36,
+  "parse_rate": 1.0,
+  "published_sota_reference": {
+    "dataset": "CLadder v1.5",
+    "methods": {
+      "DeepSeek-R1 (CRAwDAD final)": {
+        "overall": 87.45,
+        "rung1": 94.62,
+        "rung2": 89.06,
+        "rung3": 80.04
+      },
+      "GPT-3.5": {
+        "overall": 52.18,
+        "rung1": 51.8,
+        "rung2": 54.78,
+        "rung3": 50.32
+      },
+      "GPT-4": {
+        "overall": 62.03,
+        "rung1": 63.01,
+        "rung2": 62.82,
+        "rung3": 60.55
+      },
+      "GPT-4 + CausalCoT": {
+        "overall": 70.4,
+        "rung1": 83.35,
+        "rung2": 67.47,
+        "rung3": 62.05
+      },
+      "Qwen3 (CRAwDAD final)": {
+        "overall": 89.41,
+        "rung1": 96.24,
+        "rung2": 93.51,
+        "rung3": 80.35
+      },
+      "Qwen3 (CRAwDAD initial)": {
+        "overall": 84.16,
+        "rung1": 93.77,
+        "rung2": 89.8,
+        "rung3": 71.53
+      },
+      "random": {
+        "overall": 49.27,
+        "rung1": 50.28,
+        "rung2": 48.4,
+        "rung3": 49.12
+      }
+    },
+    "notes": [
+      "CRAwDAD numbers are on CLadder (paper Table 1); dual-agent debate, not single-call.",
+      "This harness evaluates a single Gemini call with a yes/no instruction (vanilla)."
+    ],
+    "source": "Jin et al., CLadder, NeurIPS 2023, Table 2 (v1.5); CRAwDAD arXiv:2511.22854 Table 1"
+  },
+  "rows": [
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "confounding",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ett",
+      "question_id": 8329,
+      "request_sha256": "7da96e425c0f8d894e9ab2670f5d636b25ef842d661d6d28380e9fe769105ca5",
+      "response_sha256": "92063e6eab8278f92d032679d07e60556c382ae67be20f350322ea65d1fd763d",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 180,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 180
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 191
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "diamondcut",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "marginal",
+      "question_id": 27738,
+      "request_sha256": "08dc86070edf2f6ce7a986352407c27c08ad39005d3e301cb90ceba993d65c50",
+      "response_sha256": "fc22273d3bc85618f1497649a4a8d720cc47a42590f30dd8e0a5bdfcf1d3db98",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 153,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 153
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 164
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "chain",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 12170,
+      "request_sha256": "066cd7c388a843408e23fdad4c5677b302c759c846fe442e55227fb0060f7197",
+      "response_sha256": "a956498a990f195a0e5d3f85de7f4a398dc8003ac5e548312d5128d33457587a",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 132,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 132
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 143
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamondcut",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 27731,
+      "request_sha256": "8565ff73ddac0e44a55320f864e86122e653011e53a5a1cf6df855a66ca965b7",
+      "response_sha256": "b64050c3b9f16e3bbcc09c180b21445e0256a14c75ff1b4f99e090c91f595c8b",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 248,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 248
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 259
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "frontdoor",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 29776,
+      "request_sha256": "961db8648512d8f97ad6b1150ccb40848a2917ce7610a4e8b2225dcd941db435",
+      "response_sha256": "2609220491c3fcb07ebf4773440542202fb8efcb5383675f6b5801112d974fd3",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 155,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 155
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 166
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamondcut",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "backadj",
+      "question_id": 22043,
+      "request_sha256": "df8fbfb421408783f6c4f845e5bed031c49a07cbb18a681113389672ee5813d6",
+      "response_sha256": "38a6d8562042cc598e0354a114880929151a9bfca2d278c82422a72d0bea18ca",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 147,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 147
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 158
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "mediation",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 4806,
+      "request_sha256": "e76afcbddf03a2d215b1c6eb2b5bf4bea18f6da03e16fb1046089ae5067532e7",
+      "response_sha256": "f043d74397afd880e98cf979b49ff4aecaa89fc4077a30eebe5172b2fe0004b0",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 137,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 137
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 148
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "fork",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "marginal",
+      "question_id": 736,
+      "request_sha256": "7e9bcd1a111c12f42603dcc388e208e84d3408b0987923628c859c1206b04239",
+      "response_sha256": "a92c8c384159f8bbbb05ae4a9aedc790dac33225f2bf89d4aeceeea1558e4dc9",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 144,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 144
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 155
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "collision",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 24792,
+      "request_sha256": "d975e003cd8aff818a69ff6b651294adc90954e514049cdcc11f29cfed822240",
+      "response_sha256": "56a12107e0e432b05efeb9e263f52edb237123ccba13c794a5ce22df8ebf8bc6",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 137,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 137
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 148
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 20089,
+      "request_sha256": "35af949ce9460a7ee9109f7e5e1ebcd34f7f8182338afeb7e43b1ee8ebc87b2c",
+      "response_sha256": "6e6e5edbb58433fa3a3fe490ba19bf6373d932f4ef79446b5969f1f14231ee57",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 138,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 138
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 149
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "det-counterfactual",
+      "question_id": 9610,
+      "request_sha256": "07b44672ba65ed60d090a6d8d9421e50f8e77522543cf5937b10bbb2c42e4e08",
+      "response_sha256": "1c6a90850d44b0c145dc0ed12d2b4ac102e5e21d28f9d6ddc6c2e39bc9663d58",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 114,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 114
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 125
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "confounding",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 25686,
+      "request_sha256": "5d7edc1524aed97cc68529285d94ab49d4d1ca9120e09f41df8dd22af1f47c0c",
+      "response_sha256": "564a4f91215623d887eec498bf83a167d576284c5525469199957d00f9590605",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 146,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 146
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 157
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "frontdoor",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 26236,
+      "request_sha256": "dc8cae06a8fecadb2ce491ac3d2bf235a1e1c1e5a88f014360964eb2c0d7fcc8",
+      "response_sha256": "dbbc64b4ecc736ba8d16e0f720a42c403c72d8e792d4a0c363aa11cfe66b62dd",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 238,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 238
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 249
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "correlation",
+      "question_id": 5213,
+      "request_sha256": "4b05f0cfe5783824539a431530efee240a8f486f688d260256457be55b418904",
+      "response_sha256": "f5a254584b419958e3a4aeac55c013e6232f92e70372dc73220ae69c957a18fa",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 172,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 172
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 183
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "collision",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "marginal",
+      "question_id": 23521,
+      "request_sha256": "a6c6b8598b7b6549e2651147013ba82103d0c578c75fbe1d2e4eed0e5b7c2348",
+      "response_sha256": "291f3ac7a5f0f27a556a614048bd1092e562d7c273d42ecb566c78f5a4d248e1",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 135,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 135
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 146
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "mediation",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ett",
+      "question_id": 26624,
+      "request_sha256": "9de0fc50ce983abb8c0a24351fe9955d2cb8e4ed75f0ea8e795a1e84b9a3ebb9",
+      "response_sha256": "c61b44a36cd1699fbe4f31d67eaaebe6b075c2a1778e5aca1e4a7b370ed02414",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 141,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 141
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 152
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "mediation",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 30918,
+      "request_sha256": "cd8698ff31efd745b4bf012f4592a80efc6a55155ff9cca94ade55e9b5e41c0f",
+      "response_sha256": "819f2d01c27b43ce7c93d04dd973f7f87a748c27f30f9f19a1e585a27473e1d5",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 115,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 115
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 126
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "chain",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 20789,
+      "request_sha256": "a56c59ad8a63cf8f0e157bd6615203f29d32a5be5a16e8ee7d3741a990df4c81",
+      "response_sha256": "101db19cae0656410d2d78ef408adcef9af35f35148da4b1423bafe9f1e41bcd",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 139,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 139
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 150
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "fork",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "backadj",
+      "question_id": 21194,
+      "request_sha256": "10cdfd4d18f32d1180ddae6dd7c9784e17e133152d2ec0e6c6475c32bdc91c74",
+      "response_sha256": "7b60511b50b12a1d7c09aaba325c43625ee272ed84204b715ec57002585082a8",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 137,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 137
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 148
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "frontdoor",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "backadj",
+      "question_id": 28876,
+      "request_sha256": "60524d78932b4504660ae079bf4bcad3f1ac976c88cefc684bfee168e5b0feed",
+      "response_sha256": "fb6dd0fb639f21301ae6da9584ed89b97236aeafacdb90e02c847a4030f3ff98",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 157,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 157
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 168
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamondcut",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 27702,
+      "request_sha256": "29418c2ffe89b22a80a788f9c92c710bc397620f1c05d6263b23871ede8561cf",
+      "response_sha256": "98b7bd67d765501045964d4e822eceab12c7e1717f789dcf491eb7e6b59e2a98",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 153,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 153
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 164
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "chain",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 28278,
+      "request_sha256": "d2ff0ce1254faa1611f99649a8b6436dcedf5112bdcaf042b321b191af636845",
+      "response_sha256": "cd7d87a7431a9190c3ce029b8bdc532e8e8dd02883b940b2561986e8b91363f8",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 120,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 120
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 131
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "IV",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 9467,
+      "request_sha256": "2108cb675cd7a42ef42b912e0fd4930be2ba194838c736abbb2e1786daee08fb",
+      "response_sha256": "4f53cf44fffc6c1cce8ff09ea06307ed00b11be4b8e86c352c043e1e1d382f7e",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 176,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 176
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 187
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "marginal",
+      "question_id": 21996,
+      "request_sha256": "2f54ab40fa318fa6ab280e3e45b64ecabbd2e0e50dd281b26a3ceb00a23f2ee4",
+      "response_sha256": "9bc83cc6d5caa765f53104986fc890c7128adff83ea82ee1ff1a3e0f5e552310",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 145,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 145
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 156
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "fork",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ate",
+      "question_id": 24725,
+      "request_sha256": "9213ae1a7c4b6728c4c29e2e051d46e7fd4190b20e08c2686131bc64ca1bb1b7",
+      "response_sha256": "d40ce10219fd9c3913c278c1683bd49197a937d2df36ff62cbb502e2f7f9a86d",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 124,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 124
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 135
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "backadj",
+      "question_id": 590,
+      "request_sha256": "e8ba321c9f6802a4a47dfa135296f7d39158d1f85e6df2493ebfb854e5c63eec",
+      "response_sha256": "632b4c2073178f972333f7ffddb107311815e3553ce0fe28455cd14972e797bc",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 139,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 139
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 150
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ate",
+      "question_id": 11619,
+      "request_sha256": "2b5a66b969f8307b6f5d23da8e871d4d410680759b7d81d4f8f5581afb3fb859",
+      "response_sha256": "a7c6662cfcbad9bb3f7722afe49d676f223950bd7e6570698068d77852cb1085",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 143,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 143
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 154
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "diamondcut",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ate",
+      "question_id": 25118,
+      "request_sha256": "87f268ff90b2562b2af3b938b5fc2c6fe962c32ba1c5f40581feaeeb3caa55ce",
+      "response_sha256": "6fdce0597ab0b6ef1adb4bd96b2f1e4fcc4fe6796b07b62bc46fda05998383d6",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 204,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 204
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 215
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "arrowhead",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "nde",
+      "question_id": 14542,
+      "request_sha256": "ffc7d99f198cd46ad1fd4cbdfbe5f96e8c58e3b0589b602a79901bec2a1b51f3",
+      "response_sha256": "bd36d82dc6b1104b184302a8b6434eb4a4e4d3049e1dc8b0f6701e8f1b125925",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 319,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 319
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 330
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ate",
+      "question_id": 25072,
+      "request_sha256": "158fc744f25482d0a4ad27cadcfe5e599a3484ce3dac2767d9e7465433c33c42",
+      "response_sha256": "cabe3f327178f6c36819047657ac89a924ffd162cc01928e33ddc2c4da2d5d0a",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 138,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 138
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 149
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "diamond",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "marginal",
+      "question_id": 22421,
+      "request_sha256": "606d93fb114369b61d8a282312ccace578c0c448d7ac0246fa476fcb1c2e6991",
+      "response_sha256": "43b34b519082623c916836c8f1b5b274d7a60ed8ef95aaa9d80e0ef2a8335445",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 150,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 150
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 161
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "yes",
+      "graph_id": "mediation",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "ett",
+      "question_id": 23606,
+      "request_sha256": "785db5b9500f8e015a06e21421f1d7d5e6a27ee010470f374dbee363374aac07",
+      "response_sha256": "d7ff6082a51f6cb2253df0584deb5e01b632e58e09204b7e201456919665cdc6",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 139,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 139
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 150
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "collision",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "exp_away",
+      "question_id": 2677,
+      "request_sha256": "9c30a7ab2cb4d1048b16ce0f0b57141f730dc497160d47c20e31a9119306ba68",
+      "response_sha256": "235e81724b220a08ef12a816c622816829cb97bfd54aa9334e84fd4c8b45a8e9",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 186,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 186
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 197
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "confounding",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "ate",
+      "question_id": 28342,
+      "request_sha256": "7209a067ef5308a456afabf4b79eccf3438eeddca9cc8bbccd0459f71fddb195",
+      "response_sha256": "fdd6ddb21ef6e313b1ff92ccaa84319e1ecc77738820fa5da6d9549ace1a8726",
+      "rung": 2,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 186,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 186
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 197
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": false,
+      "error": null,
+      "gold": "no",
+      "graph_id": "confounding",
+      "ok_call": true,
+      "pred": "yes",
+      "query_type": "det-counterfactual",
+      "question_id": 10134,
+      "request_sha256": "4b4151c4b397385ee09a9a3ed7d7ed71a9a374325e4530cdbb5e33dcdf04dae5",
+      "response_sha256": "082974d9e39a72a1d8e781572bf7bb26fe0a6392da24994559474b660086b98e",
+      "rung": 3,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 119,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 119
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 130
+      }
+    },
+    {
+      "attempt": 1,
+      "correct": true,
+      "error": null,
+      "gold": "no",
+      "graph_id": "mediation",
+      "ok_call": true,
+      "pred": "no",
+      "query_type": "correlation",
+      "question_id": 3010,
+      "request_sha256": "6fa0cf25ecd961b078fe8f591a6c495a3d44d121b819919a40127521083fc1e6",
+      "response_sha256": "cc97ddde7652db2adf8211baefe17f2429b954c0999b4c84f078a8c1951cafb4",
+      "rung": 1,
+      "status": 200,
+      "usage": {
+        "candidatesTokenCount": 11,
+        "promptTokenCount": 120,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 120
+          }
+        ],
+        "serviceTier": "standard",
+        "totalTokenCount": 131
+      }
+    }
+  ],
+  "sample": {
+    "n": 36,
+    "per_rung": 12,
+    "question_ids": [
+      8329,
+      27738,
+      12170,
+      27731,
+      29776,
+      22043,
+      4806,
+      736,
+      24792,
+      20089,
+      9610,
+      25686,
+      26236,
+      5213,
+      23521,
+      26624,
+      30918,
+      20789,
+      21194,
+      28876,
+      27702,
+      28278,
+      9467,
+      21996,
+      24725,
+      590,
+      11619,
+      25118,
+      14542,
+      25072,
+      22421,
+      23606,
+      2677,
+      28342,
+      10134,
+      3010
+    ],
+    "seed": 20251118
+  },
+  "stats": {
+    "correct": 24,
+    "n": 36,
+    "wilson_95_ci": [
+      0.5033,
+      0.7979
+    ]
+  }
+}

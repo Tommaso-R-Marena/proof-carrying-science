@@ -1,0 +1,21 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+V1 -> V3, V1 -> X, X -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+marginal
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = 1)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = 1) = 0.19; P(X = 0) = 0.81; P(Y = 1 | X = 0) = 0.58; P(Y = 1 | X = 1) = 0.45
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Using the law of total probability over X (since X is a parent of Y, P(Y) = sum_x P(Y | X=x) P(X=x)):
+P(Y = 1) = P(Y = 1 | X = 1) * P(X = 1) + P(Y = 1 | X = 0) * P(X = 0)
+P(Y = 1) = 0.45 * 0.19 + 0.58 * 0.81
+P(Y = 1) = 0.0855 + 0.4698 = 0.5553
+
+Since P(Y = 1) = 0.5553 > 0.5, kwox is more likely than not kwox overall. Thus, kwox is *not* less likely than not kwox.
+
+FINAL: no

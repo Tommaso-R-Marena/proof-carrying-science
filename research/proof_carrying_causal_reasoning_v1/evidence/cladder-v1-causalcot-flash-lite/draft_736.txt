@@ -1,0 +1,25 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> Y, V2 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+marginal
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = on fire) vs P(Y = not on fire)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = match) = 0.24; P(X = no match) = 0.76; P(Y = on fire | X = no match) = 0.34; P(Y = on fire | X = match) = 0.60
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Using the law of total probability for the camper (X):
+P(Y = on fire) = P(Y = on fire | X = match) * P(X = match) + P(Y = on fire | X = no match) * P(X = no match)
+P(Y = on fire) = 0.60 * 0.24 + 0.34 * 0.76
+P(Y = on fire) = 0.144 + 0.2584 = 0.4024 (40.24%)
+
+Probability that the forest is not on fire:
+P(Y = not on fire) = 1 - 0.4024 = 0.5976 (59.76%)
+
+Comparing the two: 40.24% is less than 59.76%, so the forest on fire is not more likely than the forest not on fire.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

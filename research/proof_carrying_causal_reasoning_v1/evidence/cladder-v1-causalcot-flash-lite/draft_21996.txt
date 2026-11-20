@@ -1,0 +1,22 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V3, X -> V2, V2 -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+marginal
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = 1)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(X = 1) = 0.48; P(Y = 1 | X = 0) = 0.39; P(Y = 1 | X = 1) = 0.78
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Using the law of total probability over X:
+P(Y = 1) = P(Y = 1 | X = 1) * P(X = 1) + P(Y = 1 | X = 0) * P(X = 0)
+P(X = 0) = 1 - P(X = 1) = 1 - 0.48 = 0.52
+P(Y = 1) = 0.78 * 0.48 + 0.39 * 0.52
+P(Y = 1) = 0.3744 + 0.2028 = 0.5772
+
+Since P(Y = 1) = 0.5772 > 0.5, gyzp is more likely than not gyzp overall. Therefore, gyzp is not less likely than not gyzp overall.
+
+FINAL: no

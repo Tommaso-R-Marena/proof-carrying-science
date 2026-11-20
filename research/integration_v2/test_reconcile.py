@@ -429,6 +429,9 @@ def test_v21_unknown_added_source_is_not_admitted(fixture):
 def test_v22_keeps_the_fully_qualified_v21_intake_manifest_unchanged():
     raw=(gate.ROOT/'docs/integration/2026-11-05/RECONCILIATION_V21.json').read_bytes()
     assert hashlib.sha256(raw).hexdigest()=='7fbd145fbf737ab0b2f1ef653a13ff26920e956137942dad67bfdb8c48566bde'
+    v22=(gate.ROOT/'docs/integration/2026-11-05/RECONCILIATION_V22.json').read_bytes()
+    assert hashlib.sha256(v22).hexdigest()=='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83'
     current=gate._json((gate.ROOT/gate.MANIFEST).read_bytes())
-    assert current['format']=='pcs-source-reconciliation-v22'
-    assert current['predecessor_manifest']==dict(commit='0b521f39af99f5856b69dfcc25bc274ec9dc804a',path='docs/integration/2026-11-05/RECONCILIATION_V21.json',sha256=hashlib.sha256(raw).hexdigest())
+    assert current['format']=='pcs-source-reconciliation-v23'
+    assert current['predecessor_manifest']['path']=='docs/integration/2026-11-05/RECONCILIATION_V22.json'
+    assert current['predecessor_manifest']['sha256']==hashlib.sha256(v22).hexdigest()

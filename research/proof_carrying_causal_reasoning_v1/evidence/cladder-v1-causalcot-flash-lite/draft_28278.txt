@@ -1,0 +1,19 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V2, V2 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ate
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+$P(Y=1 \mid do(X=1)) - P(Y=1 \mid do(X=0))$
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+$P(Y=1 \mid X=0) = 0.85$ ; $P(Y=1 \mid X=1) = 0.87$
+Since there are no confounding back-door paths between X and Y (the causal graph is X -> V2 -> Y), $P(Y=1 \mid do(X=x)) = P(Y=1 \mid X=x)$. Thus:
+$P(Y=1 \mid do(X=1)) = 0.87$ ; $P(Y=1 \mid do(X=0)) = 0.85$
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+ATE = $0.87 - 0.85 = 0.02$. Since $0.02 > 0$, zuph increases the chance of uvzi.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: yes

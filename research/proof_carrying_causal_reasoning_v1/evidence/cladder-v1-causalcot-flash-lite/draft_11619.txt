@@ -1,0 +1,19 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V3, X -> V2, V2 -> Y, V3 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ate
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y = 1 | do(X = 1)) - P(Y = 1 | do(X = 0))
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(Y = 1 | X = 1) = 56% = 0.56; P(Y = 1 | X = 0) = 54% = 0.54
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+Based on the problem statement and the causal graph, X has no confounding parents (no back-door paths from X to Y through unobserved confounders), so the causal effect (ATE) equals the observational difference:
+P(Y = 1 | do(X = 1)) - P(Y = 1 | do(X = 0)) = P(Y = 1 | X = 1) - P(Y = 1 | X = 0) = 0.56 - 0.54 = 0.02.
+Since the difference is positive (+2%), having a brother *increases* the chance of smallpox survival, so it does not decrease it.
+
+Step 6) On the last line, write exactly: FINAL: yes   or   FINAL: no
+FINAL: no

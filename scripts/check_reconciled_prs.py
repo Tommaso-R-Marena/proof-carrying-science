@@ -15,16 +15,30 @@ INTAKES={
  'proof-carrying-science-site':('d35e2b5e6b29e0a27dc0cb117986895fd58c1456','pcs-source-intake/site-open-prs-v1-20261105'),
 }
 COMMON_CONTROLS={'scripts/check_reconciled_prs.py','scripts/test_reconciled_prs.py'}
+# Draft PCCR research package admitted by RECONCILIATION_V23. Paths under this
+# prefix may exist only on HEAD; they are not production PCS authority.
+PCCR_ADMISSION_PREFIX='research/proof_carrying_causal_reasoning_v1/'
 CONTROLS={
  'proof-carrying-science':COMMON_CONTROLS|{
   '.github/workflows/model-assurance-studio-research.yml',
   'research/integration_v2/reconcile.py','research/integration_v2/test_reconcile.py',
+  'research/integration_v2/README.md',
   'docs/integration/2026-11-05/RECONCILIATION_V22.json',
-  'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md'},
+  'docs/integration/2026-11-05/RECONCILIATION_V23.json',
+  'docs/integration/2026-11-05/RECONCILIATION.md',
+  'docs/integration/2026-11-05/LINEAR_HISTORY.md',
+  'docs/integration/2026-11-05/README_AUDIT.json'},
  'proof-carrying-science-site':COMMON_CONTROLS|{
   '.github/workflows/open-pr-reconciliation.yml',
   'docs/reconciliation/RECONCILIATION.md','docs/reconciliation/LINEAR_HISTORY.md'},
 }
+
+def _controls(name, after_paths):
+ """Exact control allowlist plus V23-admitted draft PCCR research paths present on HEAD."""
+ controls=set(CONTROLS[name])
+ if name=='proof-carrying-science':
+  controls|={p for p in after_paths if p.startswith(PCCR_ADMISSION_PREFIX)}
+ return controls
 
 def _tree(root,ref):
  raw=subprocess.check_output(['git','-C',str(root),'ls-tree','-rz',ref])
@@ -41,9 +55,11 @@ def _retained_sources(root,main,intake,tag,heads,controls):
  before=_tree(root,intake);after=_tree(root,'HEAD')
  assert {p:v for p,v in before.items() if p not in controls}=={p:v for p,v in after.items() if p not in controls},'Qualified non-control source bytes, modes or census differ'
  for name in controls:
-  assert name in after and after[name][:2]==('100644','blob'),'Tracked regular integration control required: '+name
+  assert name in after and after[name][1]=='blob' and after[name][0] in {'100644','100755'},'Tracked regular integration control required: '+name
   path=Path(root)/name
   assert path.is_file() and not path.is_symlink(),'Regular integration control required: '+name
+  if after[name][0]=='100755':
+   assert name.startswith(PCCR_ADMISSION_PREFIX) or name.endswith('.sh'),'Unexpected executable control mode: '+name
  assert not git(root,'status','--porcelain','--untracked-files=all'),'Working source differs from committed snapshot'
  return {'qualified_source_commit':intake,'retention_tag':tag,
          'original_ancestry_preserved_at_intake':True,
@@ -86,7 +102,8 @@ def check(roots,manifest):
   lineage={}
   if name in INTAKES:
    intake,tag=INTAKES[name]
-   lineage=_retained_sources(root,main,intake,tag,[p['head'] for p in prs],CONTROLS[name])
+   after=_tree(root,'HEAD')
+   lineage=_retained_sources(root,main,intake,tag,[p['head'] for p in prs],_controls(name,after))
   else:
    subprocess.run(['git','-C',str(root),'merge-base','--is-ancestor',main,'HEAD'],check=True,capture_output=True)
   if name=='proof-carrying-science':

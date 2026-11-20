@@ -1,0 +1,28 @@
+Step 1) Extract the causal graph: V1 -> Y, X -> Y, V1 -> X
+
+Step 2) Identify the query type: ate
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals): $E[Y | do(X=1)] - E[Y | do(X=0)]$ (or comparing $P(Y=1 | do(X=true))$ vs $P(Y=1 | do(X=false))$)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+$P(V1=1) = 0.76$, $P(V1=0) = 0.24$
+$P(Y=1 | V1=0, X=0) = 0.11$
+$P(Y=1 | V1=0, X=1) = 0.40$
+$P(Y=1 | V1=1, X=0) = 0.93$
+$P(Y=1 | V1=1, X=1) = 0.05$
+(Note: Since V1 affects X, we must adjust for V1 using the backdoor formula: $P(Y=1 | do(X=x)) = \sum_{v1} P(Y=1 | X=x, V1=v1) P(V1=v1)$)
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+For $X=1$ ($do(X=1)$):
+$P(Y=1 | do(X=1)) = P(Y=1 | X=1, V1=0)P(V1=0) + P(Y=1 | X=1, V1=1)P(V1=1)$
+$= (0.40 \times 0.24) + (0.05 \times 0.76)$
+$= 0.096 + 0.038 = 0.134$
+
+For $X=0$ ($do(X=0)$):
+$P(Y=1 | do(X=0)) = P(Y=1 | X=0, V1=0)P(V1=0) + P(Y=1 | X=0, V1=1)P(V1=1)$
+$= (0.11 \times 0.24) + (0.93 \times 0.76)$
+$= 0.0264 + 0.7068 = 0.7332$
+
+Comparing the two, $do(X=1)$ gives 0.134 and $do(X=0)$ gives 0.7332. Thus, zuph decreases the chance of uvzi.
+
+FINAL: no

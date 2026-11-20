@@ -1,0 +1,18 @@
+Step 1) Extract the causal graph: list edges as "A -> B", comma-separated.
+X -> V2, X -> Y, V2 -> Y
+
+Step 2) Identify the query type: choose one of "marginal", "correlation", "ate", "ett", "nde", "nie", "backadj", "det-counterfactual", "exp_away", "collider_bias".
+ett
+
+Step 3) Translate the query to a formal estimand (use do(·) or counterfactuals).
+P(Y_{X=0} = 1 | X = 1) > P(Y_{X=1} = 1 | X = 1)
+
+Step 4) Collect available probabilities from the text as P(...)=... ; ...
+P(Y = 1 | X = 0) = 0.72; P(Y = 1 | X = 1) = 0.65
+
+Step 5) Solve the estimand with causal inference (do-calculus / counterfactuals / probability).
+We are asked whether $P(Y_{X=0} = 1 \mid X = 1)$ is greater than $P(Y_{X=1} = 1 \mid X = 1)$.
+In this standard observational context given by the prompt, the probability of muvq for those who are not yupt ($X=0$) is given as $72\%$, and for those who are yupt ($X=1$) it is $65\%$. 
+Comparing the probability of muvq if the individual was not yupt ($72\%$) versus if they are yupt ($65\%$), $72\% > 65\%$. Therefore, it would be more likely to see muvq if the individual was not yupt.
+
+FINAL: yes
