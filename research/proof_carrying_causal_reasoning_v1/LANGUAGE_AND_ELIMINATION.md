@@ -1,6 +1,34 @@
 # Population causal questions and exact variable elimination
 
-## Language and decision boundary
+## Current scope-checked results
+
+The current entry point is `external.typed_language_scoped.predict`, version 2.1. It answered 2,290 of 10,112 exposed CLadder items. It matched 2,283 published labels, disagreed with seven and abstained on 7,822. Coverage was 22.65% and selective accuracy 99.69%. The descriptive iid Wilson interval was 99.37–99.85%. Shared templates and development exposure limit its interpretation. Of 1,206 numerical answers, all 1,206 supplied a compatible finite model that the scorer replayed against every typed probability fact. The other 1,084 answers compare graphical adjustment sets. Numerical model feasibility and validity of the sign throughout the rounded probability enclosure are separate checks. The source interpretation and population assumptions remain trusted.
+
+| Exposed query family | Correct | Incorrect | Abstained |
+|---|---:|---:|---:|
+| ATE | 212 | 0 | 1,210 |
+| Adjustment | 1,084 | 0 | 496 |
+| Association | 432 | 0 | 990 |
+| Marginal | 555 | 7 | 1,018 |
+| Other six families | 0 | 0 | 4,108 |
+
+The separately authored 72-case exercise yielded 24 correct answers, zero wrong answers, 12 missed answerable paraphrases and all 36 required abstentions. Its verdicts were identical across the three frozen Challenge II versions. This set had been disclosed by the time versions 2 and 2.1 were developed. The original reviewer result and development chronology are preserved below. [Current counts and paired changes](qualification/language_ii/feasible-report.json) · [All scored rows and feasibility models](qualification/language_ii/feasible-rows.json.gz) · [899-point margin curve](qualification/language_ii/feasible-coverage.json.gz) · [Reviewer predictions](qualification/language_ii/feasible-reviewer.json.gz)
+
+### Independent counterexamples and version locks
+
+| Predictor file in `external/` | SHA-256 locked before evaluation | Status |
+|---|---|---|
+| `typed_language.py` | `5e94ee9f087d30a87339c72e8a38127f104d37eec7d5bf36d3b0ae7d9bb6988b` | Original first score, 2,471 answers. Closed-world binding defect. |
+| `typed_language_v2.py` | `050283c177b46f57c3e4505706ae0123f7afdf66f0d719bae4f503525feb19f0` | First scope correction, 2,290 answers. Unchecked extra-marginal feasibility defect. |
+| `typed_language_scoped.py` | `037957ad5b69f0d1b0bcb34bc77bb073f35e3532ab8bcb357ebe72462cf090f3` | Current entry point, 2,290 answers. |
+
+The first parser returned a signed effect on rain from a complete graph declaring only switch and lamp, and even accepted a self-association through nested negation. The version 2 binder normalizes one leading lexical negation, refuses repeated negations and ambiguous qualifiers, and resolves every query event, supplied probability event, condition, adjustment variable, randomized variable and unobserved variable in a closed graph. An isolated vertex requires an explicit declaration such as “rain is an isolated node.” Open or previously undeclared phrases receive no implicit node in a complete DAG. On the archive this withheld 181 formerly correct labels, with 139 declines for unresolved graph variables and 42 for ambiguous names or qualifiers. Those 181 included 159 association answers and 22 adjustment comparisons. All seven published-label disagreements remain. [Scope-only score and paired rows](qualification/language_ii/scope-report.json) · [Binding controls](tests/test_typed_language_v2.py)
+
+The scope correction alone still accepted an impossible table on the graph rain → flow → lamp. The printed rates were 50% for rain, 40% for rain and lamp, 10% for no rain and lamp, and 0% for flow. Rounding permits at most 0.5% flow, giving each conditional flow probability an upper bound below 0.011. In this chain the absolute lamp contrast cannot exceed the absolute flow contrast, yet the bivariate table requires a contrast greater than 0.57. The frozen scope-only score is retained. The current version abstains on this counterexample. Adding model feasibility changed zero further benchmark verdicts. This counterexample distinguishes the systems even where their label scores coincide. [Reproducers and witness substitutions](tests/test_population_witness.py)
+
+Version 2.1 requires that all numerical facts refer to at most the two query variables (the outcome and its stratum for mixtures). Additional numerical constraints cause abstention. A candidate binary model specifies one Bernoulli mechanism for every declared vertex. A variable can use a single declared parent or be exogenous. For a pair with a common ancestor, the constructor chooses a latest common ancestor, draws a binary carrier there, and copies it down two directed paths whose interiors are disjoint. The second endpoint samples its prescribed conditional probability. A reversed path uses the reverse conditional law computed from the same joint table. Without a common ancestor, the constructor proposes independent marginals. The checker validates the vertices, parent edges, probabilities, randomized roots and all printed probability intervals using the existing exact marginal engine. Every conditional fact must have positive support. Under the Markov reading, mechanisms may ignore additional declared parents. Model feasibility is existential. The sign calculation still requires interval separation for every law allowed by the bounded interpretation. The implementation uses conservative ambiguity checks and makes no claim to interpret unrestricted English or give a general decision procedure for observational feasibility.
+
+## First frozen Challenge II interpreter (historical)
 
 The new public-text interpreter answered 2,471 of 10,112 exposed CLadder questions. It matched 2,464 labels and disagreed with seven. The Phase I text rule answered 425, with 423 matches. Both rules see exactly the background, given information and question. The new rule was written with access to public examples from this previously exposed corpus. Its output was locked before scoring against the answers. The test partition likewise measures exposed performance. The reviewer-owned set has a separate protocol and empirical scope. [Evaluation protocol](qualification/language_ii/PROTOCOL.md) · [Reviewer artifacts](qualification/language_ii/reviewer/)
 
@@ -50,7 +78,10 @@ From the checkout root with the Phase I pinned CLadder archive, SHA-256 `9fdae05
 ```bash
 P=research.proof_carrying_causal_reasoning_v1
 python -m "$P.qualification.language_ii.replay" /path/to/cladder-v1.zip
+python -m "$P.qualification.language_ii.replay_scope" score /path/to/cladder-v1.zip
+python -m "$P.qualification.language_ii.replay_scope" score /path/to/cladder-v1.zip --checked
+python -m "$P.qualification.language_ii.reviewer.replay"
 python -m "$P.qualification.replay_eliminated_ate" /path/to/cladder-v1.zip
 python -m "$P.qualification.benchmark_elimination"
-python -m unittest "$P.tests.test_elimination" "$P.tests.test_typed_language"
+python -m unittest "$P.tests.test_elimination" "$P.tests.test_typed_language" "$P.tests.test_typed_language_v2" "$P.tests.test_population_witness"
 ```
