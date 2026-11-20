@@ -1,0 +1,83 @@
+{
+  "split": "development",
+  "cases": [
+    {
+      "id": "d1",
+      "source": "For all sets A and B, A is a subset of the union of A and B.",
+      "reference": {
+        "variables": [
+          "A",
+          "B"
+        ],
+        "premises": [],
+        "conclusion": {
+          "subset": [
+            {
+              "var": "A"
+            },
+            {
+              "union": [
+                {
+                  "var": "A"
+                },
+                {
+                  "var": "B"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d2",
+      "source": "For all sets A and B, B is contained within the union of A and B.",
+      "reference": {
+        "variables": [
+          "A",
+          "B"
+        ],
+        "premises": [],
+        "conclusion": {
+          "subset": [
+            {
+              "var": "B"
+            },
+            {
+              "union": [
+                {
+                  "var": "A"
+                },
+                {
+                  "var": "B"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d3",
+      "source": "For all sets A and B, A is a subset of B.",
+      "reference": {
+        "variables": [
+          "A",
+          "B"
+        ],
+        "premises": [],
+        "conclusion": {
+          "subset": [
+            {
+              "var": "A"
+            },
+            {
+              "var": "B"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "schema": "set-batch/cases-v1"
+}

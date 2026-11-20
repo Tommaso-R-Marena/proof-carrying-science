@@ -1,0 +1,76 @@
+{
+  "split": "final",
+  "cases": [
+    {
+      "id": "f1",
+      "source": "For all sets X and Y, X is contained within Y.",
+      "reference": {
+        "variables": [
+          "X",
+          "Y"
+        ],
+        "premises": [],
+        "conclusion": {
+          "subset": [
+            {
+              "var": "X"
+            },
+            {
+              "var": "Y"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "f2",
+      "source": "For all sets X and Y, Y is contained within the union of X and Y.",
+      "reference": {
+        "variables": [
+          "X",
+          "Y"
+        ],
+        "premises": [],
+        "conclusion": {
+          "subset": [
+            {
+              "var": "Y"
+            },
+            {
+              "union": [
+                {
+                  "var": "X"
+                },
+                {
+                  "var": "Y"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "f3",
+      "source": "For all sets X and Y, X contains Y.",
+      "reference": {
+        "variables": [
+          "X",
+          "Y"
+        ],
+        "premises": [],
+        "conclusion": {
+          "subset": [
+            {
+              "var": "Y"
+            },
+            {
+              "var": "X"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "schema": "set-batch/cases-v1"
+}

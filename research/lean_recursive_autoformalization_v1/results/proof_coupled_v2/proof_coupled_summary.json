@@ -1,0 +1,315 @@
+{
+  "accepted_generations": 5,
+  "automatic_deployment": false,
+  "corpus_sha256": "5e34b8c023b2fabca1cfd354172b629fbf362eaabde431f4ce380128073028a3",
+  "final_rules": [
+    "rule_distinct_forall",
+    "rule_is_equal_to",
+    "rule_plus_times_words",
+    "rule_unique_exists",
+    "rule_zero_word"
+  ],
+  "format": "pcs-pgra-proof-coupled-summary-v2",
+  "generations": [
+    {
+      "generation": 0,
+      "loss": 9,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq"
+      ],
+      "proved_count": 3,
+      "rules": []
+    },
+    {
+      "attempts": [
+        {
+          "accepted": true,
+          "gained": [
+            "dup_ext_unique",
+            "ext_unique_exists"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_unique_exists"
+        }
+      ],
+      "gained": [
+        "dup_ext_unique",
+        "ext_unique_exists"
+      ],
+      "generation": 1,
+      "loss": 7,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_unique",
+        "ext_unique_exists"
+      ],
+      "proved_count": 5,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "gained": [
+            "dup_ext_plus",
+            "ext_plus_times"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_plus_times_words"
+        }
+      ],
+      "gained": [
+        "dup_ext_plus",
+        "ext_plus_times"
+      ],
+      "generation": 2,
+      "loss": 5,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_plus",
+        "dup_ext_unique",
+        "ext_plus_times",
+        "ext_unique_exists"
+      ],
+      "proved_count": 7,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_plus_times_words",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "gained": [
+            "ext_distinct_forall"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_distinct_forall"
+        }
+      ],
+      "gained": [
+        "ext_distinct_forall"
+      ],
+      "generation": 3,
+      "loss": 4,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_plus",
+        "dup_ext_unique",
+        "ext_distinct_forall",
+        "ext_plus_times",
+        "ext_unique_exists"
+      ],
+      "proved_count": 8,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_plus_times_words",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "gained": [
+            "dup_ext_zero",
+            "ext_zero_word"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_zero_word"
+        }
+      ],
+      "gained": [
+        "dup_ext_zero",
+        "ext_zero_word"
+      ],
+      "generation": 4,
+      "loss": 2,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_plus",
+        "dup_ext_unique",
+        "dup_ext_zero",
+        "ext_distinct_forall",
+        "ext_plus_times",
+        "ext_unique_exists",
+        "ext_zero_word"
+      ],
+      "proved_count": 10,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_zero_word"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "gained": [],
+          "reason": "REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "gained": [
+            "dup_ext_is_equal",
+            "ext_is_equal_to"
+          ],
+          "reason": "ACCEPT:reference_only_proof_coupled",
+          "rule": "rule_is_equal_to"
+        }
+      ],
+      "gained": [
+        "dup_ext_is_equal",
+        "ext_is_equal_to"
+      ],
+      "generation": 5,
+      "loss": 0,
+      "proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_base_nat_eq",
+        "dup_ext_is_equal",
+        "dup_ext_plus",
+        "dup_ext_unique",
+        "dup_ext_zero",
+        "ext_distinct_forall",
+        "ext_is_equal_to",
+        "ext_plus_times",
+        "ext_unique_exists",
+        "ext_zero_word"
+      ],
+      "proved_count": 12,
+      "reason": "ACCEPT:reference_only_proof_coupled",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_is_equal_to",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_zero_word"
+      ]
+    }
+  ],
+  "pcs_scientific_authority": false,
+  "policy_hash": "468a41db512b49ebef858a62c678053c9768416b9be7113c84159cad816501b9",
+  "proof_ids": [
+    "base_nat_eq",
+    "base_nat_add",
+    "dup_base_nat_eq",
+    "ext_plus_times",
+    "dup_ext_plus",
+    "ext_distinct_forall",
+    "ext_unique_exists",
+    "dup_ext_unique",
+    "ext_zero_word",
+    "dup_ext_zero",
+    "ext_is_equal_to",
+    "dup_ext_is_equal"
+  ],
+  "protocol": {
+    "automatic_deployment": false,
+    "beam": 4,
+    "budget": 96,
+    "depth": 18,
+    "format": "pcs-pgra-proof-coupled-protocol-v2",
+    "frozen": true,
+    "minimum_additional_proofs": 1,
+    "pcs_scientific_authority": false,
+    "policy": "symbolic"
+  },
+  "proved_counts": [
+    3,
+    5,
+    7,
+    8,
+    10,
+    12
+  ],
+  "rising_proved": true,
+  "self_improvement_scope": "Finite proof-coupled formalization rulebooks: kernel-proved count on a frozen authored proof-target set under preserve/expand/loss. Not general AI self-improvement or unrestricted English."
+}

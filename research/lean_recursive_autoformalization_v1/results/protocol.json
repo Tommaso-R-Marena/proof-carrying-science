@@ -1,0 +1,101 @@
+{
+  "automatic_deployment": false,
+  "claims": [
+    "Finite certified formalization capability under discrete rulebooks",
+    "Monotonic proof-gated rule enabling with exact integer loss"
+  ],
+  "corpus_sha256": "5e34b8c023b2fabca1cfd354172b629fbf362eaabde431f4ce380128073028a3",
+  "format": "pcs-pgra-protocol-v1",
+  "frozen": true,
+  "generation_targets": {
+    "0": [
+      "abstain_graphs",
+      "abstain_prove_everything",
+      "base_nat_add",
+      "base_nat_eq",
+      "dup_ext_whenever",
+      "ext_neither_nor",
+      "ext_unique_exists",
+      "ext_zero_word"
+    ],
+    "1": [
+      "abstain_poetry",
+      "abstain_reals",
+      "base_prop_implies",
+      "dup_base_iff",
+      "dup_ext_plus",
+      "ext_exactly_when",
+      "ext_is_equal_to",
+      "ext_whenever"
+    ],
+    "2": [
+      "abstain_informal",
+      "abstain_physics",
+      "base_exists",
+      "dup_abstain",
+      "dup_base_nat_eq",
+      "dup_ext_exactly",
+      "dup_ext_is_equal",
+      "dup_ext_neither",
+      "dup_ext_unique",
+      "dup_ext_zero",
+      "ext_distinct_forall",
+      "ext_plus_times"
+    ]
+  },
+  "non_claims": [
+    "General English-to-Lean understanding",
+    "Production scientific authority",
+    "Automatic deployment of rulebooks or models"
+  ],
+  "package": "research/lean_recursive_autoformalization_v1",
+  "pcs_scientific_authority": false,
+  "policy_binding": "pcs-pgra-v1/formalization-rulebook-gate",
+  "rule_catalog": [
+    "rule_unique_exists",
+    "rule_neither_nor",
+    "rule_exactly_when",
+    "rule_whenever",
+    "rule_plus_times_words",
+    "rule_distinct_forall",
+    "rule_zero_word",
+    "rule_is_equal_to"
+  ],
+  "splits": {
+    "holdout": [
+      "abstain_informal",
+      "abstain_physics",
+      "base_exists",
+      "dup_abstain",
+      "dup_base_nat_eq",
+      "dup_ext_exactly",
+      "dup_ext_is_equal",
+      "dup_ext_neither",
+      "dup_ext_unique",
+      "dup_ext_zero",
+      "ext_distinct_forall",
+      "ext_plus_times"
+    ],
+    "seed": [
+      "abstain_graphs",
+      "abstain_prove_everything",
+      "base_nat_add",
+      "base_nat_eq",
+      "dup_ext_whenever",
+      "ext_neither_nor",
+      "ext_unique_exists",
+      "ext_zero_word"
+    ],
+    "validation": [
+      "abstain_poetry",
+      "abstain_reals",
+      "base_prop_implies",
+      "dup_base_iff",
+      "dup_ext_plus",
+      "ext_exactly_when",
+      "ext_is_equal_to",
+      "ext_whenever"
+    ]
+  },
+  "tasks_sha256": "5cc8b553615ef4fcfc4020ff674b8d42374a17289373c54aa44e80a44f7a4535"
+}

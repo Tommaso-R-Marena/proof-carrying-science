@@ -1,0 +1,286 @@
+{
+  "benchmark": "FormL4 Basic",
+  "distinct_english": 962,
+  "elaborated": 4,
+  "external_correspondence": 2,
+  "external_correspondence_and_proof": 2,
+  "formal_signature_abstentions": 2,
+  "historically_exposed_development_distribution": true,
+  "items": [
+    {
+      "candidate": {
+        "conclusion": {
+          "equal": [
+            {
+              "inf": [
+                {
+                  "var": "A"
+                },
+                {
+                  "var": "B"
+                }
+              ]
+            },
+            {
+              "inter": [
+                {
+                  "var": "A"
+                },
+                {
+                  "var": "B"
+                }
+              ]
+            }
+          ]
+        },
+        "premises": [],
+        "variables": [
+          "A",
+          "B"
+        ]
+      },
+      "english_sha256": "03f0bf647e124e411a992e5e3785a595b842a388dbfb374648a035502002de19",
+      "formal_sha256": "39238dac5db80d3b940c1c98e469682caa05d339efb620955dcc42ce5ce4b99a",
+      "reference": {
+        "conclusion": {
+          "equal": [
+            {
+              "inf": [
+                {
+                  "var": "X"
+                },
+                {
+                  "var": "Y"
+                }
+              ]
+            },
+            {
+              "inter": [
+                {
+                  "var": "X"
+                },
+                {
+                  "var": "Y"
+                }
+              ]
+            }
+          ]
+        },
+        "premises": [],
+        "variables": [
+          "X",
+          "Y"
+        ]
+      },
+      "review": {
+        "axioms": {
+          "correspondence": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "validity": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        "correspondence": "EQUIVALENT",
+        "counterexample": null,
+        "elaborated": true,
+        "lean_sha256": "1f8e726cf9b1a7ee548c00d6bc18b1114dc72bb83dcaf06ea2f794d13501e3df",
+        "library_sha256": "9a3e539ccc426d4ced06be7a18d3b870fbb1889b02654d1da7eba070bc0c5af9",
+        "proof": "KERNEL_CHECKED"
+      },
+      "source_index": 498
+    },
+    {
+      "candidate": {
+        "conclusion": {
+          "equal": [
+            {
+              "union": [
+                {
+                  "var": "A"
+                },
+                {
+                  "var": "B"
+                }
+              ]
+            },
+            {
+              "sup": [
+                {
+                  "var": "A"
+                },
+                {
+                  "var": "B"
+                }
+              ]
+            }
+          ]
+        },
+        "premises": [],
+        "variables": [
+          "A",
+          "B"
+        ]
+      },
+      "english_sha256": "c3b415d8b075c80542dc11c01c9a4ee0612b9f52ccf8c8a136573e1addc335f5",
+      "formal_sha256": "3a49008e76b06c93310764448b4cced531588c8ff98added54a0bd1f789fa04e",
+      "reference": {
+        "conclusion": {
+          "equal": [
+            {
+              "sup": [
+                {
+                  "var": "X"
+                },
+                {
+                  "var": "Y"
+                }
+              ]
+            },
+            {
+              "union": [
+                {
+                  "var": "X"
+                },
+                {
+                  "var": "Y"
+                }
+              ]
+            }
+          ]
+        },
+        "premises": [],
+        "variables": [
+          "X",
+          "Y"
+        ]
+      },
+      "review": {
+        "axioms": {
+          "correspondence": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "validity": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        "correspondence": "EQUIVALENT",
+        "counterexample": null,
+        "elaborated": true,
+        "lean_sha256": "97953e7e8f90b9f10d229ce0ffc16ee8aaa21bea86d1750f7cb76651b3e9a10e",
+        "library_sha256": "9a3e539ccc426d4ced06be7a18d3b870fbb1889b02654d1da7eba070bc0c5af9",
+        "proof": "KERNEL_CHECKED"
+      },
+      "source_index": 499
+    },
+    {
+      "candidate": {
+        "conclusion": {
+          "equal": [
+            {
+              "compl": {
+                "empty": true
+              }
+            },
+            {
+              "univ": true
+            }
+          ]
+        },
+        "premises": [],
+        "variables": []
+      },
+      "english_sha256": "ac9fb085a37d820dba74c2240d11509f97fb2f9286f05cbcfd7da0ea1e490071",
+      "formal_sha256": "e56c9ba0b0c242f9c414325fb8f925e864e5c37753b0aa773955e01835a0102e",
+      "reference": null,
+      "review": {
+        "correspondence": "UNSUPPORTED_FORMAL_SIGNATURE",
+        "elaborated": true,
+        "proof": "NOT_CHECKED"
+      },
+      "source_index": 747,
+      "standalone_proof": {
+        "axioms": {
+          "correspondence": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "validity": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        "correspondence": "EQUIVALENT",
+        "counterexample": null,
+        "elaborated": true,
+        "lean_sha256": "58a0c73f2428741ce0955f9073b5d069250b09c0f0b353b2c933bf16bd728c36",
+        "library_sha256": "9a3e539ccc426d4ced06be7a18d3b870fbb1889b02654d1da7eba070bc0c5af9",
+        "proof": "KERNEL_CHECKED"
+      }
+    },
+    {
+      "candidate": {
+        "conclusion": {
+          "equal": [
+            {
+              "compl": {
+                "univ": true
+              }
+            },
+            {
+              "empty": true
+            }
+          ]
+        },
+        "premises": [],
+        "variables": []
+      },
+      "english_sha256": "d416200cec233968bf8ed46d9b9ad5a01a90e4309df49f556cb99b73fa6b240a",
+      "formal_sha256": "1acd2eb0b49b1ac757d0979311fb25d2edde3e2c9e04e1c86db316390c54cded",
+      "reference": null,
+      "review": {
+        "correspondence": "UNSUPPORTED_FORMAL_SIGNATURE",
+        "elaborated": true,
+        "proof": "NOT_CHECKED"
+      },
+      "source_index": 758,
+      "standalone_proof": {
+        "axioms": {
+          "correspondence": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "validity": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        "correspondence": "EQUIVALENT",
+        "counterexample": null,
+        "elaborated": true,
+        "lean_sha256": "146b45adbcc48c906e82c37c29e2468701af8d7d5efdd479f29e028ec6f91972",
+        "library_sha256": "9a3e539ccc426d4ced06be7a18d3b870fbb1889b02654d1da7eba070bc0c5af9",
+        "proof": "KERNEL_CHECKED"
+      }
+    }
+  ],
+  "model_requests": 0,
+  "old_parser_candidates": 0,
+  "parsed": 4,
+  "parser_abstentions": 966,
+  "population": 970,
+  "revision": "7f65d2c27e79239d754e08af2de84a4cea58acc7",
+  "sha256": "942313eded48cdf6d329a0076ac3935f633fc2e156a9e507ad24ee16dcfd9dde"
+}

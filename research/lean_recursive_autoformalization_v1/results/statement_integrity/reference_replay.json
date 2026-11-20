@@ -1,0 +1,63 @@
+[
+  {
+    "candidate": "theorem proposal (k : Nat) : k = k",
+    "case": "alpha-renaming",
+    "receipt": {
+      "candidate_sha256": "1277cee5dbe382fd90e9010b2c4cc29fae4a0a8185eaf874dc031a46246133b1",
+      "compiled": true,
+      "equivalence_audit": "'sameStatement' does not depend on any axioms",
+      "equivalence_source": "import Std\nset_option autoImplicit false\ndef Candidate : Prop := \u2200 (x0 : Nat), x0 = x0\ndef Reference : Prop := \u2200 (x0 : Nat), x0 = x0\ntheorem sameStatement : Candidate = Reference := rfl\n#print axioms sameStatement\n",
+      "equivalence_verified": true,
+      "error": null,
+      "normalized": "import Std\nset_option autoImplicit false\ndef Candidate : Prop := \u2200 (x0 : Nat), x0 = x0\n",
+      "ok": true,
+      "proof_audit": "'sameStatement' does not depend on any axioms\n'sourceTheorem' does not depend on any axioms",
+      "proof_axioms": [],
+      "proof_source": "import Std\nset_option autoImplicit false\ndef Candidate : Prop := \u2200 (x0 : Nat), x0 = x0\ndef Reference : Prop := \u2200 (x0 : Nat), x0 = x0\ntheorem sameStatement : Candidate = Reference := rfl\n#print axioms sameStatement\ntheorem sourceTheorem : Candidate := by\n  unfold Candidate\n  intros\n  first | rfl | decide | omega | assumption\n#print axioms sourceTheorem\n",
+      "proof_verified": true,
+      "reference_sha256": "2448d410781cab71fe62a43fe48fb72842769b62d14f8a1a2e4b6d2f53823e80",
+      "returncode": 0,
+      "status": "PROOF_VERIFIED",
+      "syntax_valid": true
+    },
+    "reference": "example (n : Nat) : n = n"
+  },
+  {
+    "candidate": "theorem proposal : False",
+    "case": "same-unprovable",
+    "receipt": {
+      "candidate_sha256": "3abcc9fc4ef10481c2bfc7658938a4d55587ce2026288e444a8b01db8b932fef",
+      "compiled": true,
+      "equivalence_audit": "'sameStatement' does not depend on any axioms",
+      "equivalence_source": "import Std\nset_option autoImplicit false\ndef Candidate : Prop := False\ndef Reference : Prop := False\ntheorem sameStatement : Candidate = Reference := rfl\n#print axioms sameStatement\n",
+      "equivalence_verified": true,
+      "error": null,
+      "normalized": "import Std\nset_option autoImplicit false\ndef Candidate : Prop := False\n",
+      "ok": true,
+      "proof_verified": false,
+      "reference_sha256": "4ea5000b08ae4e5c4bebeeb55a258ef6321e387ff774dbb6dc529db4f071e138",
+      "returncode": 0,
+      "status": "SEMANTICALLY_EQUIVALENT",
+      "syntax_valid": true
+    },
+    "reference": "example : False"
+  },
+  {
+    "candidate": "theorem proposal : True",
+    "case": "changed-conclusion",
+    "receipt": {
+      "candidate_sha256": "5376d84f17a92b8fe7130c1cff3c1de2bb91be6d9e491b70567c9ec6606b3b01",
+      "compiled": true,
+      "equivalence_verified": false,
+      "error": "definitional equality unchecked or unestablished",
+      "normalized": "import Std\nset_option autoImplicit false\ndef Candidate : Prop := True\n",
+      "ok": true,
+      "proof_verified": false,
+      "reference_sha256": "4ea5000b08ae4e5c4bebeeb55a258ef6321e387ff774dbb6dc529db4f071e138",
+      "returncode": 0,
+      "status": "WELL_TYPED_UNVALIDATED",
+      "syntax_valid": true
+    },
+    "reference": "example : False"
+  }
+]

@@ -1,0 +1,810 @@
+{
+  "automatic_deployment": false,
+  "by_benchmark": {
+    "FormL4": {
+      "gated_supported": 0,
+      "gated_supported_rate": 0.0,
+      "llm_abstain": 6,
+      "llm_abstain_rate": 0.75,
+      "llm_ok": 8,
+      "n": 8,
+      "zero_shot_rate": 0.0,
+      "zero_shot_supported": 0
+    },
+    "bridge_rewriteable": {
+      "gated_supported": 4,
+      "gated_supported_rate": 1.0,
+      "llm_abstain": 0,
+      "llm_abstain_rate": 0.0,
+      "llm_ok": 4,
+      "n": 4,
+      "zero_shot_rate": 0.0,
+      "zero_shot_supported": 0
+    },
+    "miniF2F": {
+      "gated_supported": 0,
+      "gated_supported_rate": 0.0,
+      "llm_abstain": 7,
+      "llm_abstain_rate": 0.875,
+      "llm_ok": 8,
+      "n": 8,
+      "zero_shot_rate": 0.0,
+      "zero_shot_supported": 0
+    }
+  },
+  "format": "pcs-pgra-unrestricted-llm-benchmark-v1",
+  "limit": 20,
+  "limitations": [
+    "Unrestricted English equivalence unproved",
+    "FormL4/miniF2F Lean compile parity not claimed here",
+    "Free-tier remaining RPM/RPD not returned by Generative Language API",
+    "LLM rewrites are fail-closed gated; authority remains false"
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "overall": {
+    "gated_supported": 4,
+    "gated_supported_rate": 0.2,
+    "llm_abstain": 13,
+    "llm_abstain_rate": 0.65,
+    "llm_ok": 20,
+    "n": 20,
+    "zero_shot_rate": 0.0,
+    "zero_shot_supported": 0
+  },
+  "pcs_scientific_authority": false,
+  "quota_probe": {
+    "assumed_free_tier_flash_lite": {
+      "rpd_soft_harness": 80,
+      "rpm_soft": 10,
+      "typical_flash_lite_rpd": 500,
+      "typical_flash_rpd": 20
+    },
+    "format": "pcs-pgra-gemini-quota-probe-v1",
+    "generate_ok": true,
+    "model": "gemini-3.1-flash-lite",
+    "note": "Google Generative Language generateContent responses expose per-request usageMetadata but not project remaining RPM/TPM/RPD. View remaining quota in Google AI Studio \u2192 Usage & Billing for project 171569345899. This harness enforces local soft caps under published free-tier flash-lite limits.",
+    "pcs_scientific_authority": false,
+    "remaining_quota_visible_in_api": false,
+    "session_ledger": {
+      "candidates_tokens": 1,
+      "failures": 0,
+      "http_statuses": {
+        "200": 1
+      },
+      "model": "gemini-3.1-flash-lite",
+      "notes": [],
+      "prompt_tokens": 5,
+      "requests": 1,
+      "successes": 1,
+      "total_tokens": 6
+    },
+    "usage_this_request": {
+      "candidatesTokenCount": 1,
+      "promptTokenCount": 5,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 5
+        }
+      ],
+      "serviceTier": "standard",
+      "totalTokenCount": 6
+    }
+  },
+  "rows": [
+    {
+      "benchmark": "miniF2F",
+      "english": "Let $n$ be a positive natural number. Show that $n^{1/n} \\leq 2 - 1/n$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves fractional exponents (roots), which are not defined within the scope of elementary Nat/Int/Prop logic.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_algebra_ineq_nto1onlt2m1on",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves fractional exponents (roots), which are not defined within the scope of elementary Nat/Int/Prop logic.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 49,
+          "promptTokenCount": 322,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 322
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 371
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that for any natural number k, the ascending factorial of 0 up to (k + 1) is equal to 0.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The term 'ascending factorial' is a specialized mathematical function not defined within elementary Nat/Int/Prop logic.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_0",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The term 'ascending factorial' is a specialized mathematical function not defined within elementary Nat/Int/Prop logic.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 52,
+          "promptTokenCount": 321,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 321
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 373
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Show that for any natural number $n$, we have $11\\mid 10^n-(-1)^n$.",
+      "gated": {
+        "lean_text": "theorem divisibility_property (n : Nat) : (10^n - (-1 : Int)^n) % 11 = 0",
+        "note": "Mathlib/Lean compile not claimed in this harness",
+        "path": "lean4_stmt_recorded_only",
+        "status": "recorded_not_compiled",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_11div10tonmn1ton",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "LEAN4_STMT",
+          "reason": "The statement involves modular arithmetic and integer exponentiation, which can be expressed using Nat/Int types and basic operations.",
+          "text": "theorem divisibility_property (n : Nat) : (10^n - (-1 : Int)^n) % 11 = 0"
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 83,
+          "promptTokenCount": 319,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 319
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 402
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that for any non-negative integers n and k where k is less than or equal to n, the product of \"n choose k\", k factorial, and (n-k) factorial is equal to n factorial.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves the factorial function and binomial coefficients, which are not primitive operations in the allowed elementary Nat/Int/Prop grammar.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_1",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves the factorial function and binomial coefficients, which are not primitive operations in the allowed elementary Nat/Int/Prop grammar.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 51,
+          "promptTokenCount": 338,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 338
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 389
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Show that for any natural number $n$, 12 divides $4^{n+1} + 20$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves divisibility and modular arithmetic properties that exceed the allowed elementary quantifier grammar and basic arithmetic operations.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_12dvd4expnp1p20",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves divisibility and modular arithmetic properties that exceed the allowed elementary quantifier grammar and basic arithmetic operations.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 46,
+          "promptTokenCount": 318,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 318
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 364
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that 1 is coprime to any natural number x.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The concept of 'coprime' requires the definition of the greatest common divisor, which involves divisibility and potentially existential quantification over factors, falling outside the requested elementary grammar scope.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_2",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The concept of 'coprime' requires the definition of the greatest common divisor, which involves divisibility and potentially existential quantification over factors, falling outside the requested elementary grammar scope.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 60,
+          "promptTokenCount": 305,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 305
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 365
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Show that for any integer $n \\geq 3$, we have $n! < n^{n-1}$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves the factorial function, which is not a primitive operation in the allowed elementary Nat/Int/Prop scope.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_nfactltnexpnm1ngt3",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves the factorial function, which is not a primitive operation in the allowed elementary Nat/Int/Prop scope.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 49,
+          "promptTokenCount": 317,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 317
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 366
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that the coefficient of the term \\(x^k\\) in the \\(2n+k\\)-th Hermite polynomial is equal to  \\((-1)^n \\cdot (2n-1)!! \\cdot \\binom{2n+k}{k}\\).",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves Hermite polynomials, which are defined via analysis/calculus and fall outside the scope of elementary Nat/Int/Prop logic.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_3",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves Hermite polynomials, which are defined via analysis/calculus and fall outside the scope of elementary Nat/Int/Prop logic.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 59,
+          "promptTokenCount": 349,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 349
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 408
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Show that for positive integer $n$, $(\\prod_{k=1}^{n} (1 + 1/2^k)) < 5/2$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves rational numbers (fractions) and products, which fall outside the scope of elementary Nat/Int/Prop quantifier logic.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_pord1p1on2powklt5on2",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves rational numbers (fractions) and products, which fall outside the scope of elementary Nat/Int/Prop quantifier logic.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 52,
+          "promptTokenCount": 326,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 326
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 378
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that any natural number 'x' is coprime with 1.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The concept of 'coprime' requires the definition of greatest common divisors, which involves divisibility theory beyond the requested elementary grammar scope.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_4",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The concept of 'coprime' requires the definition of greatest common divisors, which involves divisibility theory beyond the requested elementary grammar scope.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 52,
+          "promptTokenCount": 307,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 307
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 359
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Let $p$ be a prime number and $a$ a positive integer. Show that $p$ divides $a^p - a$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves the concept of prime numbers, which requires defining divisibility and primality within the domain of natural numbers; while expressible, it is a standard competition-style number theory problem often requiring lemmas beyond basic arithmetic axioms.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_pprime_pdvdapowpma",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves the concept of prime numbers, which requires defining divisibility and primality within the domain of natural numbers; while expressible, it is a standard competition-style number theory problem often requiring lemmas beyond basic arithmetic axioms.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 76,
+          "promptTokenCount": 322,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 322
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 398
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that for any integer 'a', the absolute value of 'a' is equal to the natural number absolute value of 'a'.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The concept of 'absolute value' is not defined within the restricted domain of elementary Nat/Int/Prop arithmetic primitives (only +, *, =, \u2227, \u2228, \u2192, \u00ac, \u2203, \u2200 are permitted).",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_5",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The concept of 'absolute value' is not defined within the restricted domain of elementary Nat/Int/Prop arithmetic primitives (only +, *, =, \u2227, \u2228, \u2192, \u00ac, \u2203, \u2200 are permitted).",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 75,
+          "promptTokenCount": 320,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 320
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 395
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Show that for any positive integer $n$, we have $\\prod_{k=1}^n (1 + 1/k^3) \\leq 3 - 1/n$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves rational numbers (fractions) and products, which fall outside the scope of elementary Nat/Int/Prop quantifier logic.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_prod1p1onk3le3m1onn",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves rational numbers (fractions) and products, which fall outside the scope of elementary Nat/Int/Prop quantifier logic.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 52,
+          "promptTokenCount": 332,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 332
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 384
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that for any two integers, if they have the same sign, then their sum has the same sign as each of them.",
+      "gated": {
+        "lean": null,
+        "path": "controlled_english",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_6",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "CONTROLLED_ENGLISH",
+          "reason": "The statement involves properties of integers and signs, which can be expressed using basic arithmetic comparisons.",
+          "text": "For all integers a and b, if (a > 0 and b > 0) implies (a + b > 0), and if (a < 0 and b < 0) implies (a + b < 0), then the statement holds."
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 99,
+          "promptTokenCount": 319,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 319
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 418
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "miniF2F",
+      "english": "Show that for all natural numbers $n$, we have $\\sum_{k=0}^{n-1}k^3 = \\left(\\sum_{k=0}^{n-1}k\\right)^2$.",
+      "gated": {
+        "path": "abstain",
+        "reason": "The statement involves summation notation and powers, which are not part of the allowed elementary Nat/Int/Prop quantifier grammar.",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "minif2f_test_induction_sumkexp3eqsumksq",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "ABSTAIN",
+          "reason": "The statement involves summation notation and powers, which are not part of the allowed elementary Nat/Int/Prop quantifier grammar.",
+          "text": ""
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 54,
+          "promptTokenCount": 338,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 338
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 392
+        }
+      },
+      "split": "test",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "FormL4",
+      "english": "Prove that the factorial of any natural number is greater than 0.",
+      "gated": {
+        "lean": null,
+        "path": "controlled_english",
+        "status": "unsupported",
+        "supported": false
+      },
+      "id": "forml4_basic_7",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "CONTROLLED_ENGLISH",
+          "reason": "The statement is a basic property of natural numbers expressible in the required grammar.",
+          "text": "For all natural numbers n, the factorial of n is greater than 0."
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 58,
+          "promptTokenCount": 307,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 307
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 365
+        }
+      },
+      "split": "basic",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "bridge_rewriteable",
+      "english": "Every natural number is equal to itself.",
+      "gated": {
+        "lean": "\u2200 (n : Nat), (n = n)",
+        "path": "controlled_english",
+        "status": "supported",
+        "supported": true
+      },
+      "id": "bridge_identity_plain",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "CONTROLLED_ENGLISH",
+          "reason": "The statement is a basic property of natural numbers expressible in the required grammar.",
+          "text": "For all natural numbers n, n equals n."
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 52,
+          "promptTokenCount": 301,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 301
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 353
+        }
+      },
+      "split": "diag",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "bridge_rewriteable",
+      "english": "Addition of natural numbers is commutative: for naturals n and m, n+m equals m+n.",
+      "gated": {
+        "lean": "\u2200 (n : Nat) (m : Nat), ((n + m) = (m + n))",
+        "path": "controlled_english",
+        "status": "supported",
+        "supported": true
+      },
+      "id": "bridge_comm_add",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "CONTROLLED_ENGLISH",
+          "reason": "The statement is a direct expression of the commutativity of addition on natural numbers, which fits the required grammar.",
+          "text": "For all natural numbers n and m, n + m equals m + n."
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 64,
+          "promptTokenCount": 315,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 315
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 379
+        }
+      },
+      "split": "diag",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "bridge_rewriteable",
+      "english": "Zero is a natural number, and there is some natural equal to it.",
+      "gated": {
+        "lean": "(\u2203 (n : Nat), (n = (0 : Nat)))",
+        "path": "controlled_english",
+        "status": "supported",
+        "supported": true
+      },
+      "id": "bridge_exists_zero",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "CONTROLLED_ENGLISH",
+          "reason": "The statement asserts the existence of a natural number equal to zero, which fits the required grammar.",
+          "text": "There exists a natural number n such that n equals 0."
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 58,
+          "promptTokenCount": 308,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 308
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 366
+        }
+      },
+      "split": "diag",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    },
+    {
+      "benchmark": "bridge_rewriteable",
+      "english": "Adding zero on the right does nothing to a natural number.",
+      "gated": {
+        "lean": "\u2200 (n : Nat), ((n + (0 : Nat)) = n)",
+        "path": "controlled_english",
+        "status": "supported",
+        "supported": true
+      },
+      "id": "bridge_plus_zero",
+      "llm": {
+        "ok": true,
+        "parsed": {
+          "decision": "CONTROLLED_ENGLISH",
+          "reason": "The statement is a basic property of natural numbers expressible in the required grammar.",
+          "text": "For all natural numbers n, n + 0 equals n."
+        },
+        "status": 200,
+        "usage": {
+          "candidatesTokenCount": 55,
+          "promptTokenCount": 305,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 305
+            }
+          ],
+          "serviceTier": "standard",
+          "totalTokenCount": 360
+        }
+      },
+      "split": "diag",
+      "zero_shot_pgra_supported": false,
+      "zero_shot_status": "unsupported"
+    }
+  ],
+  "usage_ledger": {
+    "candidates_tokens": 1196,
+    "failures": 0,
+    "http_statuses": {
+      "200": 20
+    },
+    "model": "gemini-3.1-flash-lite",
+    "notes": [],
+    "prompt_tokens": 6389,
+    "requests": 20,
+    "successes": 20,
+    "total_tokens": 7585
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "assumed_free_tier_flash_lite": {
+    "rpd_soft_harness": 80,
+    "rpm_soft": 10,
+    "typical_flash_lite_rpd": 500,
+    "typical_flash_rpd": 20
+  },
+  "format": "pcs-pgra-gemini-quota-probe-v1",
+  "generate_ok": true,
+  "model": "gemini-3.1-flash-lite",
+  "note": "Google Generative Language generateContent responses expose per-request usageMetadata but not project remaining RPM/TPM/RPD. View remaining quota in Google AI Studio \u2192 Usage & Billing for project 171569345899. This harness enforces local soft caps under published free-tier flash-lite limits.",
+  "pcs_scientific_authority": false,
+  "remaining_quota_visible_in_api": false,
+  "session_ledger": {
+    "candidates_tokens": 1,
+    "failures": 0,
+    "http_statuses": {
+      "200": 1
+    },
+    "model": "gemini-3.1-flash-lite",
+    "notes": [],
+    "prompt_tokens": 5,
+    "requests": 1,
+    "successes": 1,
+    "total_tokens": 6
+  },
+  "usage_this_request": {
+    "candidatesTokenCount": 1,
+    "promptTokenCount": 5,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 5
+      }
+    ],
+    "serviceTier": "standard",
+    "totalTokenCount": 6
+  }
+}

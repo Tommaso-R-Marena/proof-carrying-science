@@ -1,0 +1,79 @@
+{
+  "decision": {
+    "accepted": true,
+    "automatic_deployment": false,
+    "fitting_proof_ids": [
+      "base_nat_eq",
+      "base_nat_add",
+      "dup_ext_plus",
+      "ext_unique_exists",
+      "ext_zero_word",
+      "ext_is_equal_to"
+    ],
+    "formalization": {
+      "accepted": true,
+      "gained": [
+        "ext_unique_exists"
+      ],
+      "new_loss": 7,
+      "old_loss": 8,
+      "reason": "ACCEPT:reference_only"
+    },
+    "pcs_scientific_authority": false,
+    "proof": {
+      "accepted": true,
+      "gained": [
+        "ext_unique_exists"
+      ],
+      "new_loss": 3,
+      "new_proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "ext_unique_exists"
+      ],
+      "old_loss": 4,
+      "old_proved": [
+        "base_nat_add",
+        "base_nat_eq"
+      ],
+      "reason": "ACCEPT:reference_only_proof_coupled"
+    },
+    "reason": "ACCEPT:reference_only_dual_v3"
+  },
+  "event": {
+    "attempts": [
+      {
+        "accepted": true,
+        "formalization_gained": [
+          "ext_unique_exists"
+        ],
+        "proof_gained": [
+          "ext_unique_exists"
+        ],
+        "reason": "ACCEPT:reference_only_dual_v3",
+        "rule": "rule_unique_exists"
+      }
+    ],
+    "automatic_deployment": false,
+    "efficiency": null,
+    "fitting_certified": 9,
+    "fitting_form_loss": 7,
+    "fitting_proof_loss": 3,
+    "fitting_proved": 3,
+    "gained_formalization": [
+      "ext_unique_exists"
+    ],
+    "gained_proofs": [
+      "ext_unique_exists"
+    ],
+    "generation": 1,
+    "holdout_certified": 6,
+    "holdout_proved": 2,
+    "holdout_role": "report_only",
+    "pcs_scientific_authority": false,
+    "reason": "ACCEPT:reference_only_dual_v3",
+    "rules": [
+      "rule_unique_exists"
+    ]
+  }
+}

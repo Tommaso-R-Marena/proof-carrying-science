@@ -1,0 +1,455 @@
+{
+  "automatic_deployment": false,
+  "comparison": {
+    "forml4": {
+      "our_metric": "reference token-F1 / soft match (no Mathlib compile)",
+      "our_sample": {
+        "exact_norm_rate": 0.0,
+        "llm_ok_rate": 1.0,
+        "looks_like_lean_rate": 1.0,
+        "mean_token_f1": 0.3621,
+        "n": 8,
+        "soft_f1_ge_0_5_rate": 0.125,
+        "soft_f1_ge_0_7_rate": 0.0,
+        "zero_shot_pgra_rate": 0.0
+      },
+      "published_GPT4Turbo_basic_compile_pct": 1.47,
+      "published_SOTA_basic_compile_pct": 46.28,
+      "published_metric": "Lean compile success % (greedy)",
+      "verdict": "PGRA zero-shot does not autoformalize FormL4/Mathlib English (by design). Gemini-flash-lite produces Lean-looking output often, but without Mathlib compile we cannot claim PDA-parity; soft reference match remains far below PDA RFT+Verifier ~46% basic compile SOTA."
+    },
+    "minif2f_autoformalization": {
+      "our_sample": {
+        "exact_norm_rate": 0.0,
+        "llm_ok_rate": 1.0,
+        "looks_like_lean_rate": 1.0,
+        "mean_token_f1": 0.8578,
+        "n": 8,
+        "soft_f1_ge_0_5_rate": 1.0,
+        "soft_f1_ge_0_7_rate": 1.0,
+        "zero_shot_pgra_rate": 0.0
+      },
+      "published_SOTA_pass8_approx": "Kimina-Autoformalizer ~92%; LongCat ~99-100%",
+      "verdict": "Our gated PGRA path zero-shot rate is ~0% on miniF2F informal (correct fail-closed). Raw Gemini autoformalization soft-match is not competitive with ~92%+ SOTA autoformalizers; proving SOTA (~84-93% pass@32) is a separate axis we do not claim."
+    }
+  },
+  "format": "pcs-pgra-sota-comparison-v1",
+  "limitations": [
+    "Subset evaluation (free-tier bounded), not full 970/950/244 suites",
+    "No Mathlib compile oracle \u2014 PDA compile-% not reproduced exactly",
+    "Soft token-F1 is a proxy, not semantic equivalence",
+    "PGRA is a fail-closed controlled-grammar gate, not a Mathlib autoformalizer",
+    "miniF2F proving SOTA assumes gold formal statements"
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "ours": {
+    "forml4": {
+      "exact_norm_rate": 0.0,
+      "llm_ok_rate": 1.0,
+      "looks_like_lean_rate": 1.0,
+      "mean_token_f1": 0.3621,
+      "n": 8,
+      "soft_f1_ge_0_5_rate": 0.125,
+      "soft_f1_ge_0_7_rate": 0.0,
+      "zero_shot_pgra_rate": 0.0
+    },
+    "minif2f": {
+      "exact_norm_rate": 0.0,
+      "llm_ok_rate": 1.0,
+      "looks_like_lean_rate": 1.0,
+      "mean_token_f1": 0.8578,
+      "n": 8,
+      "soft_f1_ge_0_5_rate": 1.0,
+      "soft_f1_ge_0_7_rate": 1.0,
+      "zero_shot_pgra_rate": 0.0
+    },
+    "rows_forml4": [
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that for any natural number k, the ascending factorial of 0 up to (k + 1) is equal to 0.",
+        "gold_formal": "theorem zero_ascFactorial : \u2200 (k : \u2115), (0 : \u2115).ascFactorial k.succ = 0\n  | 0 => by\n    rw [ascFactorial_succ, ascFactorial_zero, Nat.zero_add, Nat.zero_mul]\n  | (k+1) => by\n    rw [ascFactorial_succ, zero_ascFactorial k, Nat.mul_zero]",
+        "id": "forml4_basic_0",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem ascending_factorial_zero (k : \u2115) : Nat.ascFactorial 0 (k + 1) = 0 := by sorry",
+        "similarity": {
+          "contain_ratio": 0.4375,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.56
+        },
+        "split": "basic",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that for any non-negative integers n and k where k is less than or equal to n, the product of \"n choose k\", k factorial, and (n-k) factorial is equal to n factorial.",
+        "gold_formal": "theorem choose_mul_factorial_mul_factorial : \u2200 {n k}, k \u2264 n \u2192 choose n k * k ! * (n - k)! = n !\n  | 0, _, hk => by simp [Nat.eq_zero_of_le_zero hk]\n  | n + 1, 0, _ => by simp\n  | n + 1, succ k, hk => by\n    rcases lt_or_eq_of_le hk with hk\u2081 | hk\u2081\n    \u00b7 have h : choose n k * k.succ ! * (n - k)! = (k + 1) * n ! := by\n        rw [\u2190 choose_mul_factorial_mul_factorial (le_of_succ_le_succ hk)]\n        s",
+        "id": "forml4_basic_1",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem choose_mul_factorial_mul_factorial (n k : \u2115) (h : k \u2264 n) : (Nat.choose n k) * (Nat.factorial k) * (Nat.factorial (n - k)) = Nat.factorial n := by sorry",
+        "similarity": {
+          "contain_ratio": 0.2105,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.3333
+        },
+        "split": "basic",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that 1 is coprime to any natural number x.",
+        "gold_formal": "theorem isCoprime_one_left : IsCoprime 1 x :=\n  \u27e81, 0, by rw [one_mul, zero_mul, add_zero]\u27e9\n",
+        "id": "forml4_basic_2",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem coprime_one_left (x : \u2115) : Nat.Coprime 1 x := by sorry",
+        "similarity": {
+          "contain_ratio": 0.3636,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.4211
+        },
+        "split": "basic",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that the coefficient of the term \\(x^k\\) in the \\(2n+k\\)-th Hermite polynomial is equal to  \\((-1)^n \\cdot (2n-1)!! \\cdot \\binom{2n+k}{k}\\).",
+        "gold_formal": "theorem coeff_hermite_explicit :\n    \u2200 n k : \u2115, coeff (hermite (2 * n + k)) k = (-1) ^ n * (2 * n - 1)\u203c * Nat.choose (2 * n + k) k\n  | 0, _ => by simp\n  | n + 1, 0 => by\n    convert coeff_hermite_succ_zero (2 * n + 1) using 1\n    -- Porting note: ring_nf did not solve the goal on line 165\n    rw [coeff_hermite_explicit n 1, (by rw [Nat.left_distrib, mul_one, Nat.add_one_sub_one] :\n      2 * (n + 1",
+        "id": "forml4_basic_3",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem hermite_coeff_k (n k : \u2115) :\n  (polynomial.coeff (hermite_poly (2 * n + k)) k) = (-1)^n * (nat.double_factorial (2 * n - 1)) * (nat.choose (2 * n + k) k) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.125,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.2093
+        },
+        "split": "basic",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that for any natural numbers 'm' and 'n', and any element 'a' from a set with an operation denoted by '\u2022', the following holds: (m + n) \u2022 a = (m \u2022 a) + (n \u2022 a).",
+        "gold_formal": "theorem add_nsmul (a : A) (m n : \u2115) : (m + n) \u2022 a = m \u2022 a + n \u2022 a := by\n   induction n with\n   | zero => rw [Nat.add_zero, zero_nsmul, add_zero]\n   | succ n ih => rw [Nat.add_succ, Nat.succ_eq_add_one, succ_nsmul, ih, succ_nsmul, add_assoc]\n ",
+        "id": "forml4_random_0",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem add_smul {M : Type*} [AddMonoid M] {A : Type*} [AddCommMonoid A] [DistribMulAction M A] (m n : M) (a : A) : (m + n) \u2022 a = (m \u2022 a) + (n \u2022 a) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.2632,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.3333
+        },
+        "split": "random",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Given a sequence defined by the recurrence relation `y_{n+2} = a\u2081 * y_{n+1} + y_n`, prove that for any natural number `n`, `y_n` is congruent to `n` modulo 2.  Here, `a\u2081` is a fixed constant natural number.",
+        "gold_formal": "theorem yn_modEq_two : \u2200 n, yn a1 n \u2261 n [MOD 2]\n   | 0 => by rfl\n   | 1 => by simp; rfl\n   | n + 2 =>\n     (yn_modEq_two n).add_right_cancel <| by\n       rw [yn_succ_succ, mul_assoc, (by ring : n + 2 + n = 2 * (n + 1))]\n       exact (dvd_mul_right 2 _).modEq_zero_nat.trans (dvd_mul_right 2 _).zero_modEq_nat\n ",
+        "id": "forml4_random_1",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem sequence_congruence (a\u2081 : \u2115) (y : \u2115 \u2192 \u2115) (h : \u2200 n, y (n + 2) = a\u2081 * y (n + 1) + y n) (h\u2080 : y 0 \u2261 0 [MOD 2]) (h\u2081 : y 1 \u2261 1 [MOD 2]) : \u2200 n, y n \u2261 n [MOD 2] := by sorry",
+        "similarity": {
+          "contain_ratio": 0.3333,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.4211
+        },
+        "split": "random",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that for any natural number k, the expression ((2 * k + 1) / (2 * k + 2)) * (\u03c0 / 2) is less than or equal to W(k), where W(k) represents Wallis's product up to k terms.",
+        "gold_formal": "theorem le_W (k : \u2115) : ((2 : \u211d) * k + 1) / (2 * k + 2) * (\u03c0 / 2) \u2264 W k := by\n   rw [\u2190 le_div_iff pi_div_two_pos, div_eq_inv_mul (W k) _]\n   rw [W_eq_integral_sin_pow_div_integral_sin_pow, le_div_iff (integral_sin_pow_pos _)]\n   convert integral_sin_pow_succ_le (2 * k + 1)\n   rw [integral_sin_pow (2 * k)]\n   simp only [sin_zero, ne_eq, add_eq_zero, and_false, not_false_eq_true, zero_pow, cos_zero,\n",
+        "id": "forml4_random_2",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem wallis_inequality (k : \u2115) : ((2 * k + 1 : \u211d) / (2 * k + 2)) * (\u03c0 / 2) \u2264 \u220f i in Finset.range k, ((2 * (i + 1) : \u211d) / (2 * (i + 1) - 1)) * ((2 * (i + 1) : \u211d) / (2 * (i + 1) + 1)) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.1892,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.28
+        },
+        "split": "random",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "FormL4",
+        "english": "Prove that the sum of a geometric series with a positive odd number of terms is always greater than zero, given that the elements of the series belong to a linearly ordered ring.",
+        "gold_formal": "theorem Odd.geom_sum_pos [LinearOrderedRing \u03b1] (h : Odd n) : 0 < \u2211 i in range n, x ^ i := by\n   rcases n with (_ | _ | k)\n   \u00b7 exact ((show \u00acOdd 0 by decide) h).elim\n   \u00b7 simp only [Nat.zero_eq, \u2190 Nat.one_eq_succ_zero, geom_sum_one, zero_lt_one]\n   rw [Nat.odd_iff_not_even] at h\n   rcases lt_trichotomy (x + 1) 0 with (hx | hx | hx)\n   \u00b7 have := geom_sum_alternating_of_lt_neg_one hx k.one_lt_succ_s",
+        "id": "forml4_random_3",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem geometric_series_odd_pos_sum_pos {R : Type*} [LinearOrderedRing R] {a r : R} {n : \u2115} (h_odd : Odd (2 * n + 1)) (h_a_pos : a > 0) (h_r_pos : r > 0) : (\u2211 i in Finset.range (2 * n + 1), a * r ^ i) > 0 := by sorry",
+        "similarity": {
+          "contain_ratio": 0.25,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": false,
+          "soft_match_f1_ge_0_7": false,
+          "token_f1": 0.3385
+        },
+        "split": "random",
+        "zero_shot_pgra_supported": false
+      }
+    ],
+    "rows_minif2f": [
+      {
+        "benchmark": "miniF2F",
+        "english": "Let $n$ be a positive natural number. Show that $n^{1/n} \\leq 2 - 1/n$.",
+        "gold_formal": "theorem algebra_ineq_nto1onlt2m1on\n  (n : \u2115) :\n  (n:\u211d)^((1:\u211d) / n) < 2 - 1 / n := by sorry",
+        "id": "minif2f_test_algebra_ineq_nto1onlt2m1on",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem pos_nat_pow_le_sub (n : \u2115) (hn : 0 < n) : (n : \u211d)^(1 / (n : \u211d)) \u2264 2 - 1 / (n : \u211d) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.8889,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.8
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Show that for any natural number $n$, we have $11\\mid 10^n-(-1)^n$.",
+        "gold_formal": "theorem induction_11div10tonmn1ton\n  (n : \u2115) :\n  11 \u2223 (10^n - (-1 : \u2124)^n) := by sorry",
+        "id": "minif2f_test_induction_11div10tonmn1ton",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem dvd_ten_pow_sub_neg_one_pow (n : \u2115) : 11 \u2223 10^n - (-1 : \u2124)^n := by sorry",
+        "similarity": {
+          "contain_ratio": 0.9,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.9
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Show that for any natural number $n$, 12 divides $4^{n+1} + 20$.",
+        "gold_formal": "theorem induction_12dvd4expnp1p20\n  (n : \u2115) :\n  12 \u2223 4^(n+1) + 20 := by sorry",
+        "id": "minif2f_test_induction_12dvd4expnp1p20",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem nat_div_pow_add (n : \u2115) : 12 \u2223 4^(n + 1) + 20 := by sorry",
+        "similarity": {
+          "contain_ratio": 0.9,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.9
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Show that for any integer $n \\geq 3$, we have $n! < n^{n-1}$.",
+        "gold_formal": "theorem induction_nfactltnexpnm1ngt3\n  (n : \u2115)\n  (h\u2080 : 3 \u2264 n) :\n  n! < n^(n - 1) := by sorry",
+        "id": "minif2f_test_induction_nfactltnexpnm1ngt3",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem factorial_lt_pow_n_sub_one (n : \u2115) (h : n \u2265 3) : Nat.factorial n < n^(n - 1) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.8889,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.8421
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Show that for positive integer $n$, $(\\prod_{k=1}^{n} (1 + 1/2^k)) < 5/2$.",
+        "gold_formal": "theorem induction_pord1p1on2powklt5on2\n  (n : \u2115)\n  (h\u2080 : 0 < n) :\n  \u220f k in finset.Icc 1 n, (1 + (1:\u211d) / 2^k) < 5 / 2 := by sorry",
+        "id": "minif2f_test_induction_pord1p1on2powklt5on2",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem prod_one_plus_one_over_two_pow_lt_five_two (n : \u2115) (hn : 0 < n) : (\u220f k in Finset.Icc 1 n, (1 + (1 / 2^k : \u211d))) < 5 / 2 := by sorry",
+        "similarity": {
+          "contain_ratio": 0.875,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.875
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Let $p$ be a prime number and $a$ a positive integer. Show that $p$ divides $a^p - a$.",
+        "gold_formal": "theorem induction_pprime_pdvdapowpma\n  (p a : \u2115)\n  (h\u2080 : 0 < a)\n  (h\u2081 : nat.prime p) :\n  p \u2223 (a^p - a) := by sorry",
+        "id": "minif2f_test_induction_pprime_pdvdapowpma",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem fermat_little_theorem_divisibility (p : \u2115) (a : \u2115) (hp : p.Prime) (ha : 0 < a) : p \u2223 (a^p - a) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.8,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.7619
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Show that for any positive integer $n$, we have $\\prod_{k=1}^n (1 + 1/k^3) \\leq 3 - 1/n$.",
+        "gold_formal": "theorem induction_prod1p1onk3le3m1onn\n  (n : \u2115)\n  (h\u2080 : 0 < n) :\n  \u220f k in finset.Icc 1 n, (1 + (1:\u211d) / k^3) \u2264 (3:\u211d) - 1 / \u2191n := by sorry",
+        "id": "minif2f_test_induction_prod1p1onk3le3m1onn",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem prod_one_plus_inv_cube_le (n : \u2115) (hn : 0 < n) : \u220f k in Finset.Icc 1 n, (1 + 1 / (k : \u211d)^3) \u2264 3 - 1 / (n : \u211d) := by sorry",
+        "similarity": {
+          "contain_ratio": 0.8667,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.8667
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      },
+      {
+        "benchmark": "miniF2F",
+        "english": "Show that for all natural numbers $n$, we have $\\sum_{k=0}^{n-1}k^3 = \\left(\\sum_{k=0}^{n-1}k\\right)^2$.",
+        "gold_formal": "theorem induction_sumkexp3eqsumksq\n  (n : \u2115) :\n  \u2211 k in finset.range n, k^3 = (\u2211 k in finset.range n, k)^2 := by sorry",
+        "id": "minif2f_test_induction_sumkexp3eqsumksq",
+        "llm_ok": true,
+        "looks_like_lean": true,
+        "mathlib_compile_checked": false,
+        "pred_lean": "theorem sum_cubes_eq_sq_sum (n : \u2115) : (\u2211 k in Finset.range n, (k : \u211a)^3) = (\u2211 k in Finset.range n, (k : \u211a))^2 := by sorry",
+        "similarity": {
+          "contain_ratio": 0.9167,
+          "exact_norm": false,
+          "soft_match_f1_ge_0_5": true,
+          "soft_match_f1_ge_0_7": true,
+          "token_f1": 0.9167
+        },
+        "split": "test",
+        "zero_shot_pgra_supported": false
+      }
+    ]
+  },
+  "pcs_scientific_authority": false,
+  "published": {
+    "forml4_greedy_compile": {
+      "format": "published-forml4-greedy-compile-percent",
+      "metric": "percent of generated Lean outputs that successfully compile (greedy)",
+      "models": {
+        "DeepSeek-Math-Instruct-7B": {
+          "basic": 1.16,
+          "random": 0.58,
+          "real": 0.3
+        },
+        "GPT-3.5-Turbo": {
+          "basic": 0.29,
+          "random": 0.41,
+          "real": 5.1
+        },
+        "GPT-4-Turbo": {
+          "basic": 1.47,
+          "random": 0.49,
+          "real": 10.2
+        },
+        "PDA RFT+Verifier (SOTA in paper)": {
+          "basic": 46.28,
+          "random": 39.38,
+          "real": 27.9
+        }
+      },
+      "source": "Process-Driven Autoformalization in Lean 4 (arXiv:2406.01940) Table 2 + RFT+Verifier table"
+    },
+    "minif2f_autoformalization": {
+      "format": "published-minif2f-autoformalization",
+      "metric": "statement autoformalization pass rate (often pass@k; protocols differ)",
+      "models": {
+        "Gemini-3 Pro (leaderboard)": {
+          "note": "third-party leaderboard",
+          "pass_at_k": "pass@8 ~97.5%"
+        },
+        "Kimina-Autoformalizer-7B": {
+          "note": "statement formalization",
+          "pass_at_k": "pass@8 ~92.2% (leaderboard)"
+        },
+        "LongCat-Flash-Prover": {
+          "note": "autoformalization track",
+          "pass_at_k": "pass@8 ~99-100% (leaderboard)"
+        }
+      },
+      "source": "public miniF2F auto-formalization leaderboards / Kimina-Autoformalizer reports (2025-2026)"
+    },
+    "minif2f_proving": {
+      "format": "published-minif2f-theorem-proving",
+      "metric": "kernel-verified proof pass@k on miniF2F-test (formal statements given)",
+      "models": {
+        "DeepSeek-Prover-V2-7B": {
+          "pass@32": "~74-76%"
+        },
+        "Kimina-Prover-72B": {
+          "pass@32": "~84%",
+          "with_TTRL": "~92.2%"
+        },
+        "OProver-32B (reported)": {
+          "pass@32": "~93.3%"
+        }
+      },
+      "note": "Proving assumes gold formal statements; orthogonal to PGRA English\u2192IR gate.",
+      "source": "Kimina-Prover blog / DeepSeek-Prover-V2 / recent agentic provers"
+    }
+  },
+  "usage_ledger": {
+    "candidates_tokens": 975,
+    "failures": 0,
+    "http_statuses": {
+      "200": 16
+    },
+    "model": "gemini-3.1-flash-lite",
+    "notes": [],
+    "prompt_tokens": 1742,
+    "requests": 16,
+    "successes": 16,
+    "total_tokens": 2717
+  }
+}

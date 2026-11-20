@@ -1,0 +1,95 @@
+{
+  "metrics": {
+    "fitting_certified": 11,
+    "fitting_form_loss": 5,
+    "fitting_proof_loss": 2,
+    "fitting_proved": 4,
+    "holdout_certified": 8,
+    "holdout_proved": 3,
+    "holdout_role": "report_only",
+    "rules": [
+      "rule_neither_nor",
+      "rule_plus_times_words",
+      "rule_unique_exists"
+    ]
+  },
+  "original": {
+    "kind": "catalog",
+    "parent_reason": null,
+    "rules": [
+      "rule_neither_nor",
+      "rule_unique_exists"
+    ],
+    "strategy": "next_catalog_rule"
+  },
+  "original_decision": {
+    "accepted": false,
+    "automatic_deployment": false,
+    "fitting_proof_ids": [
+      "base_nat_eq",
+      "base_nat_add",
+      "dup_ext_plus",
+      "ext_unique_exists",
+      "ext_zero_word",
+      "ext_is_equal_to"
+    ],
+    "formalization": {
+      "accepted": true,
+      "gained": [
+        "ext_neither_nor"
+      ],
+      "new_loss": 6,
+      "old_loss": 7,
+      "reason": "ACCEPT:reference_only"
+    },
+    "pcs_scientific_authority": false,
+    "proof": {
+      "accepted": false,
+      "gained": [],
+      "new_loss": 3,
+      "new_proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "ext_unique_exists"
+      ],
+      "old_loss": 3,
+      "old_proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "ext_unique_exists"
+      ],
+      "reason": "REJECT:no_new_kernel_proof"
+    },
+    "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof"
+  },
+  "repair_trace": [
+    {
+      "accepted": true,
+      "diagnosis_used": {
+        "details": {
+          "form": "ACCEPT:reference_only",
+          "form_gained": [
+            "ext_neither_nor"
+          ],
+          "proof": "REJECT:no_new_kernel_proof"
+        },
+        "failing_side": "proof",
+        "lost_or_blocked": [],
+        "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+        "suggested_strategy": "combine_with_proof_expander"
+      },
+      "proposal": {
+        "kind": "repair",
+        "parent_reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+        "rules": [
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists"
+        ],
+        "strategy": "combine_with_proof_expander"
+      },
+      "reason": "ACCEPT:reference_only_dual_v3",
+      "repair_index": 1
+    }
+  ]
+}

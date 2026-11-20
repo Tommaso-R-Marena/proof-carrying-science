@@ -1,0 +1,120 @@
+{
+  "decision": {
+    "accepted": true,
+    "automatic_deployment": false,
+    "fitting_proof_ids": [
+      "base_nat_eq",
+      "base_nat_add",
+      "dup_ext_plus",
+      "ext_unique_exists",
+      "ext_zero_word",
+      "ext_is_equal_to"
+    ],
+    "formalization": {
+      "accepted": true,
+      "gained": [
+        "ext_zero_word"
+      ],
+      "new_loss": 5,
+      "old_loss": 6,
+      "reason": "ACCEPT:reference_only"
+    },
+    "pcs_scientific_authority": false,
+    "proof": {
+      "accepted": true,
+      "gained": [
+        "ext_zero_word"
+      ],
+      "new_loss": 1,
+      "new_proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_ext_plus",
+        "ext_unique_exists",
+        "ext_zero_word"
+      ],
+      "old_loss": 2,
+      "old_proved": [
+        "base_nat_add",
+        "base_nat_eq",
+        "dup_ext_plus",
+        "ext_unique_exists"
+      ],
+      "reason": "ACCEPT:reference_only_proof_coupled"
+    },
+    "reason": "ACCEPT:reference_only_dual_v3"
+  },
+  "event": {
+    "attempts": [
+      {
+        "accepted": false,
+        "formalization_gained": [
+          "ext_neither_nor"
+        ],
+        "proof_gained": [],
+        "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+        "rule": "rule_neither_nor"
+      },
+      {
+        "accepted": false,
+        "formalization_gained": [
+          "ext_exactly_when"
+        ],
+        "proof_gained": [],
+        "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+        "rule": "rule_exactly_when"
+      },
+      {
+        "accepted": false,
+        "formalization_gained": [
+          "dup_ext_whenever",
+          "ext_whenever"
+        ],
+        "proof_gained": [],
+        "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+        "rule": "rule_whenever"
+      },
+      {
+        "accepted": false,
+        "formalization_gained": [],
+        "proof_gained": [],
+        "reason": "REJECT:dual_both_failed form=REJECT:no_new_certified_capability;proof=REJECT:no_new_kernel_proof",
+        "rule": "rule_distinct_forall"
+      },
+      {
+        "accepted": true,
+        "formalization_gained": [
+          "ext_zero_word"
+        ],
+        "proof_gained": [
+          "ext_zero_word"
+        ],
+        "reason": "ACCEPT:reference_only_dual_v3",
+        "rule": "rule_zero_word"
+      }
+    ],
+    "automatic_deployment": false,
+    "efficiency": null,
+    "fitting_certified": 11,
+    "fitting_form_loss": 5,
+    "fitting_proof_loss": 1,
+    "fitting_proved": 5,
+    "gained_formalization": [
+      "ext_zero_word"
+    ],
+    "gained_proofs": [
+      "ext_zero_word"
+    ],
+    "generation": 3,
+    "holdout_certified": 8,
+    "holdout_proved": 4,
+    "holdout_role": "report_only",
+    "pcs_scientific_authority": false,
+    "reason": "ACCEPT:reference_only_dual_v3",
+    "rules": [
+      "rule_plus_times_words",
+      "rule_unique_exists",
+      "rule_zero_word"
+    ]
+  }
+}

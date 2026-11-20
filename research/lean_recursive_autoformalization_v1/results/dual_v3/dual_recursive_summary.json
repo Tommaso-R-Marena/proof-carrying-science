@@ -1,0 +1,355 @@
+{
+  "accepted_generations": 4,
+  "automatic_deployment": false,
+  "corpus_sha256": "5e34b8c023b2fabca1cfd354172b629fbf362eaabde431f4ce380128073028a3",
+  "final_rules": [
+    "rule_is_equal_to",
+    "rule_plus_times_words",
+    "rule_unique_exists",
+    "rule_zero_word"
+  ],
+  "fitting_certified_counts": [
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "fitting_proof_ids": [
+    "base_nat_eq",
+    "base_nat_add",
+    "dup_ext_plus",
+    "ext_unique_exists",
+    "ext_zero_word",
+    "ext_is_equal_to"
+  ],
+  "fitting_proved_counts": [
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "format": "pcs-pgra-dual-recursive-summary-v3",
+  "generations": [
+    {
+      "fitting_certified": 8,
+      "fitting_form_loss": 8,
+      "fitting_proof_loss": 4,
+      "fitting_proved": 2,
+      "generation": 0,
+      "holdout_certified": 5,
+      "holdout_proved": 1,
+      "holdout_role": "report_only",
+      "rules": []
+    },
+    {
+      "attempts": [
+        {
+          "accepted": true,
+          "formalization_gained": [
+            "ext_unique_exists"
+          ],
+          "proof_gained": [
+            "ext_unique_exists"
+          ],
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "rule": "rule_unique_exists"
+        }
+      ],
+      "automatic_deployment": false,
+      "efficiency": null,
+      "fitting_certified": 9,
+      "fitting_form_loss": 7,
+      "fitting_proof_loss": 3,
+      "fitting_proved": 3,
+      "gained_formalization": [
+        "ext_unique_exists"
+      ],
+      "gained_proofs": [
+        "ext_unique_exists"
+      ],
+      "generation": 1,
+      "holdout_certified": 6,
+      "holdout_proved": 2,
+      "holdout_role": "report_only",
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only_dual_v3",
+      "rules": [
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "ext_neither_nor"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "ext_exactly_when"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "dup_ext_whenever",
+            "ext_whenever"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": true,
+          "formalization_gained": [
+            "dup_ext_plus"
+          ],
+          "proof_gained": [
+            "dup_ext_plus"
+          ],
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "rule": "rule_plus_times_words"
+        }
+      ],
+      "automatic_deployment": false,
+      "efficiency": null,
+      "fitting_certified": 10,
+      "fitting_form_loss": 6,
+      "fitting_proof_loss": 2,
+      "fitting_proved": 4,
+      "gained_formalization": [
+        "dup_ext_plus"
+      ],
+      "gained_proofs": [
+        "dup_ext_plus"
+      ],
+      "generation": 2,
+      "holdout_certified": 7,
+      "holdout_proved": 3,
+      "holdout_role": "report_only",
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only_dual_v3",
+      "rules": [
+        "rule_plus_times_words",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "ext_neither_nor"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "ext_exactly_when"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "dup_ext_whenever",
+            "ext_whenever"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [],
+          "proof_gained": [],
+          "reason": "REJECT:dual_both_failed form=REJECT:no_new_certified_capability;proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_distinct_forall"
+        },
+        {
+          "accepted": true,
+          "formalization_gained": [
+            "ext_zero_word"
+          ],
+          "proof_gained": [
+            "ext_zero_word"
+          ],
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "rule": "rule_zero_word"
+        }
+      ],
+      "automatic_deployment": false,
+      "efficiency": null,
+      "fitting_certified": 11,
+      "fitting_form_loss": 5,
+      "fitting_proof_loss": 1,
+      "fitting_proved": 5,
+      "gained_formalization": [
+        "ext_zero_word"
+      ],
+      "gained_proofs": [
+        "ext_zero_word"
+      ],
+      "generation": 3,
+      "holdout_certified": 8,
+      "holdout_proved": 4,
+      "holdout_role": "report_only",
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only_dual_v3",
+      "rules": [
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_zero_word"
+      ]
+    },
+    {
+      "attempts": [
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "ext_neither_nor"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_neither_nor"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "ext_exactly_when"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_exactly_when"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [
+            "dup_ext_whenever",
+            "ext_whenever"
+          ],
+          "proof_gained": [],
+          "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_whenever"
+        },
+        {
+          "accepted": false,
+          "formalization_gained": [],
+          "proof_gained": [],
+          "reason": "REJECT:dual_both_failed form=REJECT:no_new_certified_capability;proof=REJECT:no_new_kernel_proof",
+          "rule": "rule_distinct_forall"
+        },
+        {
+          "accepted": true,
+          "formalization_gained": [
+            "ext_is_equal_to"
+          ],
+          "proof_gained": [
+            "ext_is_equal_to"
+          ],
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "rule": "rule_is_equal_to"
+        }
+      ],
+      "automatic_deployment": false,
+      "efficiency": null,
+      "fitting_certified": 12,
+      "fitting_form_loss": 4,
+      "fitting_proof_loss": 0,
+      "fitting_proved": 6,
+      "gained_formalization": [
+        "ext_is_equal_to"
+      ],
+      "gained_proofs": [
+        "ext_is_equal_to"
+      ],
+      "generation": 4,
+      "holdout_certified": 9,
+      "holdout_proved": 5,
+      "holdout_role": "report_only",
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only_dual_v3",
+      "rules": [
+        "rule_is_equal_to",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_zero_word"
+      ]
+    }
+  ],
+  "holdout_proof_ids": [
+    "dup_base_nat_eq",
+    "ext_plus_times",
+    "ext_distinct_forall",
+    "dup_ext_unique",
+    "dup_ext_zero",
+    "dup_ext_is_equal"
+  ],
+  "holdout_proved_counts": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "holdout_proved_nondecreasing": true,
+  "pcs_scientific_authority": false,
+  "policy_hash": "468a41db512b49ebef858a62c678053c9768416b9be7113c84159cad816501b9",
+  "proof_ids": [
+    "base_nat_eq",
+    "base_nat_add",
+    "dup_base_nat_eq",
+    "ext_plus_times",
+    "dup_ext_plus",
+    "ext_distinct_forall",
+    "ext_unique_exists",
+    "dup_ext_unique",
+    "ext_zero_word",
+    "dup_ext_zero",
+    "ext_is_equal_to",
+    "dup_ext_is_equal"
+  ],
+  "proof_protocol": {
+    "automatic_deployment": false,
+    "beam": 4,
+    "budget": 96,
+    "depth": 18,
+    "format": "pcs-pgra-proof-coupled-protocol-v2",
+    "frozen": true,
+    "minimum_additional_proofs": 1,
+    "pcs_scientific_authority": false,
+    "policy": "symbolic"
+  },
+  "protocol": {
+    "automatic_deployment": false,
+    "fitting_splits": [
+      "seed",
+      "validation"
+    ],
+    "format": "pcs-pgra-dual-recursive-protocol-v3",
+    "frozen": true,
+    "gate": "formalization_accept AND proof_coupled_accept on fitting only",
+    "holdout_role": "report_only_never_gates",
+    "holdout_split": "holdout",
+    "lemma_harvest": "optional_efficiency_metric_after_accept",
+    "pcs_scientific_authority": false
+  },
+  "rising_fitting_certified": true,
+  "rising_fitting_proved": true,
+  "self_improvement_scope": "Finite dual formalize+prove rulebooks on fitting splits with holdout report-only; optional lemma-harvest efficiency. Not general AI self-improvement or unrestricted English."
+}

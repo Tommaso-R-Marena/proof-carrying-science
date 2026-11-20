@@ -1,0 +1,250 @@
+{
+  "entries": [
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": null,
+          "kind": "rfl"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "n",
+              "op": "var"
+            },
+            "op": "add",
+            "right": {
+              "op": "number",
+              "type": "Nat",
+              "value": 0
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "n",
+            "op": "var"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "CC0-1.0",
+      "source_revision": "pgra-dual-v3"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": null,
+          "kind": "rfl"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "name": "n",
+            "op": "var"
+          },
+          "op": "eq",
+          "right": {
+            "name": "n",
+            "op": "var"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "CC0-1.0",
+      "source_revision": "pgra-dual-v3"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": null,
+          "kind": "simp"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "x",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "name": "x",
+              "op": "var"
+            },
+            "op": "mul",
+            "right": {
+              "op": "number",
+              "type": "Nat",
+              "value": 1
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "x",
+            "op": "var"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "CC0-1.0",
+      "source_revision": "pgra-dual-v3"
+    },
+    {
+      "actions": [
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": null,
+          "kind": "simp"
+        }
+      ],
+      "goal": {
+        "binders": [
+          {
+            "name": "n",
+            "type": "Nat"
+          }
+        ],
+        "body": {
+          "left": {
+            "left": {
+              "op": "number",
+              "type": "Nat",
+              "value": 0
+            },
+            "op": "add",
+            "right": {
+              "name": "n",
+              "op": "var"
+            }
+          },
+          "op": "eq",
+          "right": {
+            "name": "n",
+            "op": "var"
+          }
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "CC0-1.0",
+      "source_revision": "pgra-dual-v3"
+    },
+    {
+      "actions": [
+        {
+          "argument": 0,
+          "kind": "witness"
+        },
+        {
+          "argument": null,
+          "kind": "constructor"
+        },
+        {
+          "argument": null,
+          "kind": "rfl"
+        },
+        {
+          "argument": "h0",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "intro"
+        },
+        {
+          "argument": "h1",
+          "kind": "exact"
+        }
+      ],
+      "goal": {
+        "binders": [],
+        "body": {
+          "body": {
+            "left": {
+              "left": {
+                "name": "n",
+                "op": "var"
+              },
+              "op": "eq",
+              "right": {
+                "op": "number",
+                "type": "Nat",
+                "value": 0
+              }
+            },
+            "op": "and",
+            "right": {
+              "body": {
+                "left": {
+                  "left": {
+                    "name": "m",
+                    "op": "var"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "op": "number",
+                    "type": "Nat",
+                    "value": 0
+                  }
+                },
+                "op": "implies",
+                "right": {
+                  "left": {
+                    "name": "m",
+                    "op": "var"
+                  },
+                  "op": "eq",
+                  "right": {
+                    "name": "n",
+                    "op": "var"
+                  }
+                }
+              },
+              "name": "m",
+              "op": "forall",
+              "type": "Nat"
+            }
+          },
+          "name": "n",
+          "op": "exists",
+          "type": "Nat"
+        },
+        "format": "pcs-math-ir-v1"
+      },
+      "license": "CC0-1.0",
+      "source_revision": "pgra-dual-v3"
+    }
+  ],
+  "format": "pcs-checked-lemma-library-v1"
+}

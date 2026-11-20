@@ -1,0 +1,483 @@
+{
+  "accepted_generations": 8,
+  "automatic_deployment": false,
+  "certified_counts": [
+    13,
+    15,
+    17,
+    19,
+    21,
+    23,
+    24,
+    26,
+    28
+  ],
+  "corpus_sha256": "5e34b8c023b2fabca1cfd354172b629fbf362eaabde431f4ce380128073028a3",
+  "final_certified_count": 28,
+  "final_loss": 0,
+  "final_rules": [
+    "rule_distinct_forall",
+    "rule_exactly_when",
+    "rule_is_equal_to",
+    "rule_neither_nor",
+    "rule_plus_times_words",
+    "rule_unique_exists",
+    "rule_whenever",
+    "rule_zero_word"
+  ],
+  "format": "pcs-pgra-recursive-summary-v1",
+  "generations": [
+    {
+      "accepted": null,
+      "certified_abstain": 7,
+      "certified_count": 13,
+      "certified_supported": 6,
+      "generation": 0,
+      "loss": 15,
+      "rules": []
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 15,
+      "certified_supported": 8,
+      "generation": 1,
+      "loss": 13,
+      "rules": [
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 17,
+      "certified_supported": 10,
+      "generation": 2,
+      "loss": 11,
+      "rules": [
+        "rule_neither_nor",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 19,
+      "certified_supported": 12,
+      "generation": 3,
+      "loss": 9,
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 21,
+      "certified_supported": 14,
+      "generation": 4,
+      "loss": 7,
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_unique_exists",
+        "rule_whenever"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 23,
+      "certified_supported": 16,
+      "generation": 5,
+      "loss": 5,
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 24,
+      "certified_supported": 17,
+      "generation": 6,
+      "loss": 4,
+      "rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 26,
+      "certified_supported": 19,
+      "generation": 7,
+      "loss": 2,
+      "rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever",
+        "rule_zero_word"
+      ]
+    },
+    {
+      "accepted": true,
+      "certified_abstain": 7,
+      "certified_count": 28,
+      "certified_supported": 21,
+      "generation": 8,
+      "loss": 0,
+      "rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_is_equal_to",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever",
+        "rule_zero_word"
+      ]
+    }
+  ],
+  "pcs_authority": false,
+  "pcs_scientific_authority": false,
+  "policy_hash": "468a41db512b49ebef858a62c678053c9768416b9be7113c84159cad816501b9",
+  "reference_only": true,
+  "rising_certified": true,
+  "start_rules": [],
+  "store_root": "/tmp/pgra_v1_out/store",
+  "trace": [
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_unique_exists"
+          ],
+          "gained": [
+            "dup_ext_unique",
+            "ext_unique_exists"
+          ],
+          "new_loss": 13,
+          "old_loss": 15,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 15,
+      "certified_supported": 8,
+      "gained": [
+        "dup_ext_unique",
+        "ext_unique_exists"
+      ],
+      "generation": 1,
+      "loss": 13,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_neither_nor",
+            "rule_unique_exists"
+          ],
+          "gained": [
+            "dup_ext_neither",
+            "ext_neither_nor"
+          ],
+          "new_loss": 11,
+          "old_loss": 13,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 17,
+      "certified_supported": 10,
+      "gained": [
+        "dup_ext_neither",
+        "ext_neither_nor"
+      ],
+      "generation": 2,
+      "loss": 11,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_neither_nor",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_exactly_when",
+            "rule_neither_nor",
+            "rule_unique_exists"
+          ],
+          "gained": [
+            "dup_ext_exactly",
+            "ext_exactly_when"
+          ],
+          "new_loss": 9,
+          "old_loss": 11,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 19,
+      "certified_supported": 12,
+      "gained": [
+        "dup_ext_exactly",
+        "ext_exactly_when"
+      ],
+      "generation": 3,
+      "loss": 9,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_exactly_when",
+            "rule_neither_nor",
+            "rule_unique_exists",
+            "rule_whenever"
+          ],
+          "gained": [
+            "dup_ext_whenever",
+            "ext_whenever"
+          ],
+          "new_loss": 7,
+          "old_loss": 9,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 21,
+      "certified_supported": 14,
+      "gained": [
+        "dup_ext_whenever",
+        "ext_whenever"
+      ],
+      "generation": 4,
+      "loss": 7,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_unique_exists",
+        "rule_whenever"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_exactly_when",
+            "rule_neither_nor",
+            "rule_plus_times_words",
+            "rule_unique_exists",
+            "rule_whenever"
+          ],
+          "gained": [
+            "dup_ext_plus",
+            "ext_plus_times"
+          ],
+          "new_loss": 5,
+          "old_loss": 7,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 23,
+      "certified_supported": 16,
+      "gained": [
+        "dup_ext_plus",
+        "ext_plus_times"
+      ],
+      "generation": 5,
+      "loss": 5,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_distinct_forall",
+            "rule_exactly_when",
+            "rule_neither_nor",
+            "rule_plus_times_words",
+            "rule_unique_exists",
+            "rule_whenever"
+          ],
+          "gained": [
+            "ext_distinct_forall"
+          ],
+          "new_loss": 4,
+          "old_loss": 5,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 24,
+      "certified_supported": 17,
+      "gained": [
+        "ext_distinct_forall"
+      ],
+      "generation": 6,
+      "loss": 4,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_distinct_forall",
+            "rule_exactly_when",
+            "rule_neither_nor",
+            "rule_plus_times_words",
+            "rule_unique_exists",
+            "rule_whenever",
+            "rule_zero_word"
+          ],
+          "gained": [
+            "dup_ext_zero",
+            "ext_zero_word"
+          ],
+          "new_loss": 2,
+          "old_loss": 4,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 26,
+      "certified_supported": 19,
+      "gained": [
+        "dup_ext_zero",
+        "ext_zero_word"
+      ],
+      "generation": 7,
+      "loss": 2,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever",
+        "rule_zero_word"
+      ]
+    },
+    {
+      "accepted": true,
+      "attempts": [
+        {
+          "accepted": true,
+          "candidate_rules": [
+            "rule_distinct_forall",
+            "rule_exactly_when",
+            "rule_is_equal_to",
+            "rule_neither_nor",
+            "rule_plus_times_words",
+            "rule_unique_exists",
+            "rule_whenever",
+            "rule_zero_word"
+          ],
+          "gained": [
+            "dup_ext_is_equal",
+            "ext_is_equal_to"
+          ],
+          "new_loss": 0,
+          "old_loss": 2,
+          "reason": "ACCEPT:reference_only"
+        }
+      ],
+      "automatic_deployment": false,
+      "certified_abstain": 7,
+      "certified_count": 28,
+      "certified_supported": 21,
+      "gained": [
+        "dup_ext_is_equal",
+        "ext_is_equal_to"
+      ],
+      "generation": 8,
+      "loss": 0,
+      "pcs_scientific_authority": false,
+      "reason": "ACCEPT:reference_only",
+      "rules": [
+        "rule_distinct_forall",
+        "rule_exactly_when",
+        "rule_is_equal_to",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever",
+        "rule_zero_word"
+      ]
+    }
+  ]
+}

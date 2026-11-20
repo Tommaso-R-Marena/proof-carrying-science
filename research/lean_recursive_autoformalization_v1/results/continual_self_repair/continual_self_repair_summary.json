@@ -1,0 +1,225 @@
+{
+  "accepts": 4,
+  "adversarial_rejected": 1,
+  "automatic_deployment": false,
+  "corpus_sha256": "5e34b8c023b2fabca1cfd354172b629fbf362eaabde431f4ce380128073028a3",
+  "episodes": [
+    {
+      "episode": 0,
+      "event": "baseline",
+      "fitting_certified": 8,
+      "fitting_form_loss": 8,
+      "fitting_proof_loss": 4,
+      "fitting_proved": 2,
+      "holdout_certified": 5,
+      "holdout_proved": 1,
+      "holdout_role": "report_only",
+      "rules": []
+    },
+    {
+      "episode": 1,
+      "event": "accept",
+      "fitting_certified": 9,
+      "fitting_form_loss": 7,
+      "fitting_proof_loss": 3,
+      "fitting_proved": 3,
+      "holdout_certified": 6,
+      "holdout_proved": 2,
+      "holdout_role": "report_only",
+      "rules": [
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "diagnosis": {
+        "details": {
+          "form": "REJECT:rule_removal_forbidden",
+          "proof": "REJECT:rule_removal_or_nonmonotonic"
+        },
+        "failing_side": "monotonicity",
+        "lost_or_blocked": [],
+        "reason": "REJECT:dual_both_failed form=REJECT:rule_removal_forbidden;proof=REJECT:rule_removal_or_nonmonotonic",
+        "suggested_strategy": "reject_rule_removal_forever"
+      },
+      "episode": 2,
+      "event": "adversarial_rejected_and_ignored",
+      "fitting_certified": 9,
+      "fitting_form_loss": 7,
+      "fitting_proof_loss": 3,
+      "fitting_proved": 3,
+      "holdout_certified": 6,
+      "holdout_proved": 2,
+      "holdout_role": "report_only",
+      "rules": [
+        "rule_unique_exists"
+      ]
+    },
+    {
+      "episode": 3,
+      "event": "repair_accept",
+      "fitting_certified": 11,
+      "fitting_form_loss": 5,
+      "fitting_proof_loss": 2,
+      "fitting_proved": 4,
+      "holdout_certified": 8,
+      "holdout_proved": 3,
+      "holdout_role": "report_only",
+      "repairs_used": 1,
+      "rules": [
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists"
+      ],
+      "strategy": "combine_with_proof_expander"
+    },
+    {
+      "episode": 4,
+      "event": "repair_accept",
+      "fitting_certified": 13,
+      "fitting_form_loss": 3,
+      "fitting_proof_loss": 1,
+      "fitting_proved": 5,
+      "holdout_certified": 10,
+      "holdout_proved": 4,
+      "holdout_role": "report_only",
+      "repairs_used": 1,
+      "rules": [
+        "rule_exactly_when",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_zero_word"
+      ],
+      "strategy": "combine_with_proof_expander"
+    },
+    {
+      "episode": 5,
+      "event": "repair_accept",
+      "fitting_certified": 16,
+      "fitting_form_loss": 0,
+      "fitting_proof_loss": 0,
+      "fitting_proved": 6,
+      "holdout_certified": 11,
+      "holdout_proved": 5,
+      "holdout_role": "report_only",
+      "repairs_used": 1,
+      "rules": [
+        "rule_exactly_when",
+        "rule_is_equal_to",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever",
+        "rule_zero_word"
+      ],
+      "strategy": "combine_with_proof_expander"
+    },
+    {
+      "episode": 6,
+      "event": "reject_exhausted",
+      "fitting_certified": 16,
+      "fitting_form_loss": 0,
+      "fitting_proof_loss": 0,
+      "fitting_proved": 6,
+      "holdout_certified": 11,
+      "holdout_proved": 5,
+      "holdout_role": "report_only",
+      "original_reason": "REJECT:dual_both_failed form=REJECT:no_new_certified_capability;proof=REJECT:no_new_kernel_proof",
+      "rules": [
+        "rule_exactly_when",
+        "rule_is_equal_to",
+        "rule_neither_nor",
+        "rule_plus_times_words",
+        "rule_unique_exists",
+        "rule_whenever",
+        "rule_zero_word"
+      ]
+    }
+  ],
+  "final": {
+    "fitting_certified": 16,
+    "fitting_form_loss": 0,
+    "fitting_proof_loss": 0,
+    "fitting_proved": 6,
+    "holdout_certified": 11,
+    "holdout_proved": 5,
+    "holdout_role": "report_only",
+    "rules": [
+      "rule_exactly_when",
+      "rule_is_equal_to",
+      "rule_neither_nor",
+      "rule_plus_times_words",
+      "rule_unique_exists",
+      "rule_whenever",
+      "rule_zero_word"
+    ]
+  },
+  "final_rules": [
+    "rule_exactly_when",
+    "rule_is_equal_to",
+    "rule_neither_nor",
+    "rule_plus_times_words",
+    "rule_unique_exists",
+    "rule_whenever",
+    "rule_zero_word"
+  ],
+  "fitting_certified_series": [
+    8,
+    9,
+    9,
+    11,
+    13,
+    16,
+    16
+  ],
+  "fitting_proved_series": [
+    2,
+    3,
+    3,
+    4,
+    5,
+    6,
+    6
+  ],
+  "format": "pcs-pgra-continual-self-repair-summary-v1",
+  "journal_len": 6,
+  "pcs_scientific_authority": false,
+  "policy_hash": "468a41db512b49ebef858a62c678053c9768416b9be7113c84159cad816501b9",
+  "proof_ids": [
+    "base_nat_eq",
+    "base_nat_add",
+    "dup_base_nat_eq",
+    "ext_plus_times",
+    "dup_ext_plus",
+    "ext_distinct_forall",
+    "ext_unique_exists",
+    "dup_ext_unique",
+    "ext_zero_word",
+    "dup_ext_zero",
+    "ext_is_equal_to",
+    "dup_ext_is_equal"
+  ],
+  "protocol": {
+    "automatic_deployment": false,
+    "format": "pcs-pgra-continual-self-repair-protocol-v1",
+    "frozen": true,
+    "gate": "accept_dual on fitting only",
+    "holdout_role": "report_only_never_gates",
+    "max_repairs_per_proposal": 4,
+    "pcs_scientific_authority": false,
+    "repair_strategies": [
+      "skip_failed_candidate",
+      "combine_with_proof_expander",
+      "combine_with_formalization_expander",
+      "next_catalog_rule",
+      "reject_rule_removal_forever"
+    ]
+  },
+  "rejects_seen": 5,
+  "repairs_succeeded": 3,
+  "rising_fitting_proved_on_accepts": true,
+  "self_improvement_scope": "Finite continual dual-gated rulebook search with REJECT\u2192diagnose\u2192repair\u2192re-gate and CAS promotion only on ACCEPT. Demonstrates self-repair under frozen protocols. Not general AI self-modification or automatic deployment.",
+  "self_repair_rate": 0.6,
+  "store_root": "research/lean_recursive_autoformalization_v1/results/continual_self_repair/store",
+  "wall_seconds": 407.3
+}

@@ -1,0 +1,297 @@
+{
+  "automatic_deployment": false,
+  "entries": [
+    {
+      "automatic_deployment": false,
+      "decision_reason": "ACCEPT:reference_only_dual_v3",
+      "episode": 1,
+      "metrics": {
+        "fitting_certified": 9,
+        "fitting_form_loss": 7,
+        "fitting_proof_loss": 3,
+        "fitting_proved": 3,
+        "holdout_certified": 6,
+        "holdout_proved": 2,
+        "holdout_role": "report_only",
+        "rules": [
+          "rule_unique_exists"
+        ]
+      },
+      "pcs_scientific_authority": false,
+      "phase": "accept",
+      "proposal": {
+        "kind": "catalog",
+        "parent_reason": null,
+        "rules": [
+          "rule_unique_exists"
+        ],
+        "strategy": "next_catalog_rule"
+      }
+    },
+    {
+      "automatic_deployment": false,
+      "decision_accepted": false,
+      "decision_reason": "REJECT:dual_both_failed form=REJECT:rule_removal_forbidden;proof=REJECT:rule_removal_or_nonmonotonic",
+      "diagnosis": {
+        "details": {
+          "form": "REJECT:rule_removal_forbidden",
+          "proof": "REJECT:rule_removal_or_nonmonotonic"
+        },
+        "failing_side": "monotonicity",
+        "lost_or_blocked": [],
+        "reason": "REJECT:dual_both_failed form=REJECT:rule_removal_forbidden;proof=REJECT:rule_removal_or_nonmonotonic",
+        "suggested_strategy": "reject_rule_removal_forever"
+      },
+      "episode": 2,
+      "head_unchanged": true,
+      "pcs_scientific_authority": false,
+      "phase": "adversarial_probe",
+      "proposal": {
+        "kind": "adversarial",
+        "parent_reason": null,
+        "rules": [],
+        "strategy": "adversarial_rule_removal"
+      }
+    },
+    {
+      "automatic_deployment": false,
+      "episode": 3,
+      "metrics": {
+        "fitting_certified": 11,
+        "fitting_form_loss": 5,
+        "fitting_proof_loss": 2,
+        "fitting_proved": 4,
+        "holdout_certified": 8,
+        "holdout_proved": 3,
+        "holdout_role": "report_only",
+        "rules": [
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists"
+        ]
+      },
+      "original_proposal": {
+        "kind": "catalog",
+        "parent_reason": null,
+        "rules": [
+          "rule_neither_nor",
+          "rule_unique_exists"
+        ],
+        "strategy": "next_catalog_rule"
+      },
+      "original_reject": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+      "pcs_scientific_authority": false,
+      "phase": "repair_accept",
+      "repair_trace": [
+        {
+          "accepted": true,
+          "diagnosis_used": {
+            "details": {
+              "form": "ACCEPT:reference_only",
+              "form_gained": [
+                "ext_neither_nor"
+              ],
+              "proof": "REJECT:no_new_kernel_proof"
+            },
+            "failing_side": "proof",
+            "lost_or_blocked": [],
+            "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+            "suggested_strategy": "combine_with_proof_expander"
+          },
+          "proposal": {
+            "kind": "repair",
+            "parent_reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+            "rules": [
+              "rule_neither_nor",
+              "rule_plus_times_words",
+              "rule_unique_exists"
+            ],
+            "strategy": "combine_with_proof_expander"
+          },
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "repair_index": 1
+        }
+      ]
+    },
+    {
+      "automatic_deployment": false,
+      "episode": 4,
+      "metrics": {
+        "fitting_certified": 13,
+        "fitting_form_loss": 3,
+        "fitting_proof_loss": 1,
+        "fitting_proved": 5,
+        "holdout_certified": 10,
+        "holdout_proved": 4,
+        "holdout_role": "report_only",
+        "rules": [
+          "rule_exactly_when",
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists",
+          "rule_zero_word"
+        ]
+      },
+      "original_proposal": {
+        "kind": "catalog",
+        "parent_reason": null,
+        "rules": [
+          "rule_exactly_when",
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists"
+        ],
+        "strategy": "next_catalog_rule"
+      },
+      "original_reject": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+      "pcs_scientific_authority": false,
+      "phase": "repair_accept",
+      "repair_trace": [
+        {
+          "accepted": true,
+          "diagnosis_used": {
+            "details": {
+              "form": "ACCEPT:reference_only",
+              "form_gained": [
+                "ext_exactly_when"
+              ],
+              "proof": "REJECT:no_new_kernel_proof"
+            },
+            "failing_side": "proof",
+            "lost_or_blocked": [],
+            "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+            "suggested_strategy": "combine_with_proof_expander"
+          },
+          "proposal": {
+            "kind": "repair",
+            "parent_reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+            "rules": [
+              "rule_exactly_when",
+              "rule_neither_nor",
+              "rule_plus_times_words",
+              "rule_unique_exists",
+              "rule_zero_word"
+            ],
+            "strategy": "combine_with_proof_expander"
+          },
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "repair_index": 1
+        }
+      ]
+    },
+    {
+      "automatic_deployment": false,
+      "episode": 5,
+      "metrics": {
+        "fitting_certified": 16,
+        "fitting_form_loss": 0,
+        "fitting_proof_loss": 0,
+        "fitting_proved": 6,
+        "holdout_certified": 11,
+        "holdout_proved": 5,
+        "holdout_role": "report_only",
+        "rules": [
+          "rule_exactly_when",
+          "rule_is_equal_to",
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists",
+          "rule_whenever",
+          "rule_zero_word"
+        ]
+      },
+      "original_proposal": {
+        "kind": "catalog",
+        "parent_reason": null,
+        "rules": [
+          "rule_exactly_when",
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists",
+          "rule_whenever",
+          "rule_zero_word"
+        ],
+        "strategy": "next_catalog_rule"
+      },
+      "original_reject": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+      "pcs_scientific_authority": false,
+      "phase": "repair_accept",
+      "repair_trace": [
+        {
+          "accepted": true,
+          "diagnosis_used": {
+            "details": {
+              "form": "ACCEPT:reference_only",
+              "form_gained": [
+                "dup_ext_whenever",
+                "ext_whenever"
+              ],
+              "proof": "REJECT:no_new_kernel_proof"
+            },
+            "failing_side": "proof",
+            "lost_or_blocked": [],
+            "reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+            "suggested_strategy": "combine_with_proof_expander"
+          },
+          "proposal": {
+            "kind": "repair",
+            "parent_reason": "REJECT:proof_gate proof=REJECT:no_new_kernel_proof",
+            "rules": [
+              "rule_exactly_when",
+              "rule_is_equal_to",
+              "rule_neither_nor",
+              "rule_plus_times_words",
+              "rule_unique_exists",
+              "rule_whenever",
+              "rule_zero_word"
+            ],
+            "strategy": "combine_with_proof_expander"
+          },
+          "reason": "ACCEPT:reference_only_dual_v3",
+          "repair_index": 1
+        }
+      ]
+    },
+    {
+      "automatic_deployment": false,
+      "episode": 6,
+      "head_unchanged": true,
+      "original_proposal": {
+        "kind": "catalog",
+        "parent_reason": null,
+        "rules": [
+          "rule_distinct_forall",
+          "rule_exactly_when",
+          "rule_is_equal_to",
+          "rule_neither_nor",
+          "rule_plus_times_words",
+          "rule_unique_exists",
+          "rule_whenever",
+          "rule_zero_word"
+        ],
+        "strategy": "next_catalog_rule"
+      },
+      "original_reject": "REJECT:dual_both_failed form=REJECT:no_new_certified_capability;proof=REJECT:no_new_kernel_proof",
+      "pcs_scientific_authority": false,
+      "phase": "reject_exhausted",
+      "repair_trace": [
+        {
+          "diagnosis": {
+            "details": {
+              "form": "REJECT:no_new_certified_capability",
+              "proof": "REJECT:no_new_kernel_proof"
+            },
+            "failing_side": "both",
+            "lost_or_blocked": [],
+            "reason": "REJECT:dual_both_failed form=REJECT:no_new_certified_capability;proof=REJECT:no_new_kernel_proof",
+            "suggested_strategy": "next_catalog_rule"
+          },
+          "repair_index": 1,
+          "status": "no_repair_available"
+        }
+      ]
+    }
+  ],
+  "format": "pcs-pgra-continual-journal-v1",
+  "pcs_scientific_authority": false
+}
