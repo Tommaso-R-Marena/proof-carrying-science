@@ -1,0 +1,51 @@
+{
+  "model": "Qwen/Qwen3-0.6B-GGUF",
+  "weights": {
+    "name": "Qwen3-0.6B-Q8_0.gguf",
+    "url": "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF/resolve/23749fefcc72300e3a2ad315e1317431b06b590a/Qwen3-0.6B-Q8_0.gguf",
+    "size": 639446688,
+    "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "kind": "weights",
+    "repository": "Qwen/Qwen3-0.6B-GGUF",
+    "revision": "23749fefcc72300e3a2ad315e1317431b06b590a"
+  },
+  "weight_snapshot_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+  "snapshot_bytes": 639446688,
+  "seals": 15,
+  "runtime_release": "b11827",
+  "runtime_commit": "970b51ce7c9ba5fff0726c5e9994f1c2f0e4eedc",
+  "local_cpu": true,
+  "gpu_layers": 0,
+  "remote_model_api": false,
+  "max_calls": 160,
+  "production_authority": false,
+  "weight_mappings": [
+    "7f1f0e3d9000-7f1f33cd0000 r--s 005ac000 00:01 3080                       /memfd:pcs-local-model-weights (deleted)",
+    "7f1f33fff000-7f1f34000000 r--s 261d2000 00:01 3080                       /memfd:pcs-local-model-weights (deleted)"
+  ],
+  "command": [
+    "/tmp/pcs-pinned-weights/runtime/llama-b11827/llama-server",
+    "-m",
+    "/proc/self/fd/3",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "47285",
+    "--threads",
+    "2",
+    "--threads-batch",
+    "2",
+    "--ctx-size",
+    "4096",
+    "--parallel",
+    "1",
+    "--n-gpu-layers",
+    "0",
+    "--offline",
+    "--reasoning",
+    "off",
+    "--alias",
+    "Qwen/Qwen3-0.6B-GGUF",
+    "--no-webui"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "format": "pcs-assurance-mirage-formal-v1",
+  "source_sha256": "27c9be16bc180ece275d15e4b173ed86cb4a281ac957fb8f415b8ab38fbda092",
+  "staged_sha256": "c891ea76426f4bf10dbbb22e60078c1c5fef024b6e9a538b040648fa470868e1",
+  "olean_sha256": "c2f9a4d31e47278f2e21f01339bbfe8e7dc880b2632e36f4bc578be0c4c9e920",
+  "lean_path": "/tmp/pcs-lean-428.Giau4b/lean-4.28.0-linux/bin/lean",
+  "leanchecker_path": "/tmp/pcs-lean-428.Giau4b/lean-4.28.0-linux/bin/leanchecker",
+  "theorems": [
+    "AssuranceMirage.admit_unique",
+    "AssuranceMirage.step_proposal_independent",
+    "AssuranceMirage.tool_trace_independent",
+    "AssuranceMirage.channel1_score_independent",
+    "AssuranceMirage.constructive_mirage",
+    "AssuranceMirage.single_channel_blind",
+    "AssuranceMirage.joint_detects_constructive_mirage",
+    "AssuranceMirage.completion_not_competence",
+    "AssuranceMirage.guard_erases_divergence",
+    "AssuranceMirage.unguarded_diverges",
+    "AssuranceMirage.guard_completion_independent_unguarded_not",
+    "AssuranceMirage.admit_never_exfiltrates",
+    "AssuranceMirage.channel2_detects_constructive_mirage",
+    "AssuranceMirage.channel3_detects_constructive_mirage",
+    "AssuranceMirage.constructive_mirage_any_fuel",
+    "AssuranceMirage.unguarded_unsafe_stalls",
+    "AssuranceMirage.unguarded_safe_completes"
+  ],
+  "axiom_closures": {
+    "AssuranceMirage.admit_unique": [
+      "propext"
+    ],
+    "AssuranceMirage.step_proposal_independent": [
+      "propext"
+    ],
+    "AssuranceMirage.tool_trace_independent": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.channel1_score_independent": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.constructive_mirage": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.single_channel_blind": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.joint_detects_constructive_mirage": [
+      "propext"
+    ],
+    "AssuranceMirage.completion_not_competence": [
+      "propext"
+    ],
+    "AssuranceMirage.guard_erases_divergence": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.unguarded_diverges": [
+      "propext"
+    ],
+    "AssuranceMirage.guard_completion_independent_unguarded_not": [
+      "propext"
+    ],
+    "AssuranceMirage.admit_never_exfiltrates": [],
+    "AssuranceMirage.channel2_detects_constructive_mirage": [
+      "propext"
+    ],
+    "AssuranceMirage.channel3_detects_constructive_mirage": [
+      "propext"
+    ],
+    "AssuranceMirage.constructive_mirage_any_fuel": [
+      "propext",
+      "Quot.sound"
+    ],
+    "AssuranceMirage.unguarded_unsafe_stalls": [
+      "propext"
+    ],
+    "AssuranceMirage.unguarded_safe_completes": [
+      "propext"
+    ]
+  },
+  "permitted_axioms": [
+    "Quot.sound",
+    "propext"
+  ],
+  "kernel_checked": true,
+  "native_decide": false,
+  "sorry": false,
+  "production_authority": false,
+  "seconds": 59.838143
+}

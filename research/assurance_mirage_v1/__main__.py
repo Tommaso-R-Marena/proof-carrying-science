@@ -1,0 +1,134 @@
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+from .analysis import analyze_evidence_root
+from .compare_models import compare
+from .detector import leaderboard_flip
+from .formal_check import check_formal
+from .gemini_arm import run_gemini_arm
+from .hf_secondary import run_hf_secondary
+from .run import run_campaign
+from .replay import replay_campaign
+from .transfer import run_transfer_campaign
+from .unguarded import replay_campaign_unguarded
+
+
+def main() -> int:
+    p = argparse.ArgumentParser(
+        description="Assurance Mirage v1: formal metric independence + real-model red team"
+    )
+    sub = p.add_subparsers(dest="command", required=True)
+
+    f = sub.add_parser("formal")
+    f.add_argument("out", type=Path)
+
+    r = sub.add_parser("run")
+    r.add_argument("weights", type=Path)
+    r.add_argument("out", type=Path)
+    r.add_argument("--max-cases", type=int, default=None)
+    r.add_argument(
+        "--model",
+        default="Qwen/Qwen3-0.6B-GGUF",
+        choices=["Qwen/Qwen3-0.6B-GGUF", "Qwen/Qwen3-1.7B-GGUF"],
+    )
+
+    h = sub.add_parser("hf-secondary")
+    h.add_argument("out", type=Path)
+    h.add_argument("--max-cases", type=int, default=5)
+
+    g = sub.add_parser("gemini-arm")
+    g.add_argument("out", type=Path)
+    g.add_argument("--model", default="gemini-flash-lite-latest")
+    g.add_argument("--max-cases", type=int, default=None)
+    g.add_argument("--case-ids", default=None, help="Comma-separated case ids")
+    g.add_argument(
+        "--prompt-arm",
+        default="instruction_boundary",
+        choices=["instruction_boundary", "plain"],
+    )
+    g.add_argument("--turns", type=int, default=4)
+    g.add_argument("--max-requests", type=int, default=20)
+    g.add_argument("--min-interval-sec", type=float, default=6.0)
+
+    u = sub.add_parser("unguarded-replay")
+    u.add_argument("capture", type=Path)
+    u.add_argument("out", type=Path)
+
+    c = sub.add_parser("compare")
+    c.add_argument("evidence_root", type=Path)
+    c.add_argument("out", type=Path)
+
+    an = sub.add_parser("analyze")
+    an.add_argument("evidence_root", type=Path)
+    an.add_argument("out", type=Path)
+
+    d = sub.add_parser("detect")
+    d.add_argument("evidence_root", type=Path)
+    d.add_argument("out", type=Path)
+
+    t = sub.add_parser("transfer")
+    t.add_argument("weights", type=Path)
+    t.add_argument("out", type=Path)
+    t.add_argument("--max-cases", type=int, default=None)
+    t.add_argument(
+        "--model",
+        default="Qwen/Qwen3-0.6B-GGUF",
+        choices=["Qwen/Qwen3-0.6B-GGUF", "Qwen/Qwen3-1.7B-GGUF"],
+    )
+
+    q = sub.add_parser("replay")
+    q.add_argument("capture", type=Path)
+    q.add_argument("out", type=Path)
+
+    a = p.parse_args()
+    try:
+        if a.command == "formal":
+            result = check_formal(a.out)
+        elif a.command == "run":
+            result = run_campaign(
+                a.weights, a.out, max_cases=a.max_cases, model_id=a.model
+            )
+        elif a.command == "hf-secondary":
+            result = run_hf_secondary(a.out, max_cases=a.max_cases)
+        elif a.command == "gemini-arm":
+            case_ids = (
+                [x.strip() for x in a.case_ids.split(",") if x.strip()]
+                if a.case_ids
+                else None
+            )
+            result = run_gemini_arm(
+                a.out,
+                model=a.model,
+                max_cases=a.max_cases if case_ids is None else None,
+                case_ids=case_ids,
+                prompt_arm=a.prompt_arm,
+                turns=a.turns,
+                max_requests=a.max_requests,
+                min_interval_sec=a.min_interval_sec,
+            )
+        elif a.command == "unguarded-replay":
+            result = replay_campaign_unguarded(a.capture, a.out)
+        elif a.command == "compare":
+            result = compare(a.evidence_root, a.out)
+        elif a.command == "analyze":
+            result = analyze_evidence_root(a.evidence_root, a.out)
+        elif a.command == "detect":
+            result = leaderboard_flip(a.evidence_root, a.out)
+        elif a.command == "transfer":
+            result = run_transfer_campaign(
+                a.weights, a.out, max_cases=a.max_cases, model_id=a.model
+            )
+        else:
+            result = replay_campaign(a.capture, a.out)
+        print(json.dumps({"ok": True, "result_keys": sorted(result.keys())}, indent=2))
+        return 0
+    except (ValueError, OSError, KeyError, TypeError, AssertionError) as e:
+        print(json.dumps({"ok": False, "error": str(e), "production_authority": False}))
+        return 20
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
