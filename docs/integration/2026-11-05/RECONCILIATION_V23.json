@@ -64,7 +64,7 @@
         "docs/integration/2026-11-05/README_AUDIT.json",
         "research/assurance_mirage_v1/"
       ],
-      "reason": "Research-only evolving safety gate + Assurance Mirage: composedStack, external bake-off, qualification/routing measurement, formal promotion replay, observation adequacy. Production authority unchanged.",
+      "reason": "Research-only evolving safety gate + Assurance Mirage: composedStack, external bake-off, qualification/routing measurement, formal promotion replay, observation adequacy, qualification_ii corruption-tolerant monitoring, robust_review signed promotion limits. Production authority unchanged.",
       "production_authority_changed": false,
       "formal_root_changed": false
     }
@@ -64725,7 +64725,7 @@
     },
     "docs/integration/2026-11-05/README_AUDIT.json": {
       "mode": "100644",
-      "sha256": "fdc1e46ab5273af8c5cf1d55476b3cf3389a576cc65d8fbde0a799b69d8e13ae"
+      "sha256": "734c6812076092d14228b813641c888822a71ef0b9e608274889f0187b61a8ca"
     },
     "docs/integration/2026-11-05/RECONCILIATION.md": {
       "mode": "100644",
@@ -86707,6 +86707,62 @@
       "mode": "100644",
       "sha256": "f41bafdd29517b691cd5feeae4004081ad02b75177e557f718a17173a713577e"
     },
+    "research/assurance_mirage_v1/qualification_ii/PROTOCOL.md": {
+      "mode": "100644",
+      "sha256": "d74131d8f3bca174262faeca31b406b93faaec86b32a574a90a2df2b1adb832a"
+    },
+    "research/assurance_mirage_v1/qualification_ii/README.md": {
+      "mode": "100644",
+      "sha256": "c68b542e3dc8ad7255d383c6cd2f08175338e07e16c01aed3cb1ecd5468dc182"
+    },
+    "research/assurance_mirage_v1/qualification_ii/adjudicator.py": {
+      "mode": "100644",
+      "sha256": "df9c1f5d083896b506b75e8d2ebb0deec223b05e12dbca2f494db4c5cbeb5fad"
+    },
+    "research/assurance_mirage_v1/qualification_ii/freeze.py": {
+      "mode": "100644",
+      "sha256": "404b8fd96ec9ff530a519b54cf0f76d07ca7662cc47978e4d0dcdc01741c2388"
+    },
+    "research/assurance_mirage_v1/qualification_ii/frozen/answers.jsonl": {
+      "mode": "100644",
+      "sha256": "67927d573dea357d341c9c5279dd3743fe4860581f4040d10814843190efe2bf"
+    },
+    "research/assurance_mirage_v1/qualification_ii/frozen/cases.jsonl": {
+      "mode": "100644",
+      "sha256": "ec5c55cddc835d24080f8c8241dc3261df9cb95f4b33b9cec9ed1fa7478698b4"
+    },
+    "research/assurance_mirage_v1/qualification_ii/frozen/freeze.sha256": {
+      "mode": "100644",
+      "sha256": "c43aff32e100b831790703cd8a0a91a9d347abc79dc5be0a13d1dfb6eb8607b7"
+    },
+    "research/assurance_mirage_v1/qualification_ii/ledger_study.py": {
+      "mode": "100644",
+      "sha256": "12da5e010eb8a9a153e01ff56bfe7290dc920ebd03a67e9e15fae336b0ccf0f3"
+    },
+    "research/assurance_mirage_v1/qualification_ii/monitors.py": {
+      "mode": "100644",
+      "sha256": "819dab6741525e1689459886e6575505a60be104bed6f76aebf6fa38a5ffa3ef"
+    },
+    "research/assurance_mirage_v1/qualification_ii/packets.py": {
+      "mode": "100644",
+      "sha256": "f1fbb146879a07bb063d3296ce6f7c992519bb03edda6c47e09aad99e9f0af4d"
+    },
+    "research/assurance_mirage_v1/qualification_ii/replay.py": {
+      "mode": "100644",
+      "sha256": "45dbca95f973776519f1f5aaf0ae4993f0886b128a666bb1fc7bee2164ca9068"
+    },
+    "research/assurance_mirage_v1/qualification_ii/results.json": {
+      "mode": "100644",
+      "sha256": "dbc3bcf44c055fd1ce8d9d99ebd9bb6676d4e47374f31112d877e8b47e3d8cc2"
+    },
+    "research/assurance_mirage_v1/qualification_ii/selection.py": {
+      "mode": "100644",
+      "sha256": "689de593e7ab4aa0e2b2ed18018e30e939e808fa10118bb6d74c669909bbd6c2"
+    },
+    "research/assurance_mirage_v1/qualification_ii/test_study.py": {
+      "mode": "100644",
+      "sha256": "24a97dd12353563de49c843e3c3f4e8761b3392a086e92b65ca42e6855dcfe48"
+    },
     "research/assurance_mirage_v1/replay.py": {
       "mode": "100644",
       "sha256": "9e5cc2cf7dbb3468fa1dd3fa3da59f99d12df24e500331b34f82f361428f3a51"
@@ -87878,6 +87934,50 @@
     "research/evolving_safety_gate_v1/qualification/transfer-results.json": {
       "mode": "100644",
       "sha256": "9437232d1e312f9a752565c39f4a809264418a0d6368fbe22bf7a271c6d2331e"
+    },
+    "research/evolving_safety_gate_v1/robust_review/Audit.lean": {
+      "mode": "100644",
+      "sha256": "2c94a517506a21f3e61b0c720f0b70c6fd0a2ba0e00201aa536bc44444ae4677"
+    },
+    "research/evolving_safety_gate_v1/robust_review/HardReview.lean": {
+      "mode": "100644",
+      "sha256": "4ec75f21dbce849bb29ffb53ebda84e671c82d3da897f821ecaa4a6bb999cf54"
+    },
+    "research/evolving_safety_gate_v1/robust_review/README.md": {
+      "mode": "100644",
+      "sha256": "14a4a51750a028cdc8cda55cfa291e2e31bc33050a0b73e8d5e94699af130318"
+    },
+    "research/evolving_safety_gate_v1/robust_review/ReceiptCheck.lean": {
+      "mode": "100644",
+      "sha256": "1223e1778ce88ee125a563b0aafa959a3a833b1588e2a90ca756e13c39d09348"
+    },
+    "research/evolving_safety_gate_v1/robust_review/RobustObservation.lean": {
+      "mode": "100644",
+      "sha256": "81d55994eb3644c332ed10e55378a240906c4327cb155b78fd1dade8bd56a7aa"
+    },
+    "research/evolving_safety_gate_v1/robust_review/__init__.py": {
+      "mode": "100644",
+      "sha256": "73a43aab3cad56e29948ed445bf4789c57f3af354364df7fb1b892567612fdf8"
+    },
+    "research/evolving_safety_gate_v1/robust_review/receiver.py": {
+      "mode": "100644",
+      "sha256": "9f8573fd00976f0f581ff8b6dd52efa199dfbd7a9c711d07892d25bb63505f64"
+    },
+    "research/evolving_safety_gate_v1/robust_review/replay-summary.json": {
+      "mode": "100644",
+      "sha256": "5b45e82761084e3dbb11a2759344c1ee2121e33218592cf6668eb6e3b476bdf0"
+    },
+    "research/evolving_safety_gate_v1/robust_review/replay.py": {
+      "mode": "100644",
+      "sha256": "23c178735f0982674703120e18a81505eb750d4563dd6cde7044db3d02ee3e0e"
+    },
+    "research/evolving_safety_gate_v1/robust_review/signed_fixture.json": {
+      "mode": "100644",
+      "sha256": "02044909996780ba4269b54f9ca07cfe41a5df025280e69fffb4fc62a431ce3d"
+    },
+    "research/evolving_safety_gate_v1/robust_review/test_receiver.py": {
+      "mode": "100644",
+      "sha256": "ded9145c26732934ae73eb31587ebcaf80a872cac887952f1607ddd3dd1f6ecc"
     },
     "research/evolving_safety_gate_v1/test_evolve.py": {
       "mode": "100644",
