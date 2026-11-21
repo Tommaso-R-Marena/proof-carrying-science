@@ -1,0 +1,60 @@
+name: PCS ClaimCheck assurance research (Lean 4.28 proofs and refinement tests)
+
+# Path-scoped research CI. Read-only; grants no authority; replaces no existing check.
+on:
+  pull_request:
+    paths:
+      - "research/claimcheck_assurance_v1/**"
+      - "research/claimcheck_v1/formal/ClaimCheck.lean"
+      - "research/claimcheck_v1/pipeline.py"
+      - "research/claimcheck_v1_1/policy.py"
+      - "research/claimcheck_v1_1/space.py"
+      - "research/claimcheck_v1_1/claimcheck_kernel_runner.py"
+      - ".github/workflows/pcs-claimcheck-assurance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  proofs-and-refinement:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Checksum-pinned Lean 4.28.0
+        shell: bash
+        run: source scripts/activate_lean_428.sh
+      - name: Kernel-check the assurance modules; the axiom report must equal the reviewed one
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/claimcheck_assurance_v1/formal
+          ./build.sh | tee "$RUNNER_TEMP/build.log"
+          grep "depends on axioms\|does not depend" "$RUNNER_TEMP/build.log" | diff - AXIOMS.expected
+          if grep -q "sorryAx\|ofReduceBool" "$RUNNER_TEMP/build.log"; then exit 1; fi
+      - name: The decision tables used by the conformance check are the ones Lean prints
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/claimcheck_assurance_v1/formal
+          LEAN_PATH="$PWD/.build" lean ../conformance/ExportTables.lean > "$RUNNER_TEMP/tables.json"
+          diff "$RUNNER_TEMP/tables.json" ../conformance/lean_tables.json
+      - name: Header decoder, the proved Lean function against the C and Python decoders
+        run: python3 research/claimcheck_assurance_v1/conformance/test_header_refinement.py
+      - name: Claims part, the proved Lean parser against the runner's Python parser
+        run: python3 research/claimcheck_assurance_v1/conformance/test_claims_refinement.py
+      - name: Lean model of the verdict policy against the Python policy
+        run: python3 research/claimcheck_assurance_v1/conformance/check_conformance.py
+      - name: Implemented decoy rule against its Lean model
+        run: python3 research/claimcheck_assurance_v1/conformance/test_decoy_rule.py
+      - name: C codec under address and undefined-behaviour sanitizers
+        run: python3 research/claimcheck_assurance_v1/c/test_srcbind.py
+      - name: Aristotle's counterexample still reproduces against the first decoder, and not against the second
+        run: python3 research/claimcheck_assurance_v1/c/test_counterexample.py
+      - name: Strict proof-file grammar, and the runner forgery with the real kernel
+        shell: bash
+        run: PCS_LEAN="$(command -v lean)" python3 research/claimcheck_assurance_v1/runner/test_strict_tail.py

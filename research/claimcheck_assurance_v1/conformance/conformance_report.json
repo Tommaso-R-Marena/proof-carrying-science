@@ -1,0 +1,58 @@
+{
+ "lean_tables": {
+  "core": 160,
+  "math": 84,
+  "mismatch": 512,
+  "match": 64
+ },
+ "A_real_receipts": {
+  "receipts": 302,
+  "distinct_core_states": 6,
+  "distinct_variant_patterns": 6
+ },
+ "B_decision_table": {
+  "core_states": 160,
+  "calls_to__decide": 2560
+ },
+ "C_gates": {
+  "mismatch_gate_states_checked": 384,
+  "mismatch_gate_states_unreachable_in_code": 128,
+  "match_gate_states_checked": 64
+ },
+ "D_mathematical_status": {
+  "variant_patterns": 84,
+  "receipts_through__complete": 24696,
+  "by_status": {
+   "CONDITIONAL_ON_CONVENTION": 224,
+   "MATCH_PROVED": 56,
+   "MISMATCH_PROVED": 56,
+   "NOT_ESTABLISHED": 24016,
+   "UNDEFINED_PROVED": 344
+  }
+ },
+ "E_verdict_function": {
+  "points": 1310720,
+  "unreachable_count_with_dispersion_wording_failed": 327680,
+  "checked": 983040,
+  "checked_with_a_receipt_v1_does_not_write": 393216,
+  "by_verdict": {
+   "CONFIRMATION": 2112,
+   "DISCREPANCY_FOR_REVIEW": 32,
+   "REQUIRE_HUMAN_REVIEW": 145312,
+   "UNKNOWN": 835584
+  },
+  "lean_table_sha256": "0b3cad3240c2fa01b1ffa9757deaf42ceef1ef7e50a0ddecd55d69087ee76c83",
+  "lean_seconds": 5.9,
+  "python_seconds": 15.2,
+  "concrete_alternatives_used": 52,
+  "points_whose_reported_findings_were_checked": {
+   "match": 12288,
+   "mismatch": 12288
+  },
+  "outside_the_input_condition_decides_nothing": {
+   "status MATCH_PROVED, result REFUTED, all findings pass, siblings": "UNKNOWN",
+   "status MISMATCH_PROVED, result PROVED, all findings pass, siblings": "UNKNOWN"
+  }
+ },
+ "passed": true
+}
