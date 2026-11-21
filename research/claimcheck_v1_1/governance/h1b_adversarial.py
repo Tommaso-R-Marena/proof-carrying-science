@@ -149,12 +149,15 @@ def main(argv=None) -> int:
         # 2 ---------------------------------------------------------------------------------------------
         census_source = P.git(wt, "ls-tree", "-r", "--name-only", source).splitlines()
         census_retained = P.git(wt, "ls-tree", "-r", "--name-only", r).splitlines()
+        against_main = P.git(wt, "diff", "--name-status", "--no-renames", P.PROTECTED_MAIN, source).splitlines()
         T["2_no_file_introduced_or_removed"] = {
             "files": len(census_retained),
-            "snapshot_changes_exactly_the_source_branch_changes": P.git(wt, "diff", "--name-status", P.PROTECTED_MAIN, snap)
-            == P.git(wt, "diff", "--name-status", P.PROTECTED_MAIN, source),
+            "snapshot_tree_id_equals_source_tree_id": P.git(wt, "rev-parse", f"{snap}^{{tree}}") == P.git(wt, "rev-parse", f"{source}^{{tree}}"),
+            "files_added_to_protected_main": len(against_main),
+            "existing_files_changed_or_removed_against_protected_main": [x for x in against_main if not x.startswith("A\t")][:10],
             "passed": census_source == census_retained and not P.git(wt, "diff", "--name-only", source, r)
-            and P.git(wt, "diff", "--name-status", P.PROTECTED_MAIN, snap) == P.git(wt, "diff", "--name-status", P.PROTECTED_MAIN, source)}
+            and P.git(wt, "rev-parse", f"{snap}^{{tree}}") == P.git(wt, "rev-parse", f"{source}^{{tree}}")
+            and all(x.startswith("A\t") for x in against_main)}
         # 3 ---------------------------------------------------------------------------------------------
         anc = {k: is_ancestor(wt, v, r) for k, v in required.items()}
         T["3_required_ancestors_preserved"] = {"ancestors": anc, "gates_on_the_control_commit": positive,

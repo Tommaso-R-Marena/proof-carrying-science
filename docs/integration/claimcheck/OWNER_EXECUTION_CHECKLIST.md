@@ -112,8 +112,11 @@ source commit. The evidence must then be regenerated and reviewed again.
      `review_v23_manifest --emit D2 --head H` must report `consistent: true`.
   3. Create the retained commit with the exact commands in `ADMISSION_PROPOSAL.md`, step 4, for the
      design chosen under H1 (fixed identity, date and messages; two commands under H1-b). Its ID must
-     equal `proposed_retained_source_commit.commit` in `D1/dry-run.json`, and the dry run must report
-     `retained_history_as_designed: true`.
+     equal `proposed_retained_source_commit.commit` in `D1/dry-run.json`. The dry run must report:
+     * `retained_history_as_designed: true`;
+     * `proposed_retained_source_commit.history` equal to the chosen design;
+     * under H1-b, an empty `retained_history_review.withheld_blobs_reachable`. **Stop if it is not**:
+       the withholding commit is missing.
   4. Check that the tag name is free:
      `git ls-remote --tags origin 'refs/tags/pcs-source-intake/core-claimcheck-v1-20261114'` prints
      nothing. Then run
@@ -165,7 +168,11 @@ source commit. The evidence must then be regenerated and reviewed again.
 
 ### R1. Research assurance branch (PR 216)
 * **Decision:** confirm the route. Recommended: a separate V24 successor after C1 is merged, built by
-  the same script on the research branch.
+  the same script on the research branch:
+  * the H1-b way, on post-C1 `main`, with C1's retained commit as the previous intake;
+  * only after the research branch's tree carries the withholding stubs;
+  * and PR 216 squash-merged only, because a merge commit would bring its development history,
+    with the three response commits, into `main`.
 * **Authorises now:** nothing. A V24 proposal, with its own census, dry run and review, would be
   prepared on request after C1.
 
@@ -228,24 +235,46 @@ new values.
 * **Authorises:** committing `docs/integration/claimcheck/g1/gate-definition-guard.<repo>.yml` to
   `.github/workflows/` on `main`, through a reviewed pull request, and then adding
   `gate-definition-unchanged` (GitHub Actions) to the `main` ruleset.
-* **What it does:** a `pull_request_target` job, defined on `main` only, fails whenever a pull
-  request changes any workflow or a gate-defining file. It reads the pull request as data and runs
-  nothing from it; the token is read-only and no secret is used.
+* **What it does:** a `pull_request_target` job, defined on `main` only. It fails whenever a pull
+  request changes:
+  * any workflow;
+  * a gate-defining file;
+  * an import path of a gate (root `*.py`, `scripts/`, a new `research/__init__.py`, `conftest.py`,
+    `sitecustomize.py` or `usercustomize.py`).
+
+  It compares against `main` fetched at run time, and runs again when a pull request is retargeted.
+  It reads the pull request as data and runs nothing from it; the token is read-only and no secret
+  is used.
+* **On the site, G1 alone does not protect `site-full-gate`:** its tests and build scripts are bound
+  only by D2b's retained-source rule.
 * **Consequence:** every later gate change (C1, C2b, D2 and later admissions) merges only through
   your recorded ruleset bypass.
 * **Before relying on it:** check in a scratch repository how GitHub decides a required check when two
   workflows report the same job name (`REQUIRED_CHECKS.md`, "G1").
 * **Undo:** remove the check from the ruleset, then remove the workflow.
 
+### G2 (optional, both repositories). Isolate the gates' imports (protected: workflow changes)
+* **Authorises:**
+  * running the retained-source gate as `python -I scripts/check_reconciled_prs.py …` in the workflows
+    that run it;
+  * running the manifest gate through a launcher in isolated mode that adds the repository to the
+    end of `sys.path`, after the standard library, and refuses a `research/__init__.py`.
+* **Why:** so that no module a pull request adds can replace what a gate imports (finding F2 of the
+  independent review, reproduced).
+* **Before:** a dry run like C2b's. It must show that both gates still pass, and that a marker
+  `json.py` at the root and in `scripts/` no longer runs.
+* **Undo:** revert the workflow commit.
+
 ## Before every merge (no change; recommended now)
 
 Run, from a full clone:
 
-* core: `git diff --name-only origin/main...<head> -- .github/workflows scripts/check_reconciled_prs.py scripts/test_reconciled_prs.py docs/reconciliation/OPEN_PRS.json research/integration_v2 docs/integration/2026-11-05 docs/integration/2026-11-14`;
-* site: `git diff --name-only origin/main...<head> -- .github/workflows scripts/check_reconciled_prs.py scripts/test_reconciled_prs.py docs/reconciliation/OPEN_PRS.json`.
+* core: `git diff --name-only --no-renames origin/main...<head> -- .github scripts research/integration_v2 research/__init__.py docs/reconciliation/OPEN_PRS.json docs/integration/2026-11-05 docs/integration/2026-11-14 ':(top,glob)*.py' ':(glob)**/conftest.py' ':(glob)**/sitecustomize.py' ':(glob)**/usercustomize.py'`;
+* site: `git diff --name-only --no-renames origin/main...<head> -- .github scripts docs/reconciliation/OPEN_PRS.json package.json package-lock.json ':(top,glob)*.py' ':(glob)**/conftest.py' ':(glob)**/sitecustomize.py' ':(glob)**/usercustomize.py'`.
 
-Any output means the pull request changes the definition of a gate. Merge it only as its own
-approved protected change.
+Any output means the pull request changes the definition of a gate, or a path through which a gate's
+own imports could be replaced (a `json.py` at the root or in `scripts/`, for example, runs before
+either gate checks anything). Merge it only as its own approved protected change.
 
 ## After all of the above (separate decisions)
 

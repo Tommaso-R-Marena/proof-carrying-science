@@ -30,7 +30,6 @@ import os
 import subprocess
 import sys
 import tarfile
-import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -99,20 +98,26 @@ def build(out: Path, ref: str) -> dict:
 
 def verify(archive: Path, ref: str = "HEAD") -> dict:
     inventory = {f["path"]: f for f in json.loads(git("show", f"{ref}:{INVENTORY}", raw=True))["files"] if f["action"].startswith("withhold")}
-    with tempfile.TemporaryDirectory() as tmp, tarfile.open(archive, "r") as tar:
+    # read every member into memory: nothing is extracted, so no Python version's extraction rules matter
+    with tarfile.open(archive, "r") as tar:
         members = tar.getmembers()
-        if any(m.issym() or m.islnk() or not m.isfile() or m.name.startswith("/") or ".." in Path(m.name).parts for m in members):
+        if any(m.issym() or m.islnk() or not m.isfile() or m.name.startswith("/") or ".." in Path(m.name).parts
+               or not m.name.startswith(NAME + "/") for m in members):
             raise SystemExit("unexpected member in the archive")
-        tar.extractall(tmp, filter="data")
-        base = Path(tmp) / NAME
-        manifest = json.loads((base / "MANIFEST.json").read_bytes())
-        bad = []
-        for f in manifest["files"]:
-            raw = (base / f["path"]).read_bytes()
-            d = hashlib.sha256(raw).hexdigest()
-            if d != f["sha256"] or len(raw) != f["bytes"] or inventory.get(f["path"], {}).get("original_sha256") != d:
-                bad.append(f["path"])
-        listed = {f["path"] for f in manifest["files"]}
+        content = {m.name[len(NAME) + 1:]: tar.extractfile(m).read() for m in members}
+    if len(content) != len(members) or "MANIFEST.json" not in content:
+        raise SystemExit("archive has duplicate members or no manifest")
+    manifest = json.loads(content["MANIFEST.json"])
+    bad = []
+    for f in manifest["files"]:
+        raw = content.get(f["path"], b"")
+        d = hashlib.sha256(raw).hexdigest()
+        if d != f["sha256"] or len(raw) != f["bytes"] or inventory.get(f["path"], {}).get("original_sha256") != d:
+            bad.append(f["path"])
+    listed = {f["path"] for f in manifest["files"]}
+    extra = sorted(set(content) - listed - {"MANIFEST.json"})
+    if extra:
+        bad += extra
     return {"archive_sha256": hashlib.sha256(Path(archive).read_bytes()).hexdigest(), "files_in_archive": len(listed),
             "files_the_inventory_withholds": len(inventory), "missing_from_archive": sorted(set(inventory) - listed),
             "digest_mismatches": bad, "recoverable_and_complete": not bad and set(inventory) == listed}

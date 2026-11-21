@@ -15,7 +15,9 @@ On every other pull request nothing runs it. The required path is `source-policy
 
 **The smallest change.** `reconcile.py --require-committed` also runs the retained-source gate:
 
-* in a separate process, with `PYTHONOPTIMIZE` removed, so `python -O` cannot strip its assertions;
+* in a separate process in Python's isolated mode (`-I`), so that no module the pull request adds (a
+  `json.py` in `scripts/`, say) can shadow the standard library it imports; and with `PYTHONOPTIMIZE`
+  removed, so `python -O` cannot strip its assertions;
 * failing the source contract if the gate fails.
 
 Two control files change: `research/integration_v2/reconcile.py` (two imports, one function, three
@@ -53,14 +55,15 @@ from pathlib import Path
 from . import prepare_core_admission as P
 
 C2B_FUNCTION = '''# C2b: the retained-source gate (lineage, tag and exact non-control bytes: scripts/check_reconciled_prs.py,
-# core mode) runs in the required source-policy path.  A separate process without PYTHONOPTIMIZE, so that its
-# assertions cannot be optimised away.
+# core mode) runs in the required source-policy path.  A separate process in Python's isolated mode (-I: neither
+# the script's directory nor PYTHON* variables are used, so a module the pull request adds cannot shadow the
+# standard library it imports), and without PYTHONOPTIMIZE, so that its assertions cannot be optimised away.
 RETAINED_SOURCE_GATE = "scripts/check_reconciled_prs.py"
 
 
 def _retained_source(root):
     env = {k: v for k, v in os.environ.items() if k != "PYTHONOPTIMIZE"}
-    proc = subprocess.run([sys.executable, RETAINED_SOURCE_GATE, "--core", str(root)], cwd=root,
+    proc = subprocess.run([sys.executable, "-I", RETAINED_SOURCE_GATE, "--core", str(root)], cwd=root,
                           capture_output=True, text=True, env=env)
     try:
         result = json.loads(proc.stdout)
@@ -93,7 +96,7 @@ def test_require_committed_runs_the_retained_source_gate(monkeypatch):
     with pytest.raises(ValueError, match="retained-source gate failed: AssertionError: Retained source tag differs"):
         gate._retained_source(gate.ROOT)
     cmd, env = calls[0]
-    assert cmd[1:] == [gate.RETAINED_SOURCE_GATE, "--core", str(gate.ROOT)] and "PYTHONOPTIMIZE" not in env
+    assert cmd[1:] == ["-I", gate.RETAINED_SOURCE_GATE, "--core", str(gate.ROOT)] and "PYTHONOPTIMIZE" not in env
     ok = json.dumps({"passed": True, "checked": [{"qualified_source_commit": "c", "retention_tag": "t"}]})
     monkeypatch.setattr(gate.subprocess, "run", lambda cmd, **kw: Done(0, ok))
     assert gate._retained_source(gate.ROOT) == {"passed": True, "qualified_source_commit": "c", "retention_tag": "t"}

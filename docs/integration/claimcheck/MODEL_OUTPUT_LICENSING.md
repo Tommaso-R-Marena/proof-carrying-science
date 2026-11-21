@@ -338,6 +338,13 @@ tool):
   Nemotron-dependent figures. Regenerating them offline therefore needs your private archive. The
   committed results themselves, the frozen receipts and bundles, and their replays are unaffected.
 
+**One caution after withholding.** A stub is a cache miss to the frozen reader. With network use off,
+which is the default for every offline tool, the arm is left out. The frozen benchmark runner with
+`--allow-network` or `--prefetch-only` (which forces it on) would instead call the provider again,
+and overwrite the stub with a new response. That would be a new model call, which is not
+authorised in any case. Never run the frozen v1 benchmark with the network allowed against these
+directories.
+
 After your confirmation, steps 6 to 10 follow:
 
 * `withhold_model_outputs --apply --groups N,C --decision "<reference>"`, as one commit;

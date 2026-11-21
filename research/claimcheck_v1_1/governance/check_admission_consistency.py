@@ -50,6 +50,8 @@ def sha(raw: bytes) -> str:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--evidence", default="docs/integration/claimcheck")
+    ap.add_argument("--history", choices=("clean", "development"), default="clean",
+                    help="the retained-commit design the owner chose under H1 (H1-b clean is the proposal; development is H1-a)")
     args = ap.parse_args(argv)
     ev = ROOT / args.evidence
     dry = json.loads((ev / "dry-run.json").read_text(encoding="utf-8"))
@@ -95,10 +97,28 @@ def main(argv=None) -> int:
     checks["gate_test_pins_v22_and_its_commit"] = (prep.V22_SHA256 in gate_test and prep.V22_COMMIT in gate_test
                                                    and "def test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar" in gate_test)
     # 5
-    again = prep.retained_commit(ROOT, s, retained.get("history", "development"))
+    design = retained.get("history", "development")
+    again = prep.retained_commit(ROOT, s, design)
     checks["retained_commit_reproducible"] = (again["commit"] == retained["commit"] and again["parents"] == retained["parents"]
                                               and retained["tree"] == git("rev-parse", f"{s}^{{tree}}") and retained.get("tag_created") is False
                                               and again.get("snapshot") == retained.get("snapshot"))
+    # 5b: the same facts read from git itself, not from the function that built the commit or its record
+    from research.claimcheck_v1_1.governance.retained_history import OUTPUT_COMMITS, is_ancestor
+    r = retained["commit"]
+
+    def git_parents(c):
+        return git("rev-list", "--parents", "-n", "1", c).split()[1:]
+    tree_s = git("rev-parse", f"{s}^{{tree}}")
+    checks["retained_design_is_the_one_chosen"] = design == args.history
+    if design == "clean":
+        snap = git_parents(r)[0] if git_parents(r) else ""
+        checks["retained_commit_read_from_git_is_as_designed"] = (
+            git_parents(r) == [snap, prep.OLD_INTAKE] and git_parents(snap) == [prep.PROTECTED_MAIN]
+            and git("rev-parse", f"{r}^{{tree}}") == tree_s == git("rev-parse", f"{snap}^{{tree}}")
+            and not is_ancestor(ROOT, s, r) and not any(is_ancestor(ROOT, c, r) for c in OUTPUT_COMMITS))
+    else:
+        checks["retained_commit_read_from_git_is_as_designed"] = (git_parents(r) == [s, prep.OLD_INTAKE]
+                                                                  and git("rev-parse", f"{r}^{{tree}}") == tree_s)
     # 6
     head = git("rev-parse", "HEAD")
     since = sorted(set(git("diff", "--name-only", s, head).splitlines()) - {""})

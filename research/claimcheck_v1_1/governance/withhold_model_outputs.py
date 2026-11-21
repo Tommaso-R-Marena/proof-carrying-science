@@ -19,7 +19,9 @@ reason, prompt digest, token usage and the SHA-256 and length of the model text,
 The cache key is kept as `cache_key`, not `key`. The frozen v1 cache lookup
 (`claimcheck_v1.providers.complete`) serves any file whose `key` matches and then reads its text; a
 stub with `key` would be served and crash the reader. Under `cache_key` the lookup misses, and with
-network use off the frozen code reports "no cached response" and leaves that arm out.
+network use off the frozen code reports "no cached response" and leaves that arm out. With network use
+on (`benchmark/run.py --allow-network` or `--prefetch-only`), the frozen code would instead call the
+provider and overwrite the stub: never run it against these directories.
 
 It refuses to run without `--decision`, and it never touches Git history, frozen files or files
 outside `results/*/model_responses/`. The originals must first be archived privately by the owner;

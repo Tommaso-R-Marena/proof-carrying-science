@@ -264,16 +264,13 @@ limited in practice by who can merge.
 
 **Smallest effective additional protection.**
 
-1. **Procedural (recommended now; no change).** Before merging any pull request, run in the core:
+1. **Procedural (recommended now; no change).** Before merging any pull request, run the
+   gate-definition check in the owner execution checklist ("Before every merge"). It lists changes to:
+   * workflows;
+   * gate-defining files;
+   * the paths through which a gate's own imports could be replaced (next section).
 
-   ```
-   git diff --name-only origin/main...<head> -- .github/workflows scripts/check_reconciled_prs.py \
-     scripts/test_reconciled_prs.py docs/reconciliation/OPEN_PRS.json research/integration_v2 \
-     docs/integration/2026-11-05 docs/integration/2026-11-14
-   ```
-
-   In the site, the first four paths. Any output means the pull request changes the definition of a
-   gate and needs its own protected decision. This is in the owner execution checklist.
+   Any output means the pull request needs its own protected decision.
 2. **Enforced (optional): G1, a gate-definition guard** (protected: one workflow on `main` and one
    required check). The proposals are `g1/gate-definition-guard.core.yml` and
    `g1/gate-definition-guard.site.yml`.
@@ -282,19 +279,56 @@ limited in practice by who can merge.
      the merge commit"), so a pull request cannot change what it runs.
    * It reads the pull request's commits as data (file names only) and executes nothing from them.
      Its token is read-only and it uses no secret.
-   * It fails when the pull request changes any workflow or any file that defines a gate.
+   * It fails when the pull request changes any workflow, any gate-defining file, or any path through
+     which a gate's own imports could be replaced (next section): `.github/`, `scripts/`, root `*.py`,
+     a new `research/__init__.py` (core), `conftest.py`, `sitecustomize.py`, `usercustomize.py`, and
+     the manifests and registry. It compares with `main` fetched at run time and runs again when a
+     pull request is retargeted.
    * Required as `gate-definition-unchanged`, it never stays pending: it has no path filter.
    * Consequence: every gate change (C1, C2b, D2, later admissions) merges only through your
      recorded ruleset bypass. That is the intended meaning.
-   * Tested on scratch repositories (2026-11-19). An unrelated change passes. In both repositories an
-     edited workflow, an added workflow, an edited gate script and an edited registry fail; in the
-     core, an edited manifest or an edited `reconcile.py` fail too.
+   * Tested on scratch repositories (2026-11-19): 14 cases in each repository, all as intended.
+     * Pass: an unrelated change, and a new module deep in the tree.
+     * Fail in both: an edited or added workflow, an edited gate script, an edited registry, a
+       `json.py` at the root or in `scripts/`, a nested `conftest.py`, a `sitecustomize.py`.
+     * Fail in the core: `research/__init__.py`, the manifest, `reconcile.py`.
+     * Fail in the site: `package.json`.
+   * **On the site, G1 alone does not protect `site-full-gate`.** Its tests and build scripts are
+     bound only by D2b's retained-source rule, so G1 there assumes D2b.
    * **Residual risk, not verifiable here.** GitHub does not document how a required check is decided
      when two workflows report jobs with the same name. A pull request could add a workflow with a
      job named `gate-definition-unchanged`. G1 itself would then fail, because a workflow was added.
      But if GitHub accepted the later of two same-named results, the imitation could mask it. Before
      relying on G1, test this in a scratch repository: a failing `pull_request_target` job and a
      same-named `pull_request` job that passes later. Merging must stay blocked.
+
+### The gates can import a module the pull request adds (independent review, 2026-11-19; reproduced)
+
+Both gates import standard-library modules before they check anything:
+
+* the manifest gate runs as `python -m research.integration_v2.reconcile` from the repository root;
+* the retained-source gate runs as `python scripts/check_reconciled_prs.py`;
+* Python puts the root, or `scripts/`, first on its import path. So a `json.py` (or `hashlib.py`, …)
+  that a pull request adds there replaces the standard module, and runs before the census or tree
+  check that would reject it;
+* `research/` has no `__init__.py`, so one added there would run on import too;
+* the scripts `source-policy` runs before the gate are also taken from the pull request. V23 pins
+  them, but only the later gate checks that.
+
+Reproduced in a scratch clone with a harmless marker module: it ran before either gate checked
+anything. Under Python's isolated mode (`-I`) it did not, and the retained-source gate ran its own
+checks. A pull request can therefore make both gates report success without touching a gate file,
+which is the same class as editing the workflow. It predates this work.
+
+**Mitigations (none applied):**
+
+* the pre-merge check and G1 now list these paths;
+* C2b's child process runs in isolated mode (`-I`);
+* **G2 (optional, protected):** run both gates with isolated imports in the workflows: the
+  retained-source gate as `python -I scripts/check_reconciled_prs.py …`, and the manifest gate
+  through an isolated launcher that appends the repository to the end of `sys.path` and refuses a
+  `research/__init__.py`;
+* run the gate before any other step of its job.
 
 ### T1: retained-source tag rulesets (both repositories)
 

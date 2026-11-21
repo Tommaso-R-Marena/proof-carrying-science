@@ -57,12 +57,17 @@ class CleanHistory(unittest.TestCase):
         self.assertEqual(r["output_commits_reachable"], [])
 
     def test_the_original_design_reaches_the_whole_branch(self):
+        # Relative to HEAD: on the ClaimCheck branch HEAD descends from the three response commits; after the squash merge
+        # onto main it does not.  H1-a reaches exactly what HEAD reaches; H1-b never reaches any of them.
         d = self.dev["commit"]
         self.assertEqual(parents(d), [self.head, P.OLD_INTAKE])
         self.assertTrue(is_ancestor(ROOT, self.head, d))
         r = reach(ROOT, d, [P.PROTECTED_MAIN, P.OLD_INTAKE], {})
-        self.assertEqual(sorted(r["output_commits_reachable"]), sorted(OUTPUT_COMMITS))
-        self.assertGreater(r["commits_beyond_protected_history"], 2)
+        expected = sorted(c for c in OUTPUT_COMMITS if is_ancestor(ROOT, c, self.head))
+        self.assertEqual(sorted(r["output_commits_reachable"]), expected)
+        beyond_head = len(git("rev-list", self.head, "--not", P.PROTECTED_MAIN, P.OLD_INTAKE).split())
+        self.assertEqual(r["commits_beyond_protected_history"], beyond_head + 1)          # HEAD's own commits, and the retained one
+        self.assertEqual(reach(ROOT, self.clean["commit"], [P.PROTECTED_MAIN, P.OLD_INTAKE], {})["output_commits_reachable"], [])
 
     def test_both_designs_are_deterministic_and_differ(self):
         self.assertEqual(P.retained_commit(ROOT, self.head, "clean"), self.clean)

@@ -60,7 +60,9 @@ be final: they are regenerated at the commit you admit, as before.
 * **Assumptions:**
   * the withholding commit is in place (A1);
   * the gate's own source files are trusted configuration, which no gate can check (H1-b test 9);
-    review of the control commit is what protects them.
+    review of the control commit is what protects them;
+  * a module a pull request adds at the root or in `scripts/` would run before either gate checks
+    anything (independent review F2, reproduced); the pre-merge check, G1 or G2 is what covers it.
 * **Approving:** exactly the retained commit, the tag and the control commit, after their checks
   pass.
 * **Rejecting:** nothing to undo; the branch has no protected change.
@@ -75,7 +77,8 @@ be final: they are regenerated at the commit you admit, as before.
 
 ### C2b. Run the retained-source gate in the required `source-policy` path (core, protected, optional)
 * **Changes:** two control files (`reconcile.py`, `test_reconcile.py`): `--require-committed` also
-  runs `check_reconciled_prs.py --core` in a separate process without `PYTHONOPTIMIZE`.
+  runs `check_reconciled_prs.py --core`. It runs as a separate process, in Python's isolated mode
+  (`-I`) and without `PYTHONOPTIMIZE`.
 * **Why:** today the retained-source gate runs on the core only in a path-filtered workflow that is
   not required.
 * **Evidence:** `c2b/c2b-dry-run.json`, all as expected:
@@ -128,19 +131,35 @@ be final: they are regenerated at the commit you admit, as before.
   * one `pull_request_target` workflow on `main`, which runs only the definition on `main`, reads the
     pull request as data and executes nothing from it;
   * one required check, `gate-definition-unchanged`.
-* **Why:** it is the smallest enforced protection against D2b's caveat, and against committed edits
-  to the gate's own source, which no gate detects.
-* **Evidence:** the logic was tested on scratch repositories, positive and negative.
+* **Why:** it is the smallest enforced protection against three things:
+  * D2b's caveat;
+  * committed edits to the gate's own source, which no gate detects;
+  * modules a pull request adds where a gate imports from (`scripts/`, root `*.py`, a new
+    `research/__init__.py`).
+* **Evidence:** the logic was tested on scratch repositories: 14 cases in each repository, all as
+  intended. On the site it assumes D2b, which binds `site-full-gate`'s own files.
 * **Assumption to test first:** how GitHub decides a required check when two workflows report the
   same job name.
 * **Approving:** every later gate change merges only through your recorded ruleset bypass.
 * **Rejecting:** the pre-merge check stays a manual step.
+
+### G2. Isolate the gates' imports (either repository, optional, protected)
+* **Changes:** the workflows run the retained-source gate as `python -I …`, and the manifest gate
+  through an isolated launcher, so no module a pull request adds can replace a gate's imports.
+* **Why:** independent review F2, reproduced: a marker `json.py` at the root or in `scripts/` ran
+  before either gate checked anything.
+* **Evidence:** under `-I` the marker did not run, and the retained-source gate ran its own checks.
+  A dry run for both gates is to be prepared on request.
+* **Approving:** one workflow commit per repository, after its dry run.
+* **Rejecting:** the pre-merge check and G1 remain the protection.
 
 ### R1. Assurance research (PR 216)
 * **Changes:** nothing now.
 * **Recommendation:** a separate V24 successor after C1, built the H1-b way, on post-C1 `main`, with
   C1's retained commit as the previous intake. Its tree must carry the withholding stubs first
   (H1-b test 12 shows that a V24 built the H1-a way would bring the development history back).
+  Squash-merge PR 216 only: a merge commit would bring its history, with the three response commits,
+  into `main`.
 * **Approving:** a V24 proposal will be prepared after C1, with its own dry run and review.
 * **Rejecting:** the research stays on its draft branch.
 

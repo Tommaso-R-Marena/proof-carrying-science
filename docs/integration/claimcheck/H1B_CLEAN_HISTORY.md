@@ -123,11 +123,35 @@ throw-away worktree, with no ref.
 **What test 9 means.** It is not a property of H1-b; the gates behave the same under H1-a. It is a
 property of the protected gate as it stands. The code that checks every other file cannot check
 itself, and the same two files are excluded by the second gate. So a pull request that edits those
-files and commits the edit passes every gate. Today only three things catch it:
+files and commits the edit passes every gate. C1 and C2b each change `reconcile.py` and
+`test_reconcile.py` by design, so their review is where this matters.
 
-* review of the control commit;
-* the pre-merge gate-definition check (`OWNER_EXECUTION_CHECKLIST.md`, "Before every merge");
-* G1, whose rule fails on any change under `research/integration_v2/`.
+**The trust root is wider than these two files** (independent review, 2026-11-19, reproduced). Both
+gates import standard-library modules (`json`, `argparse`, `hashlib`, `subprocess` and others) before
+any check runs:
 
-C1 and C2b each change `reconcile.py` and `test_reconcile.py` by design, so their review is where
-this matters.
+* the manifest gate runs as `python -m …` from the repository root, and the retained-source gate as
+  `python scripts/…`;
+* so a module the pull request adds, such as a `json.py` at the root or in `scripts/`, runs first;
+  so would a new `research/__init__.py`;
+* a harmless marker module placed there ran before either gate checked anything;
+* the scripts that `source-policy` runs before the gate also come from the pull request (V23 pins
+  them, but only the later gate checks that).
+
+So a pull request can make both gates report success without touching any gate file. What catches
+that:
+
+* review;
+* the pre-merge check, and G1, both extended on 2026-11-19 to the import paths (`REQUIRED_CHECKS.md`,
+  "G1");
+* C2b's child process, now in Python's isolated mode (`-I`);
+* the proposed G2 (isolated imports for both gates in the workflows). None of these is applied.
+
+**A precondition, and a merge rule.**
+
+* H1-b keeps the withheld responses unreachable only after the withholding commit. Before it, the
+  admitted tree itself carries them. The dry run then reports `all_as_expected: false`; no gate checks
+  it.
+* PR 216 holds the three response commits in its history and all 22 responses in its tree. A merge
+  commit or rebase merge of PR 216 would put them into `main`'s history whatever C1 pins. **Squash-merge
+  PR 216 only, and only after its tree carries the stubs.**

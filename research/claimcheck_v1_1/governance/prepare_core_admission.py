@@ -186,8 +186,13 @@ def history_review(cwd: Path, head: str, retained: dict) -> dict:
              "source_commit_is_an_ancestor": is_ancestor(cwd, head, r)}
     if retained["history"] == "clean":
         s = retained["snapshot"]["commit"]
-        facts["snapshot_changes_exactly_what_the_source_branch_changes"] = (
-            git(cwd, "diff", "--name-status", PROTECTED_MAIN, s) == git(cwd, "diff", "--name-status", PROTECTED_MAIN, head))
+        # read from git, not from the record: the snapshot's tree and its only parent
+        facts["snapshot_read_from_git_is_the_source_tree_on_protected_main"] = (
+            git(cwd, "rev-parse", f"{s}^{{tree}}") == git(cwd, "rev-parse", f"{head}^{{tree}}")
+            and git(cwd, "rev-list", "--parents", "-n", "1", s).split()[1:] == [PROTECTED_MAIN]
+            and git(cwd, "rev-list", "--parents", "-n", "1", r).split()[1:] == [s, OLD_INTAKE])
+    facts["source_only_adds_files_to_protected_main"] = all(
+        line.startswith("A\t") for line in git(cwd, "diff", "--name-status", "--no-renames", PROTECTED_MAIN, head).splitlines())
     facts.update(reach(cwd, r, [PROTECTED_MAIN, OLD_INTAKE], withheld_blobs(cwd, search_from=head)))
     return facts
 
@@ -405,7 +410,8 @@ def main(argv=None) -> int:
                       and (args.history == "development" or (not hr["source_commit_is_an_ancestor"] and not hr["output_commits_reachable"]
                                                              and not hr["withheld_blobs_reachable"]
                                                              and hr["commits_beyond_protected_history"] == 2
-                                                             and hr["snapshot_changes_exactly_what_the_source_branch_changes"])))
+                                                             and hr["snapshot_read_from_git_is_the_source_tree_on_protected_main"]))
+                      and hr["source_only_adds_files_to_protected_main"])
         report["retained_history_as_designed"] = history_ok
         report["all_as_expected"] = (history_ok and not changed and not outside and report["gate_on_the_protected_v22_commit"]["passed"]
                                      and report["dry_run_tested_the_proposal"]["only_the_tag_name_and_its_consequent_digests_differ"]
