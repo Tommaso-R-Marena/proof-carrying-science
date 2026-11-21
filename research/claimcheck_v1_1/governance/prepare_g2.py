@@ -69,14 +69,21 @@ os._exit(0)
 EXTENSION_C = r'''#include <Python.h>
 #include <stdio.h>
 #include <unistd.h>
-PyMODINIT_FUNC PyInit_integration_v2(void) {
-    FILE *f = fopen("%s", "w");
+PyMODINIT_FUNC PyInit_%(init)s(void) {
+    FILE *f = fopen("%(marker)s", "w");
     if (f) { fputs("ran", f); fclose(f); }
-    fputs("{\"passed\": true, \"source_review_complete\": true, \"forged_by\": \"gate_init_extension\"}\n", stdout);
+    fputs("{\"passed\": true, \"source_review_complete\": true, \"forged_by\": \"%(name)s\"}\n", stdout);
     fflush(stdout);
     _exit(0);
 }
 '''
+G1_PROPOSAL = "docs/integration/claimcheck/g1/gate-definition-guard.core.yml"
+
+
+def g1_pathspec(text: str) -> list:
+    """The paths G1's proposed guard compares (read from its workflow file, so the two cannot drift)."""
+    lines = text.split("git diff --name-only --no-renames", 1)[1].split(")\"", 1)[0].splitlines()[1:]
+    return [line.strip().rstrip("\\").strip().strip("'") for line in lines if line.strip().rstrip("\\").strip()]
 
 
 def sh(cwd: Path, script: str, env: dict, shell=("bash", "--noprofile", "--norc", "-eo", "pipefail", "-c")) -> dict:
@@ -268,13 +275,25 @@ def main(argv=None) -> int:
                 return [str(cfile.relative_to(wt))]
             return apply
 
-        def plant_extension():
-            target = pkg / ("__init__" + importlib.machinery.EXTENSION_SUFFIXES[0])
-            c = work / "ext.c"
-            c.write_text(EXTENSION_C % str(markers / "gate_init_extension"))
-            subprocess.run(["gcc", "-shared", "-fPIC", "-I" + sysconfig.get_paths()["include"], "-o", str(target), str(c)], check=True,
-                           capture_output=True)
-            return [str(target.relative_to(wt))]
+        def plant_extension(name, target, init):
+            def apply():
+                c = work / f"{name}.c"
+                c.write_text(EXTENSION_C % {"init": init, "marker": str(markers / name), "name": name})
+                subprocess.run(["gcc", "-shared", "-fPIC", "-I" + sysconfig.get_paths()["include"], "-o", str(target), str(c)], check=True,
+                               capture_output=True)
+                return [str(target.relative_to(wt))]
+            return apply
+
+        def plant_sourceless(name, target):
+            def apply():
+                tmp = work / f"{name}.py"
+                tmp.write_text(forge(name))
+                py_compile.compile(str(tmp), cfile=str(target))
+                return [str(target.relative_to(wt))]
+            return apply
+
+        pathspec = g1_pathspec((wt / G1_PROPOSAL).read_text(encoding="utf-8"))
+        report["g1_pathspec_compared"] = pathspec
 
         def plant_pre_gate_script():
             name = "pre_gate_script_plants_bytecode"
@@ -297,6 +316,7 @@ def main(argv=None) -> int:
                 P.git(wt, "add", "-f", f)
             P.git(wt, "commit", "-q", "-m", f"DRY RUN attack: {name}", env=P.FIXED)
             commit = P.git(wt, "rev-parse", "HEAD")
+            flagged_by_g1 = bool(P.git(wt, "diff", "--name-only", "--no-renames", f"{base}...{commit}", "--", *pathspec))
             e = {**env, **(env_extra or {})}
             marker = markers / name
             marker.unlink(missing_ok=True)
@@ -311,7 +331,7 @@ def main(argv=None) -> int:
             else:
                 isolated = (isolated_retained if old is old_retained else g2_gate)(e)
             g2_ran = marker.exists()
-            row = {"files": files, "env": sorted(env_extra) if env_extra else [], "kind": kind,
+            row = {"files": files, "env": sorted(env_extra) if env_extra else [], "kind": kind, "flagged_by_g1_paths": flagged_by_g1,
                    "current": {"planted_code_ran": current_ran, **{k: v for k, v in current.items() if k in ("exit", "reported_success", "forged")}},
                    "g2": {"planted_code_ran": g2_ran, **{k: v for k, v in isolated.items() if k in ("exit", "reported_success", "forged", "error")}}}
             if kind == "vulnerable":
@@ -331,7 +351,13 @@ def main(argv=None) -> int:
         attacks["gate_bytecode_unchecked"] = run_attack("gate_bytecode_unchecked", plant_pyc("gate_bytecode_unchecked", False), old_gate)
         attacks["gate_bytecode_checked_genuine_hash"] = run_attack("gate_bytecode_checked_genuine_hash",
                                                                    plant_pyc("gate_bytecode_checked_genuine_hash", True), old_gate)
-        attacks["gate_init_extension"] = run_attack("gate_init_extension", plant_extension, old_gate)
+        attacks["gate_init_extension"] = run_attack("gate_init_extension", plant_extension(
+            "gate_init_extension", pkg / ("__init__" + importlib.machinery.EXTENSION_SUFFIXES[0]), "integration_v2"), old_gate)
+        attacks["root_package_json"] = run_attack("root_package_json", plant_files({"json/__init__.py": forge("root_package_json")}), old_gate)
+        attacks["root_sourceless_json_pyc"] = run_attack("root_sourceless_json_pyc", plant_sourceless("root_sourceless_json_pyc", wt / "json.pyc"),
+                                                         old_gate)
+        attacks["root_extension_json"] = run_attack("root_extension_json", plant_extension(
+            "root_extension_json", wt / ("json" + importlib.machinery.EXTENSION_SUFFIXES[0]), "json"), old_gate)
         attacks["gate_package_shadow"] = run_attack("gate_package_shadow", plant_files({
             "research/integration_v2/reconcile/__init__.py": "", "research/integration_v2/reconcile/__main__.py": forge("gate_package_shadow")}), old_gate)
         attacks["scripts_json_retained_gate"] = run_attack("scripts_json_retained_gate",
