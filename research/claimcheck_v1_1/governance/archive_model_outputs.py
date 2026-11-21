@@ -106,29 +106,35 @@ def build(out: Path, ref: str) -> dict:
 
 def verify(archive: Path, ref: str = "HEAD") -> dict:
     inventory = {f["path"]: f for f in json.loads(stored_bytes(f"{ref}:{INVENTORY}"))["files"] if f["action"].startswith("withhold")}
-    # read every member into memory: nothing is extracted, so no Python version's extraction rules matter
-    with tarfile.open(archive, "r") as tar:
-        members = tar.getmembers()
-        if any(m.issym() or m.islnk() or not m.isfile() or m.name.startswith("/") or ".." in Path(m.name).parts
-               or not m.name.startswith(NAME + "/") for m in members):
-            raise SystemExit("unexpected member in the archive")
-        content = {m.name[len(NAME) + 1:]: tar.extractfile(m).read() for m in members}
-    if len(content) != len(members) or "MANIFEST.json" not in content:
-        raise SystemExit("archive has duplicate members or no manifest")
-    manifest = json.loads(content["MANIFEST.json"])
-    bad = []
-    for f in manifest["files"]:
-        raw = content.get(f["path"], b"")
-        d = hashlib.sha256(raw).hexdigest()
-        if d != f["sha256"] or len(raw) != f["bytes"] or inventory.get(f["path"], {}).get("original_sha256") != d:
-            bad.append(f["path"])
-    listed = {f["path"] for f in manifest["files"]}
-    extra = sorted(set(content) - listed - {"MANIFEST.json"})
-    if extra:
-        bad += extra
-    return {"archive_sha256": hashlib.sha256(Path(archive).read_bytes()).hexdigest(), "files_in_archive": len(listed),
-            "files_the_inventory_withholds": len(inventory), "missing_from_archive": sorted(set(inventory) - listed),
-            "digest_mismatches": bad, "recoverable_and_complete": not bad and set(inventory) == listed}
+    result = {"archive_sha256": None, "files_in_archive": 0, "files_the_inventory_withholds": len(inventory),
+              "missing_from_archive": sorted(inventory), "digest_mismatches": [], "unexpected_members": [],
+              "error": None, "recoverable_and_complete": False}
+    try:
+        result["archive_sha256"] = hashlib.sha256(Path(archive).read_bytes()).hexdigest()
+        # read every member into memory: nothing is extracted, so no Python version's extraction rules matter
+        with tarfile.open(archive, "r") as tar:
+            members = tar.getmembers()
+            if any(m.issym() or m.islnk() or not m.isfile() or m.name.startswith("/") or ".." in Path(m.name).parts
+                   or not m.name.startswith(NAME + "/") for m in members):
+                raise ValueError("unexpected kind of member, or a member outside " + NAME + "/")
+            content = {m.name[len(NAME) + 1:]: tar.extractfile(m).read() for m in members}
+        if len(content) != len(members) or "MANIFEST.json" not in content:
+            raise ValueError("duplicate members, or no MANIFEST.json")
+        files = json.loads(content["MANIFEST.json"])["files"]
+    except (OSError, EOFError, tarfile.TarError, ValueError, KeyError, TypeError) as exc:   # unreadable: incomplete, said plainly
+        result["error"] = f"{type(exc).__name__}: {exc}"
+        return result
+    listed = {f["path"] for f in files}
+    present = [f for f in files if f["path"] in content]
+    result["files_in_archive"] = len(present)
+    result["missing_from_archive"] = sorted((set(inventory) - listed) | {f["path"] for f in files if f["path"] not in content})
+    result["digest_mismatches"] = [f["path"] for f in present
+                                   if hashlib.sha256(content[f["path"]]).hexdigest() != f["sha256"] or len(content[f["path"]]) != f["bytes"]
+                                   or inventory.get(f["path"], {}).get("original_sha256") != f["sha256"]]
+    result["unexpected_members"] = sorted(set(content) - listed - {"MANIFEST.json"})
+    result["recoverable_and_complete"] = (listed == set(inventory) and not result["missing_from_archive"]
+                                          and not result["digest_mismatches"] and not result["unexpected_members"])
+    return result
 
 
 def main(argv=None) -> int:
