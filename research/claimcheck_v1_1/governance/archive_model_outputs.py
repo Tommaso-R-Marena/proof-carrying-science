@@ -1,7 +1,10 @@
 """A private archive of the model responses whose disposition is to withhold them (L2, L3).  Read-only on the repository.
 
-    python -m research.claimcheck_v1_1.governance.archive_model_outputs --out DIR [--from REF]
-    python -m research.claimcheck_v1_1.governance.archive_model_outputs --verify DIR/model-outputs-withheld.tar
+    python -I research/claimcheck_v1_1/governance/archive_model_outputs.py --out DIR [--from REF]
+    python -I research/claimcheck_v1_1/governance/archive_model_outputs.py --verify DIR/model-outputs-withheld.tar
+
+It imports only the standard library and finds the repository from its own path, so it runs as a plain
+script, on Windows too (the owner's procedure: `docs/integration/claimcheck/A1_ARCHIVE_PROCEDURE.md`).
 
 `--out` takes, for every inventoried response whose action is to withhold it, the original bytes from
 Git history (the file at REF, or the last commit before REF where it still has the inventory's
@@ -42,6 +45,11 @@ def git(*args, raw=False):
     return out if raw else out.decode().strip()
 
 
+def blob(spec: str) -> bytes:
+    """The exact stored bytes: `cat-file blob` applies no textconv, filter or end-of-line conversion (`git show` may)."""
+    return git("cat-file", "blob", spec, raw=True)
+
+
 def originals(ref: str, inventory: dict) -> list[dict]:
     rows = []
     for f in inventory["files"]:
@@ -50,7 +58,7 @@ def originals(ref: str, inventory: dict) -> list[dict]:
         found = None
         for c in git("log", "--format=%H", ref, "--", f["path"]).split():
             try:
-                raw = git("show", f"{c}:{f['path']}", raw=True)
+                raw = blob(f"{c}:{f['path']}")
             except subprocess.CalledProcessError:
                 continue
             if hashlib.sha256(raw).hexdigest() == f["original_sha256"] and len(raw) == f["original_bytes"]:
@@ -78,7 +86,7 @@ def build(out: Path, ref: str) -> dict:
     out = out.resolve()
     if out == ROOT or ROOT in out.parents:
         raise SystemExit("the archive must be written outside the repository")
-    inventory = json.loads(git("show", f"{ref}:{INVENTORY}", raw=True))
+    inventory = json.loads(blob(f"{ref}:{INVENTORY}"))
     rows = originals(ref, inventory)
     # the manifest depends only on the originals (not on REF or on later edits of the inventory): the same archive from any REF
     manifest = json.dumps({"what": "Model responses withheld from publication (L2, L3); originals, kept privately by the owner.",
@@ -97,7 +105,7 @@ def build(out: Path, ref: str) -> dict:
 
 
 def verify(archive: Path, ref: str = "HEAD") -> dict:
-    inventory = {f["path"]: f for f in json.loads(git("show", f"{ref}:{INVENTORY}", raw=True))["files"] if f["action"].startswith("withhold")}
+    inventory = {f["path"]: f for f in json.loads(blob(f"{ref}:{INVENTORY}"))["files"] if f["action"].startswith("withhold")}
     # read every member into memory: nothing is extracted, so no Python version's extraction rules matter
     with tarfile.open(archive, "r") as tar:
         members = tar.getmembers()
