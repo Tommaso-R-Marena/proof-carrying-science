@@ -37,7 +37,8 @@ Any of these lets a pull request make the gate report success without changing a
   * `reconcile.py`, one exact reviewed successor of the workflow, bound like the receiver test repair
     (`_current_expected`, original and new SHA-256), and the `combined_source` transformation that
     inserts the new step;
-  * `test_reconcile.py`, three tests.
+  * `test_reconcile.py`, three new tests. The existing test that freezes every adapted workflow at its
+    reviewed bytes now states this one change explicitly.
 * *Site.* `open-pr-reconciliation.yml`, a control file of the site's retained-source gate, runs the gate
   first and as `python -I`, then the tests.
 
@@ -187,6 +188,20 @@ def test_g2_launcher_runs_only_the_gate_sources(tmp_path):
 '''
 
 
+FROZEN_WORKFLOWS_OLD = (
+    '        expected=previous.replace(b"leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6",b"leanprover/lean-action@fe408643ea7367d8c0404a8be3975bb145f5fb64") if name.startswith(".github/") else previous\n'
+    '        assert (gate.ROOT/name).read_bytes()==expected\n')
+FROZEN_WORKFLOWS_NEW = (
+    '        expected=previous.replace(b"leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6",b"leanprover/lean-action@fe408643ea7367d8c0404a8be3975bb145f5fb64") if name.startswith(".github/") else previous\n'
+    '        if name==gate.SOURCE_POLICY_WORKFLOW:   # G2, the one reviewed successor: the gate step moves first and runs isolated\n'
+    '            step=b"      - name: Exact reviewed combined-source contract\\n        run: python -m research.integration_v2.reconcile --require-committed\\n"\n'
+    '            first=b"      - name: Audit revision, repository governance, and Python source\\n"\n'
+    '            assert expected.count(step)==1 and expected.count(first)==1\n'
+    '            expected=expected.replace(step,b"").replace(first,gate.ISOLATED_GATE_STEP.encode()+first)\n'
+    '            assert hashlib.sha256(expected).hexdigest()==gate.SOURCE_POLICY_NEW\n'
+    '        assert (gate.ROOT/name).read_bytes()==expected\n')
+
+
 def controls(gate_text: str, test_text: str, old: bytes) -> tuple[str, str]:
     """G2's edits of reconcile.py and test_reconcile.py: exact, single-occurrence replacements."""
     new = hashlib.sha256(successor(old)).hexdigest()
@@ -209,4 +224,6 @@ def controls(gate_text: str, test_text: str, old: bytes) -> tuple[str, str]:
         if text.count(needle) != 1:
             raise ValueError("exact public CI source-step insertion point required")
         text = text.replace(needle, ISOLATED_GATE_STEP + needle)''')
-    return g, test_text.rstrip("\n") + "\n" + GATE_TEST.format()
+    # the protected test that freezes every adapted workflow at its reviewed bytes states G2's one change explicitly
+    t = _once(test_text, FROZEN_WORKFLOWS_OLD, FROZEN_WORKFLOWS_NEW)
+    return g, t.rstrip("\n") + "\n" + GATE_TEST.format()
