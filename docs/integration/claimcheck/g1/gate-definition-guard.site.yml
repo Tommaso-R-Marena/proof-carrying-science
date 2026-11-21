@@ -6,8 +6,9 @@
 # data (git diff of file names against the current `main`, fetched at run time) and executes nothing from
 # them; the token is read-only and no secret is used.  It fails when the pull request changes any workflow,
 # any file that defines a gate, or any file through which a gate's own imports could be replaced (a
-# module at the repository root or in scripts/ that shadows the standard library, a new package
-# __init__.py, conftest.py, sitecustomize.py or usercustomize.py).  Such a change can merge only through
+# module, package, bytecode or compiled module at the repository root or in scripts/ that shadows the standard
+# library, cached bytecode or a compiled module anywhere, a new package __init__.py, conftest.py, sitecustomize.py
+# or usercustomize.py).  Such a change can merge only through
 # the owner's recorded ruleset bypass.
 name: Gate definition guard
 on:
@@ -39,6 +40,12 @@ jobs:
             package.json \
             package-lock.json \
             ':(top,glob)*.py' \
+            ':(top,glob)*.pyc' \
+            ':(top,glob)*.so' \
+            ':(top,glob)*/__init__.*' \
+            ':(glob)**/__pycache__/**' \
+            ':(glob)**/*.pyc' \
+            ':(glob)**/*.so' \
             ':(glob)**/conftest.py' \
             ':(glob)**/sitecustomize.py' \
             ':(glob)**/usercustomize.py')"

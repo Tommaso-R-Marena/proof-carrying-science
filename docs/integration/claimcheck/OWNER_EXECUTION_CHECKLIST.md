@@ -269,12 +269,19 @@ new values.
 
 Run, from a full clone:
 
-* core: `git diff --name-only --no-renames origin/main...<head> -- .github scripts research/integration_v2 research/__init__.py docs/reconciliation/OPEN_PRS.json docs/integration/2026-11-05 docs/integration/2026-11-14 ':(top,glob)*.py' ':(glob)**/conftest.py' ':(glob)**/sitecustomize.py' ':(glob)**/usercustomize.py'`;
-* site: `git diff --name-only --no-renames origin/main...<head> -- .github scripts docs/reconciliation/OPEN_PRS.json package.json package-lock.json ':(top,glob)*.py' ':(glob)**/conftest.py' ':(glob)**/sitecustomize.py' ':(glob)**/usercustomize.py'`.
+* core: `git diff --name-only --no-renames origin/main...<head> -- .github scripts research/integration_v2 research/__init__.py docs/reconciliation/OPEN_PRS.json docs/integration/2026-11-05 docs/integration/2026-11-14 ':(top,glob)*.py' ':(top,glob)*.pyc' ':(top,glob)*.so' ':(top,glob)*/__init__.*' ':(glob)**/__pycache__/**' ':(glob)**/*.pyc' ':(glob)**/*.so' ':(glob)**/conftest.py' ':(glob)**/sitecustomize.py' ':(glob)**/usercustomize.py'`;
+* site: `git diff --name-only --no-renames origin/main...<head> -- .github scripts docs/reconciliation/OPEN_PRS.json package.json package-lock.json ':(top,glob)*.py' ':(top,glob)*.pyc' ':(top,glob)*.so' ':(top,glob)*/__init__.*' ':(glob)**/__pycache__/**' ':(glob)**/*.pyc' ':(glob)**/*.so' ':(glob)**/conftest.py' ':(glob)**/sitecustomize.py' ':(glob)**/usercustomize.py'`.
 
 Any output means the pull request changes the definition of a gate, or a path through which a gate's
-own imports could be replaced (a `json.py` at the root or in `scripts/`, for example, runs before
-either gate checks anything). Merge it only as its own approved protected change.
+own imports could be replaced. Examples: a `json.py`, a `json/` package, a `json.pyc` or a compiled
+`json` module at the root or in `scripts/`, or cached bytecode beside the gate. Each runs before
+either gate checks anything (`G2_IMPORT_ISOLATION.md`). Merge such a pull request only as its own
+approved protected change.
+
+The list gained the bytecode and compiled-module entries on 2026-11-21: the G2 dry run showed three
+vectors that the earlier list missed. With G2 in place, the import-path entries become a second line
+of defence for the core's required path, and the gate-definition entries remain the check that
+matters.
 
 ## After all of the above (separate decisions)
 
