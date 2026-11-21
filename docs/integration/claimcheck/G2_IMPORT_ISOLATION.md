@@ -1,8 +1,8 @@
 # G2: the source gates run before anything from the pull request (proposal; G1 evaluated)
 
-**Status (2026-11-21).** Prepared and tested in throw-away worktrees. **Not applied.** No workflow,
-gate file, manifest, tag or ruleset was changed in either repository. G2 is your decision. On the
-core, make it before C1's final regeneration (section 5).
+**Status (2026-11-21).** Prepared, tested in throw-away worktrees, and reviewed independently (section
+7). **Not applied.** No workflow, gate file, manifest, tag or ruleset was changed in either repository.
+G2 is your decision. On the core, make it before C1's final regeneration (section 5).
 
 ## 1. The weakness
 
@@ -16,7 +16,7 @@ So Python looks in the root, or in `scripts/`, before the standard library. A pu
 file that runs before the gate has checked anything. It then forges the gate's report and exits 0,
 without changing any gate file.
 
-The dry run (`g2/g2-dry-run.json`, at `2ece33f7`, Python 3.12) planted each of the following and
+The dry run (`g2/g2-dry-run.json`, at `b702b422`, Python 3.12) planted each of the following and
 committed it. Each planted module writes a marker, prints a forged success report and exits 0.
 
 | Vector | Example | Today | With G2 | Flagged by the pre-merge path list |
@@ -30,9 +30,10 @@ committed it. Each planted module writes a marker, prints a forged success repor
 | cached bytecode beside the gate | `__pycache__/reconcile.cpython-312.pyc`, unchecked, or "checked" with the **genuine source's hash** | forged | blocked | yes |
 | compiled module beside the gate | `research/integration_v2/__init__.cpython-312-x86_64-linux-gnu.so` | forged | refused | yes |
 | package beside the gate | `research/integration_v2/reconcile/__main__.py` | forged | refused | yes |
-| module in `scripts/` (retained-source gate) | `scripts/json.py` | forged | blocked | yes |
+| module in `scripts/`, for the retained-source gate (the site's step; on the core only through C2b's child) | `scripts/json.py` | forged | blocked | yes |
 | a script that runs before the gate | `scripts/check_repository_integrity.py` planting bytecode for the gate | forged | blocked | yes |
 | an environment variable set by an earlier step | `PYTHONPATH` | forged | ignored | only through the earlier step |
+| no bytecode directory (`mktemp` fails), with cached bytecode beside the gate: an environment failure, not caused by a pull request | `TMPDIR` set to a missing directory | forged | refused | n/a |
 | startup hooks at the root (not vectors) | `sitecustomize.py`, `usercustomize.py`, `probe.pth` | not run | not run | yes or n/a |
 | **an edit of the gate itself** | `research/integration_v2/reconcile.py` | forged | **forged: outside G2** | yes |
 
@@ -57,13 +58,16 @@ runs isolated:
         shell: bash
         run: |
           python -I -B -X pycache_prefix="$(mktemp -d)" - "$PWD" --require-committed <<'PY'
-          ...the launcher, 13 lines (g2_isolation.LAUNCHER)...
+          ...the launcher, 16 lines (g2_isolation.LAUNCHER)...
           PY
 ```
 
 * `-I`: no script directory or working directory on the path, no `PYTHON*` variables, no user site.
-* `-B` and an empty `pycache_prefix`: no bytecode is read from the repository or written to it, so
-  every gate module is compiled from its source.
+* `-B` and a new, empty bytecode directory (`-X pycache_prefix="$(mktemp -d)"`): no bytecode is read
+  from the repository or written to it, so every gate module is compiled from its source.
+* The launcher's first statement refuses unless it runs isolated, with `-B`, and with that directory
+  present and empty. If `mktemp` failed, the prefix would be empty, which re-enables cached bytecode
+  (review finding F1).
 * The launcher refuses any entry beside the gate's sources other than `*.py`, `README.md` and
   `__pycache__`, which is never read. That closes the compiled-module and package cases.
 * It then puts on the import path one new directory holding only `research/integration_v2`, a link
@@ -73,14 +77,14 @@ runs isolated:
 Two control files change. V23 does not: it keeps V22's identity for the workflow, as for the
 earlier receiver test repair.
 
-* **`reconcile.py`**, +37 −3 lines:
-  * constants: the workflow's original and new SHA-256 (`bb920a82…67cf` → `bf876c35…85fc`) and the
+* **`reconcile.py`**, +42 −3 lines:
+  * constants: the workflow's original and new SHA-256 (`bb920a82…67cf` → `b4e6b4ef…5d5a`) and the
     launcher;
   * `_current_expected` maps exactly that original identity to the new one;
   * the `combined_source` transformation inserts the new step at the new place.
-* **`test_reconcile.py`**, +44 lines:
+* **`test_reconcile.py`**, +53 lines:
   * three new tests: the step order, the exact-predecessor binding, and the launcher on a stand-in
-    gate with planted files;
+    gate with planted files, including its refusals;
   * the existing test that freezes every adapted workflow at its reviewed bytes states this one
     change explicitly.
 
@@ -101,9 +105,9 @@ two files) and `g2/proposed-g2-site.patch`.
   as the current invocation ("combined tracked file census differs"). Exit codes pass through.
 * **C2b still fits.** C1 + G2 + C2b passes and reports the retained source (80 tests).
 * **C1 carries G2 only when chosen.** C1 includes G2's control edits only when the source commit
-  carries G2's exact workflow. Any other change to that workflow is refused. V23 is byte-identical
-  with and without G2.
-* **Attacks:** the table above, 23 of 23 rows as expected.
+  carries G2's exact workflow, as a regular non-executable file. Any other bytes, or the executable
+  mode, are refused. V23 is byte-identical with and without G2.
+* **Attacks:** the table above, 24 of 24 rows as expected.
 * **Site:**
   * on protected `main`, G2's step passes;
   * with a planted `scripts/json.py`, the current step (tests first, then the gate) is forged;
@@ -122,6 +126,23 @@ An independent security review is in section 7.
 * **Trusted components.** The runner image, the pinned actions and the interpreter remain trusted.
 * **The site depends on D2b.** On the site, G2 matters once the retained-source check is required.
   Until then that check is advisory.
+* **Other invocations stay as they are** (review F4). The core runs the manifest gate in more places,
+  none of them a required check:
+  * `python -m research.integration_v2.reconcile` in `pcs-reconciled-source.yml` and
+    `pcs-authority-v2-transport-diagnostic.yml`;
+  * `python -m research.integration_v2.boundary …` in many workflows, each of which calls the gate;
+  * the core's retained-source gate in `model-assurance-studio-research.yml`.
+
+  The same vectors can forge their green results. Treat none of them as evidence, and make none of
+  them required, without the same isolation.
+* **A workflow edit reopens every vector** (review F5). On C1 + G2, a pull request that restores the
+  old step and adds a root `json.py` gets a forged success. That is inside the stated exclusion, and
+  it is why the `.github` entry of the pre-merge check carries the weight. G2's new tests live in a
+  control file, so they are regression tests. The enforcement is the pinned workflow digest in
+  `reconcile.py`.
+* **Assumptions about the runner.** `PATH` (and `LD_LIBRARY_PATH`) have no empty or relative entry,
+  and `mktemp` works. Both hold on GitHub-hosted runners, and nothing from the pull request runs before
+  the step to change them. A failed `mktemp` is refused (F1).
 
 ## 5. Order and cost
 
@@ -194,7 +215,51 @@ vectors someone has thought of. G2 removes the class from the gate's own job.
 * Do not implement a `pull_request_target` workflow that runs pull-request code. Do not change live
   rulesets for G1.
 
-## 7. Independent review
+## 7. Independent review (2026-11-21)
 
-To be completed by an independent security review (a separate agent under the same restrictions);
-results recorded here when it finishes.
+A separate agent reviewed G2 at `b8bcea55`, under the same restrictions: read-only on both
+repositories, throw-away clones only, no GitHub writes, no model calls. It did not see this
+document's reasoning.
+
+**Verdict.** G2's claim holds as stated. It found no way for a pull request that leaves the workflows
+and the gate's own sources unchanged to run code before the gate's checks, or to make the gate pass on
+an unadmitted tree. There was no critical or important finding.
+
+**What it ran.**
+* 194 cases against G2's exact step on a stand-in gate:
+  * a module and a package at the root named after about 95 standard-library modules, among them
+    `os`, `runpy`, `tempfile`, `site`, `encodings` and `nt`;
+  * namespace, `__init__` and compiled-module variants of `research`;
+  * `.pth`, `sitecustomize`, `pyvenv.cfg` and `._pth` files;
+  * cached-bytecode variants, including a symlinked `__pycache__`, timestamp-matching and opt-level
+    files;
+  * entries beside the gate.
+* 185 cases against the site's step.
+* A trace of the real step: before its first `git` command, Python touched only the gate directory and
+  the manifest, loaded only the standard library and the three gate sources, and opened no `.pyc`
+  file.
+* Git behaviour driven by repository files, through a real checkout:
+  * `.gitattributes` line-ending and encoding rules either fail closed or leave the result unchanged;
+  * no filter driver can be supplied by a pull request.
+* The gate logic: nothing weakened; the binding maps only V22's exact identity; a reverted workflow
+  fails.
+* The tooling's default path is byte-identical to `8f834664`.
+* An independent rerun of the dry run: all as expected, with byte-identical patches.
+
+**Findings and what was done.**
+
+| # | Severity | Finding | Done |
+| --- | --- | --- | --- |
+| F1 | minor | If `mktemp -d` fails, the prefix is empty and cached bytecode beside the gate is used again (reproduced with `TMPDIR` set to a missing directory; not triggerable by a pull request) | **fixed**: the launcher refuses unless isolated, with `-B` and with a new empty directory; dry-run row `bytecode_directory_unavailable` |
+| F2 | minor | The inclusion check compared the workflow's bytes but not its mode (the gate itself rejects a mode change) | **fixed**: `carried` requires a regular non-executable file; dry-run checks for the mode and for other bytes |
+| F3 | info | The `scripts/json.py` row tests the isolated form, which the core runs only through C2b | **relabelled** in the table |
+| F4 | info | About 50 other core invocations of the manifest gate stay non-isolated (none required) | **documented** in section 4 |
+| F5 | info | A workflow edit reopens every vector; `.github` in the pre-merge check carries the weight | **documented** in section 4 |
+| F6 | info | The dry run left its work directory behind; the launcher leaves two temporary directories per run | **fixed** for the dry run; harmless on CI for the launcher |
+
+**Not checked** (stated by the reviewer):
+* a real GitHub-hosted runner, with its setup-python build and environment;
+* GitHub's own YAML parser (PyYAML reads exactly the reviewed launcher);
+* the pinned actions' code;
+* G2's tests under pytest on 3.12 (only 3.13 has pytest here; the same behaviour was covered on 3.12
+  directly).

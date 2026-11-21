@@ -121,7 +121,7 @@ succeed:
 
 | ID | Check | How | Expected |
 | --- | --- | --- | --- |
-| G2.1 | The branch carries exactly G2's workflow, and nothing else changed in an existing file | `git diff --name-status --no-renames bc78660b H` | `A` lines only, plus `M .github/workflows/pcs-public-full-verification.yml`; that file's SHA-256 is `bf876c35…85fc` |
+| G2.1 | The branch carries exactly G2's workflow, and nothing else changed in an existing file | `git diff --name-status --no-renames bc78660b H` | `A` lines only, plus `M .github/workflows/pcs-public-full-verification.yml`; that file's SHA-256 is `b4e6b4ef…5d5a`, mode `100644` |
 | G2.2 | C1's control commit carries G2's control edits, and only those, beyond C1's | the dry run's `c1_includes_g2_only_when_the_source_carries_its_workflow`; `git diff` of `reconcile.py` and `test_reconcile.py` against `g2/proposed-g2-core-controls.patch` | true; identical |
 | G2.3 | V23 is unchanged by G2 | the same report: `v23_identical_with_and_without_g2` | true; V23 keeps V22's identity `bb920a82…67cf` for the workflow, and `_current_expected` maps exactly that identity |
 | G2.4 | The gate step is first and isolated | the protected test `test_g2_source_policy_runs_the_gate_first_through_the_isolated_launcher`; read the step in the workflow | passes; only checkout and setup-python run before it |

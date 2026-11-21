@@ -152,15 +152,17 @@ regenerated at the commit you admit, after the withholding commit.
 ### G2. The source gates run first, with isolated imports (core and site, protected; recommended)
 * **Changes:**
   * core: in `source-policy`, the manifest gate becomes the first step after checkout and
-    setup-python, as `python -I -B -X pycache_prefix=<empty>` through a fixed 13-line launcher;
-  * `reconcile.py` (+37 −3) binds exactly this workflow successor, and `test_reconcile.py` (+44)
+    setup-python, as `python -I -B -X pycache_prefix="$(mktemp -d)"` through a fixed 16-line launcher.
+    The launcher refuses to go on unless it runs isolated, without writing bytecode and with a new,
+    empty bytecode directory;
+  * `reconcile.py` (+42 −3) binds exactly this workflow successor, and `test_reconcile.py` (+53)
     tests it. V23 is unchanged;
   * site: `open-pr-reconciliation.yml` runs `python -I scripts/check_reconciled_prs.py` first.
 * **Why:** a file a pull request adds can run before either gate checks anything and forge its
   report, without changing any gate file. The dry run reproduced 19 working vectors, among them
   `json.py`, a root package, cached bytecode carrying the genuine source's hash, a compiled module
   beside the gate, `nt.py` and `PYTHONPATH`.
-* **Evidence:** `g2/g2-dry-run.json`, all as expected:
+* **Evidence:** `g2/g2-dry-run.json`, all as expected (24 rows):
   * at C1 + G2, the same report as the current invocation (72 PRs);
   * the protected suites pass (79 tests), and with C2b too (80);
   * fail-closed with the same error without C1;
@@ -168,6 +170,10 @@ regenerated at the commit you admit, after the withholding commit.
   * the site's positive case and its planted `scripts/json.py` case behave as expected.
 
   Patches are in `g2/`. Design and limits: [`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md).
+* **Independent security review (2026-11-21):** the claim holds. Nothing ran early in about 380
+  planted-file cases, and a trace of the real step agreed. No critical or important finding. The
+  two minor findings are fixed: the launcher checks its own flags, and the inclusion check binds
+  the file mode.
 * **Does not cover:** edits of the workflow or of the gate's own sources. Review, the pre-merge check,
   or G1 covers those.
 * **Timing:** core, before C1's final regeneration. C1 then carries G2's two control edits

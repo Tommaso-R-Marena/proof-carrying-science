@@ -346,9 +346,11 @@ The full table is in [`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md).
 * C2b's child process runs in isolated mode (`-I`);
 * **G2 (protected; prepared and tested, `G2_IMPORT_ISOLATION.md`):**
   * core: the manifest gate is the first step of `source-policy`, as
-    `python -I -B -X pycache_prefix=<empty>` through a fixed launcher;
+    `python -I -B -X pycache_prefix="$(mktemp -d)"` through a fixed launcher, which checks those flags
+    itself;
   * site: the retained-source gate is first, as `python -I`;
-  * 23 of 23 dry-run rows as expected.
+  * 24 of 24 dry-run rows as expected;
+  * the independent review: the claim holds, and its two minor findings are fixed.
 
   An earlier sketch here, a launcher that appends the repository to the end of `sys.path`, is
   **not safe**: a planted `nt.py`, `research.py` or `research/__init__.py` defeats it (dry run). G2's

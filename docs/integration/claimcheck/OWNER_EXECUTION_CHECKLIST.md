@@ -286,7 +286,9 @@ new values.
   * site: committing `g2/proposed-g2-site.patch`, one control file. Meaningful together with D2b.
 * **Why:** a file a pull request adds can run before either gate checks anything, and forge the
   gate's report without changing a gate file. 19 working vectors were reproduced.
-* **Evidence:** `g2/g2-dry-run.json`, all as expected (23 rows, the site, C2b compatible).
+* **Evidence:** `g2/g2-dry-run.json`, all as expected (24 rows, the site, C2b compatible). An
+  independent security review found that the claim holds, with two minor findings, both fixed
+  (`G2_IMPORT_ISOLATION.md`, section 7).
 * **Does not cover:** edits of the workflow or of the gate's own sources: review, the pre-merge
   check, or G1.
 * **If decided after C1:** G2 needs an admission cycle of its own.

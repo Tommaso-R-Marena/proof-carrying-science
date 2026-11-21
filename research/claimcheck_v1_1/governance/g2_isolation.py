@@ -70,7 +70,7 @@ OLD_STEP = ("      - name: Exact reviewed combined-source contract\n"
 OLD_NEEDLE = "      - name: Exercise disclosure-audit unit tests\n"
 NEW_NEEDLE = "      - name: Audit revision, repository governance, and Python source\n"
 
-# The launcher, read by `python -I -B -X pycache_prefix=<empty> -` from the step's here-document.  No blank line (YAML block).
+# The launcher, read by `python -I -B -X pycache_prefix=<new empty directory> -` from the step's here-document.  No blank line (YAML block).
 LAUNCHER = '''import os, runpy, sys, tempfile
 # Refuse unless isolated (-I), not writing bytecode (-B) and reading cached bytecode only from a new, empty
 # directory (-X pycache_prefix): without that, cached bytecode beside the gate's sources could replace them.

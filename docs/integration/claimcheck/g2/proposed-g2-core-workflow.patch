@@ -1,8 +1,8 @@
 diff --git a/.github/workflows/pcs-public-full-verification.yml b/.github/workflows/pcs-public-full-verification.yml
-index bd3438a8..d2b4a71b 100644
+index bd3438a8..1a40f467 100644
 --- a/.github/workflows/pcs-public-full-verification.yml
 +++ b/.github/workflows/pcs-public-full-verification.yml
-@@ -122,6 +122,26 @@ jobs:
+@@ -122,6 +122,31 @@ jobs:
          uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
          with:
            python-version: "3.12.14"
@@ -11,6 +11,11 @@ index bd3438a8..d2b4a71b 100644
 +        run: |
 +          python -I -B -X pycache_prefix="$(mktemp -d)" - "$PWD" --require-committed <<'PY'
 +          import os, runpy, sys, tempfile
++          # Refuse unless isolated (-I), not writing bytecode (-B) and reading cached bytecode only from a new, empty
++          # directory (-X pycache_prefix): without that, cached bytecode beside the gate's sources could replace them.
++          prefix = sys.pycache_prefix
++          if not (sys.flags.isolated and sys.flags.dont_write_bytecode and prefix and os.path.isdir(prefix) and not os.listdir(prefix)):
++              sys.exit("source contract refused before the gate ran: not isolated, or no new empty bytecode directory")
 +          root = sys.argv.pop(1)
 +          gate = os.path.join(root, "research", "integration_v2")
 +          # Only the gate's reviewed sources may run before it has checked the tree. A compiled module or a package
@@ -29,7 +34,7 @@ index bd3438a8..d2b4a71b 100644
        - name: Audit revision, repository governance, and Python source
          shell: bash
          env:
-@@ -152,8 +172,6 @@ jobs:
+@@ -152,8 +177,6 @@ jobs:
            test -f CONTRIBUTING.md
            test -f docs/PUBLIC_RELEASE_GATE.md
            grep -q 'TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION' LICENSE

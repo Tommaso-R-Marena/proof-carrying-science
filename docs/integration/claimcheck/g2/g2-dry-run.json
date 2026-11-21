@@ -1,6 +1,30 @@
 {
  "all_as_expected": true,
  "attacks": {
+  "bytecode_directory_unavailable": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [
+    "TMPDIR"
+   ],
+   "files": [
+    "research/integration_v2/__pycache__/reconcile.cpython-312.pyc"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "source contract refused before the gate ran: not isolated, or no new empty bytecode directory",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
   "edit_of_the_gate_itself": {
    "as_expected": true,
    "current": {
@@ -514,6 +538,8 @@
  "c1_includes_g2_only_when_the_source_carries_its_workflow": {
   "branch_head": false,
   "control_files_differ_only_in_the_gate_and_its_test": true,
+  "executable_mode_refused": true,
+  "other_bytes_refused": true,
   "source_with_g2_workflow": true,
   "v23_identical_with_and_without_g2": true
  },
@@ -528,7 +554,7 @@
   },
   "gate_tests": {
    "exit": 0,
-   "last_line": "80 passed in 8.21s"
+   "last_line": "80 passed in 8.59s"
   },
   "retained_source_reported": true
  },
@@ -575,7 +601,7 @@
   "parser": "PyYAML 6.0.1",
   "shell": "bash --noprofile --norc -eo pipefail (GitHub's `shell: bash`)"
  },
- "generated_from_commit": "2ece33f79af98ced3bd64a055792083570e3e9c9",
+ "generated_from_commit": "b702b422df5892780d00c55ac2e4896b70213437",
  "naive_launcher_appending_the_repository": {
   "all_defeated_as_expected": true,
   "naive_nt": {
@@ -596,11 +622,11 @@
    "applies_on_top_of": "C1's reconcile.py and test_reconcile.py (built in by prepare_core_admission)",
    "lines_added_and_removed": {
     "research/integration_v2/reconcile.py": [
-     37,
+     42,
      3
     ],
     "research/integration_v2/test_reconcile.py": [
-     44,
+     53,
      0
     ]
    }
@@ -610,7 +636,7 @@
    "files": [
     ".github/workflows/pcs-public-full-verification.yml"
    ],
-   "new_sha256": "bf876c3560a90e6f5235a80005b5c9a6bace98b6c7a00106c0e2920acafd85fc",
+   "new_sha256": "b4e6b4ef2aed4378557b3e44fba3dfddd872e68392844fd524f545de7e595d5a",
    "old_sha256": "bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf"
   }
  },
@@ -633,7 +659,7 @@
   },
   "gate_tests": {
    "exit": 0,
-   "last_line": "79 passed in 8.36s"
+   "last_line": "79 passed in 8.67s"
   },
   "isolated_retained_source_gate": {
    "error": null,
