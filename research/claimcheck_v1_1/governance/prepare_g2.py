@@ -41,6 +41,7 @@ import importlib.util
 import json
 import os
 import py_compile
+import shutil
 import subprocess
 import sys
 import sysconfig
@@ -176,6 +177,18 @@ def main(argv=None) -> int:
             "source_with_g2_workflow": G2.carried(wt, P.V22_COMMIT, source), "branch_head": G2.carried(wt, P.V22_COMMIT, head),
             "control_files_differ_only_in_the_gate_and_its_test": sorted(n for n in with_g2 if with_g2[n] != plain[n]) == sorted([P.GATE, P.GATE_TEST]),
             "v23_identical_with_and_without_g2": with_g2[P.V23] == plain[P.V23]}
+        refused = {}
+        for name, damage in (("executable_mode_refused", lambda: os.chmod(wt / G2.WORKFLOW, 0o755)),
+                             ("other_bytes_refused", lambda: (wt / G2.WORKFLOW).write_bytes((wt / G2.WORKFLOW).read_bytes() + b"\n"))):
+            damage()
+            P.git(wt, "commit", "-q", "-am", f"scratch: {name}", env=P.FIXED)
+            try:
+                G2.carried(wt, P.V22_COMMIT, P.git(wt, "rev-parse", "HEAD"))
+                refused[name] = False
+            except SystemExit:
+                refused[name] = True
+            P.git(wt, "checkout", "-q", "-f", "--detach", source)
+        report["c1_includes_g2_only_when_the_source_carries_its_workflow"].update(refused)
         P.write(wt, with_g2)
         P.git(wt, "add", "-A")
         P.git(wt, "commit", "-q", "-m", "DRY RUN: C1 control commit with G2 (never pushed)", env=P.FIXED)
@@ -351,6 +364,9 @@ def main(argv=None) -> int:
         attacks["gate_bytecode_unchecked"] = run_attack("gate_bytecode_unchecked", plant_pyc("gate_bytecode_unchecked", False), old_gate)
         attacks["gate_bytecode_checked_genuine_hash"] = run_attack("gate_bytecode_checked_genuine_hash",
                                                                    plant_pyc("gate_bytecode_checked_genuine_hash", True), old_gate)
+        attacks["bytecode_directory_unavailable"] = run_attack("bytecode_directory_unavailable",
+                                                               plant_pyc("bytecode_directory_unavailable", False), old_gate,
+                                                               env_extra={"TMPDIR": str(work / "no-such-directory")})
         attacks["gate_init_extension"] = run_attack("gate_init_extension", plant_extension(
             "gate_init_extension", pkg / ("__init__" + importlib.machinery.EXTENSION_SUFFIXES[0]), "integration_v2"), old_gate)
         attacks["root_package_json"] = run_attack("root_package_json", plant_files({"json/__init__.py": forge("root_package_json")}), old_gate)
@@ -438,6 +454,7 @@ def main(argv=None) -> int:
         report["all_as_expected"] = bool(
             inc["source_with_g2_workflow"] is True and inc["branch_head"] is False
             and inc["control_files_differ_only_in_the_gate_and_its_test"] and inc["v23_identical_with_and_without_g2"]
+            and inc["executable_mode_refused"] and inc["other_bytes_refused"]
             and report["g2_step_as_read_from_the_workflow"]["equals_the_reviewed_launcher"]
             and pos["g2_step"]["genuine_success"] and pos["g2_step"]["prs_checked"] == 72 and pos["current_invocation"]["genuine_success"]
             and pos["same_report"] and pos["isolated_retained_source_gate"]["genuine_success"]
@@ -453,6 +470,7 @@ def main(argv=None) -> int:
         subprocess.run(["git", "worktree", "remove", "--force", str(wt)], cwd=P.ROOT, capture_output=True)
         if site_wt is not None:
             subprocess.run(["git", "worktree", "remove", "--force", str(site_wt)], cwd=Path(args.site).resolve(), capture_output=True)
+        shutil.rmtree(work, ignore_errors=True)
     (out / "g2-dry-run.json").write_text(json.dumps(report, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     summary = {k: report.get(k) for k in ("generated_from_commit", "all_as_expected")}
     summary["attacks"] = {k: v.get("as_expected") for k, v in report.get("attacks", {}).items()}

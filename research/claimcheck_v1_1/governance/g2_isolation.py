@@ -24,7 +24,8 @@ Any of these lets a pull request make the gate report success without changing a
 **The smallest correction.**
 
 * *Core, `source-policy`.* The gate becomes the job's first step after checkout and setup-python. It runs
-  as `python -I -B -X pycache_prefix=<new empty directory>`, through a fixed launcher of a few lines:
+  as `python -I -B -X pycache_prefix="$(mktemp -d)"`, through a fixed launcher of a few lines:
+  * the launcher first refuses to go on unless it really runs that way;
   * isolated mode: no script directory or working directory on the path, no `PYTHON*` variables, no
     user site;
   * no bytecode read from, or written to, the repository;
@@ -71,6 +72,11 @@ NEW_NEEDLE = "      - name: Audit revision, repository governance, and Python so
 
 # The launcher, read by `python -I -B -X pycache_prefix=<empty> -` from the step's here-document.  No blank line (YAML block).
 LAUNCHER = '''import os, runpy, sys, tempfile
+# Refuse unless isolated (-I), not writing bytecode (-B) and reading cached bytecode only from a new, empty
+# directory (-X pycache_prefix): without that, cached bytecode beside the gate's sources could replace them.
+prefix = sys.pycache_prefix
+if not (sys.flags.isolated and sys.flags.dont_write_bytecode and prefix and os.path.isdir(prefix) and not os.listdir(prefix)):
+    sys.exit("source contract refused before the gate ran: not isolated, or no new empty bytecode directory")
 root = sys.argv.pop(1)
 gate = os.path.join(root, "research", "integration_v2")
 # Only the gate's reviewed sources may run before it has checked the tree. A compiled module or a package
@@ -125,6 +131,9 @@ def carried(cwd, base: str, head: str) -> bool:
     """Whether commit `head` carries G2's workflow, `base` being the protected commit with V22's: read from Git objects."""
     def blob(commit):
         return subprocess.run(["git", "cat-file", "blob", f"{commit}:{WORKFLOW}"], cwd=cwd, capture_output=True, check=True).stdout
+    entry = subprocess.run(["git", "ls-tree", head, "--", WORKFLOW], cwd=cwd, capture_output=True, check=True, text=True).stdout.split()
+    if entry[:2] != ["100644", "blob"]:
+        raise SystemExit(f"{WORKFLOW} at {head} is not a regular non-executable file: not admitted")
     return included(blob(base), blob(head))
 
 
@@ -177,14 +186,23 @@ def test_g2_launcher_runs_only_the_gate_sources(tmp_path):
     for planted in ("json.py", "research.py", "nt.py", "research/__init__.py"):
         (tmp_path / planted).write_text("open(%r, 'a').write(%r)\\n" % (str(marker), planted))
 
-    def launch():
-        return subprocess.run([sys.executable, "-I", "-B", "-X", "pycache_prefix=" + str(tmp_path / "cache"), "-", str(tmp_path),
-                               "--require-committed"], input=gate.ISOLATED_GATE_LAUNCHER, capture_output=True, text=True)
-    run = launch()
+    def launch(*flags):
+        return subprocess.run([sys.executable, *flags, "-", str(tmp_path), "--require-committed"],
+                              input=gate.ISOLATED_GATE_LAUNCHER, capture_output=True, text=True)
+
+    def fresh():                      # a new, empty bytecode directory for each run, as mktemp -d gives in CI
+        cache = tmp_path / ("cache%d" % len(list(tmp_path.glob("cache*"))))
+        cache.mkdir()
+        return "pycache_prefix=" + str(cache)
+    run = launch("-I", "-B", "-X", fresh())
     assert run.returncode == 7 and json.loads(run.stdout) == ["--require-committed"] and not marker.exists()
+    # not isolated; writing bytecode; an empty prefix (as when mktemp fails); no prefix
+    for flags in (("-B", "-X", fresh()), ("-I", "-X", fresh()), ("-I", "-B", "-X", "pycache_prefix="), ("-I", "-B")):
+        run = launch(*flags)
+        assert run.returncode == 1 and "no new empty bytecode directory" in run.stderr and not marker.exists(), flags
     (pkg / "__init__.abi3.so").write_bytes(b"")
-    run = launch()
-    assert run.returncode == 1 and "refused before the gate ran" in run.stderr and not marker.exists()
+    run = launch("-I", "-B", "-X", fresh())
+    assert run.returncode == 1 and "beside the gate's sources" in run.stderr and not marker.exists()
 '''
 
 
