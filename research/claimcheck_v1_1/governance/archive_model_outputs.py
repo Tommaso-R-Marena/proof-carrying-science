@@ -46,7 +46,7 @@ def git(*args, raw=False):
 
 
 def stored_bytes(spec: str) -> bytes:
-    """The exact stored bytes: `cat-file blob` applies no textconv, filter or end-of-line conversion (`git show` may)."""
+    """The exact stored bytes: `cat-file blob` is plumbing, with no textconv, filter or end-of-line conversion whatever the local configuration."""
     return git("cat-file", "blob", spec, raw=True)
 
 
