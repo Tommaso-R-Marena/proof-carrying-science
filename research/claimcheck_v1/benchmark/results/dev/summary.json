@@ -1,0 +1,227 @@
+{
+ "split": "dev",
+ "documents": [
+  "01_pmc6972591:original",
+  "03_pmc5551083:original"
+ ],
+ "models": {
+  "gemini": "gemini-3.6-flash",
+  "openrouter": "nvidia/nemotron-3-ultra-550b-a55b:free"
+ },
+ "arms": {
+  "rules": {
+   "classes": {
+    "abstained": 9,
+    "correct_abstention": 6,
+    "correct_verification": 4,
+    "unannotated_refuted": 20,
+    "unsupported_refutation": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 9,
+    "correct_abstention": 6,
+    "correct_verification": 4,
+    "unannotated_refuted": 20,
+    "unsupported_refutation": 9
+   },
+   "proposals": 81,
+   "verify_seconds": 81.4,
+   "kernel_claims_new": 48,
+   "model_calls": 0,
+   "prompt_tokens": 0,
+   "output_tokens": 0,
+   "model_errors": 0
+  },
+  "search": {
+   "classes": {
+    "abstained": 7,
+    "correct_abstention": 9,
+    "correct_verification": 12,
+    "unannotated_proved": 4
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 7,
+    "correct_abstention": 9,
+    "correct_verification": 12,
+    "unannotated_proved": 17
+   },
+   "proposals": 39,
+   "verify_seconds": 57.4,
+   "kernel_claims_new": 32,
+   "model_calls": 0,
+   "prompt_tokens": 0,
+   "output_tokens": 0,
+   "model_errors": 0
+  },
+  "gemini": {
+   "classes": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "proposals": 0,
+   "verify_seconds": 0.2,
+   "kernel_claims_new": 0,
+   "model_calls": 2,
+   "prompt_tokens": 0,
+   "output_tokens": 0,
+   "model_errors": 2
+  },
+  "openrouter": {
+   "classes": {
+    "abstained": 10,
+    "correct_abstention": 9,
+    "correct_verification": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 10,
+    "correct_abstention": 9,
+    "correct_verification": 9
+   },
+   "proposals": 50,
+   "verify_seconds": 36.6,
+   "kernel_claims_new": 9,
+   "model_calls": 2,
+   "prompt_tokens": 11504,
+   "output_tokens": 6975,
+   "model_errors": 0
+  },
+  "gemini_lite": {
+   "classes": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "proposals": 0,
+   "verify_seconds": 0.2,
+   "kernel_claims_new": 0,
+   "model_calls": 2,
+   "prompt_tokens": 11433,
+   "output_tokens": 14,
+   "model_errors": 0
+  },
+  "union": {
+   "classes": {
+    "abstained": 10,
+    "correct_abstention": 9,
+    "correct_verification": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 10,
+    "correct_abstention": 9,
+    "correct_verification": 9
+   },
+   "proposals": 50,
+   "verify_seconds": 0.3,
+   "kernel_claims_new": 0,
+   "model_calls": 4,
+   "prompt_tokens": 11504,
+   "output_tokens": 6975,
+   "model_errors": 2
+  },
+  "agree": {
+   "classes": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "proposals": 0,
+   "verify_seconds": 0.2,
+   "kernel_claims_new": 0,
+   "model_calls": 4,
+   "prompt_tokens": 11504,
+   "output_tokens": 6975,
+   "model_errors": 2
+  },
+  "gemini+critic": {
+   "classes": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 19,
+    "correct_abstention": 9
+   },
+   "proposals": 0,
+   "verify_seconds": 0.2,
+   "kernel_claims_new": 0,
+   "model_calls": 2,
+   "prompt_tokens": 0,
+   "output_tokens": 0,
+   "model_errors": 2
+  },
+  "openrouter+critic": {
+   "classes": {
+    "abstained": 10,
+    "correct_abstention": 9,
+    "correct_verification": 9
+   },
+   "classes_without_statistic_wording_gate": {
+    "abstained": 10,
+    "correct_abstention": 9,
+    "correct_verification": 9
+   },
+   "proposals": 50,
+   "verify_seconds": 0.3,
+   "kernel_claims_new": 0,
+   "model_calls": 4,
+   "prompt_tokens": 11504,
+   "output_tokens": 6975,
+   "model_errors": 2
+  }
+ },
+ "gold": {
+  "items": 28,
+  "derivable_consistent": 19,
+  "derivable_inconsistent": 0,
+  "derivable_conditional": 0,
+  "not_derivable": 9,
+  "numeric_tokens_in_documents": 603
+ },
+ "ledger": {
+  "max_calls": {
+   "gemini": 16,
+   "openrouter": 4
+  },
+  "network_calls": {
+   "gemini": 16,
+   "openrouter": 2
+  },
+  "cache_hits": {
+   "gemini": 2,
+   "openrouter": 4
+  },
+  "prompt_tokens": {
+   "gemini": 11433,
+   "openrouter": 11504
+  },
+  "output_tokens": {
+   "gemini": 14,
+   "openrouter": 6975
+  },
+  "seconds": {
+   "gemini": 35.99,
+   "openrouter": 244.94
+  },
+  "failures": {
+   "gemini": 14,
+   "openrouter": 0
+  }
+ },
+ "verifier": {
+  "fresh_receipts": 166,
+  "cache_hits": 154,
+  "kernel_checked_claims": 89,
+  "verify_wall_seconds": 174.0
+ },
+ "wall_seconds": 656.3
+}

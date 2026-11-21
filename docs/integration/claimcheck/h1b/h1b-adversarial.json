@@ -1,0 +1,434 @@
+{
+ "what": "Adversarial tests of H1-b in throw-away worktrees. Nothing in the branch changed; nothing pushed; only a local placeholder tag, deleted at the end. Not an approval.",
+ "generated_from_commit": "ad43f21c6a177e066788c1cb11b4f9730d169791",
+ "research_head": "0ff8d553213ad6553e5bbe846ffae5d6249525ec",
+ "tests": {
+  "1_retained_tree_equals_reviewed_tree": {
+   "retained_tree": "7b255a694590e25f7d468913031556a706258ff7",
+   "source_tree": "7b255a694590e25f7d468913031556a706258ff7",
+   "snapshot_tree": "7b255a694590e25f7d468913031556a706258ff7",
+   "passed": true
+  },
+  "2_no_file_introduced_or_removed": {
+   "files": 10095,
+   "snapshot_tree_id_equals_source_tree_id": true,
+   "files_added_to_protected_main": 2048,
+   "existing_files_changed_or_removed_against_protected_main": [],
+   "passed": true
+  },
+  "3_required_ancestors_preserved": {
+   "ancestors": {
+    "registry protected main": true,
+    "previous intake": true,
+    "original PR 197 head": true,
+    "original PR 196 head": true
+   },
+   "gates_on_the_control_commit": {
+    "manifest_gate": {
+     "exit": 0,
+     "passed": true,
+     "error": null,
+     "prs_checked": 72,
+     "source_bindings_checked": 4781
+    },
+    "retained_source_gate": {
+     "exit": 0,
+     "passed": true,
+     "error": null
+    }
+   },
+   "passed": true
+  },
+  "4_no_ancestry_to_the_model_response_commits": {
+   "withheld_blobs_checked": 22,
+   "clean_h1b": {
+    "commits_beyond_protected_history": 2,
+    "output_commits_reachable": [],
+    "withheld_blobs_reachable": []
+   },
+   "development_h1a_positive_control": {
+    "commits_beyond_protected_history": 70,
+    "output_commits_reachable": [
+     "f17649ca",
+     "dbe31d72",
+     "87900a17"
+    ],
+    "withheld_blobs_reachable": [
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-1e8ad61a6e3faa4eaf1bc52921e56310.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-53f0b8dc9ac77eba7f898543c21f4c37.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-577d0e8f8905b04522b4d0c757c42f55.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-87eae271494c6a4ebbbb053b9751900e.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-d580abe22443a5872e9def9b68574829.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-072fd71b0a3c6606dbb8fb43c5b7d26c.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-12be371fe22277fa01f99abfeb87f53e.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-17715ca45af691c34ef8a8c0bc85a198.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-18110e8a521b020d18545c877a75b8aa.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-1c3afee56b2ddccbd176ecaa5a512f36.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-29a22f69a6f46aa9146cd9e2d1413059.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-3b51519022c540c84b83f3e8617e51e5.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-5c4b0fd6bb3a55fa4a38ec6f5cdd325a.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-6e3e5e252db91d589018f9013f63d355.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-853432c545791d4626e9627a4d3797de.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-a6b8ee574872a57b4bfb67ddd0d1aa5f.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-bf4257962a9b24b44dc631d90a94963a.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-c483f8573d94bc49987b0e9b9dda21ba.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-e6a7218a101a1e14dba7494bb9098be5.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-e79158a844e4ec0f32802d618195f132.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-f11296a392ed9ab8b4b119e8a8e490fd.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-fc114c12ab17f698c2660a44a88dedc1.json"
+    ]
+   },
+   "passed": true
+  },
+  "5_changed_file_fails": {
+   "uncommitted": {
+    "exit": 1,
+    "passed": false,
+    "error": "combined source bytes or mode differ: research/claimcheck_v1/formal/ClaimCheck.lean",
+    "prs_checked": null,
+    "source_bindings_checked": null
+   },
+   "committed": {
+    "manifest_gate": {
+     "exit": 1,
+     "passed": false,
+     "error": "combined source bytes or mode differ: research/claimcheck_v1/formal/ClaimCheck.lean",
+     "prs_checked": null,
+     "source_bindings_checked": null
+    },
+    "retained_source_gate": {
+     "exit": 1,
+     "passed": false,
+     "error": "AssertionError: Qualified non-control source bytes, modes or census differ"
+    }
+   },
+   "passed": true
+  },
+  "6_substituted_retained_commit_fails": {
+   "tag_on_the_h1a_commit_same_tree": {
+    "exit": 1,
+    "passed": false,
+    "error": "AssertionError: Retained source tag differs"
+   },
+   "tag_on_a_forged_commit_same_tree_and_parents": {
+    "exit": 1,
+    "passed": false,
+    "error": "AssertionError: Retained source tag differs"
+   },
+   "retained_entry_and_tag_both_retargeted": {
+    "manifest_gate": {
+     "exit": 1,
+     "passed": false,
+     "error": "combined source bytes or mode differ: scripts/check_reconciled_prs.py",
+     "prs_checked": null,
+     "source_bindings_checked": null
+    },
+    "retained_source_gate": {
+     "exit": 0,
+     "passed": true,
+     "error": null
+    }
+   },
+   "passed": true
+  },
+  "7_moved_or_deleted_tag_fails": {
+   "tag_moved_to_the_source_commit": {
+    "exit": 1,
+    "passed": false,
+    "error": "AssertionError: Retained source tag differs"
+   },
+   "tag_moved_to_the_snapshot": {
+    "exit": 1,
+    "passed": false,
+    "error": "AssertionError: Retained source tag differs"
+   },
+   "tag_deleted": {
+    "exit": 1,
+    "passed": false,
+    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-jjuqabw1/wt', 'rev-parse', 'refs/tags/pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag^{commit}']' returned non-zero exit status 128."
+   },
+   "passed": true
+  },
+  "8_altered_predecessor_or_broken_ancestry_fails": {
+   "previous_intake_missing": {
+    "exit": 1,
+    "passed": false,
+    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-jjuqabw1/wt', 'merge-base', '--is-ancestor', '7c119370990ca6917f09328aab0abea24584d969', '3cf62938e0d361df46a1bb876fb52c192903eb9a']' returned non-zero exit status 1."
+   },
+   "previous_intake_forged_same_tree_no_history": {
+    "exit": 1,
+    "passed": false,
+    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-jjuqabw1/wt', 'merge-base', '--is-ancestor', '7c119370990ca6917f09328aab0abea24584d969', '453e9bbec6e73bfee95ff1f9528178ac55f5eca0']' returned non-zero exit status 1."
+   },
+   "predecessor_manifest_edited": {
+    "exit": 1,
+    "passed": false,
+    "error": "combined source bytes or mode differ: docs/integration/2026-11-05/RECONCILIATION_V22.json",
+    "prs_checked": null,
+    "source_bindings_checked": null
+   },
+   "passed": true
+  },
+  "9_changed_protected_control_file_fails": {
+   "pinned_control_files_committed_edit": {
+    "scripts/check_reconciled_prs.py": {
+     "manifest_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "combined source bytes or mode differ: scripts/check_reconciled_prs.py",
+      "prs_checked": null,
+      "source_bindings_checked": null
+     }
+    },
+    "scripts/test_reconciled_prs.py": {
+     "manifest_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "combined source bytes or mode differ: scripts/test_reconciled_prs.py",
+      "prs_checked": null,
+      "source_bindings_checked": null
+     }
+    },
+    "docs/integration/2026-11-14/RECONCILIATION_V23.json": {
+     "manifest_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "reconciliation manifest differs from fixed reviewed digest",
+      "prs_checked": null,
+      "source_bindings_checked": null
+     }
+    },
+    "docs/integration/2026-11-05/RECONCILIATION_V22.json": {
+     "manifest_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "combined source bytes or mode differ: docs/integration/2026-11-05/RECONCILIATION_V22.json",
+      "prs_checked": null,
+      "source_bindings_checked": null
+     }
+    },
+    ".github/workflows/pcs-public-full-verification.yml": {
+     "manifest_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "reviewed source identity differs: .github/workflows/pcs-public-full-verification.yml",
+      "prs_checked": null,
+      "source_bindings_checked": null
+     }
+    }
+   },
+   "pinned_control_files_rejected": true,
+   "gate_source_files_committed_edit": {
+    "research/integration_v2/reconcile.py": {
+     "manifest_gate": {
+      "exit": 0,
+      "passed": true,
+      "error": null,
+      "prs_checked": 72,
+      "source_bindings_checked": 4781
+     },
+     "retained_source_gate": {
+      "exit": 0,
+      "passed": true,
+      "error": null
+     },
+     "g1_guard_would_fail": true
+    },
+    "research/integration_v2/test_reconcile.py": {
+     "manifest_gate": {
+      "exit": 0,
+      "passed": true,
+      "error": null,
+      "prs_checked": 72,
+      "source_bindings_checked": 4781
+     },
+     "retained_source_gate": {
+      "exit": 0,
+      "passed": true,
+      "error": null
+     },
+     "g1_guard_would_fail": true
+    },
+    "research/integration_v2/boundary.py": {
+     "manifest_gate": {
+      "exit": 0,
+      "passed": true,
+      "error": null,
+      "prs_checked": 72,
+      "source_bindings_checked": 4781
+     },
+     "retained_source_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "AssertionError: Qualified non-control source bytes, modes or census differ"
+     },
+     "g1_guard_would_fail": true
+    },
+    "research/integration_v2/__init__.py": {
+     "manifest_gate": {
+      "exit": 0,
+      "passed": true,
+      "error": null,
+      "prs_checked": 72,
+      "source_bindings_checked": 4781
+     },
+     "retained_source_gate": {
+      "exit": 1,
+      "passed": false,
+      "error": "AssertionError: Qualified non-control source bytes, modes or census differ"
+     },
+     "g1_guard_would_fail": true
+    }
+   },
+   "gate_source_files_neither_gate_detects": [
+    "research/integration_v2/reconcile.py",
+    "research/integration_v2/test_reconcile.py"
+   ],
+   "g1_guard_would_flag_every_gate_source_edit": true,
+   "uncommitted_edit_of_the_gate_rejected": true,
+   "note": "Holds for every pinned control file. It does not hold for the files listed under gate_source_files_neither_gate_detects: the manifest gate treats its own sources as trusted configuration (reconcile.py, _snapshot), and the retained-source gate lists the same files as controls, so a committed edit to them passes both gates. This predates H1-b and is the same under H1-a; only review of the control commit, the pre-merge gate-definition check, or G1 catches it.",
+   "passed": false
+  },
+  "10_successor_manifest_enforces_the_same_authority": {
+   "snapshot_entries": 10091,
+   "entries_that_differ_between_h1a_and_h1b": [
+    "scripts/check_reconciled_prs.py"
+   ],
+   "all_other_manifest_fields_equal": {
+    "additional_review": true,
+    "control_paths": true,
+    "format": true,
+    "parent_heads": true,
+    "pcs_authority": true,
+    "predecessor_manifest": true,
+    "protected_main": true,
+    "prs": true,
+    "release_ready": true,
+    "reviewer": true,
+    "scope": true,
+    "superseded_closed_prs": true,
+    "workflow_adaptations": true,
+    "workflow_predecessor_tree": true
+   },
+   "gate_differs_only_in_the_manifest_digest": true,
+   "retained_entry_differs_only_in_the_commit_id": true,
+   "gate_test_identical": true,
+   "prs_checked_on_the_control_commit": 72,
+   "passed": true
+  },
+  "11_squash_onto_protected_main_passes_both_gates": {
+   "squash_commit_parents": [
+    "bc78660b5fac857fce3873eb6cda0445d1903da1"
+   ],
+   "manifest_gate": {
+    "exit": 0,
+    "passed": true,
+    "error": null,
+    "prs_checked": 72,
+    "source_bindings_checked": 4781
+   },
+   "retained_source_gate": {
+    "exit": 0,
+    "passed": true,
+    "error": null
+   },
+   "retained_and_snapshot_are_not_on_main": true,
+   "passed": true
+  },
+  "12_v24_does_not_reintroduce_the_development_history": {
+   "research_tree_contains_withheld_blobs_before_withholding": 22,
+   "research_withholding_simulated": true,
+   "v24_clean": {
+    "commits_beyond_protected_history": 2,
+    "output_commits_reachable": [],
+    "withheld_blobs_reachable": []
+   },
+   "v24_development_positive_control": {
+    "commits_beyond_protected_history": 80,
+    "output_commits_reachable": [
+     "f17649ca",
+     "dbe31d72",
+     "87900a17"
+    ],
+    "withheld_blobs_reachable": [
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-1e8ad61a6e3faa4eaf1bc52921e56310.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-53f0b8dc9ac77eba7f898543c21f4c37.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-577d0e8f8905b04522b4d0c757c42f55.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-87eae271494c6a4ebbbb053b9751900e.json",
+     "research/claimcheck_v1/benchmark/results/dev/model_responses/openrouter-d580abe22443a5872e9def9b68574829.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-072fd71b0a3c6606dbb8fb43c5b7d26c.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-12be371fe22277fa01f99abfeb87f53e.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-17715ca45af691c34ef8a8c0bc85a198.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-18110e8a521b020d18545c877a75b8aa.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-1c3afee56b2ddccbd176ecaa5a512f36.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-29a22f69a6f46aa9146cd9e2d1413059.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-3b51519022c540c84b83f3e8617e51e5.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-5c4b0fd6bb3a55fa4a38ec6f5cdd325a.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-6e3e5e252db91d589018f9013f63d355.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-853432c545791d4626e9627a4d3797de.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-a6b8ee574872a57b4bfb67ddd0d1aa5f.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-bf4257962a9b24b44dc631d90a94963a.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-c483f8573d94bc49987b0e9b9dda21ba.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-e6a7218a101a1e14dba7494bb9098be5.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-e79158a844e4ec0f32802d618195f132.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-f11296a392ed9ab8b4b119e8a8e490fd.json",
+     "research/claimcheck_v1/benchmark/results/heldout/model_responses/openrouter-fc114c12ab17f698c2660a44a88dedc1.json"
+    ]
+   },
+   "intake_chain_preserved_in_v24_clean": {
+    "registry protected main": true,
+    "previous intake": true,
+    "original PR 197 head": true,
+    "original PR 196 head": true,
+    "C1 retained commit": true
+   },
+   "passed": true
+  }
+ },
+ "source_commit_tested": "ffd13fe8aadca256146249dd8261d7d988105e42",
+ "withholding_simulated": true,
+ "retained": {
+  "clean": {
+   "history": "clean",
+   "commit": "926813fa69c3ce7f0ea704bc6dde8cf51267fc30",
+   "tree": "7b255a694590e25f7d468913031556a706258ff7",
+   "parents": [
+    "a476a04470f25e4b4b52d4d15591b25b85b909f9",
+    "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
+   ],
+   "source_commit": "ffd13fe8aadca256146249dd8261d7d988105e42",
+   "snapshot": {
+    "commit": "a476a04470f25e4b4b52d4d15591b25b85b909f9",
+    "tree": "7b255a694590e25f7d468913031556a706258ff7",
+    "parents": [
+     "bc78660b5fac857fce3873eb6cda0445d1903da1"
+    ]
+   }
+  },
+  "development": {
+   "history": "development",
+   "commit": "331135c976cd639892aeb4bf5f1eb88703579026",
+   "tree": "7b255a694590e25f7d468913031556a706258ff7",
+   "parents": [
+    "ffd13fe8aadca256146249dd8261d7d988105e42",
+    "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
+   ],
+   "source_commit": "ffd13fe8aadca256146249dd8261d7d988105e42"
+  }
+ },
+ "positive": {
+  "manifest_gate": {
+   "exit": 0,
+   "passed": true,
+   "error": null,
+   "prs_checked": 72,
+   "source_bindings_checked": 4781
+  },
+  "retained_source_gate": {
+   "exit": 0,
+   "passed": true,
+   "error": null
+  }
+ },
+ "all_passed": false
+}

@@ -1,0 +1,164 @@
+name: PCS ClaimCheck research checks (v1 and v1.1, actual Lean 4.28)
+
+# Research CI. It grants no production authority and does not replace the protected
+# source-admission gate.
+#
+# It runs on every pull request so that the aggregate job `claimcheck-required` always reports a
+# result: a path filter on the workflow would leave a required check pending forever on pull
+# requests that do not touch ClaimCheck. The expensive jobs run only when a ClaimCheck path, or the
+# Lean bootstrap they use, changed; `claimcheck-required` fails unless change detection succeeded and,
+# when it found a relevant change, both jobs succeeded (a skipped, cancelled or failed job fails it).
+# Only `claimcheck-required` is meant to be a required check (an owner decision).
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      relevant: ${{ steps.diff.outputs.relevant }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - id: diff
+        name: Did this change touch ClaimCheck or what it runs on?
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # the checked-out commit is GitHub's merge of the pull request into its base; first parent = base
+          test "$(git rev-list --parents -n 1 HEAD | wc -w)" = 3
+          # --no-renames: a file moved out of ClaimCheck is listed under its old path too
+          git diff --no-renames --name-only HEAD^1 HEAD > "$RUNNER_TEMP/changed.txt"
+          if grep -E '^(research/claimcheck_v1/|research/claimcheck_v1_1/|scripts/activate_lean_428\.sh$|\.github/workflows/pcs-claimcheck-v1\.yml$)' "$RUNNER_TEMP/changed.txt"; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No ClaimCheck path changed."
+            echo "relevant=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  offline-and-kernel:
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          # full history and tags: tests/test_retained_history.py builds the proposed retained commit from protected main
+          # and the previous intake (reachable only through its tag)
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+      - name: Software and held-out inputs match their frozen digests
+        run: python -m research.claimcheck_v1.benchmark.freeze check
+      - name: Offline tests (no Lean, no network, no API keys)
+        run: python -m unittest discover -s research/claimcheck_v1/tests -v
+      - name: Install checksum-pinned Lean 4.28.0
+        shell: bash
+        run: source scripts/activate_lean_428.sh
+      - name: Live kernel controls and oracle/checker differential fuzz
+        run: python -m research.claimcheck_v1.check_live --fuzz 300
+      - name: Independently replay one committed held-out evidence bundle
+        run: |
+          python research/claimcheck_v1/replay_independent.py \
+            research/claimcheck_v1/benchmark/results/bundles/08_pmc6238128 \
+            --checker-sha256 "$(cut -d' ' -f1 research/claimcheck_v1/formal/ClaimCheck.lean.sha256)"
+      - name: The same bundle through the checked v1 replay (frozen replayer plus the claim-binding checks it lacks)
+        run: |
+          python research/claimcheck_v1_1/replay_v1_bundle_checked.py \
+            research/claimcheck_v1/benchmark/results/bundles/08_pmc6238128 \
+            --checker-sha256 "$(cut -d' ' -f1 research/claimcheck_v1/formal/ClaimCheck.lean.sha256)"
+      - name: v1.1 offline tests (policy, records, statistics; runner incl. forged and altered proof files; no Lean, no network)
+        run: python -m unittest discover -s research/claimcheck_v1_1/tests -v
+      - name: v1.1 live checks with the real kernel (end to end, replay, tampering, fail-closed, runner incl. the reported forgery)
+        run: python -m research.claimcheck_v1_1.check_live_v11
+      - name: Contamination safeguards reject a v1 pool record and a copy of a used article
+        run: |
+          python - <<'PY'
+          import json
+          from research.claimcheck_v1_1.prospective.contamination import V1, check
+          pool = json.loads((V1 / "candidates.json").read_text())
+          assert check(pool[0]), "a v1 pool record must be excluded"
+          d = V1 / "heldout" / "06_pmc5980576"
+          assert check({"zenodo": "0", "title": "x"}, (d / "article.mutated.txt").read_text(), None), "a copy of a used article must be excluded"
+          assert check({"zenodo": "0", "title": "Thermal tolerance of limpets"}, "new text " * 200, b"a,b\n1,2\n") == []
+          PY
+      - name: Post-run analysis reproduces from committed receipts (no Lean, no network)
+        run: |
+          python -m research.claimcheck_v1.tools.analyze \
+            --results research/claimcheck_v1/benchmark/results/heldout --out "$RUNNER_TEMP/analysis.json"
+
+  meaning-theorems:
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Checker lemmas and Mathlib meaning theorems, with axiom audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          source scripts/activate_lean_428.sh
+          cd research/claimcheck_v1/formal
+          lake exe cache get
+          lake build ClaimCheck ClaimCheckReal
+          cat > "$RUNNER_TEMP/audit.lean" <<'LEAN'
+          import ClaimCheckReal
+          #print axioms PCS.ClaimCheck.runAll_eq_map
+          #print axioms PCS.ClaimCheck.run_of_runAll
+          #print axioms PCS.ClaimCheck.sqrtInInterval_iff
+          #print axioms PCS.ClaimCheck.within_rat_iff
+          #print axioms PCS.ClaimCheck.within_sqrt_iff
+          #print axioms PCS.ClaimCheck.sumQ_eq_sum
+          #print axioms PCS.ClaimCheck.meanQ_eq
+          #print axioms PCS.ClaimCheck.ssQ_eq
+          #print axioms PCS.ClaimCheck.pearson_signed_sqrt
+          LEAN
+          lake env lean "$RUNNER_TEMP/audit.lean" | tee "$RUNNER_TEMP/axioms.txt"
+          test "$(wc -l < "$RUNNER_TEMP/axioms.txt")" = 9
+          ! grep -v "depends on axioms: \[propext, Classical.choice, Quot.sound\]$" "$RUNNER_TEMP/axioms.txt"
+
+  claimcheck-required:
+    needs: [changes, offline-and-kernel, meaning-theorems]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require both ClaimCheck jobs whenever a ClaimCheck path changed
+        shell: bash
+        env:
+          CHANGES: ${{ needs.changes.result }}
+          RELEVANT: ${{ needs.changes.outputs.relevant }}
+          OFFLINE: ${{ needs.offline-and-kernel.result }}
+          MEANING: ${{ needs.meaning-theorems.result }}
+        run: |
+          set -euo pipefail
+          test "$CHANGES" = success || { echo "::error::change detection did not succeed ($CHANGES)"; exit 1; }
+          if [ "$RELEVANT" = true ]; then
+            test "$OFFLINE" = success || { echo "::error::offline-and-kernel did not succeed ($OFFLINE)"; exit 1; }
+            test "$MEANING" = success || { echo "::error::meaning-theorems did not succeed ($MEANING)"; exit 1; }
+            echo "ClaimCheck paths changed; offline-and-kernel and meaning-theorems both succeeded."
+          elif [ "$RELEVANT" = false ]; then
+            echo "No ClaimCheck path changed; the ClaimCheck jobs were not needed."
+          else
+            echo "::error::change detection gave no answer ($RELEVANT)"
+            exit 1
+          fi

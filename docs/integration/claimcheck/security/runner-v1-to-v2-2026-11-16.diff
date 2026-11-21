@@ -1,0 +1,212 @@
+diff --git a/research/claimcheck_v1_1/claimcheck_kernel_runner.py b/research/claimcheck_v1_1/claimcheck_kernel_runner.py
+index 973adf1e..cf4a7a44 100644
+--- a/research/claimcheck_v1_1/claimcheck_kernel_runner.py
++++ b/research/claimcheck_v1_1/claimcheck_kernel_runner.py
+@@ -10,19 +10,30 @@ proof file the ClaimCheck web page lets you download.  A browser can calculate;
+ What it checks before trusting a "pass":
+   * the file starts with the reviewed checker (its SHA-256 is fixed below; override with
+     --checker-sha256 only if you obtained another reviewed digest independently);
+-  * the generated part contains no escape hatch (sorry, native_decide, axiom, unsafe, ...);
++  * the generated part is exactly in the form the ClaimCheck generator writes: one data numeral,
++    claim records built from literals only, one batch theorem, and one fixed-form theorem per claim
++    proved from the batch theorem.  Anything else -- another definition (for example one that
++    shadows `run`), a macro, a comment, an option, a different proof, text after the last theorem --
++    is refused before Lean is started;
+   * `lean` is version 4.28.0, exits 0, prints nothing on stderr, and prints exactly one axiom
+     report per claim theorem, in order, naming only the three standard axioms.
+ 
+-What a pass means: each theorem `run pcs_src pcs_c<i> = <outcome>` in the file is true of the data
+-bytes embedded in the file.  The expected outcome (matches / does not match the printed number) is
+-part of the theorem text; this program reports it.  A pass says nothing about whether a sentence in
+-a paper means that statement, or whether the bytes are the authors' data.
++Receipt schema pcs-claimcheck-kernel-run-v2.  The previous runner (schema v1) checked the
++generated part only for a few forbidden words and accepted a hand-written proof file that defined
++its own `run`; do not rely on v1 receipts for files you did not generate yourself.
++
++What a pass means, and what it does not:
++  * it verifies the supplied mathematical obligation: each theorem `run pcs_src pcs_c<i> = <outcome>`
++    in the file, about the reviewed checker's `run`, is true of the data bytes embedded in the file;
++  * it does not verify that the obligation faithfully represents a paper: whether a sentence means
++    that statement, whether the reported value is the paper's number, and whether the bytes are the
++    authors' data are not established by any kernel run.
+ """
+ import argparse
+ import datetime
+ import hashlib
+ import json
++import math
+ import os
+ import platform
+ import re
+@@ -35,7 +46,117 @@ REVIEWED_CHECKER_SHA256 = "35c83b283b18f50c3fa9d1bb3f42ec0beca1d6a7458d14ebf7180
+ MARKER = "\n-- ===== generated obligations (data numeral, claims, expected outcomes) =====\n"
+ FORBIDDEN = ("sorry", "native_decide", "axiom ", "unsafe ", "implemented_by", "extern ", "partial ", "ofReduceBool")
+ ALLOWED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
+-SCHEMA = "pcs-claimcheck-kernel-run-v1"
++SCHEMA = "pcs-claimcheck-kernel-run-v2"
++
++
++# ---- strict grammar of the generated part: exactly the language of claimcheck_v1/lean.py::batch_tail ----
++# Canonical: every value has one spelling, the generator's.  The same language is the image of
++# `renderTail` in research/claimcheck_assurance_v1/formal/ClaimCheckAssurance/Claims.lean, where the
++# Lean parser is proved to accept exactly it (agreement with this parser is tested, not proved).
++
++NAT = r"(?:0|[1-9][0-9]*)"
++INT = r"(?:0|-?[1-9][0-9]*)"                      # no "-0"
++BYTE = r"(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])"
++SAFE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _.,:;()[]%/+-#=<>&*!?@^|~"
++SAFE = r"[A-Za-z0-9 _.,:;()\[\]%/+\-#=<>&*!?@^|~]*"
++BYTES = rf'(?:b "{SAFE}"|\[{BYTE}(?:, {BYTE})*\])'   # a list only when some byte is not a safe character (checked below)
++RAT = rf"\(\({INT} : Rat\) / [1-9][0-9]*\)"         # in lowest terms (checked below)
++CMP = r"\.(?:eq|ne|lt|le|gt|ge)"
++COND = rf"(?:\.textEq \({BYTES}\) \({BYTES}\)|\.textNe \({BYTES}\) \({BYTES}\)|\.num \({BYTES}\) {CMP} {RAT})"
++CONDS = rf"\[(?:{COND}(?:, {COND})*)?\]"
++STAT = (rf"(?:\.count|\.sum|\.mean|\.median|\.min|\.max|\.varSample|\.sdSample|\.sdPop|\.sem|\.share {CONDS}"
++        rf"|\.pearson \({BYTES}\)|\.olsSlope \({BYTES}\)|\.olsIntercept \({BYTES}\))")
++COLUMN = rf"(?:none|some \({BYTES}\))"
++NALIST = rf"\[(?:{BYTES}(?:, {BYTES})*)?\]"
++VALUE = rf"(?:\(\.rat {RAT}\)|\(\.sqrt \((?:-1|0|1) : Int\) \(\({NAT} : Rat\) / [1-9][0-9]*\)\))"
++UNDEFINED = (r"(?:sourceNotWellFormed|csvMalformed|columnNotFound|nonNumericCell|emptySelection|degenerate"
++             r"|badReportedLiteral|badScale|missingColumn)")
++OUTCOME = rf"(?:\.undefined \.{UNDEFINED}|\.checked \.(?:consistent|inconsistent) {VALUE} {NAT} {NAT})"
++
++PREAMBLE = "open PCS.ClaimCheck\n\n"
++SRC = re.compile(r"def pcs_src : Source := ⟨0x([0-9a-f]+), (0|[1-9][0-9]*)⟩\n\n")
++OUTCOME_RE = re.compile(OUTCOME)
++MAX_CLAIMS = 256
++MAX_DATA_BYTES = 65536          # the generator's bound (claimcheck_v1/lean.py) and MAXD of the Lean header model
++
++
++class NotCanonical(ValueError):
++    pass
++
++
++_SAFE_BYTES = frozenset(SAFE_CHARS.encode("ascii"))
++_QUOTED = re.compile(r'b "[^"]*"')
++_RAT_LITERAL = re.compile(r"\(\((-?[0-9]+) : Rat\) / ([0-9]+)\)")
++_BYTE_LIST = re.compile(r"\[([0-9]+(?:, [0-9]+)*)\]")
++
++
++def _canonical_literals(text: str) -> None:
++    """The literals of one claim or outcome must be the generator's spelling of their values."""
++    bare = _QUOTED.sub('b ""', text)          # string contents cannot hide or imitate a literal
++    for num, den in _RAT_LITERAL.findall(bare):
++        if math.gcd(abs(int(num)), int(den)) != 1:
++            raise NotCanonical("a fraction is not in lowest terms")
++    for body in _BYTE_LIST.findall(bare):
++        if all(int(v) in _SAFE_BYTES for v in body.split(", ")):
++            raise NotCanonical("a byte string that has a quoted spelling is written as a list of numbers")
++
++
++def _claim(i: int):
++    return re.compile(rf"def pcs_c{i} : Claim :=\n  \{{ column := {COLUMN},\n    filter := {CONDS},\n    stat := {STAT},\n"
++                      rf"    naTokens := {NALIST},\n    scale := {RAT},\n    reported := {BYTES} \}}\n\n")
++
++
++def parse_tail(tail: str):
++    """Return (data bytes, [outcome literal per claim]) or raise NotCanonical."""
++    if not tail.startswith(PREAMBLE):
++        raise NotCanonical("the generated part does not start with the fixed preamble")
++    pos = len(PREAMBLE)
++    m = SRC.match(tail, pos)
++    if not m:
++        raise NotCanonical("no canonical data numeral")
++    digits, size = m.group(1), int(m.group(2))
++    if size > MAX_DATA_BYTES:
++        raise NotCanonical(f"the embedded data has {size} bytes; this runner accepts at most {MAX_DATA_BYTES}")
++    if not ((size == 0 and digits == "0") or (size > 0 and len(digits) == 2 * size)):
++        raise NotCanonical("the data numeral is not the two-digits-per-byte dump of a file of the stated length")
++    data = bytes.fromhex(digits) if size else b""
++    pos = m.end()
++    n = 0
++    while n < MAX_CLAIMS:
++        m = _claim(n).match(tail, pos)
++        if not m:
++            break
++        _canonical_literals(m.group(0))
++        pos, n = m.end(), n + 1
++    if n == 0:
++        raise NotCanonical("no claim in canonical form")
++    if n == MAX_CLAIMS and _claim(n).match(tail, pos):
++        raise NotCanonical(f"more than {MAX_CLAIMS} claims in one file; this runner accepts at most {MAX_CLAIMS}")
++    head = "theorem pcs_batch : runAll pcs_src [" + ", ".join(f"pcs_c{i}" for i in range(n)) + "] =\n    ["
++    if not tail.startswith(head, pos):
++        raise NotCanonical("the batch theorem is missing or does not list exactly the claims defined")
++    pos += len(head)
++    outcomes = []
++    for i in range(n):
++        m = OUTCOME_RE.match(tail, pos)
++        if not m:
++            raise NotCanonical(f"outcome {i} of the batch theorem is not a literal outcome")
++        _canonical_literals(m.group(0))
++        outcomes.append(m.group(0))
++        pos = m.end()
++        sep = ",\n    " if i + 1 < n else "] := by decide +kernel\n\n"
++        if not tail.startswith(sep, pos):
++            raise NotCanonical("the batch theorem is not in canonical form")
++        pos += len(sep)
++    for i, outcome in enumerate(outcomes):
++        theorem = (f"theorem pcs_claim_{i} : run pcs_src pcs_c{i} = {outcome} :=\n"
++                   f"  run_of_runAll pcs_batch {i} rfl rfl\n#print axioms pcs_claim_{i}\n\n")
++        if not tail.startswith(theorem, pos):
++            raise NotCanonical(f"theorem pcs_claim_{i} is missing, altered or states another outcome than the batch theorem")
++        pos += len(theorem)
++    if pos != len(tail):
++        raise NotCanonical("there is text after the last theorem")
++    return data, outcomes
+ 
+ 
+ def sha(data):
+@@ -67,21 +188,14 @@ def run(path, lean, checker_sha256, timeout):
+     bad = [w.strip() for w in FORBIDDEN if w in stripped]
+     if bad:
+         return fail(report, "the generated part contains a forbidden token: " + ", ".join(bad))
+-    m = re.search(r"def pcs_src : Source := ⟨0x([0-9a-f]+), ([0-9]+)⟩", tail)
+-    if not m:
+-        return fail(report, "no embedded data numeral found")
+-    size = int(m.group(2))
+-    digits = m.group(1)
+     try:
+-        data = bytes.fromhex(digits.rjust(2 * size, "0")) if size else b""
+-    except ValueError:
+-        return fail(report, "the embedded data numeral is malformed")
+-    if len(data) != size:
+-        return fail(report, "the embedded data numeral does not fit its stated length")
++        data, outcomes = parse_tail(tail)
++    except NotCanonical as exc:
++        return fail(report, "the generated part is not in canonical form (" + str(exc) + "); nothing was run")
++    size = len(data)
++    report["generated_part_canonical"] = True
+     report["data_sha256"], report["data_bytes"] = sha(data), size
+-    stated = re.findall(r"theorem pcs_claim_(\d+) : run pcs_src pcs_c\1 = (.+?) :=\n", tail)
+-    if not stated or [int(i) for i, _ in stated] != list(range(len(stated))):
+-        return fail(report, "the claim theorems are missing or not numbered 0, 1, 2, ...")
++    stated = [(str(i), o) for i, o in enumerate(outcomes)]
+     lean = lean or os.environ.get("PCS_CLAIMCHECK_LEAN") or shutil.which("lean")
+     if not lean:
+         return fail(report, "no `lean` executable found; install Lean 4.28.0 (https://lean-lang.org) or pass --lean", 2)
+@@ -119,14 +233,19 @@ def run(path, lean, checker_sha256, timeout):
+         if not m or int(m.group(1)) != i or not axioms <= ALLOWED_AXIOMS:
+             return fail(report, "axiom report %d is missing, out of order or names a non-standard axiom" % i)
+         outcome = stated[i][1].strip()
+-        kind = ("the printed number MATCHES the file under this statement" if outcome.startswith(".checked .consistent") else
+-                "the printed number DOES NOT MATCH the file under this statement" if outcome.startswith(".checked .inconsistent") else
+-                "the statistic is UNDEFINED for this file under this statement")
++        kind = ("the reported value MATCHES the statistic of the embedded data under this typed statement"
++                if outcome.startswith(".checked .consistent") else
++                "the reported value DOES NOT MATCH the statistic of the embedded data under this typed statement"
++                if outcome.startswith(".checked .inconsistent") else
++                "the statistic is UNDEFINED for the embedded data under this typed statement")
+         report["theorems"].append({"theorem": "pcs_claim_%d" % i, "kernel_accepted": True, "proved_outcome": outcome,
+                                    "in_words": kind, "axioms": sorted(axioms)})
+     report["accepted"] = True
+-    report["meaning"] = ("The Lean kernel checked every theorem listed here against the data bytes embedded in the proof file. This is a statement "
+-                         "about those bytes and the typed statement in the file. It is not a statement about a paper.")
++    report["meaning"] = ("The Lean kernel checked every theorem listed here against the data bytes embedded in the proof file: the supplied "
++                         "mathematical obligation holds. This does not show that the obligation faithfully represents a paper: whether a "
++                         "sentence means this statement, and whether these bytes are the authors' data, are not established by a kernel run.")
++    report["establishes"] = "the supplied mathematical obligation, about the embedded data bytes"
++    report["does_not_establish"] = "that the obligation represents any sentence of a paper, or that the bytes are the authors' data"
+     return report, 0
+ 
+ 

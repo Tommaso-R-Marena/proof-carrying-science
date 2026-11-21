@@ -1,0 +1,48 @@
+{
+ "annotation": "internal AI-assisted annotation; not expert adjudicated",
+ "items": [
+  {
+   "id": "D01-01",
+   "token": "1035.29",
+   "context": "loss of female body mass (average 1035.29 g)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "truth": "consistent",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "Body_Mass_Before",
+     "reported": "1035.29"
+    }
+   ]
+  },
+  {
+   "id": "D01-02",
+   "token": "1392.55",
+   "context": "of a male body mass (average 1392.55 g)",
+   "kind": "not_derivable",
+   "why": "describes males; this document's table holds females only"
+  },
+  {
+   "id": "D01-03",
+   "token": "78",
+   "context": "127 unique males and 78 unique females",
+   "kind": "not_derivable",
+   "why": "a count of distinct individuals, not a supported statistic (the table has 246 rows)"
+  },
+  {
+   "id": "D01-04",
+   "token": "41.27",
+   "context": "and 41.27 (SD = 28.04) agonistic interactions per female",
+   "kind": "not_derivable",
+   "why": "no column for agonistic interactions in the female table"
+  },
+  {
+   "id": "D01-05",
+   "token": "12",
+   "context": "(12 females and 10 males per group)",
+   "kind": "not_derivable",
+   "why": "design description, not a statistic of the table"
+  }
+ ]
+}

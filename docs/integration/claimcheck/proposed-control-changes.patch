@@ -1,0 +1,101 @@
+diff --git a/research/integration_v2/reconcile.py b/research/integration_v2/reconcile.py
+index 6c80b5c2..e90ba290 100644
+--- a/research/integration_v2/reconcile.py
++++ b/research/integration_v2/reconcile.py
+@@ -18,8 +18,8 @@ import subprocess
+ import urllib.request
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V22.json"
+-MANIFEST_SHA256 = '28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83'
++MANIFEST = "docs/integration/2026-11-14/RECONCILIATION_V23.json"
++MANIFEST_SHA256 = 'caa053834baa7454252d8ade5d53f9f707d2f1bd10e5ad4a336bd4ce2b1620fe'
+ API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
+ # Exact reviewed source references for reconciling the held research branch.
+ # This adds a source rollback check; it does not release PR117 or grant authority.
+@@ -128,11 +128,11 @@ def _historical_identities(root, prs):
+ 
+ def _verify(root, manifest):
+     """Internal checker; the CLI accepts only the compiled-in manifest digest."""
+-    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"}:
++    if manifest["format"] not in {"pcs-source-reconciliation-v12", "pcs-source-reconciliation-v13", "pcs-source-reconciliation-v14", "pcs-source-reconciliation-v15", "pcs-source-reconciliation-v16", "pcs-source-reconciliation-v17", "pcs-source-reconciliation-v18", "pcs-source-reconciliation-v19", "pcs-source-reconciliation-v20", "pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22", "pcs-source-reconciliation-v23"}:
+         raise ValueError("unsupported reconciliation")
+     prs = manifest["prs"]
+     numbers = [p["number"] for p in prs]
+-    expected_count = 72 if manifest["format"] in {"pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22"} else 70
++    expected_count = 72 if manifest["format"] in {"pcs-source-reconciliation-v21", "pcs-source-reconciliation-v22", "pcs-source-reconciliation-v23"} else 70
+     if len(numbers) != len(set(numbers)) or len(prs) != expected_count:
+         raise ValueError("incomplete or duplicate PR census")
+     if [p["number"] for p in prs if p["disposition"] == "HELD"] != [117]:
+@@ -311,8 +311,8 @@ def check(*, require_committed=False, live=False):
+     if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
+         raise ValueError("reconciliation manifest differs from fixed reviewed digest")
+     manifest = _json(raw)
+-    if manifest["format"] != "pcs-source-reconciliation-v22":
+-        raise ValueError("current combined admission requires explicit V22 format")
++    if manifest["format"] != "pcs-source-reconciliation-v23":
++        raise ValueError("current combined admission requires explicit V23 format")
+     result = _verify(ROOT, manifest)
+     _snapshot(ROOT, manifest)
+     _workflows(ROOT, manifest)
+@@ -336,7 +336,7 @@ def check(*, require_committed=False, live=False):
+     return dict(result, committed_source_required=require_committed, live_heads_checked=live,
+                 manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
+                 pr117_integration=pr117,
+-                relations_scope="V22_LINEAR_INTEGRATION_WITH_IMMUTABLE_V21_AND_V20_PREDECESSORS",
++                relations_scope="V23_ADDITIVE_ADMISSION_WITH_IMMUTABLE_V22_V21_AND_V20_PREDECESSORS",
+                 reviewed_test_successor=dict(path=RECEIVER_CLEANUP_TEST,
+                     old_sha256=RECEIVER_CLEANUP_OLD, new_sha256=RECEIVER_CLEANUP_NEW,
+                     mode="100644", authority_code_changed=False,
+diff --git a/research/integration_v2/test_reconcile.py b/research/integration_v2/test_reconcile.py
+index 677e6e7c..8b468e69 100644
+--- a/research/integration_v2/test_reconcile.py
++++ b/research/integration_v2/test_reconcile.py
+@@ -429,6 +429,24 @@ def test_v21_unknown_added_source_is_not_admitted(fixture):
+ def test_v22_keeps_the_fully_qualified_v21_intake_manifest_unchanged():
+     raw=(gate.ROOT/'docs/integration/2026-11-05/RECONCILIATION_V21.json').read_bytes()
+     assert hashlib.sha256(raw).hexdigest()=='7fbd145fbf737ab0b2f1ef653a13ff26920e956137942dad67bfdb8c48566bde'
+-    current=gate._json((gate.ROOT/gate.MANIFEST).read_bytes())
++    current=gate._json((gate.ROOT/'docs/integration/2026-11-05/RECONCILIATION_V22.json').read_bytes())
+     assert current['format']=='pcs-source-reconciliation-v22'
+     assert current['predecessor_manifest']==dict(commit='0b521f39af99f5856b69dfcc25bc274ec9dc804a',path='docs/integration/2026-11-05/RECONCILIATION_V21.json',sha256=hashlib.sha256(raw).hexdigest())
++
++
++def test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar():
++    v22_path='docs/integration/2026-11-05/RECONCILIATION_V22.json'
++    raw=(gate.ROOT/v22_path).read_bytes()
++    assert hashlib.sha256(raw).hexdigest()=='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83'
++    v22=gate._json(raw)
++    current=gate._json((gate.ROOT/gate.MANIFEST).read_bytes())
++    assert current['format']=='pcs-source-reconciliation-v23'
++    assert current['predecessor_manifest']==dict(commit='bc78660b5fac857fce3873eb6cda0445d1903da1',path=v22_path,sha256='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83')
++    assert current['prs']==v22['prs'] and len(current['prs'])==72
++    assert current['control_paths']==sorted((set(v22['control_paths'])-{v22_path})|{gate.MANIFEST})
++    # one pinned control script changes: it names the new retained source commit and the V23 control path
++    changed={n for n,identity in v22['snapshot'].items() if current['snapshot'].get(n)!=identity}
++    assert changed=={'scripts/check_reconciled_prs.py'}
++    assert current['snapshot'][v22_path]==dict(sha256='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83',mode='100644')
++    added=set(current['snapshot'])-set(v22['snapshot'])-{v22_path}
++    assert added and all(n.startswith(('research/claimcheck_v1/', 'research/claimcheck_v1_1/', 'docs/integration/claimcheck/')) or n in ('.github/workflows/pcs-claimcheck-v1.yml',) for n in added)
+diff --git a/scripts/check_reconciled_prs.py b/scripts/check_reconciled_prs.py
+index 20925be8..e80f4616 100644
+--- a/scripts/check_reconciled_prs.py
++++ b/scripts/check_reconciled_prs.py
+@@ -11,7 +11,7 @@ REGISTRY_SHA256='5d69305871d78e262ba3dfa25349743efa11577491f645da8583a15b7398fe0
+ # Exact qualified source histories, retained independently of linear main history.
+ # A mutable branch/tag name is not trusted in place of its exact object ID.
+ INTAKES={
+- 'proof-carrying-science':('0b521f39af99f5856b69dfcc25bc274ec9dc804a','pcs-source-intake/core-open-prs-v1-20261105'),
++ 'proof-carrying-science':('0770f4930f13853206aa2600290a206facdb4431','pcs-source-intake/core-claimcheck-v1-20261114'),
+  'proof-carrying-science-site':('d35e2b5e6b29e0a27dc0cb117986895fd58c1456','pcs-source-intake/site-open-prs-v1-20261105'),
+ }
+ COMMON_CONTROLS={'scripts/check_reconciled_prs.py','scripts/test_reconciled_prs.py'}
+@@ -19,7 +19,7 @@ CONTROLS={
+  'proof-carrying-science':COMMON_CONTROLS|{
+   '.github/workflows/model-assurance-studio-research.yml',
+   'research/integration_v2/reconcile.py','research/integration_v2/test_reconcile.py',
+-  'docs/integration/2026-11-05/RECONCILIATION_V22.json',
++  'docs/integration/2026-11-14/RECONCILIATION_V23.json',
+   'docs/integration/2026-11-05/RECONCILIATION.md','docs/integration/2026-11-05/LINEAR_HISTORY.md'},
+  'proof-carrying-science-site':COMMON_CONTROLS|{
+   '.github/workflows/open-pr-reconciliation.yml',

@@ -1,0 +1,93 @@
+{
+ "all_as_expected": true,
+ "c1_retained_commit": {
+  "commit": "c92bb25111e21f398a0a1408c4e912c5f806c121",
+  "history": "clean",
+  "parents": [
+   "d313c89998f7b6a71f4822c87279d2c4bdb77764",
+   "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
+  ]
+ },
+ "ci_steps_before_the_gate": {
+  "exit_codes": {
+   "-m compileall -q pcs scripts tests": 0,
+   "scripts/check_mathlib_v4_evidence.py": 0,
+   "scripts/check_pr_contributions.py": 0,
+   "scripts/check_repository_integrity.py": 0,
+   "scripts/check_research_platform_evidence.py": 0
+  },
+  "gate_after_them": {
+   "error": null,
+   "exit": 0,
+   "passed": true,
+   "prs_checked": 72,
+   "retained_source": {
+    "passed": true,
+    "qualified_source_commit": "c92bb25111e21f398a0a1408c4e912c5f806c121",
+    "retention_tag": "pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag"
+   }
+  },
+  "untracked_files_left": []
+ },
+ "gate_tests_with_c2b": {
+  "exit": 0,
+  "last_line": "76 passed in 7.57s"
+ },
+ "generated_from_commit": "ad43f21c6a177e066788c1cb11b4f9730d169791",
+ "negative_controls": {
+  "an_untracked_file_is_present": {
+   "c1_alone_passes": true,
+   "c1_plus_c2b_rejects": true,
+   "error_with_c2b": "retained-source gate failed: AssertionError: Working source differs from committed snapshot"
+  },
+  "the_retained_tag_is_deleted": {
+   "c1_alone_passes": true,
+   "c1_plus_c2b_rejects": true,
+   "error_with_c2b": "retained-source gate failed: subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-c2b-dry-run-8ltaucqi/wt', 'rev-parse', 'refs/tags/pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag^{commit}']' returned non-zero exit status 128."
+  },
+  "the_tag_points_at_another_commit": {
+   "c1_alone_passes": true,
+   "c1_plus_c2b_rejects": true,
+   "error_with_c2b": "retained-source gate failed: AssertionError: Retained source tag differs"
+  }
+ },
+ "notes": {
+  "annotated_tag_not_enforced": "the gate resolves refs/tags/<tag>^{commit}; a lightweight tag at the right commit also passes. Authority rests on the commit ID compiled into the gate, not on the tag object.",
+  "order": "apply after C1 (it edits C1's versions of the two control files); no manifest or retained commit changes",
+  "what_it_does_not_add": "no new restriction beyond the manifest gate's exact census, except the lineage, the tag and a clean working tree"
+ },
+ "patch": {
+  "applies_on_top_of": "C1's reconcile.py and test_reconcile.py",
+  "file": "proposed-c2b.patch",
+  "files_changed": [
+   "research/integration_v2/reconcile.py",
+   "research/integration_v2/test_reconcile.py"
+  ],
+  "lines_added": 52
+ },
+ "positive_c1_plus_c2b": {
+  "error": null,
+  "exit": 0,
+  "passed": true,
+  "prs_checked": 72,
+  "retained_source": {
+   "passed": true,
+   "qualified_source_commit": "c92bb25111e21f398a0a1408c4e912c5f806c121",
+   "retention_tag": "pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag"
+  }
+ },
+ "required_path_static_check": {
+  "full_history_and_tags_are_checked_out": true,
+  "passed": true,
+  "runs_on_every_pull_request_to_main_without_a_path_filter": true,
+  "source_policy_runs_on_the_public_repository": true,
+  "the_aggregate_needs_source_policy": true,
+  "the_aggregate_rejects_a_skipped_or_failed_source_policy": true,
+  "the_manifest_gate_runs_with_require_committed": true
+ },
+ "retained_source_gate_tests_with_c2b": {
+  "exit": 0,
+  "last_line": "OK"
+ },
+ "what": "DRY RUN of proposal C2b in a throw-away worktree, on top of C1's dry-run control commit. Nothing in the branch changed; nothing pushed; only a local placeholder tag, deleted at the end. Not an approval."
+}

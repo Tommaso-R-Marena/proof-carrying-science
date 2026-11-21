@@ -1,0 +1,209 @@
+{
+ "annotation": "internal AI-assisted annotation; not expert adjudicated. Truth values computed with an independent calculation (csv module + Decimal).",
+ "items": [
+  {
+   "id": "H10-01",
+   "token": "5.1",
+   "context": "The mean age across all female‐years was 5.1 years (median = 4,",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "mean",
+     "column": "age",
+     "reported": "5.1"
+    }
+   ],
+   "truth": "consistent"
+  },
+  {
+   "id": "H10-02",
+   "token": "4",
+   "context": "The mean age across all female‐years was 5.1 years (median = 4,",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "median",
+     "column": "age",
+     "reported": "4"
+    }
+   ],
+   "truth": "consistent"
+  },
+  {
+   "id": "H10-03",
+   "token": "3",
+   "context": "interquartile range: IQR = 3–6), with lifespans",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "quartiles are not a supported statistic"
+  },
+  {
+   "id": "H10-04",
+   "token": "3",
+   "context": "with lifespans ranging between 3 and 14 years",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "min",
+     "column": "lifespan",
+     "reported": "3"
+    }
+   ],
+   "truth": "consistent"
+  },
+  {
+   "id": "H10-05",
+   "token": "14",
+   "context": "with lifespans ranging between 3 and 14 years",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "max",
+     "column": "lifespan",
+     "reported": "14"
+    }
+   ],
+   "truth": "consistent"
+  },
+  {
+   "id": "H10-06",
+   "token": "6.3",
+   "context": "(down‐valley: mean = 6.3, median = 6,",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "lifespan per distinct female; the table has one row per female per year"
+  },
+  {
+   "id": "H10-07",
+   "token": "6",
+   "context": "(down‐valley: mean = 6.3, median = 6,",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "see H10-06"
+  },
+  {
+   "id": "H10-08",
+   "token": "5.3",
+   "context": "up‐valley: mean = 5.3, median = 5,",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "see H10-06"
+  },
+  {
+   "id": "H10-09",
+   "token": "5",
+   "context": "up‐valley: mean = 5.3, median = 5,",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "see H10-06"
+  },
+  {
+   "id": "H10-10",
+   "token": "590",
+   "context": "included 590 and 475 body mass estimates",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "massjun",
+     "reported": "590"
+    }
+   ],
+   "truth": "consistent"
+  },
+  {
+   "id": "H10-11",
+   "token": "475",
+   "context": "included 590 and 475 body mass estimates",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "massaug",
+     "reported": "475"
+    }
+   ],
+   "truth": "consistent"
+  },
+  {
+   "id": "H10-12",
+   "token": "205",
+   "context": "a total of 205 different females",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "number of distinct females"
+  },
+  {
+   "id": "H10-13",
+   "token": ".75",
+   "context": "(Pearson's correlation: r = .75; N = 472 individual‐year observations)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "pearson",
+     "column": "massaug",
+     "x_column": "massjun",
+     "reported": ".75"
+    },
+    {
+     "stat": "pearson",
+     "column": "massjun",
+     "x_column": "massaug",
+     "reported": ".75"
+    }
+   ],
+   "truth": "inconsistent"
+  },
+  {
+   "id": "H10-14",
+   "token": "472",
+   "context": "(Pearson's correlation: r = .75; N = 472 individual‐year observations)",
+   "occurrence": 0,
+   "kind": "derivable",
+   "gold": [
+    {
+     "stat": "count",
+     "column": "massaug",
+     "filter": [
+      {
+       "kind": "num",
+       "column": "massjun",
+       "cmp": "ge",
+       "value": "0"
+      }
+     ],
+     "reported": "472"
+    },
+    {
+     "stat": "count",
+     "column": "massjun",
+     "filter": [
+      {
+       "kind": "num",
+       "column": "massaug",
+       "cmp": "ge",
+       "value": "0"
+      }
+     ],
+     "reported": "472"
+    }
+   ],
+   "truth": "inconsistent"
+  },
+  {
+   "id": "H10-15",
+   "token": "900",
+   "context": "mean body mass was 900 g greater in late summer than in spring",
+   "occurrence": 0,
+   "kind": "not_derivable",
+   "why": "a difference between two means, not a supported statistic"
+  }
+ ]
+}

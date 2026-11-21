@@ -1,0 +1,179 @@
+{
+ "what": "DRY RUN in a throw-away worktree. No protected file in the branch was changed. Nothing was pushed. No tag with a real name was created. Not an approval.",
+ "generated_from_commit": "763aaa8b00e1e21167dee05c1147a2f291549a0e",
+ "valid_only_for_that_commit": true,
+ "evidence_committed_in_this_tree": {
+  "describes_commit": "95d3045e3db10c78a40d4c04ea9428b534633147",
+  "files_changed_since_then": [
+   ".github/workflows/pcs-claimcheck-v1.yml",
+   "docs/integration/claimcheck/ADMISSION_AUDIT.json",
+   "docs/integration/claimcheck/ADMISSION_AUDIT.md",
+   "docs/integration/claimcheck/ADMISSION_CENSUS.json",
+   "docs/integration/claimcheck/ADMISSION_PROPOSAL.md",
+   "docs/integration/claimcheck/OWNER_AUTHORIZATION.md",
+   "docs/integration/claimcheck/REQUIRED_CHECKS.md",
+   "docs/integration/claimcheck/SECURITY_REVIEW_C3_D4.md",
+   "docs/integration/claimcheck/dry-run.json",
+   "docs/integration/claimcheck/proposed-control-changes.patch",
+   "research/claimcheck_v1/LEGACY_REPLAY_WARNING.md",
+   "research/claimcheck_v1_1/OWNER_DECISIONS.md",
+   "research/claimcheck_v1_1/README.md",
+   "research/claimcheck_v1_1/REPORT.md",
+   "research/claimcheck_v1_1/adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md",
+   "research/claimcheck_v1_1/dev/adversary.py",
+   "research/claimcheck_v1_1/dev/evaluate.py",
+   "research/claimcheck_v1_1/governance/check_admission_consistency.py",
+   "research/claimcheck_v1_1/policy.py",
+   "research/claimcheck_v1_1/prospective/AMENDMENTS_DRAFT_3.md",
+   "research/claimcheck_v1_1/prospective/DECISION_PACKAGE.md",
+   "research/claimcheck_v1_1/prospective/DECISION_SUPPORT.json",
+   "research/claimcheck_v1_1/prospective/DEMONSTRATION_ON_DEVELOPMENT_DATA.json",
+   "research/claimcheck_v1_1/prospective/DESIGN_120.json",
+   "research/claimcheck_v1_1/prospective/MODEL_ACCESS.md",
+   "research/claimcheck_v1_1/prospective/PROTOCOL_DRAFT.md",
+   "research/claimcheck_v1_1/prospective/budget.py",
+   "research/claimcheck_v1_1/prospective/criteria.json",
+   "research/claimcheck_v1_1/prospective/decision_support.py",
+   "research/claimcheck_v1_1/prospective/design_120.py",
+   "research/claimcheck_v1_1/prospective/lean_guard.py",
+   "research/claimcheck_v1_1/prospective/model_config.json",
+   "research/claimcheck_v1_1/prospective/score.py",
+   "research/claimcheck_v1_1/replay_v1_bundle_checked.py",
+   "research/claimcheck_v1_1/tests/test_binding_offline.py",
+   "research/claimcheck_v1_1/tests/test_budget.py",
+   "research/claimcheck_v1_1/tests/test_decide_guard.py",
+   "research/claimcheck_v1_1/tests/test_decision_support.py",
+   "research/claimcheck_v1_1/tests/test_design_120.py",
+   "research/claimcheck_v1_1/tests/test_lean_guard.py",
+   "research/claimcheck_v1_1/tests/test_oracle_opt_in.py",
+   "research/claimcheck_v1_1/tests/test_score_draft2.py",
+   "research/claimcheck_v1_1/tests/test_score_draft3.py",
+   "research/claimcheck_v1_1/tests/test_v11_offline.py"
+  ],
+  "only_evidence_files_changed": false
+ },
+ "gate_on_the_protected_v22_commit": {
+  "exit": 0,
+  "passed": true,
+  "error": null,
+  "prs_checked": 72,
+  "source_bindings_checked": 4781
+ },
+ "existing_files_changed_or_removed": [],
+ "files_added": 2006,
+ "added_files_outside_the_admitted_roots": [],
+ "proposed_retained_source_commit": {
+  "commit": "0770f4930f13853206aa2600290a206facdb4431",
+  "tree": "d6236b06867bc6270ee3dac74fb2ac1fa5a687f9",
+  "parents": [
+   "763aaa8b00e1e21167dee05c1147a2f291549a0e",
+   "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
+  ],
+  "proposed_tag": "pcs-source-intake/core-claimcheck-v1-20261114",
+  "reproducible_with": "git commit-tree <tree> -p <source commit> -p <previous intake> with the fixed identity and date in this script",
+  "tag_created": false
+ },
+ "proposal": {
+  "control_commit_files": {
+   "docs/integration/2026-11-14/RECONCILIATION_V23.json": {
+    "sha256": "caa053834baa7454252d8ade5d53f9f707d2f1bd10e5ad4a336bd4ce2b1620fe",
+    "bytes": 4707710
+   },
+   "research/integration_v2/reconcile.py": {
+    "sha256": "9de92660f86e1e2a569c4406f27b3502d7ff229b0e1e02bf734361bdaeabd313",
+    "bytes": 20113
+   },
+   "research/integration_v2/test_reconcile.py": {
+    "sha256": "f302b4cfe1820428e22861886082ea184dd7b36426b80fb178818c5695015d54",
+    "bytes": 22616
+   },
+   "scripts/check_reconciled_prs.py": {
+    "sha256": "b09fc4b99e131c5ac124c9b8e48d842b8e91660ebb24dfa54c8e3f8ad02264c6",
+    "bytes": 6930
+   }
+  },
+  "successor_manifest": {
+   "path": "docs/integration/2026-11-14/RECONCILIATION_V23.json",
+   "sha256": "caa053834baa7454252d8ade5d53f9f707d2f1bd10e5ad4a336bd4ce2b1620fe",
+   "snapshot_entries": 10049
+  },
+  "not_committed": "generate it again at the commit to be admitted; it pins every tracked file"
+ },
+ "dry_run_tested_the_proposal": {
+  "only_the_tag_name_and_its_consequent_digests_differ": true,
+  "per_file": {
+   "scripts/check_reconciled_prs.py": true,
+   "docs/integration/2026-11-14/RECONCILIATION_V23.json": true,
+   "research/integration_v2/reconcile.py": true,
+   "research/integration_v2/test_reconcile.py": true
+  }
+ },
+ "gate_with_successor": {
+  "exit": 0,
+  "passed": true,
+  "error": null,
+  "prs_checked": 72,
+  "source_bindings_checked": 4781
+ },
+ "retained_source_gate_with_successor": {
+  "exit": 0,
+  "passed": true,
+  "error": null
+ },
+ "gate_tests_on_the_successor": {
+  "exit": 0,
+  "last_line": "75 passed in 8.98s"
+ },
+ "retained_source_gate_tests_on_the_successor": {
+  "exit": 0,
+  "last_line": "OK"
+ },
+ "negative_controls": {
+  "an_unlisted_file_is_added": {
+   "rejected": true,
+   "error": "combined tracked file census differs"
+  },
+  "an_admitted_file_is_edited": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: research/claimcheck_v1/formal/ClaimCheck.lean"
+  },
+  "the_successor_manifest_is_edited": {
+   "rejected": true,
+   "error": "reconciliation manifest differs from fixed reviewed digest"
+  },
+  "the_predecessor_manifest_is_edited": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: docs/integration/2026-11-05/RECONCILIATION_V22.json"
+  },
+  "a_frozen_benchmark_result_is_edited": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: research/claimcheck_v1/benchmark/results/heldout/summary.json"
+  },
+  "an_existing_production_file_is_edited": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: pcs/__init__.py"
+  },
+  "a_gate_control_file_is_edited_after_the_control_commit": {
+   "rejected": true,
+   "error": "committed source required; staged/working changes remain"
+  },
+  "the_retained_source_entry_is_retargeted_and_committed": {
+   "rejected": true,
+   "error": "combined source bytes or mode differ: scripts/check_reconciled_prs.py"
+  },
+  "the_tag_points_elsewhere": {
+   "rejected": true,
+   "error": "AssertionError: Retained source tag differs"
+  }
+ },
+ "patch": {
+  "file": "proposed-control-changes.patch",
+  "files": [
+   "research/integration_v2/reconcile.py",
+   "research/integration_v2/test_reconcile.py",
+   "scripts/check_reconciled_prs.py"
+  ],
+  "not_in_the_patch": "docs/integration/2026-11-14/RECONCILIATION_V23.json (4.7 MB, regenerated by this script; its digest is above)"
+ },
+ "all_as_expected": true
+}

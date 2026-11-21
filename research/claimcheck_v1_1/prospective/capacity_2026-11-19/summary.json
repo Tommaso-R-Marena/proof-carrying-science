@@ -1,0 +1,1805 @@
+{
+ "what": "Feasibility study part C (protocol 13.7): development and synthetic data only. A development-set finding; it enters no criterion. The protocol (draft 3) stays unapproved.",
+ "configuration": {
+  "workers": 2,
+  "claims_per_proof_file": 1,
+  "seconds_per_proof_file": 900,
+  "memory_limit_mb_per_lean_process": 7168,
+  "memory_limit_enforced_by": "prospective/lean_guard.py",
+  "c7_limits": {
+   "max_median_seconds_per_claim": 60,
+   "max_p95_seconds_per_claim": 300,
+   "max_peak_memory_gb": 8,
+   "min_completed_share": 0.95
+  }
+ },
+ "synthetic": {
+  "overall": {
+   "runs": 90,
+   "completed": 66,
+   "completed_share": 0.7333,
+   "outcomes": {
+    "accepted": 66,
+    "memory guard stop": 11,
+    "killed by the operating system": 1,
+    "time limit": 0,
+    "kernel rejection: Lean recursion-depth limit": 12,
+    "kernel rejection: other": 0
+   },
+   "resource_unknown": 12,
+   "median_seconds": 17.1,
+   "p95_seconds": 51.824,
+   "max_seconds": 64.073,
+   "max_peak_gb": 7.01,
+   "stopped_for_memory": 11,
+   "killed_by_system": 1,
+   "timed_out": 0,
+   "kernel_hours": 0.589,
+   "c7_limits_hold": false
+  },
+  "by_statistic": {
+   "count": {
+    "runs": 15,
+    "completed": 15,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 15,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 9.82,
+    "p95_seconds": 42.961,
+    "max_seconds": 42.961,
+    "max_peak_gb": 4.88,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.061,
+    "c7_limits_hold": true
+   },
+   "mean": {
+    "runs": 15,
+    "completed": 13,
+    "completed_share": 0.8667,
+    "outcomes": {
+     "accepted": 13,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 2,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 13.94,
+    "p95_seconds": 59.427,
+    "max_seconds": 59.427,
+    "max_peak_gb": 6.67,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.085,
+    "c7_limits_hold": false
+   },
+   "min": {
+    "runs": 15,
+    "completed": 7,
+    "completed_share": 0.4667,
+    "outcomes": {
+     "accepted": 7,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 8,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 15.48,
+    "p95_seconds": 59.079,
+    "max_seconds": 59.079,
+    "max_peak_gb": 6.59,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.086,
+    "c7_limits_hold": false
+   },
+   "sd_sample": {
+    "runs": 15,
+    "completed": 13,
+    "completed_share": 0.8667,
+    "outcomes": {
+     "accepted": 13,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 2,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 16.47,
+    "p95_seconds": 64.073,
+    "max_seconds": 64.073,
+    "max_peak_gb": 6.7,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.09,
+    "c7_limits_hold": false
+   },
+   "median": {
+    "runs": 15,
+    "completed": 6,
+    "completed_share": 0.4,
+    "outcomes": {
+     "accepted": 6,
+     "memory guard stop": 8,
+     "killed by the operating system": 1,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 9,
+    "median_seconds": 47.96,
+    "p95_seconds": 57.621,
+    "max_seconds": 57.621,
+    "max_peak_gb": 7.01,
+    "stopped_for_memory": 8,
+    "killed_by_system": 1,
+    "timed_out": 0,
+    "kernel_hours": 0.158,
+    "c7_limits_hold": false
+   },
+   "pearson": {
+    "runs": 15,
+    "completed": 12,
+    "completed_share": 0.8,
+    "outcomes": {
+     "accepted": 12,
+     "memory guard stop": 3,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 3,
+    "median_seconds": 23.51,
+    "p95_seconds": 51.824,
+    "max_seconds": 51.824,
+    "max_peak_gb": 7.01,
+    "stopped_for_memory": 3,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.108,
+    "c7_limits_hold": false
+   }
+  },
+  "candidate_supported_size_bytes": {
+   "count": 59952,
+   "mean": 42487,
+   "min": 12377,
+   "sd_sample": 42487,
+   "median": 10299,
+   "pearson": 33760
+  },
+  "runs_by_statistic": {
+   "count": [
+    {
+     "rows": 50,
+     "table_bytes": 1005,
+     "seconds": 2.075,
+     "peak_gb": 0.53,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 100,
+     "table_bytes": 1989,
+     "seconds": 2.672,
+     "peak_gb": 0.61,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 200,
+     "table_bytes": 4074,
+     "seconds": 3.725,
+     "peak_gb": 0.75,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 300,
+     "table_bytes": 6140,
+     "seconds": 5.081,
+     "peak_gb": 0.91,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 400,
+     "table_bytes": 8219,
+     "seconds": 6.091,
+     "peak_gb": 1.06,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 500,
+     "table_bytes": 10299,
+     "seconds": 7.698,
+     "peak_gb": 1.21,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 600,
+     "table_bytes": 12377,
+     "seconds": 9.166,
+     "peak_gb": 1.36,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 700,
+     "table_bytes": 14451,
+     "seconds": 9.821,
+     "peak_gb": 1.51,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 800,
+     "table_bytes": 16523,
+     "seconds": 11.444,
+     "peak_gb": 1.67,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1000,
+     "table_bytes": 20689,
+     "seconds": 14.24,
+     "peak_gb": 1.98,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1200,
+     "table_bytes": 25048,
+     "seconds": 17.574,
+     "peak_gb": 2.3,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1600,
+     "table_bytes": 33760,
+     "seconds": 22.447,
+     "peak_gb": 2.93,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2000,
+     "table_bytes": 42487,
+     "seconds": 29.043,
+     "peak_gb": 3.6,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2400,
+     "table_bytes": 51209,
+     "seconds": 35.59,
+     "peak_gb": 4.24,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2800,
+     "table_bytes": 59952,
+     "seconds": 42.961,
+     "peak_gb": 4.88,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    }
+   ],
+   "mean": [
+    {
+     "rows": 50,
+     "table_bytes": 1005,
+     "seconds": 2.365,
+     "peak_gb": 0.57,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 100,
+     "table_bytes": 1989,
+     "seconds": 3.272,
+     "peak_gb": 0.68,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 200,
+     "table_bytes": 4074,
+     "seconds": 4.936,
+     "peak_gb": 0.9,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 300,
+     "table_bytes": 6140,
+     "seconds": 6.945,
+     "peak_gb": 1.13,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 400,
+     "table_bytes": 8219,
+     "seconds": 8.457,
+     "peak_gb": 1.35,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 500,
+     "table_bytes": 10299,
+     "seconds": 10.569,
+     "peak_gb": 1.58,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 600,
+     "table_bytes": 12377,
+     "seconds": 12.328,
+     "peak_gb": 1.82,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 700,
+     "table_bytes": 14451,
+     "seconds": 13.938,
+     "peak_gb": 2.04,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 800,
+     "table_bytes": 16523,
+     "seconds": 16.818,
+     "peak_gb": 2.26,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1000,
+     "table_bytes": 20689,
+     "seconds": 21.148,
+     "peak_gb": 2.71,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1200,
+     "table_bytes": 25048,
+     "seconds": 24.991,
+     "peak_gb": 3.2,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1600,
+     "table_bytes": 33760,
+     "seconds": 31.904,
+     "peak_gb": 4.12,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2000,
+     "table_bytes": 42487,
+     "seconds": 40.554,
+     "peak_gb": 5.06,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2400,
+     "table_bytes": 51209,
+     "seconds": 48.513,
+     "peak_gb": 5.78,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-wk35gwt0/Obligation.lean:689:75: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 2800,
+     "table_bytes": 59952,
+     "seconds": 59.427,
+     "peak_gb": 6.67,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-uspzg5ni/Obligation.lean:689:75: error: [Error pretty printing: maximum recursion depth has been reached"
+    }
+   ],
+   "min": [
+    {
+     "rows": 50,
+     "table_bytes": 1005,
+     "seconds": 2.41,
+     "peak_gb": 0.58,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 100,
+     "table_bytes": 1989,
+     "seconds": 3.388,
+     "peak_gb": 0.69,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 200,
+     "table_bytes": 4074,
+     "seconds": 5.391,
+     "peak_gb": 0.92,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 300,
+     "table_bytes": 6140,
+     "seconds": 7.654,
+     "peak_gb": 1.16,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 400,
+     "table_bytes": 8219,
+     "seconds": 9.31,
+     "peak_gb": 1.4,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 500,
+     "table_bytes": 10299,
+     "seconds": 11.694,
+     "peak_gb": 1.63,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 600,
+     "table_bytes": 12377,
+     "seconds": 14.148,
+     "peak_gb": 1.88,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 700,
+     "table_bytes": 14451,
+     "seconds": 15.481,
+     "peak_gb": 2.05,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-n_e9ti_m/Obligation.lean:689:67: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 800,
+     "table_bytes": 16523,
+     "seconds": 16.51,
+     "peak_gb": 2.26,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-3vemynr9/Obligation.lean:689:67: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 1000,
+     "table_bytes": 20689,
+     "seconds": 20.569,
+     "peak_gb": 2.68,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-7i7nohab/Obligation.lean:689:68: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 1200,
+     "table_bytes": 25048,
+     "seconds": 23.503,
+     "peak_gb": 3.12,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-vss3qyi_/Obligation.lean:689:68: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 1600,
+     "table_bytes": 33760,
+     "seconds": 31.188,
+     "peak_gb": 4.02,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-65li3cyu/Obligation.lean:689:68: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 2000,
+     "table_bytes": 42487,
+     "seconds": 40.344,
+     "peak_gb": 4.9,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-918olf57/Obligation.lean:689:68: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 2400,
+     "table_bytes": 51209,
+     "seconds": 49.045,
+     "peak_gb": 5.77,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-fm5awb3t/Obligation.lean:689:68: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 2800,
+     "table_bytes": 59952,
+     "seconds": 59.079,
+     "peak_gb": 6.59,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-2mj3lbjl/Obligation.lean:689:68: error: [Error pretty printing: maximum recursion depth has been reached"
+    }
+   ],
+   "sd_sample": [
+    {
+     "rows": 50,
+     "table_bytes": 1005,
+     "seconds": 2.531,
+     "peak_gb": 0.58,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 100,
+     "table_bytes": 1989,
+     "seconds": 3.333,
+     "peak_gb": 0.7,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 200,
+     "table_bytes": 4074,
+     "seconds": 5.389,
+     "peak_gb": 0.94,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 300,
+     "table_bytes": 6140,
+     "seconds": 7.6,
+     "peak_gb": 1.19,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 400,
+     "table_bytes": 8219,
+     "seconds": 9.009,
+     "peak_gb": 1.43,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 500,
+     "table_bytes": 10299,
+     "seconds": 11.345,
+     "peak_gb": 1.67,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 600,
+     "table_bytes": 12377,
+     "seconds": 13.495,
+     "peak_gb": 1.92,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 700,
+     "table_bytes": 14451,
+     "seconds": 16.47,
+     "peak_gb": 2.17,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 800,
+     "table_bytes": 16523,
+     "seconds": 17.377,
+     "peak_gb": 2.41,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1000,
+     "table_bytes": 20689,
+     "seconds": 21.545,
+     "peak_gb": 2.9,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1200,
+     "table_bytes": 25048,
+     "seconds": 26.174,
+     "peak_gb": 3.43,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1600,
+     "table_bytes": 33760,
+     "seconds": 34.987,
+     "peak_gb": 4.42,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2000,
+     "table_bytes": 42487,
+     "seconds": 43.965,
+     "peak_gb": 5.42,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2400,
+     "table_bytes": 51209,
+     "seconds": 48.445,
+     "peak_gb": 5.78,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-xy1ic208/Obligation.lean:689:95: error: [Error pretty printing: maximum recursion depth has been reached"
+    },
+    {
+     "rows": 2800,
+     "table_bytes": 59952,
+     "seconds": 64.073,
+     "peak_gb": 6.7,
+     "kernel_accepted": false,
+     "outcome": "kernel rejection: Lean recursion-depth limit",
+     "detail": "Lean rejected the obligation: /tmp/pcs-claimcheck-_iv95f2f/Obligation.lean:689:96: error: [Error pretty printing: maximum recursion depth has been reached"
+    }
+   ],
+   "median": [
+    {
+     "rows": 50,
+     "table_bytes": 1005,
+     "seconds": 2.724,
+     "peak_gb": 0.62,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 100,
+     "table_bytes": 1989,
+     "seconds": 4.627,
+     "peak_gb": 0.85,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 200,
+     "table_bytes": 4074,
+     "seconds": 10.779,
+     "peak_gb": 1.56,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 300,
+     "table_bytes": 6140,
+     "seconds": 20.35,
+     "peak_gb": 2.66,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 400,
+     "table_bytes": 8219,
+     "seconds": 33.539,
+     "peak_gb": 4.05,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 500,
+     "table_bytes": 10299,
+     "seconds": 48.903,
+     "peak_gb": 5.8,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 600,
+     "table_bytes": 12377,
+     "seconds": 47.96,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 700,
+     "table_bytes": 14451,
+     "seconds": 49.354,
+     "peak_gb": 7.01,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 800,
+     "table_bytes": 16523,
+     "seconds": 49.323,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 1000,
+     "table_bytes": 20689,
+     "seconds": 48.926,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 1200,
+     "table_bytes": 25048,
+     "seconds": 47.334,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 1600,
+     "table_bytes": 33760,
+     "seconds": 47.333,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 2000,
+     "table_bytes": 42487,
+     "seconds": 48.882,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 2400,
+     "table_bytes": 51209,
+     "seconds": 50.153,
+     "peak_gb": 7.01,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 2800,
+     "table_bytes": 59952,
+     "seconds": 57.621,
+     "peak_gb": 6.95,
+     "kernel_accepted": false,
+     "outcome": "killed by the operating system",
+     "detail": "Lean rejected the obligation: no output"
+    }
+   ],
+   "pearson": [
+    {
+     "rows": 50,
+     "table_bytes": 1005,
+     "seconds": 2.924,
+     "peak_gb": 0.63,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 100,
+     "table_bytes": 1989,
+     "seconds": 4.377,
+     "peak_gb": 0.81,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 200,
+     "table_bytes": 4074,
+     "seconds": 7.103,
+     "peak_gb": 1.16,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 300,
+     "table_bytes": 6140,
+     "seconds": 9.965,
+     "peak_gb": 1.51,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 400,
+     "table_bytes": 8219,
+     "seconds": 13.236,
+     "peak_gb": 1.87,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 500,
+     "table_bytes": 10299,
+     "seconds": 16.502,
+     "peak_gb": 2.22,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 600,
+     "table_bytes": 12377,
+     "seconds": 18.16,
+     "peak_gb": 2.57,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 700,
+     "table_bytes": 14451,
+     "seconds": 23.507,
+     "peak_gb": 2.97,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 800,
+     "table_bytes": 16523,
+     "seconds": 25.327,
+     "peak_gb": 3.3,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1000,
+     "table_bytes": 20689,
+     "seconds": 31.134,
+     "peak_gb": 4.0,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1200,
+     "table_bytes": 25048,
+     "seconds": 36.91,
+     "peak_gb": 4.73,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 1600,
+     "table_bytes": 33760,
+     "seconds": 50.968,
+     "peak_gb": 6.19,
+     "kernel_accepted": true,
+     "outcome": "accepted",
+     "detail": "kernel accepted"
+    },
+    {
+     "rows": 2000,
+     "table_bytes": 42487,
+     "seconds": 47.796,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 2400,
+     "table_bytes": 51209,
+     "seconds": 50.416,
+     "peak_gb": 7.01,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    },
+    {
+     "rows": 2800,
+     "table_bytes": 59952,
+     "seconds": 51.824,
+     "peak_gb": 7.0,
+     "kernel_accepted": false,
+     "outcome": "memory guard stop",
+     "detail": "Lean rejected the obligation: lean guard: memory limit of 7168 MB exceeded; process stopped"
+    }
+   ]
+  }
+ },
+ "development": {
+  "overall": {
+   "runs": 1194,
+   "completed": 1147,
+   "completed_share": 0.9606,
+   "outcomes": {
+    "accepted": 1147,
+    "memory guard stop": 17,
+    "killed by the operating system": 3,
+    "time limit": 0,
+    "kernel rejection: Lean recursion-depth limit": 27,
+    "kernel rejection: other": 0
+   },
+   "resource_unknown": 20,
+   "median_seconds": 17.62,
+   "p95_seconds": 25.397,
+   "max_seconds": 178.221,
+   "max_peak_gb": 7.01,
+   "stopped_for_memory": 17,
+   "killed_by_system": 3,
+   "timed_out": 0,
+   "kernel_hours": 5.336,
+   "c7_limits_hold": true
+  },
+  "by_statistic": {
+   "count": {
+    "runs": 326,
+    "completed": 326,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 326,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 15.4,
+    "p95_seconds": 22.27,
+    "max_seconds": 24.038,
+    "max_peak_gb": 2.92,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 1.164,
+    "c7_limits_hold": true
+   },
+   "max": {
+    "runs": 76,
+    "completed": 61,
+    "completed_share": 0.8026,
+    "outcomes": {
+     "accepted": 61,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 15,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 17.64,
+    "p95_seconds": 25.442,
+    "max_seconds": 26.087,
+    "max_peak_gb": 3.14,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.322,
+    "c7_limits_hold": false
+   },
+   "mean": {
+    "runs": 123,
+    "completed": 123,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 123,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 18.0,
+    "p95_seconds": 23.876,
+    "max_seconds": 25.132,
+    "max_peak_gb": 3.06,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.571,
+    "c7_limits_hold": true
+   },
+   "median": {
+    "runs": 54,
+    "completed": 34,
+    "completed_share": 0.6296,
+    "outcomes": {
+     "accepted": 34,
+     "memory guard stop": 17,
+     "killed by the operating system": 3,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 20,
+    "median_seconds": 26.67,
+    "p95_seconds": 99.715,
+    "max_seconds": 178.221,
+    "max_peak_gb": 7.01,
+    "stopped_for_memory": 17,
+    "killed_by_system": 3,
+    "timed_out": 0,
+    "kernel_hours": 0.528,
+    "c7_limits_hold": false
+   },
+   "min": {
+    "runs": 80,
+    "completed": 68,
+    "completed_share": 0.85,
+    "outcomes": {
+     "accepted": 68,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 12,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 18.0,
+    "p95_seconds": 24.121,
+    "max_seconds": 25.334,
+    "max_peak_gb": 3.03,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.339,
+    "c7_limits_hold": false
+   },
+   "ols_intercept": {
+    "runs": 2,
+    "completed": 2,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 2,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 19.37,
+    "p95_seconds": 19.658,
+    "max_seconds": 19.658,
+    "max_peak_gb": 2.53,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.011,
+    "c7_limits_hold": true
+   },
+   "ols_slope": {
+    "runs": 2,
+    "completed": 2,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 2,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 19.67,
+    "p95_seconds": 20.004,
+    "max_seconds": 20.004,
+    "max_peak_gb": 2.53,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.011,
+    "c7_limits_hold": true
+   },
+   "pearson": {
+    "runs": 4,
+    "completed": 4,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 4,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 22.47,
+    "p95_seconds": 25.474,
+    "max_seconds": 25.474,
+    "max_peak_gb": 3.19,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.025,
+    "c7_limits_hold": true
+   },
+   "sd_pop": {
+    "runs": 195,
+    "completed": 195,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 195,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 17.82,
+    "p95_seconds": 25.397,
+    "max_seconds": 26.596,
+    "max_peak_gb": 3.15,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.941,
+    "c7_limits_hold": true
+   },
+   "sd_sample": {
+    "runs": 195,
+    "completed": 195,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 195,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 17.84,
+    "p95_seconds": 25.473,
+    "max_seconds": 27.047,
+    "max_peak_gb": 3.15,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.942,
+    "c7_limits_hold": true
+   },
+   "sem": {
+    "runs": 92,
+    "completed": 92,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 92,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 17.51,
+    "p95_seconds": 24.58,
+    "max_seconds": 25.654,
+    "max_peak_gb": 3.11,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.391,
+    "c7_limits_hold": true
+   },
+   "share": {
+    "runs": 20,
+    "completed": 20,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 20,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 7.35,
+    "p95_seconds": 7.645,
+    "max_seconds": 7.715,
+    "max_peak_gb": 1.2,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.041,
+    "c7_limits_hold": true
+   },
+   "sum": {
+    "runs": 25,
+    "completed": 25,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 25,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 6.39,
+    "p95_seconds": 18.018,
+    "max_seconds": 18.164,
+    "max_peak_gb": 2.48,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.05,
+    "c7_limits_hold": true
+   }
+  },
+  "by_paper": {
+   "01_pmc6972591": {
+    "runs": 290,
+    "completed": 290,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 290,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 17.63,
+    "p95_seconds": 19.256,
+    "max_seconds": 28.223,
+    "max_peak_gb": 3.3,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 1.449,
+    "c7_limits_hold": true
+   },
+   "03_pmc5551083": {
+    "runs": 108,
+    "completed": 108,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 108,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 18.98,
+    "p95_seconds": 20.063,
+    "max_seconds": 21.076,
+    "max_peak_gb": 2.53,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.57,
+    "c7_limits_hold": true
+   },
+   "06_pmc5980576": {
+    "runs": 188,
+    "completed": 188,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 188,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 23.72,
+    "p95_seconds": 25.845,
+    "max_seconds": 27.047,
+    "max_peak_gb": 3.15,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 1.237,
+    "c7_limits_hold": true
+   },
+   "08_pmc6238128": {
+    "runs": 98,
+    "completed": 98,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 98,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 3.77,
+    "p95_seconds": 4.531,
+    "max_seconds": 4.633,
+    "max_peak_gb": 0.83,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.103,
+    "c7_limits_hold": true
+   },
+   "09_pmc6476783": {
+    "runs": 164,
+    "completed": 164,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 164,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 5.8,
+    "p95_seconds": 7.0,
+    "max_seconds": 8.512,
+    "max_peak_gb": 1.32,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.275,
+    "c7_limits_hold": true
+   },
+   "10_pmc5817150": {
+    "runs": 122,
+    "completed": 75,
+    "completed_share": 0.6148,
+    "outcomes": {
+     "accepted": 75,
+     "memory guard stop": 17,
+     "killed by the operating system": 3,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 27,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 20,
+    "median_seconds": 20.37,
+    "p95_seconds": 50.809,
+    "max_seconds": 178.221,
+    "max_peak_gb": 7.01,
+    "stopped_for_memory": 17,
+    "killed_by_system": 3,
+    "timed_out": 0,
+    "kernel_hours": 0.96,
+    "c7_limits_hold": false
+   },
+   "12_pmc4417136": {
+    "runs": 131,
+    "completed": 131,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 131,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 8.11,
+    "p95_seconds": 8.549,
+    "max_seconds": 8.868,
+    "max_peak_gb": 1.32,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.29,
+    "c7_limits_hold": true
+   },
+   "17_pmc9309151": {
+    "runs": 93,
+    "completed": 93,
+    "completed_share": 1.0,
+    "outcomes": {
+     "accepted": 93,
+     "memory guard stop": 0,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 0,
+    "median_seconds": 17.56,
+    "p95_seconds": 19.838,
+    "max_seconds": 23.758,
+    "max_peak_gb": 3.08,
+    "stopped_for_memory": 0,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.451,
+    "c7_limits_hold": true
+   }
+  },
+  "within_candidate_supported_size": {
+   "rule": "a run counts if its table is no larger than the candidate supported size of its statistic (sd and sd_pop take sd_sample's; a statistic not measured takes the smallest measured size), as C7 is defined",
+   "runs": 991,
+   "completed": 991,
+   "completed_share": 1.0,
+   "outcomes": {
+    "accepted": 991,
+    "memory guard stop": 0,
+    "killed by the operating system": 0,
+    "time limit": 0,
+    "kernel rejection: Lean recursion-depth limit": 0,
+    "kernel rejection: other": 0
+   },
+   "resource_unknown": 0,
+   "median_seconds": 17.38,
+   "p95_seconds": 24.482,
+   "max_seconds": 27.047,
+   "max_peak_gb": 3.19,
+   "stopped_for_memory": 0,
+   "killed_by_system": 0,
+   "timed_out": 0,
+   "kernel_hours": 3.904,
+   "c7_limits_hold": true
+  },
+  "outside_candidate_supported_size": {
+   "runs": 203,
+   "completed": 156,
+   "completed_share": 0.7685,
+   "outcomes": {
+    "accepted": 156,
+    "memory guard stop": 17,
+    "killed by the operating system": 3,
+    "time limit": 0,
+    "kernel rejection: Lean recursion-depth limit": 27,
+    "kernel rejection: other": 0
+   },
+   "resource_unknown": 20,
+   "median_seconds": 20.19,
+   "p95_seconds": 49.904,
+   "max_seconds": 178.221,
+   "max_peak_gb": 7.01,
+   "stopped_for_memory": 17,
+   "killed_by_system": 3,
+   "timed_out": 0,
+   "kernel_hours": 1.432,
+   "c7_limits_hold": false
+  },
+  "papers": 8
+ },
+ "record_validation": {
+  "no_malformed_run_record": true,
+  "every_synthetic_case_once": true,
+  "every_development_document_done_once": true,
+  "every_run_has_a_guard_record": true,
+  "further_configurations_complete": true,
+  "valid": true,
+  "development_documents": 19,
+  "runs": 1284,
+  "malformed": [],
+  "runs_without_a_guard_record": [],
+  "phases": {
+   "rerun": {
+    "targets": 3,
+    "run": 3,
+    "not_rebuilt": 0,
+    "every_target_run_once": true,
+    "every_rebuild_is_the_same_obligation": true,
+    "phase_records": 1
+   },
+   "safer_6gib": {
+    "targets": 30,
+    "run": 30,
+    "not_rebuilt": 0,
+    "every_target_run_once": true,
+    "every_rebuild_is_the_same_obligation": true,
+    "phase_records": 1
+   },
+   "single_7gib": {
+    "targets": 30,
+    "run": 30,
+    "not_rebuilt": 0,
+    "every_target_run_once": true,
+    "every_rebuild_is_the_same_obligation": true,
+    "phase_records": 1
+   }
+  }
+ },
+ "infrastructure": {
+  "guard_finished_records_without_a_driver_record": 33,
+  "guard_runs_started_and_never_finished": 2,
+  "note": "not kernel results: the session's 2-hour background limit stopped the first development invocation"
+ },
+ "further_configurations": {
+  "rerun": {
+   "runs": {
+    "runs": 3,
+    "completed": 0,
+    "completed_share": 0.0,
+    "outcomes": {
+     "accepted": 0,
+     "memory guard stop": 3,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 0,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 3,
+    "median_seconds": 47.42,
+    "p95_seconds": 62.397,
+    "max_seconds": 62.397,
+    "max_peak_gb": 7.01,
+    "stopped_for_memory": 3,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.043,
+    "c7_limits_hold": false
+   },
+   "safety": {
+    "phase": "rerun",
+    "workers": 1,
+    "memory_limit_gb": 7.0,
+    "limit_gb": 13.354,
+    "reserve_gb": 1.0,
+    "largest_guard_overshoot_mb": 7.8,
+    "worst_case_gb": 7.133,
+    "sampled_max_working_set_gb": 7.122,
+    "sampled_max_usage_gb": 7.225,
+    "system_kills": 0,
+    "oom_kill_counter_change": 0,
+    "worst_case_leaves_reserve": true,
+    "no_system_kill": true,
+    "sampled_working_set_leaves_reserve": true,
+    "safe_on_this_machine": true
+   },
+   "candidate_supported_size_bytes": null
+  },
+  "safer_6gib": {
+   "runs": {
+    "runs": 30,
+    "completed": 3,
+    "completed_share": 0.1,
+    "outcomes": {
+     "accepted": 3,
+     "memory guard stop": 24,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 3,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 24,
+    "median_seconds": 38.89,
+    "p95_seconds": 47.433,
+    "max_seconds": 48.127,
+    "max_peak_gb": 6.04,
+    "stopped_for_memory": 24,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.334,
+    "c7_limits_hold": false
+   },
+   "safety": {
+    "phase": "safer_6gib",
+    "workers": 2,
+    "memory_limit_gb": 6.0,
+    "limit_gb": 13.354,
+    "reserve_gb": 1.0,
+    "largest_guard_overshoot_mb": 40.6,
+    "worst_case_gb": 12.204,
+    "sampled_max_working_set_gb": 11.784,
+    "sampled_max_usage_gb": 11.871,
+    "system_kills": 0,
+    "oom_kill_counter_change": 0,
+    "worst_case_leaves_reserve": true,
+    "no_system_kill": true,
+    "sampled_working_set_leaves_reserve": true,
+    "safe_on_this_machine": true
+   },
+   "candidate_supported_size_bytes": {
+    "count": 59952,
+    "mean": 42487,
+    "min": 12377,
+    "sd_sample": 42487,
+    "median": 10299,
+    "pearson": 25048
+   }
+  },
+  "single_7gib": {
+   "runs": {
+    "runs": 30,
+    "completed": 4,
+    "completed_share": 0.1333,
+    "outcomes": {
+     "accepted": 4,
+     "memory guard stop": 20,
+     "killed by the operating system": 0,
+     "time limit": 0,
+     "kernel rejection: Lean recursion-depth limit": 6,
+     "kernel rejection: other": 0
+    },
+    "resource_unknown": 20,
+    "median_seconds": 45.09,
+    "p95_seconds": 54.283,
+    "max_seconds": 55.212,
+    "max_peak_gb": 7.01,
+    "stopped_for_memory": 20,
+    "killed_by_system": 0,
+    "timed_out": 0,
+    "kernel_hours": 0.382,
+    "c7_limits_hold": false
+   },
+   "safety": {
+    "phase": "single_7gib",
+    "workers": 1,
+    "memory_limit_gb": 7.0,
+    "limit_gb": 13.354,
+    "reserve_gb": 1.0,
+    "largest_guard_overshoot_mb": 7.8,
+    "worst_case_gb": 7.133,
+    "sampled_max_working_set_gb": 7.216,
+    "sampled_max_usage_gb": 7.395,
+    "system_kills": 0,
+    "oom_kill_counter_change": 0,
+    "worst_case_leaves_reserve": true,
+    "no_system_kill": true,
+    "sampled_working_set_leaves_reserve": true,
+    "safe_on_this_machine": true
+   },
+   "candidate_supported_size_bytes": {
+    "count": 59952,
+    "mean": 42487,
+    "min": 12377,
+    "sd_sample": 42487,
+    "median": 10299,
+    "pearson": 33760
+   }
+  }
+ },
+ "repeat_variation": {
+  "documented_twice": {
+   "pairs": 315,
+   "peak_difference_mb_median": 1.6,
+   "peak_difference_mb_max": 9.1,
+   "time_difference_relative_median": 0.02,
+   "time_difference_relative_max": 0.105
+  },
+  "documented_vs_single_worker": {
+   "pairs": 4,
+   "peak_difference_mb_median": 0.8,
+   "peak_difference_mb_max": 1.3,
+   "time_difference_relative_median": 0.053,
+   "time_difference_relative_max": 0.057
+  }
+ },
+ "projection": {
+  "observed": {
+   "papers": 8,
+   "kernel_hours_per_paper_mean": 0.586,
+   "kernel_hours_per_paper_median": 0.421,
+   "kernel_hours_per_paper_max": 1.449,
+   "kernel_runs_per_paper_mean": 132.6,
+   "kernel_runs_per_paper_max": 290
+  },
+  "projected_wall_hours": {
+   "60_papers_1_worker": {
+    "at_mean": 35.2,
+    "if_every_paper_were_the_slowest": 86.9
+   },
+   "60_papers_2_workers": {
+    "at_mean": 17.6,
+    "if_every_paper_were_the_slowest": 43.5
+   },
+   "120_papers_1_worker": {
+    "at_mean": 70.4,
+    "if_every_paper_were_the_slowest": 173.9
+   },
+   "120_papers_2_workers": {
+    "at_mean": 35.2,
+    "if_every_paper_were_the_slowest": 86.9
+   }
+  }
+ }
+}

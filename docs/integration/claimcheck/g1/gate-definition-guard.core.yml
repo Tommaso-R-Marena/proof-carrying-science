@@ -1,0 +1,52 @@
+# PROPOSED, NOT APPLIED (owner decision G1, core).  To take effect it must be committed to the
+# core repository's protected `main` (pull_request_target runs only the copy on the default branch) and
+# `gate-definition-unchanged` added as a required check.  See REQUIRED_CHECKS.md, "G1".
+#
+# It runs the definition on `main`, never the pull request's.  It reads the pull request's commits as
+# data (git diff of file names against the current `main`, fetched at run time) and executes nothing from
+# them; the token is read-only and no secret is used.  It fails when the pull request changes any workflow,
+# any file that defines a gate, or any file through which a gate's own imports could be replaced (a
+# module at the repository root or in scripts/ that shadows the standard library, a new package
+# __init__.py, conftest.py, sitecustomize.py or usercustomize.py).  Such a change can merge only through
+# the owner's recorded ruleset bypass.
+name: Gate definition guard
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+permissions:
+  contents: read
+jobs:
+  gate-definition-unchanged:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Compare the gate-defining files of the pull request with main (read as data, never executed)
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --quiet origin "+refs/heads/main:refs/remotes/origin/main" "+refs/pull/${PR_NUMBER}/head:refs/remotes/pr/head"
+          test "$(git rev-parse refs/remotes/pr/head)" = "${HEAD_SHA}"
+          changed="$(git diff --name-only --no-renames "refs/remotes/origin/main...${HEAD_SHA}" -- \
+            .github \
+            scripts \
+            research/integration_v2 \
+            research/__init__.py \
+            docs/reconciliation/OPEN_PRS.json \
+            docs/integration/2026-11-05 \
+            docs/integration/2026-11-14 \
+            ':(top,glob)*.py' \
+            ':(glob)**/conftest.py' \
+            ':(glob)**/sitecustomize.py' \
+            ':(glob)**/usercustomize.py')"
+          if [ -n "${changed}" ]; then
+            printf 'This pull request changes files that define the required gates or their imports:\n%s\n' "${changed}"
+            printf 'Such a change needs a separate owner decision and the owner'"'"'s recorded ruleset bypass.\n'
+            exit 1
+          fi
+          echo "No workflow, no gate-defining file and no import path of a gate changed."

@@ -1,0 +1,22 @@
+{
+ "status": "PREPARED. Not administered to anyone.",
+ "critical_scope_questions": [
+  {"id": "S1", "question": "The tool shows “Number reproduced” for a sentence in a paper. Does that show the paper's conclusion is right?",
+   "correct": "No. It shows that this file gives the printed number under the stated reading. It says nothing about the conclusion, the methods, or whether this is the data the authors analysed.",
+   "scored_correct_if": "the answer is no and mentions at least one thing that is not established"},
+  {"id": "S2", "question": "The tool shows “Discrepancy for a person to review”. Does that show the paper is wrong?",
+   "correct": "No. The file does not give the printed number under this reading. The reading may be wrong, or the authors may have used other rows, another file version or another definition.",
+   "scored_correct_if": "the answer is no and gives at least one alternative explanation"},
+  {"id": "S3", "question": "Who or what decided that the sentence means “the mean of this column”?",
+   "correct": "The person (or program) who proposed the reading. The tool ran mechanical checks on the wording; no person reviewed it and the Lean kernel did not decide it.",
+   "scored_correct_if": "the answer does not attribute the reading to Lean or to a proof"},
+  {"id": "S4", "question": "The tool answered “A person must review the reading”. What would you do next?",
+   "correct": "Read the sentence and the methods to decide what the number is; the arithmetic result is kept and can be used once the reading is settled. Not: treat it as confirmed or as refuted.",
+   "scored_correct_if": "the answer involves a person checking the meaning and does not treat the result as a verdict on the paper"}
+ ],
+ "further_questions": [
+  "What is the difference between the result the web page calculated and the result of the Lean run?",
+  "What does UNKNOWN mean here?",
+  "Could you hand this evidence to a colleague so that they can re-check it without trusting you? How?"
+ ]
+}
