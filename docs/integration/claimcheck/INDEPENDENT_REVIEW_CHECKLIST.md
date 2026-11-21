@@ -109,13 +109,24 @@ succeed:
 | --- | --- |
 | Could the retained commit admit files that V23 does not list? | its tree is `H`'s tree (C1.6), and V23 pins every file at `H` (C1.3) |
 | Could V23 admit a file outside the reviewed roots, or change an existing file? | C1.3; the only changed entry is the gate script, which the control commit replaces |
-| Does the control commit change gate logic or a workflow? | C1.5: constants and one added test only; no workflow change |
+| Does the control commit change gate logic or a workflow? | C1.5: constants and one added test only; no workflow change. **With G2:** one reviewed workflow successor in the admitted tree and its binding in `reconcile.py` (G2.1 to G2.6), nothing else |
 | Could a tag admit anything? | no: the gate compares the tag's target with the commit ID compiled into it (`REQUIRED_CHECKS.md`, "Retained-source tags") |
 | Does anything bind less than it appears to? | **yes, and it is documented**. On the core, the retained-source gate runs only when integration paths change (path-filtered workflow, not required). The binding control on every pull request is the V23 manifest, through `source-policy` and `verified-public-integration` (`REQUIRED_CHECKS.md`, "Which gates bind"; decision C2b). Also: a committed edit to `research/integration_v2/reconcile.py` or `test_reconcile.py` passes both gates (H1-b test 9). The control commit's diff of those two files must therefore be reviewed line by line (C1.5) |
 | Does the admitted tree contain material whose redistribution is not established? | **yes**: the recorded model outputs; decide L1 to L3 first (`MODEL_OUTPUT_LICENSING.md`) |
 | Does the retained commit keep withheld material reachable? | **under H1-a, yes, as designed**: its first parent `H` reaches the three commits that added the recorded outputs (`f17649ca`, `dbe31d72`, `87900a17`), so the public tag keeps them reachable even after stubs and a squash merge. **Under H1-b, no, provided the withholding commit came first**: the H1-b commit's own tree is the admitted tree, so before withholding it carries all 22 withheld blobs (the dry run then reports `all_as_expected: false`; no gate checks this). The C1.6 commands show it. Neither design removes them from pull requests 212 and 216, or from clones (`H1B_CLEAN_HISTORY.md`) |
 | Could H1-b let a different tree or history be pinned than the one reviewed? | no: the commit ID fixes tree and parents; `check_admission_consistency` rebuilds it from `H` and compares; the gate checks the same things under both designs, and a substituted commit, moved or deleted tag, or broken ancestry fails (`h1b/h1b-adversarial.json`) |
 | Does V23's own text say anything the owner may not want permanent? | its `reviewer` field reads "PROPOSED by an AI assistant for the owner's review; not reviewed, not approved". Keep it as honest provenance, or change it in the generator and regenerate (which changes every digest) |
+
+### C1 with G2 (only if G2 is approved; `G2_IMPORT_ISOLATION.md`)
+
+| ID | Check | How | Expected |
+| --- | --- | --- | --- |
+| G2.1 | The branch carries exactly G2's workflow, and nothing else changed in an existing file | `git diff --name-status --no-renames bc78660b H` | `A` lines only, plus `M .github/workflows/pcs-public-full-verification.yml`; that file's SHA-256 is `bf876c35…85fc` |
+| G2.2 | C1's control commit carries G2's control edits, and only those, beyond C1's | the dry run's `c1_includes_g2_only_when_the_source_carries_its_workflow`; `git diff` of `reconcile.py` and `test_reconcile.py` against `g2/proposed-g2-core-controls.patch` | true; identical |
+| G2.3 | V23 is unchanged by G2 | the same report: `v23_identical_with_and_without_g2` | true; V23 keeps V22's identity `bb920a82…67cf` for the workflow, and `_current_expected` maps exactly that identity |
+| G2.4 | The gate step is first and isolated | the protected test `test_g2_source_policy_runs_the_gate_first_through_the_isolated_launcher`; read the step in the workflow | passes; only checkout and setup-python run before it |
+| G2.5 | The launcher is the reviewed one | compare the step's here-document with `g2_isolation.LAUNCHER`, line by line | identical; it puts no repository directory on the import path except `research/integration_v2` |
+| G2.6 | No planted file runs, and the verdict is unchanged | `prepare_g2` at the regenerated head | `all_as_expected: true`; every vulnerable row: planted code not run, gate failed; positive: the same report as the current invocation |
 
 ## 3. D1 to D3: website
 
