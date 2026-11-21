@@ -97,7 +97,7 @@ Fast unit tests of the construction: `research/claimcheck_v1_1/tests/test_retain
 
 ## 6. Results (2026-11-19)
 
-Run at `044d7ee2` (`h1b/h1b-adversarial.json`). The branch still holds the original responses (the
+Run at `044d7ee2`, and again at `ad43f21c` after the independent review with the same results (`h1b/h1b-adversarial.json`, the later run; commit IDs differ with the head). The branch still holds the original responses (the
 withholding waits for your archive, A1), so the tests ran on a throw-away commit with the stubs that
 the governed tool writes, marked as a simulation. The H1-b retained commit there is `1b3e3967…`, on
 snapshot `d11ebb31…`; the H1-a commit for the same tree is `52638462…`. Both are objects in a

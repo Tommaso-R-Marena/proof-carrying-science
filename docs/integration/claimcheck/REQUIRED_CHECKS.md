@@ -180,8 +180,9 @@ removed so its assertions cannot be stripped. It fails the source contract if th
 | no false failure | the `source-policy` steps that run before the gate leave no untracked file; `__pycache__` is ignored |
 | caveats | annotated tags are not enforced (a lightweight tag at the right commit passes), and authority rests on the commit ID in the gate. Every workflow that runs `reconcile --require-committed` checks out full history with tags |
 
-**C2b dry run (2026-11-19, `c2b/c2b-dry-run.json`, patch `c2b/proposed-c2b.patch`, SHA-256
-`599e4614…3f73`): all as expected.** It ran on top of C1's dry-run control commit with the H1-b
+**C2b dry run (regenerated 2026-11-21 at `ad43f21c` after the independent review, `c2b/c2b-dry-run.json`,
+patch `c2b/proposed-c2b.patch`, SHA-256 `c8d96303…560e`): all as expected.** The gate's child
+process now runs in isolated mode (`-I`). It ran on top of C1's dry-run control commit with the H1-b
 retained commit:
 
 * the gate passes on 72 PRs and reports `retained_source.passed: true`;
