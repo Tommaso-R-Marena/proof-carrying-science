@@ -150,6 +150,8 @@ def main(argv=None) -> int:
         census_source = P.git(wt, "ls-tree", "-r", "--name-only", source).splitlines()
         census_retained = P.git(wt, "ls-tree", "-r", "--name-only", r).splitlines()
         against_main = P.git(wt, "diff", "--name-status", "--no-renames", P.PROTECTED_MAIN, source).splitlines()
+        if P.G2.carried(wt, P.PROTECTED_MAIN, source):          # G2's one reviewed successor, bound by C1's control files
+            against_main = [x for x in against_main if x != "M\t" + P.G2.WORKFLOW]
         T["2_no_file_introduced_or_removed"] = {
             "files": len(census_retained),
             "snapshot_tree_id_equals_source_tree_id": P.git(wt, "rev-parse", f"{snap}^{{tree}}") == P.git(wt, "rev-parse", f"{source}^{{tree}}"),

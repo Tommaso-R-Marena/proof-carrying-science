@@ -50,6 +50,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from . import g2_isolation as G2
+
 ROOT = Path(__file__).resolve().parents[3]
 V22 = "docs/integration/2026-11-05/RECONCILIATION_V22.json"
 V23 = "docs/integration/2026-11-14/RECONCILIATION_V23.json"
@@ -191,8 +193,9 @@ def history_review(cwd: Path, head: str, retained: dict) -> dict:
             git(cwd, "rev-parse", f"{s}^{{tree}}") == git(cwd, "rev-parse", f"{head}^{{tree}}")
             and git(cwd, "rev-list", "--parents", "-n", "1", s).split()[1:] == [PROTECTED_MAIN]
             and git(cwd, "rev-list", "--parents", "-n", "1", r).split()[1:] == [s, OLD_INTAKE])
+    reviewed = {"M\t" + G2.WORKFLOW} if G2.carried(cwd, PROTECTED_MAIN, head) else set()      # G2's one reviewed successor, if chosen
     facts["source_only_adds_files_to_protected_main"] = all(
-        line.startswith("A\t") for line in git(cwd, "diff", "--name-status", "--no-renames", PROTECTED_MAIN, head).splitlines())
+        line.startswith("A\t") or line in reviewed for line in git(cwd, "diff", "--name-status", "--no-renames", PROTECTED_MAIN, head).splitlines())
     facts.update(reach(cwd, r, [PROTECTED_MAIN, OLD_INTAKE], withheld_blobs(cwd, search_from=head)))
     return facts
 
@@ -239,6 +242,10 @@ def build(src: Path, head: str, intake: str, tag: str, v22: dict, v22_raw: bytes
     t = t.rstrip("\n") + "\n" + V23_TEST.format(v22=V22, v22_sha=sha(v22_raw), v22_commit=V22_COMMIT, retained=RETAINED,
                                                 roots=ADDED_ROOTS, files=ADDED_FILES)
     files[GATE_TEST] = t.encode("utf-8")
+    # G2 (a separate owner decision): its two control edits, only if the source commit carries G2's reviewed workflow successor
+    if G2.carried(src, V22_COMMIT, head):
+        g, t = G2.controls(files[GATE].decode("utf-8"), files[GATE_TEST].decode("utf-8"), show(src, V22_COMMIT, G2.WORKFLOW))
+        files[GATE], files[GATE_TEST] = g.encode("utf-8"), t.encode("utf-8")
     return files
 
 
@@ -304,6 +311,9 @@ def main(argv=None) -> int:
         sys.path.insert(0, str(wt))
         from research.integration_v2.reconcile import _current_expected
         changed = [n for n, ident in v22["snapshot"].items() if n not in tracked or identity(wt, n) != _current_expected(n, ident)]
+        g2 = G2.carried(wt, V22_COMMIT, head)          # G2's reviewed workflow successor, bound by its control edits in build()
+        changed = [n for n in changed if not (g2 and n == G2.WORKFLOW)]
+        report["g2_included"] = g2
         added_names = sorted(tracked - set(v22["snapshot"]) - controls22)
         outside = [n for n in added_names if not (n.startswith(ADDED_ROOTS) or n in ADDED_FILES)]
         added = {n: identity(wt, n) for n in added_names}
@@ -311,7 +321,8 @@ def main(argv=None) -> int:
         report["files_added"] = len(added_names)
         report["added_files_outside_the_admitted_roots"] = outside
         census = {"note": "Every file this branch adds to the tree pinned by RECONCILIATION_V22, with its identity at the commit above. "
-                          "No existing file is changed or removed.",
+                          + ("No other existing file is changed or removed: G2's reviewed successor of the source-policy workflow is bound "
+                             "by C1's control files. " if g2 else "No existing file is changed or removed."),
                   "generated_from_commit": head, "existing_files_changed_or_removed": changed,
                   "by_directory": {}, "files": added}
         for n in added_names:

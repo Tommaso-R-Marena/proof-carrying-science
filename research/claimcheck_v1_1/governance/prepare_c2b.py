@@ -123,7 +123,8 @@ def required_path_static_check(cwd: Path) -> dict:
         "source_policy_runs_on_the_public_repository": "if: ${{ github.event.repository.private == false }}" in policy
                                                         and policy.count("if:") == 2,      # the job condition and one PR-only step
         "full_history_and_tags_are_checked_out": "fetch-depth: 0" in policy,
-        "the_manifest_gate_runs_with_require_committed": "run: python -m research.integration_v2.reconcile --require-committed" in policy,
+        "the_manifest_gate_runs_with_require_committed": ("run: python -m research.integration_v2.reconcile --require-committed" in policy
+                                                           or P.G2.step() in policy),          # G2's isolated form, if chosen
         "the_aggregate_needs_source_policy": "needs: [source-policy," in aggregate and "if: ${{ always()" in aggregate,
         "the_aggregate_rejects_a_skipped_or_failed_source_policy": 'test "$SOURCE_POLICY" = success' in aggregate,
     }
