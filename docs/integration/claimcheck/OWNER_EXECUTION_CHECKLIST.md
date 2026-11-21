@@ -30,30 +30,44 @@ source commit. The evidence must then be regenerated and reviewed again.
   * squash-merge PR 212 only;
   * no history rewrite.
 * **Authorised (2026-11-19):** preparation, and the replacement after a verified private archive.
-* **Status:** the capacity study's cache-dependent work is finished. The archive tool is verified on a
-  private container copy: 22 of 22 files match, archive SHA-256 `91acf4ff…69a3`. That copy is not an
-  archive: the container is disposable. No genuinely private, durable destination is available to
-  this session, so the originals are unchanged.
-* **Your action (A1), one of:**
-  * run `python3 -m research.claimcheck_v1_1.governance.archive_model_outputs --out <private dir>` on
-    a machine you control. It must print `"recoverable_and_complete": true` and archive SHA-256
-    `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3`. Keep the archive privately
-    and confirm;
-  * or attach a computer folder to this session for the archive;
-  * or name another private destination you authorise.
-* **Steps after your confirmation:**
-  1. Run `python -m research.claimcheck_v1_1.governance.withhold_model_outputs --apply --groups N,C --decision "<reference>"`
-     and commit the result.
-  2. Run the suites and `withholding_effect`.
-  3. Regenerate the admission evidence.
+* **Status (2026-11-21):** the capacity study's cache-dependent work is finished. The originals are
+  unchanged. The archive tool was tested end to end:
+  * a fresh clone from GitHub at commit `e6099049`, the tool run as a plain script in isolated mode;
+  * Python 3.11, 3.12 and 3.13: 22 of 22 files, the same archive SHA-256 `91acf4ff…69a3`;
+  * the four damaged-copy controls fail, and the archive rebuilds byte-identically after a simulated
+    withholding.
+
+  Every copy made here was deleted. No durable private destination is available to this session.
+* **Your action (A1):** follow [`A1_ARCHIVE_PROCEDURE.md`](A1_ARCHIVE_PROCEDURE.md) (Windows
+  PowerShell, local only, a second copy on a drive you own). Then send the SHA-256 and
+  `recoverable_and_complete` from both checks. Expected:
+  `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3` and `true`.
+* **Steps after your confirmation, and not before:**
+  1. Run `withhold_model_outputs --apply --groups N,C --decision "<your confirmation: date, SHA-256>"`.
+     It writes the provenance stubs and touches nothing else.
+  2. Check:
+     * the stubs' digests equal the inventory's;
+     * the freeze check, and the v1 and v1.1 suites;
+     * the regenerated `withholding_effect`.
+  3. Commit the withholding as one commit and push it.
+  4. If you approved G2: commit its workflow edit (`g2/proposed-g2-core-workflow.patch`).
+  5. Regenerate the admission evidence at that exact commit:
+     * `prepare_core_admission --history clean`;
+     * `check_admission_consistency --history clean`;
+     * the H1-b tests;
+     * the C2b dry run, and the G2 dry run if chosen.
+
+     H1-b's `all_as_expected` must now be `true`, with no withheld response reachable.
+  6. An independent subagent, under the same restrictions, reviews the regenerated evidence against
+     `INDEPENDENT_REVIEW_CHECKLIST.md`.
 * **Effect:** no frozen file and no test is affected. Regenerating the Nemotron arm offline then
   needs your archive. The measured effect on every offline tool is in `withholding/withholding-effect.json`
   (`MODEL_OUTPUT_LICENSING.md`, section 7). This is an ordinary commit, but it changes the census.
-* **Not before:** the capacity run has finished reading the original caches, and you have confirmed
-  the final archival and replacement plan (owner, 2026-11-19).
+* **Not before:** your confirmation of the archive's SHA-256 and `recoverable_and_complete: true`
+  (owner, 2026-11-21).
 * **What it does not do:** withdraw public access. The originals stay reachable through PR 212,
-  PR 216, clones and, under C1 as designed, the retained-source tag (`MODEL_OUTPUT_LICENSING.md`,
-  section 5). See P1 and H1.
+  PR 216 and clones, and, under H1-a only, through the retained-source tag
+  (`MODEL_OUTPUT_LICENSING.md`, section 5). See P1 and H1.
 
 ### P1. Provider clarification (NVIDIA), before C1
 * **Decision:** whether to ask NVIDIA if research outputs obtained through trial access may be
@@ -172,7 +186,12 @@ source commit. The evidence must then be regenerated and reviewed again.
   * the H1-b way, on post-C1 `main`, with C1's retained commit as the previous intake;
   * only after the research branch's tree carries the withholding stubs;
   * and PR 216 squash-merged only, because a merge commit would bring its development history,
-    with the three response commits, into `main`.
+    with the three response commits, into `main`. A rebase merge would too, and the same holds for
+    PR 212.
+
+  Built that way, the V24 retained commit reaches the snapshot on post-C1 `main`, and C1's retained
+  commit with its clean chain. It reaches none of the three response commits (H1-b test 12). The
+  required ancestry, the exact tree and every digest pin stay as for C1.
 * **Authorises now:** nothing. A V24 proposal, with its own census, dry run and review, would be
   prepared on request after C1.
 
@@ -235,12 +254,15 @@ new values.
 * **Authorises:** committing `docs/integration/claimcheck/g1/gate-definition-guard.<repo>.yml` to
   `.github/workflows/` on `main`, through a reviewed pull request, and then adding
   `gate-definition-unchanged` (GitHub Actions) to the `main` ruleset.
+* **Recommendation (2026-11-21): not now.** With G2, the pre-merge check covers the rest as a procedure,
+  and you are the only person who can merge (`G2_IMPORT_ISOLATION.md`, section 6).
 * **What it does:** a `pull_request_target` job, defined on `main` only. It fails whenever a pull
   request changes:
   * any workflow;
   * a gate-defining file;
-  * an import path of a gate (root `*.py`, `scripts/`, a new `research/__init__.py`, `conftest.py`,
-    `sitecustomize.py` or `usercustomize.py`).
+  * an import path of a gate (root `*.py`, `*.pyc`, `*.so` and packages, `scripts/`, bytecode or a
+    compiled module anywhere, a new `research/__init__.py`, `conftest.py`, `sitecustomize.py` or
+    `usercustomize.py`).
 
   It compares against `main` fetched at run time, and runs again when a pull request is retargeted.
   It reads the pull request as data and runs nothing from it; the token is read-only and no secret
@@ -249,21 +271,26 @@ new values.
   only by D2b's retained-source rule.
 * **Consequence:** every later gate change (C1, C2b, D2 and later admissions) merges only through
   your recorded ruleset bypass.
-* **Before relying on it:** check in a scratch repository how GitHub decides a required check when two
-  workflows report the same job name (`REQUIRED_CHECKS.md`, "G1").
+* **Before relying on it:** check two undocumented behaviours in a scratch repository
+  (`REQUIRED_CHECKS.md`, "G1"):
+  * that its failing check blocks the pull request's head;
+  * that a later, same-named, passing job a pull request adds does not unblock it.
 * **Undo:** remove the check from the ruleset, then remove the workflow.
 
-### G2 (optional, both repositories). Isolate the gates' imports (protected: workflow changes)
+### G2 (recommended; core before C1's regeneration). The source gates run first, with isolated imports ([`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md))
 * **Authorises:**
-  * running the retained-source gate as `python -I scripts/check_reconciled_prs.py …` in the workflows
-    that run it;
-  * running the manifest gate through a launcher in isolated mode that adds the repository to the
-    end of `sys.path`, after the standard library, and refuses a `research/__init__.py`.
-* **Why:** so that no module a pull request adds can replace what a gate imports (finding F2 of the
-  independent review, reproduced).
-* **Before:** a dry run like C2b's. It must show that both gates still pass, and that a marker
-  `json.py` at the root and in `scripts/` no longer runs.
-* **Undo:** revert the workflow commit.
+  * core: committing `g2/proposed-g2-core-workflow.patch` on the ClaimCheck branch before C1 is
+    regenerated. C1's control commit then carries G2's two control edits
+    (`g2/proposed-g2-core-controls.patch`): `reconcile.py` binds exactly this workflow successor, and
+    `test_reconcile.py` tests it. V23 is unchanged;
+  * site: committing `g2/proposed-g2-site.patch`, one control file. Meaningful together with D2b.
+* **Why:** a file a pull request adds can run before either gate checks anything, and forge the
+  gate's report without changing a gate file. 19 working vectors were reproduced.
+* **Evidence:** `g2/g2-dry-run.json`, all as expected (23 rows, the site, C2b compatible).
+* **Does not cover:** edits of the workflow or of the gate's own sources: review, the pre-merge
+  check, or G1.
+* **If decided after C1:** G2 needs an admission cycle of its own.
+* **Undo:** before C1, drop the workflow commit and regenerate. After C1, a new admission.
 
 ## Before every merge (no change; recommended now)
 

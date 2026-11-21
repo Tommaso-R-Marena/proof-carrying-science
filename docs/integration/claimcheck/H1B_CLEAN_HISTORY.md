@@ -1,9 +1,14 @@
 # H1-b: a retained-source commit without the development history
 
-**Status (2026-11-19).** Designed, implemented in the admission tooling, and tested in throw-away
-worktrees. **Not applied:** no retained commit, tag, control commit or ruleset was created or changed.
-The design is the proposed answer to owner decision H1; H1-a (the original design) stays available
-as a fallback. Approving C1 with either design remains a separate owner decision.
+**Status (2026-11-19; retained 2026-11-21).** Designed, implemented in the admission tooling, and
+tested in throw-away worktrees. **Not applied:** no retained commit, tag, control commit or ruleset
+was created or changed. The design is the proposed answer to owner decision H1. H1-a (the original
+design) stays available as a fallback. Approving C1 with either design remains a separate owner
+decision.
+
+H1-b stays the preferred design for both retained-source tags: C1's, and R1's later V24 (section 4).
+It is compatible with G2 (`G2_IMPORT_ISOLATION.md`). G2's workflow edit is one reviewed file in the
+admitted tree, and the add-only checks allow exactly that change.
 
 **What H1-b does not do.** It does not remove the original model responses from GitHub. Pull request
 212 and pull request 216 keep the commits that added them reachable (GitHub keeps
@@ -145,7 +150,10 @@ that:
 * the pre-merge check, and G1, both extended on 2026-11-19 to the import paths (`REQUIRED_CHECKS.md`,
   "G1");
 * C2b's child process, now in Python's isolated mode (`-I`);
-* the proposed G2 (isolated imports for both gates in the workflows). None of these is applied.
+* G2, now prepared and tested (`G2_IMPORT_ISOLATION.md`): the gates run first, with isolated
+  imports. In its dry run, none of 19 working vectors ran.
+
+None of these is applied.
 
 **A precondition, and a merge rule.**
 
@@ -154,4 +162,5 @@ that:
   it.
 * PR 216 holds the three response commits in its history and all 22 responses in its tree. A merge
   commit or rebase merge of PR 216 would put them into `main`'s history whatever C1 pins. **Squash-merge
-  PR 216 only, and only after its tree carries the stubs.**
+  PR 216 only, and only after its tree carries the stubs.** The same holds for PR 212: squash-merge
+  only.

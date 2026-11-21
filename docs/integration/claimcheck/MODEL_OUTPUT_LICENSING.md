@@ -275,7 +275,7 @@ Consequently:
    and H1-b. H1-b is the smallest step that avoids adding a protected public reference.
 4. Withhold the Cohere output under any option.
 
-## 7. Archive and withholding: status (2026-11-19)
+## 7. Archive and withholding: status (2026-11-19; A1 procedure 2026-11-21)
 
 | Step | Status |
 | --- | --- |
@@ -311,15 +311,26 @@ On a private copy in the container (directory 0700, files 0600, outside the repo
 
 That copy disappears with the container and does not count as the archive.
 
-**The minimal owner action** (one of):
+**The minimal owner action (A1)** is [`A1_ARCHIVE_PROCEDURE.md`](A1_ARCHIVE_PROCEDURE.md):
 
-1. On a machine you control, from a clone of this repository at the pull request 212 head:
-   `python3 -m research.claimcheck_v1_1.governance.archive_model_outputs --out <a private directory outside the clone>`.
-   It must print `"recoverable_and_complete": true` and the archive SHA-256 above. Keep the archive
-   privately, and tell me it is held.
-2. Or attach a folder of one of your computers to this session (Claude desktop app: Settings,
-   Claude Code, Remote Control) and authorise writing the archive there.
-3. Or name another private destination you authorise.
+* Windows PowerShell, on your own computer;
+* a fresh clone at the pinned commit `e6099049`, then the archive in your user folder;
+* a second copy on a drive you own, and a check of that copy.
+
+Nothing is uploaded. You then send two values: the SHA-256 (expected `91acf4ff…69a3`) and
+`recoverable_and_complete: true`. The withholding runs only after that, and not before (owner,
+2026-11-21).
+
+Tested here on 2026-11-21, from a fresh GitHub clone at that commit:
+
+* the tool reads the stored Git objects (`git cat-file blob`);
+* Python 3.11, 3.12 and 3.13 give byte-identical archives;
+* so does a clone with converting Git settings;
+* after a simulated withholding, the archive rebuilds byte-identically;
+* a changed byte, a missing response, an extra member and a truncated file each give `false`.
+
+Windows and PowerShell themselves could not be run in this environment. Every copy made for the
+tests was deleted.
 
 **Measured effect of the withholding** (`withholding/withholding-effect.json`; simulated at
 `044d7ee2` in two throw-away worktrees, one without and one with the stubs written by the governed

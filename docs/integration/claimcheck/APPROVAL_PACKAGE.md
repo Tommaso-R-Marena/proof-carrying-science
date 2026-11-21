@@ -1,21 +1,24 @@
-# ClaimCheck: the owner's approval package (2026-11-19)
+# ClaimCheck: the owner's approval package (2026-11-19; G1, G2 and A1 updated 2026-11-21)
 
 One page per decision. **Nothing here has been applied, merged, deployed, tagged or approved.**
 Approving one decision does not approve another. Steps, stop conditions and undo for each are in
 [`OWNER_EXECUTION_CHECKLIST.md`](OWNER_EXECUTION_CHECKLIST.md); the independent review steps are in
 [`INDEPENDENT_REVIEW_CHECKLIST.md`](INDEPENDENT_REVIEW_CHECKLIST.md).
 
-**One prerequisite is open: your action A1** (a private archive of the 22 responses to withhold;
-[`MODEL_OUTPUT_LICENSING.md`](MODEL_OUTPUT_LICENSING.md), section 7). Until it is done and the
-withholding commit exists, the C1 numbers (V23 digest, retained commit, control-file digests) cannot
-be final: they are regenerated at the commit you admit, as before.
+**One prerequisite is open: your action A1**, a private archive of the 22 responses to withhold. The
+procedure is [`A1_ARCHIVE_PROCEDURE.md`](A1_ARCHIVE_PROCEDURE.md): Windows PowerShell, local only,
+with a second copy on a drive you own. You then send two values: the archive's SHA-256 (expected
+`91acf4ff…69a3`) and `recoverable_and_complete: true`. Until then the originals stay unchanged, and
+the C1 numbers (V23 digest, retained commit, control-file digests) cannot be final. They are
+regenerated at the commit you admit, after the withholding commit.
 
 ## Order
 
-* **First:** A1 and the withholding commit; P1 (optional, yours to send); then H1.
+* **First:** A1 and the withholding commit; P1 (optional, yours to send); then H1 and G2. Both
+  decide what C1 is regenerated from: G2's workflow edit is part of the admitted tree.
 * **Core:** T1 (recommended), then C1, then C2, then C2b (optional), then R1.
 * **Website:** D1 and D3, then regenerate, then D2, then D2b (optional).
-* **Either repository, at any time (optional):** G1.
+* **Either repository, optional, not recommended now:** G1 (see its entry).
 
 ## The decisions
 
@@ -126,32 +129,53 @@ be final: they are regenerated at the commit you admit, as before.
 * **Approving:** add it, together with the pre-merge gate-definition check, or with G1.
 * **Rejecting:** those rules stay advisory.
 
-### G1. Gate-definition guard (either repository, optional, protected)
+### G1. Gate-definition guard (either repository, optional, protected; not recommended now)
 * **Changes:**
   * one `pull_request_target` workflow on `main`, which runs only the definition on `main`, reads the
     pull request as data and executes nothing from it;
   * one required check, `gate-definition-unchanged`.
-* **Why:** it is the smallest enforced protection against three things:
-  * D2b's caveat;
-  * committed edits to the gate's own source, which no gate detects;
-  * modules a pull request adds where a gate imports from (`scripts/`, root `*.py`, a new
-    `research/__init__.py`).
-* **Evidence:** the logic was tested on scratch repositories: 14 cases in each repository, all as
-  intended. On the site it assumes D2b, which binds `site-full-gate`'s own files.
-* **Assumption to test first:** how GitHub decides a required check when two workflows report the
-  same job name.
+* **Why:** to enforce, rather than check by hand, that no pull request changes a workflow, a gate's
+  own files or an import path without its own decision. This includes D2b's caveat.
+* **Evidence:**
+  * the logic was tested on scratch repositories: 14 cases in each repository, all as intended;
+  * its path list was extended on 2026-11-21 with three vectors the G2 dry run found it missed;
+  * evaluation: [`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md), section 6.
+* **Not documented by GitHub, to test first in a scratch repository:**
+  * which commit a `pull_request_target` check attaches to;
+  * whether a same-named passing job that a pull request adds can satisfy the requirement.
+* **Recommendation:** not necessary now. With G2, the pre-merge check covers the rest as a
+  procedure. You are the only person who can merge. Adopt G1 only if others gain merge rights, after
+  the two tests.
 * **Approving:** every later gate change merges only through your recorded ruleset bypass.
 * **Rejecting:** the pre-merge check stays a manual step.
 
-### G2. Isolate the gates' imports (either repository, optional, protected)
-* **Changes:** the workflows run the retained-source gate as `python -I …`, and the manifest gate
-  through an isolated launcher, so no module a pull request adds can replace a gate's imports.
-* **Why:** independent review F2, reproduced: a marker `json.py` at the root or in `scripts/` ran
-  before either gate checked anything.
-* **Evidence:** under `-I` the marker did not run, and the retained-source gate ran its own checks.
-  A dry run for both gates is to be prepared on request.
-* **Approving:** one workflow commit per repository, after its dry run.
-* **Rejecting:** the pre-merge check and G1 remain the protection.
+### G2. The source gates run first, with isolated imports (core and site, protected; recommended)
+* **Changes:**
+  * core: in `source-policy`, the manifest gate becomes the first step after checkout and
+    setup-python, as `python -I -B -X pycache_prefix=<empty>` through a fixed 13-line launcher;
+  * `reconcile.py` (+37 −3) binds exactly this workflow successor, and `test_reconcile.py` (+44)
+    tests it. V23 is unchanged;
+  * site: `open-pr-reconciliation.yml` runs `python -I scripts/check_reconciled_prs.py` first.
+* **Why:** a file a pull request adds can run before either gate checks anything and forge its
+  report, without changing any gate file. The dry run reproduced 19 working vectors, among them
+  `json.py`, a root package, cached bytecode carrying the genuine source's hash, a compiled module
+  beside the gate, `nt.py` and `PYTHONPATH`.
+* **Evidence:** `g2/g2-dry-run.json`, all as expected:
+  * at C1 + G2, the same report as the current invocation (72 PRs);
+  * the protected suites pass (79 tests), and with C2b too (80);
+  * fail-closed with the same error without C1;
+  * every vector: planted code never ran, and the gate failed;
+  * the site's positive case and its planted `scripts/json.py` case behave as expected.
+
+  Patches are in `g2/`. Design and limits: [`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md).
+* **Does not cover:** edits of the workflow or of the gate's own sources. Review, the pre-merge check,
+  or G1 covers those.
+* **Timing:** core, before C1's final regeneration. C1 then carries G2's two control edits
+  automatically, and only if the branch carries G2's exact workflow. After C1, G2 would need an
+  admission of its own. Site: any time, meaningful together with D2b.
+* **Approving:** I commit the workflow edit on the branch, regenerate C1 with it, and rerun every dry
+  run; the independent review follows. The site edit is one control-file commit.
+* **Rejecting:** the pre-merge check stays the only protection against these vectors.
 
 ### R1. Assurance research (PR 216)
 * **Changes:** nothing now.

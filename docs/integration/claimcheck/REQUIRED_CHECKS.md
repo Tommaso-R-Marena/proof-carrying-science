@@ -302,6 +302,12 @@ limited in practice by who can merge.
      But if GitHub accepted the later of two same-named results, the imitation could mask it. Before
      relying on G1, test this in a scratch repository: a failing `pull_request_target` job and a
      same-named `pull_request` job that passes later. Merging must stay blocked.
+   * **Also not documented:** which commit a `pull_request_target` job's check attaches to. GitHub
+     lists the event among those whose job checks are evaluated for a pull request, and `GITHUB_SHA`
+     is the default branch's last commit. The same scratch test must show that G1's failing check
+     blocks the pull request's head.
+   * **Evaluation (2026-11-21):** G1 is not necessary now. G2 is
+     ([`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md), section 6).
 
 ### The gates can import a module the pull request adds (independent review, 2026-11-19; reproduced)
 
@@ -321,15 +327,32 @@ anything. Under Python's isolated mode (`-I`) it did not, and the retained-sourc
 checks. A pull request can therefore make both gates report success without touching a gate file,
 which is the same class as editing the workflow. It predates this work.
 
+**Wider than first described (G2 dry run, 2026-11-21).** The dry run reproduced 19 working vectors:
+
+* a package, bytecode without source or a compiled module at the root;
+* cached bytecode beside the gate, including a "checked" cache entry that carries the genuine
+  source's hash;
+* a compiled module or a package beside the gate's sources;
+* a fallback for an import the standard library misses on Linux (`nt.py`);
+* a script that runs before the gate and plants bytecode for it;
+* `PYTHONPATH` set by an earlier step.
+
+The full table is in [`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md).
+
 **Mitigations (none applied):**
 
-* the pre-merge check and G1 now list these paths;
+* the pre-merge check and G1 list these paths. Since 2026-11-21 they also list root-level packages,
+  bytecode and compiled modules, which their first version missed;
 * C2b's child process runs in isolated mode (`-I`);
-* **G2 (optional, protected):** run both gates with isolated imports in the workflows: the
-  retained-source gate as `python -I scripts/check_reconciled_prs.py …`, and the manifest gate
-  through an isolated launcher that appends the repository to the end of `sys.path` and refuses a
-  `research/__init__.py`;
-* run the gate before any other step of its job.
+* **G2 (protected; prepared and tested, `G2_IMPORT_ISOLATION.md`):**
+  * core: the manifest gate is the first step of `source-policy`, as
+    `python -I -B -X pycache_prefix=<empty>` through a fixed launcher;
+  * site: the retained-source gate is first, as `python -I`;
+  * 23 of 23 dry-run rows as expected.
+
+  An earlier sketch here, a launcher that appends the repository to the end of `sys.path`, is
+  **not safe**: a planted `nt.py`, `research.py` or `research/__init__.py` defeats it (dry run). G2's
+  launcher puts no file of the repository on the path except the gate's own sources.
 
 ### T1: retained-source tag rulesets (both repositories)
 
