@@ -6,7 +6,10 @@ was created or changed. The design is the proposed answer to owner decision H1. 
 design) stays available as a fallback. Approving C1 with either design remains a separate owner
 decision.
 
-H1-b stays the preferred design for both retained-source tags: C1's, and R1's later V24 (section 4).
+**Owner decision (2026-11-22): H1-b confirmed** for both retained-source tags: C1's, and R1's later
+V24 (section 4). No permanent retained-source tag may reference the original model-response
+development history. R1's V24 dry run must show what C1's does: no response commit and no withheld
+blob reachable from the retained commit.
 It is compatible with G2 (`G2_IMPORT_ISOLATION.md`). G2's workflow edit is one reviewed file in the
 admitted tree, and the add-only checks allow exactly that change.
 

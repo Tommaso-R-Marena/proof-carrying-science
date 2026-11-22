@@ -2,7 +2,10 @@
 
 **Status (2026-11-21).** Prepared, tested in throw-away worktrees, and reviewed independently (section
 7). **Not applied.** No workflow, gate file, manifest, tag or ruleset was changed in either repository.
-G2 is your decision. On the core, make it before C1's final regeneration (section 5).
+**Owner decision (2026-11-22): approved in principle,** to be included in the final C1 admission,
+preserving all existing integrity checks. The workflow edit is committed in the sequence after A1
+(section 5). Nothing protected is applied until the owner authorises the final reviewed transaction.
+G1 is deferred. The remaining workflow risk is in `WORKFLOW_SELF_MODIFICATION_RISK.md`.
 
 ## 1. The weakness
 

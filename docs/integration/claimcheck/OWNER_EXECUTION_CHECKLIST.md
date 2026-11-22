@@ -50,7 +50,8 @@ source commit. The evidence must then be regenerated and reviewed again.
      * the freeze check, and the v1 and v1.1 suites;
      * the regenerated `withholding_effect`.
   3. Commit the withholding as one commit and push it.
-  4. If you approved G2: commit its workflow edit (`g2/proposed-g2-core-workflow.patch`).
+  4. Commit G2's workflow edit (`g2/proposed-g2-core-workflow.patch`). G2 was approved in principle
+     on 2026-11-22 for inclusion in the final C1 admission.
   5. Regenerate the admission evidence at that exact commit:
      * `prepare_core_admission --history clean`;
      * `check_admission_consistency --history clean`;
@@ -254,8 +255,9 @@ new values.
 * **Authorises:** committing `docs/integration/claimcheck/g1/gate-definition-guard.<repo>.yml` to
   `.github/workflows/` on `main`, through a reviewed pull request, and then adding
   `gate-definition-unchanged` (GitHub Actions) to the `main` ruleset.
-* **Recommendation (2026-11-21): not now.** With G2, the pre-merge check covers the rest as a procedure,
-  and you are the only person who can merge (`G2_IMPORT_ISOLATION.md`, section 6).
+* **Deferred (owner, 2026-11-22).** With G2, the pre-merge check covers the rest as a procedure, and
+  you are the only person who can merge. The remaining risk:
+  [`WORKFLOW_SELF_MODIFICATION_RISK.md`](WORKFLOW_SELF_MODIFICATION_RISK.md).
 * **What it does:** a `pull_request_target` job, defined on `main` only. It fails whenever a pull
   request changes:
   * any workflow;
@@ -277,7 +279,7 @@ new values.
   * that a later, same-named, passing job a pull request adds does not unblock it.
 * **Undo:** remove the check from the ruleset, then remove the workflow.
 
-### G2 (recommended; core before C1's regeneration). The source gates run first, with isolated imports ([`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md))
+### G2 (approved in principle 2026-11-22; core, in the final C1). The source gates run first, with isolated imports ([`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md))
 * **Authorises:**
   * core: committing `g2/proposed-g2-core-workflow.patch` on the ClaimCheck branch before C1 is
     regenerated. C1's control commit then carries G2's two control edits
@@ -294,7 +296,7 @@ new values.
 * **If decided after C1:** G2 needs an admission cycle of its own.
 * **Undo:** before C1, drop the workflow commit and regenerate. After C1, a new admission.
 
-## Before every merge (no change; recommended now)
+## Before every merge (no change; required by the owner's decision of 2026-11-22 while G1 is deferred)
 
 Run, from a full clone:
 

@@ -1,4 +1,4 @@
-# ClaimCheck: the owner's approval package (2026-11-19; G1, G2 and A1 updated 2026-11-21)
+# ClaimCheck: the owner's approval package (2026-11-19; G1, G2 and A1 updated 2026-11-21; decisions of 2026-11-22 recorded)
 
 One page per decision. **Nothing here has been applied, merged, deployed, tagged or approved.**
 Approving one decision does not approve another. Steps, stop conditions and undo for each are in
@@ -23,6 +23,9 @@ regenerated at the commit you admit, after the withholding commit.
 ## The decisions
 
 ### H1. Which retained commit C1 pins
+* **Owner decision (2026-11-22): H1-b confirmed**, for C1 and for the later R1 admission. No
+  permanent retained-source tag may reference the original model-response development history.
+  Retained commits and tags still need your explicit approval.
 * **Changes:** the parents of the commit that the retained-source tag protects. Under H1-b (proposed)
   they are a snapshot of the admitted tree on protected `main`, and the previous intake. Under H1-a
   they are the branch head and the previous intake.
@@ -130,6 +133,9 @@ regenerated at the commit you admit, after the withholding commit.
 * **Rejecting:** those rules stay advisory.
 
 ### G1. Gate-definition guard (either repository, optional, protected; not recommended now)
+* **Owner decision (2026-11-22): deferred.** G2 and your explicit review of changes to gate
+  definitions and workflows are sufficient for this stage. The remaining risk is in
+  [`WORKFLOW_SELF_MODIFICATION_RISK.md`](WORKFLOW_SELF_MODIFICATION_RISK.md).
 * **Changes:**
   * one `pull_request_target` workflow on `main`, which runs only the definition on `main`, reads the
     pull request as data and executes nothing from it;
@@ -150,6 +156,9 @@ regenerated at the commit you admit, after the withholding commit.
 * **Rejecting:** the pre-merge check stays a manual step.
 
 ### G2. The source gates run first, with isolated imports (core and site, protected; recommended)
+* **Owner decision (2026-11-22): approved in principle,** to be included in the final C1 admission,
+  preserving all existing integrity checks. Not applied: the final reviewed transaction needs your
+  separate authorisation.
 * **Changes:**
   * core: in `source-policy`, the manifest gate becomes the first step after checkout and
     setup-python, as `python -I -B -X pycache_prefix="$(mktemp -d)"` through a fixed 16-line launcher.
