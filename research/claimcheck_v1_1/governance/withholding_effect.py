@@ -1,9 +1,15 @@
 """What withholding the responses changes offline (L2, L3).  Changes nothing in the branch.
 
     python -m research.claimcheck_v1_1.governance.withholding_effect --out docs/integration/claimcheck/withholding [--lean]
+        [--base REF] [--stubbed REF]
 
-In two throw-away worktrees of HEAD, one unchanged and one with the governed withholding applied by
-the tool itself (`withhold_model_outputs --apply`, decision marked as a simulation), it runs:
+It uses two throw-away worktrees:
+* the baseline, at `--base` (default HEAD), with the original responses;
+* the stubbed one, at `--stubbed` if given: the commit that carries the committed withholding stubs.
+  Otherwise it is the baseline with the governed withholding applied by the tool itself
+  (`withhold_model_outputs --apply`, decision marked as a simulation).
+
+In each it runs:
 
 * the frozen v1 freeze check;
 * the v1 and the v1.1 offline test suites;
@@ -89,20 +95,29 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", required=True)
     ap.add_argument("--lean", action="store_true", help="also replay one committed bundle with the real kernel (needs lean on PATH)")
+    ap.add_argument("--base", default="HEAD", help="the commit with the original responses")
+    ap.add_argument("--stubbed", help="the commit with the committed stubs (default: simulate them on --base)")
     args = ap.parse_args(argv)
     out = ROOT / args.out
     out.mkdir(parents=True, exist_ok=True)
-    head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    rev = lambda ref: subprocess.check_output(["git", "rev-parse", ref], cwd=ROOT, text=True).strip()
+    head, stubbed = rev(args.base), rev(args.stubbed) if args.stubbed else None
     work = Path(tempfile.mkdtemp(prefix="pcs-withholding-effect-"))
     report: dict = {"what": "Effect of withholding on offline reproducibility, measured in throw-away worktrees. Nothing in the branch "
-                            "changed and nothing was committed. Not an owner decision.", "head": head}
+                            "changed and nothing was committed. Not an owner decision.", "head": head,
+                    "stubs": "committed in " + stubbed if stubbed else "simulated by the governed tool"}
     try:
-        for name in ("baseline", "stubbed"):
-            subprocess.run(["git", "worktree", "add", "-q", "--detach", str(work / name), head], cwd=ROOT, check=True)
-        applied = run(work / "stubbed", "-m", "research.claimcheck_v1_1.governance.withhold_model_outputs", "--apply", "--decision", SIMULATED)
-        changed = subprocess.check_output(["git", "status", "--porcelain"], cwd=work / "stubbed", text=True).splitlines()
-        report["stubs_applied"] = {"exit": applied["exit"], "files_changed": len(changed),
-                                   "outside_model_responses": [c for c in changed if "/model_responses/" not in c]}
+        for name, commit in (("baseline", head), ("stubbed", stubbed or head)):
+            subprocess.run(["git", "worktree", "add", "-q", "--detach", str(work / name), commit], cwd=ROOT, check=True)
+        if stubbed:
+            changed = subprocess.check_output(["git", "diff", "--name-only", head, stubbed], cwd=ROOT, text=True).splitlines()
+            report["stubs_applied"] = {"committed_in": stubbed, "files_changed": len(changed),
+                                       "outside_model_responses": [c for c in changed if "/model_responses/" not in c]}
+        else:
+            applied = run(work / "stubbed", "-m", "research.claimcheck_v1_1.governance.withhold_model_outputs", "--apply", "--decision", SIMULATED)
+            changed = subprocess.check_output(["git", "status", "--porcelain"], cwd=work / "stubbed", text=True).splitlines()
+            report["stubs_applied"] = {"exit": applied["exit"], "files_changed": len(changed),
+                                       "outside_model_responses": [c for c in changed if "/model_responses/" not in c]}
         base = steps(work / "baseline", work / "out-baseline", args.lean)
         stub = steps(work / "stubbed", work / "out-stubbed", args.lean)
         report["steps"] = {k: {"exit_baseline": base[k]["exit"], "exit_stubbed": stub[k]["exit"],

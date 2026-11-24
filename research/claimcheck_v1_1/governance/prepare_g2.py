@@ -161,10 +161,19 @@ def main(argv=None) -> int:
         P.git(P.ROOT, "worktree", "add", "--detach", str(wt), head)
         # ---- C1 + G2, built the way C1 would be built if G2 is chosen -------------------------------------------------------
         old_wf = P.show(wt, P.V22_COMMIT, G2.WORKFLOW)
-        (wt / G2.WORKFLOW).write_bytes(G2.successor(old_wf))
-        P.git(wt, "commit", "-q", "-am", "DRY RUN: G2's workflow on the source branch (never pushed)", env=P.FIXED)
-        source = P.git(wt, "rev-parse", "HEAD")
-        (out / "proposed-g2-core-workflow.patch").write_text(P.git(wt, "diff", head, source) + "\n", encoding="utf-8")
+        branch_carries_g2 = G2.carried(wt, P.V22_COMMIT, head)
+        if branch_carries_g2:           # the branch carries G2's workflow: it is the source; C1 alone is a scratch commit with V22's
+            source = head
+            (wt / G2.WORKFLOW).write_bytes(old_wf)
+            P.git(wt, "commit", "-q", "-am", "scratch: V22's workflow, for the comparison with C1 alone", env=P.FIXED)
+            without = P.git(wt, "rev-parse", "HEAD")
+            P.git(wt, "checkout", "-q", "--detach", source)
+        else:
+            (wt / G2.WORKFLOW).write_bytes(G2.successor(old_wf))
+            P.git(wt, "commit", "-q", "-am", "DRY RUN: G2's workflow on the source branch (never pushed)", env=P.FIXED)
+            source, without = P.git(wt, "rev-parse", "HEAD"), head
+        report["branch_carries_g2_workflow"] = branch_carries_g2
+        (out / "proposed-g2-core-workflow.patch").write_text(P.git(wt, "diff", without, source) + "\n", encoding="utf-8")
         v22_raw = (wt / P.V22).read_bytes()
         v22 = json.loads(v22_raw)
         tracked = set(P.git(wt, "ls-files", "-z").split("\0")) - {""}
@@ -172,9 +181,9 @@ def main(argv=None) -> int:
         retained = P.retained_commit(wt, source, "clean")
         intake = retained["commit"]
         with_g2 = P.build(wt, source, intake, P.DRY_TAG, v22, v22_raw, added)
-        plain = P.build(wt, head, intake, P.DRY_TAG, v22, v22_raw, added)           # C1 alone, for the control patch
+        plain = P.build(wt, without, intake, P.DRY_TAG, v22, v22_raw, added)        # C1 alone, for the control patch
         report["c1_includes_g2_only_when_the_source_carries_its_workflow"] = {
-            "source_with_g2_workflow": G2.carried(wt, P.V22_COMMIT, source), "branch_head": G2.carried(wt, P.V22_COMMIT, head),
+            "source_with_g2_workflow": G2.carried(wt, P.V22_COMMIT, source), "source_without_it": G2.carried(wt, P.V22_COMMIT, without),
             "control_files_differ_only_in_the_gate_and_its_test": sorted(n for n in with_g2 if with_g2[n] != plain[n]) == sorted([P.GATE, P.GATE_TEST]),
             "v23_identical_with_and_without_g2": with_g2[P.V23] == plain[P.V23]}
         refused = {}
@@ -452,7 +461,7 @@ def main(argv=None) -> int:
         pos = report["positive_c1_plus_g2"]
         inc = report["c1_includes_g2_only_when_the_source_carries_its_workflow"]
         report["all_as_expected"] = bool(
-            inc["source_with_g2_workflow"] is True and inc["branch_head"] is False
+            inc["source_with_g2_workflow"] is True and inc["source_without_it"] is False
             and inc["control_files_differ_only_in_the_gate_and_its_test"] and inc["v23_identical_with_and_without_g2"]
             and inc["executable_mode_refused"] and inc["other_bytes_refused"]
             and report["g2_step_as_read_from_the_workflow"]["equals_the_reviewed_launcher"]
