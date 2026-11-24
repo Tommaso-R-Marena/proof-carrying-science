@@ -70,7 +70,12 @@ ADDED_ROOTS = ("research/claimcheck_v1/", "research/claimcheck_v1_1/", "docs/int
 ADDED_FILES = (".github/workflows/pcs-claimcheck-v1.yml",)
 # files the dry run and the audit rewrite; a commit that changes only these after the commit they describe adds no source
 EVIDENCE = {"docs/integration/claimcheck/dry-run.json", "docs/integration/claimcheck/ADMISSION_CENSUS.json",
-            "docs/integration/claimcheck/proposed-control-changes.patch", "docs/integration/claimcheck/ADMISSION_AUDIT.json"}
+            "docs/integration/claimcheck/proposed-control-changes.patch", "docs/integration/claimcheck/ADMISSION_AUDIT.json",
+            # generated at the same source commit by the audit and by the H1-b, C2b and G2 dry runs
+            "docs/integration/claimcheck/THIRD_PARTY_ATTRIBUTION.md", "docs/integration/claimcheck/h1b/h1b-adversarial.json",
+            "docs/integration/claimcheck/c2b/c2b-dry-run.json", "docs/integration/claimcheck/c2b/proposed-c2b.patch",
+            "docs/integration/claimcheck/g2/g2-dry-run.json", "docs/integration/claimcheck/g2/proposed-g2-core-workflow.patch",
+            "docs/integration/claimcheck/g2/proposed-g2-core-controls.patch", "docs/integration/claimcheck/g2/proposed-g2-site.patch"}
 # H1-b: the protected main commit the source branch is based on; the snapshot's only parent (pinned, like V22_COMMIT)
 PROTECTED_MAIN = V22_COMMIT
 RETAINED_MESSAGE = "Retained qualified source: previous intake plus ClaimCheck sidecar (proposed; tree identical to the source commit)"

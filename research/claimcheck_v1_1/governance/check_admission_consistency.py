@@ -2,8 +2,9 @@
 
     python -m research.claimcheck_v1_1.governance.check_admission_consistency [--evidence docs/integration/claimcheck]
 
-The dry run (`prepare_core_admission`), the census and the audit are generated at one source commit
-S and committed in a following commit that changes only them.  This program checks, independently of
+The dry run (`prepare_core_admission`), the census and the audit (with the H1-b, C2b and G2 dry runs:
+`prepare_core_admission.EVIDENCE`) are generated at one source commit S and committed in a following
+commit that changes only them.  This program checks, independently of
 the scripts that wrote them:
 
   1. the dry run, the census and the audit name the same commit S, and all report success;
