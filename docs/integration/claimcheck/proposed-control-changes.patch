@@ -1,5 +1,5 @@
 diff --git a/research/integration_v2/reconcile.py b/research/integration_v2/reconcile.py
-index 6c80b5c2..e90ba290 100644
+index 6c80b5c2..d2e9c8ab 100644
 --- a/research/integration_v2/reconcile.py
 +++ b/research/integration_v2/reconcile.py
 @@ -18,8 +18,8 @@ import subprocess
@@ -9,11 +9,73 @@ index 6c80b5c2..e90ba290 100644
 -MANIFEST = "docs/integration/2026-11-05/RECONCILIATION_V22.json"
 -MANIFEST_SHA256 = '28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83'
 +MANIFEST = "docs/integration/2026-11-14/RECONCILIATION_V23.json"
-+MANIFEST_SHA256 = 'caa053834baa7454252d8ade5d53f9f707d2f1bd10e5ad4a336bd4ce2b1620fe'
++MANIFEST_SHA256 = '26d16fee6a47099b6a5b3e1fca3e451f8ca65988002ced0ad4a79f0cb9a04397'
  API = "https://api.github.com/repos/Tommaso-R-Marena/proof-carrying-science/pulls?state=open&per_page=100"
  # Exact reviewed source references for reconciling the held research branch.
  # This adds a source rollback check; it does not release PR117 or grant authority.
-@@ -128,11 +128,11 @@ def _historical_identities(root, prs):
+@@ -38,6 +38,46 @@ RECEIVER_CLEANUP_TEST = "research/scientific_receiver_v1/tests/test_host.py"
+ RECEIVER_CLEANUP_OLD = "46916b52b9bfa2443a71ea106fd8fe891c626a1df5318eb347a65b6e1aa25a8a"
+ RECEIVER_CLEANUP_NEW = "1952bd78f5f9a787a5fd1617e45dd2c75fe9d4188e87535e017e2e72317b4aba"
+ 
++# G2: one exact reviewed CI successor. In source-policy the gate runs first, before any repository code, in
++# Python's isolated mode through a fixed launcher, so that no file a pull request adds can run before the tree
++# is checked: a json.py at the root, a research/__init__.py, or a compiled or cached module beside these
++# sources. V22 keeps the original identity; every other job and step of the workflow is unchanged.
++SOURCE_POLICY_WORKFLOW = ".github/workflows/pcs-public-full-verification.yml"
++SOURCE_POLICY_OLD = "bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf"
++SOURCE_POLICY_NEW = "b4e6b4ef2aed4378557b3e44fba3dfddd872e68392844fd524f545de7e595d5a"
++# The consolidated research-integration gate pins that workflow's bytes too; its exact reviewed successor (new successor
++# record path and one identity line). V22 keeps its original identity as well.
++CONSOLIDATED_GATE = "research/integration_v1/source_gate.py"
++CONSOLIDATED_GATE_OLD = "0760cdfd6473b8ffc7220146ec76555152b684895da2b15dc15a55017a6bf58e"
++CONSOLIDATED_GATE_NEW = "dcce5eb187561002a5765d4a09ef7d33937ff69b19eaaffe943cbadfbc625fcc"
++ISOLATED_GATE_LAUNCHER = """import os, runpy, sys, tempfile
++# Refuse unless isolated (-I), not writing bytecode (-B) and reading cached bytecode only from a new, empty
++# directory (-X pycache_prefix): without that, cached bytecode beside the gate's sources could replace them.
++prefix = sys.pycache_prefix
++if not (sys.flags.isolated and sys.flags.dont_write_bytecode and prefix and os.path.isdir(prefix) and not os.listdir(prefix)):
++    sys.exit("source contract refused before the gate ran: not isolated, or no new empty bytecode directory")
++root = sys.argv.pop(1)
++gate = os.path.join(root, "research", "integration_v2")
++# Only the gate's reviewed sources may run before it has checked the tree. A compiled module or a package
++# beside them would be imported in their place, so refuse it; __pycache__ is never read (-X pycache_prefix).
++unexpected = sorted(n for n in os.listdir(gate) if not n.endswith(".py") and n not in ("README.md", "__pycache__"))
++if unexpected:
++    sys.exit("source contract refused before the gate ran: %s beside the gate's sources" % unexpected)
++# One new directory on the import path, holding only research/integration_v2 (a link to the gate's sources):
++# no other file of the repository can be imported, so none can replace a module the gate imports.
++view = tempfile.mkdtemp()
++os.mkdir(os.path.join(view, "research"))
++os.symlink(gate, os.path.join(view, "research", "integration_v2"))
++sys.path.append(view)
++runpy.run_module("research.integration_v2.reconcile", run_name="__main__", alter_sys=True)
++"""
++ISOLATED_GATE_STEP = ("      - name: Exact reviewed combined-source contract\n"
++                      "        shell: bash\n"
++                      "        run: |\n"
++                      "          " + 'python -I -B -X pycache_prefix="$(mktemp -d)" - "$PWD" --require-committed <<\'PY\'\n'
++                      + "".join("          " + line for line in ISOLATED_GATE_LAUNCHER.splitlines(True))
++                      + "          PY\n")
++
+ WORKFLOW_PREDECESSOR_TREE = "1fdf12112394c1ad7438e2add4460fba8fd34da0"
+ 
+ 
+@@ -78,7 +118,13 @@ def _identity(root, name):
+ 
+ 
+ def _current_expected(name, recorded):
+-    """Bind the reviewed test repair without changing historical classifications."""
++    """Bind the reviewed test repair and G2's two successors without changing historical classifications."""
++    if name in (SOURCE_POLICY_WORKFLOW, CONSOLIDATED_GATE):
++        old, new = ((SOURCE_POLICY_OLD, SOURCE_POLICY_NEW) if name == SOURCE_POLICY_WORKFLOW
++                    else (CONSOLIDATED_GATE_OLD, CONSOLIDATED_GATE_NEW))
++        if recorded != {"sha256": old, "mode": "100644"}:
++            raise ValueError("G2 successor predecessor identity differs: " + name)
++        return {"sha256": new, "mode": "100644"}
+     if name != RECEIVER_CLEANUP_TEST:
+         return recorded
+     if recorded != {"sha256": RECEIVER_CLEANUP_OLD, "mode": "100644"}:
+@@ -128,11 +174,11 @@ def _historical_identities(root, prs):
  
  def _verify(root, manifest):
      """Internal checker; the CLI accepts only the compiled-in manifest digest."""
@@ -27,7 +89,20 @@ index 6c80b5c2..e90ba290 100644
      if len(numbers) != len(set(numbers)) or len(prs) != expected_count:
          raise ValueError("incomplete or duplicate PR census")
      if [p["number"] for p in prs if p["disposition"] == "HELD"] != [117]:
-@@ -311,8 +311,8 @@ def check(*, require_committed=False, live=False):
+@@ -217,10 +263,10 @@ def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_
+     if pytest_context:
+         text = text.replace("python -m pytest ", "python -m pytest -p research.integration_v2.pytest_phase_context ")
+     if combined_source:
+-        needle = "      - name: Exercise disclosure-audit unit tests\n"
++        needle = "      - name: Audit revision, repository governance, and Python source\n"
+         if text.count(needle) != 1:
+             raise ValueError("exact public CI source-step insertion point required")
+-        text = text.replace(needle, "      - name: Exact reviewed combined-source contract\n        run: python -m research.integration_v2.reconcile --require-committed\n" + needle)
++        text = text.replace(needle, ISOLATED_GATE_STEP + needle)
+     if transport_dependencies:
+         needle = "          bash scripts/core_ci_cloudflare.sh\n"
+         if text.count(needle) != 1:
+@@ -311,8 +357,8 @@ def check(*, require_committed=False, live=False):
      if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
          raise ValueError("reconciliation manifest differs from fixed reviewed digest")
      manifest = _json(raw)
@@ -38,7 +113,7 @@ index 6c80b5c2..e90ba290 100644
      result = _verify(ROOT, manifest)
      _snapshot(ROOT, manifest)
      _workflows(ROOT, manifest)
-@@ -336,7 +336,7 @@ def check(*, require_committed=False, live=False):
+@@ -336,7 +382,7 @@ def check(*, require_committed=False, live=False):
      return dict(result, committed_source_required=require_committed, live_heads_checked=live,
                  manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
                  pr117_integration=pr117,
@@ -48,10 +123,23 @@ index 6c80b5c2..e90ba290 100644
                      old_sha256=RECEIVER_CLEANUP_OLD, new_sha256=RECEIVER_CLEANUP_NEW,
                      mode="100644", authority_code_changed=False,
 diff --git a/research/integration_v2/test_reconcile.py b/research/integration_v2/test_reconcile.py
-index 677e6e7c..8b468e69 100644
+index 677e6e7c..e7278cee 100644
 --- a/research/integration_v2/test_reconcile.py
 +++ b/research/integration_v2/test_reconcile.py
-@@ -429,6 +429,24 @@ def test_v21_unknown_added_source_is_not_admitted(fixture):
+@@ -407,6 +407,12 @@ def test_v21_preserves_frozen_v20_and_protected_proofs_with_exact_dependency_suc
+                  "formal/PCS/V2/ProofGatedInference.lean"]:
+         previous=gate._git(gate.ROOT,"show",gate.PR117_PROTECTED_HEAD+":"+name)
+         expected=previous.replace(b"leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6",b"leanprover/lean-action@fe408643ea7367d8c0404a8be3975bb145f5fb64") if name.startswith(".github/") else previous
++        if name==gate.SOURCE_POLICY_WORKFLOW:   # G2, the one reviewed successor: the gate step moves first and runs isolated
++            step=b"      - name: Exact reviewed combined-source contract\n        run: python -m research.integration_v2.reconcile --require-committed\n"
++            first=b"      - name: Audit revision, repository governance, and Python source\n"
++            assert expected.count(step)==1 and expected.count(first)==1
++            expected=expected.replace(step,b"").replace(first,gate.ISOLATED_GATE_STEP.encode()+first)
++            assert hashlib.sha256(expected).hexdigest()==gate.SOURCE_POLICY_NEW
+         assert (gate.ROOT/name).read_bytes()==expected
+ 
+ 
+@@ -429,6 +435,88 @@ def test_v21_unknown_added_source_is_not_admitted(fixture):
  def test_v22_keeps_the_fully_qualified_v21_intake_manifest_unchanged():
      raw=(gate.ROOT/'docs/integration/2026-11-05/RECONCILIATION_V21.json').read_bytes()
      assert hashlib.sha256(raw).hexdigest()=='7fbd145fbf737ab0b2f1ef653a13ff26920e956137942dad67bfdb8c48566bde'
@@ -77,8 +165,72 @@ index 677e6e7c..8b468e69 100644
 +    assert current['snapshot'][v22_path]==dict(sha256='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83',mode='100644')
 +    added=set(current['snapshot'])-set(v22['snapshot'])-{v22_path}
 +    assert added and all(n.startswith(('research/claimcheck_v1/', 'research/claimcheck_v1_1/', 'docs/integration/claimcheck/')) or n in ('.github/workflows/pcs-claimcheck-v1.yml',) for n in added)
++
++
++def test_g2_source_policy_runs_the_gate_first_through_the_isolated_launcher():
++    """G2: the gate is the first step after checkout and setup-python, through the launcher; nothing runs before it."""
++    raw = (gate.ROOT / gate.SOURCE_POLICY_WORKFLOW).read_bytes()
++    assert hashlib.sha256(raw).hexdigest() == gate.SOURCE_POLICY_NEW
++    job = raw.decode().split("\n  source-policy:\n", 1)[1].split("\n  core-full-gate:\n", 1)[0]
++    assert job.count(gate.ISOLATED_GATE_STEP) == 1
++    before = job[:job.index(gate.ISOLATED_GATE_STEP)]
++    assert before.count("\n      - ") == 2 and "actions/checkout@" in before and "actions/setup-python@" in before and "run:" not in before
++    assert "python -m research.integration_v2.reconcile" not in raw.decode()
++
++
++@pytest.mark.parametrize("name,recorded", [
++    (gate.SOURCE_POLICY_WORKFLOW, {"sha256": "0" * 64, "mode": "100644"}),
++    (gate.SOURCE_POLICY_WORKFLOW, {"sha256": gate.SOURCE_POLICY_OLD, "mode": "100755"}),
++    (gate.CONSOLIDATED_GATE, {"sha256": "0" * 64, "mode": "100644"}),
++    (gate.CONSOLIDATED_GATE, {"sha256": gate.CONSOLIDATED_GATE_OLD, "mode": "100755"}),
++])
++def test_g2_successors_require_the_exact_original_identity(name, recorded):
++    with pytest.raises(ValueError, match="predecessor"):
++        gate._current_expected(name, recorded)
++
++
++def test_g2_consolidated_gate_names_the_new_workflow_identity():
++    """G2: the consolidated research gate, which pins the workflow's bytes, names G2's workflow; bound here by digest."""
++    raw = (gate.ROOT / gate.CONSOLIDATED_GATE).read_bytes()
++    assert hashlib.sha256(raw).hexdigest() == gate.CONSOLIDATED_GATE_NEW
++    text = raw.decode()
++    assert 'SUCCESSOR_PATH = "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json"' in text
++    assert text.count(gate.SOURCE_POLICY_NEW) == 1 and text.index(gate.SOURCE_POLICY_NEW) > text.index(gate.SOURCE_POLICY_OLD)
++    record = json.loads((gate.ROOT / "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json").read_bytes())
++    assert record["files"][gate.SOURCE_POLICY_WORKFLOW]["new_sha256"] == gate.SOURCE_POLICY_NEW
++    assert record["files"][gate.CONSOLIDATED_GATE]["new_sha256"] == gate.CONSOLIDATED_GATE_NEW
++
++
++def test_g2_launcher_runs_only_the_gate_sources(tmp_path):
++    """The launcher on a stand-in gate: files planted where `python -m` would import them never run; the exit code passes through."""
++    import sys
++    pkg = tmp_path / "research" / "integration_v2"
++    pkg.mkdir(parents=True)
++    (pkg / "__init__.py").write_text("")
++    (pkg / "reconcile.py").write_text("import json, sys\nprint(json.dumps(sys.argv[1:]))\nraise SystemExit(7)\n")
++    marker = tmp_path / "MARKER"
++    for planted in ("json.py", "research.py", "nt.py", "research/__init__.py"):
++        (tmp_path / planted).write_text("open(%r, 'a').write(%r)\n" % (str(marker), planted))
++
++    def launch(*flags):
++        return subprocess.run([sys.executable, *flags, "-", str(tmp_path), "--require-committed"],
++                              input=gate.ISOLATED_GATE_LAUNCHER, capture_output=True, text=True)
++
++    def fresh():                      # a new, empty bytecode directory for each run, as mktemp -d gives in CI
++        cache = tmp_path / ("cache%d" % len(list(tmp_path.glob("cache*"))))
++        cache.mkdir()
++        return "pycache_prefix=" + str(cache)
++    run = launch("-I", "-B", "-X", fresh())
++    assert run.returncode == 7 and json.loads(run.stdout) == ["--require-committed"] and not marker.exists()
++    # not isolated; writing bytecode; an empty prefix (as when mktemp fails); no prefix
++    for flags in (("-B", "-X", fresh()), ("-I", "-X", fresh()), ("-I", "-B", "-X", "pycache_prefix="), ("-I", "-B")):
++        run = launch(*flags)
++        assert run.returncode == 1 and "no new empty bytecode directory" in run.stderr and not marker.exists(), flags
++    (pkg / "__init__.abi3.so").write_bytes(b"")
++    run = launch("-I", "-B", "-X", fresh())
++    assert run.returncode == 1 and "beside the gate's sources" in run.stderr and not marker.exists()
 diff --git a/scripts/check_reconciled_prs.py b/scripts/check_reconciled_prs.py
-index 20925be8..e80f4616 100644
+index 20925be8..4ab39fc9 100644
 --- a/scripts/check_reconciled_prs.py
 +++ b/scripts/check_reconciled_prs.py
 @@ -11,7 +11,7 @@ REGISTRY_SHA256='5d69305871d78e262ba3dfa25349743efa11577491f645da8583a15b7398fe0
@@ -86,7 +238,7 @@ index 20925be8..e80f4616 100644
  # A mutable branch/tag name is not trusted in place of its exact object ID.
  INTAKES={
 - 'proof-carrying-science':('0b521f39af99f5856b69dfcc25bc274ec9dc804a','pcs-source-intake/core-open-prs-v1-20261105'),
-+ 'proof-carrying-science':('0770f4930f13853206aa2600290a206facdb4431','pcs-source-intake/core-claimcheck-v1-20261114'),
++ 'proof-carrying-science':('7b6624286bdbcf5796acb0b9a2cb6f764b7c1b6e','pcs-source-intake/core-claimcheck-v1-20261114'),
   'proof-carrying-science-site':('d35e2b5e6b29e0a27dc0cb117986895fd58c1456','pcs-source-intake/site-open-prs-v1-20261105'),
  }
  COMMON_CONTROLS={'scripts/check_reconciled_prs.py','scripts/test_reconciled_prs.py'}

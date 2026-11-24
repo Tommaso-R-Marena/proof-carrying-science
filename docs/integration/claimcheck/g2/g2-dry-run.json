@@ -535,13 +535,16 @@
    "kind": "vulnerable"
   }
  },
+ "branch_carries_g2": true,
  "c1_includes_g2_only_when_the_source_carries_its_workflow": {
-  "branch_head": false,
+  "consolidated_gate_without_the_workflow_refused": true,
   "control_files_differ_only_in_the_gate_and_its_test": true,
   "executable_mode_refused": true,
   "other_bytes_refused": true,
   "source_with_g2_workflow": true,
-  "v23_identical_with_and_without_g2": true
+  "source_without_it": false,
+  "v23_identical_with_and_without_g2": true,
+  "workflow_without_the_consolidated_gate_refused": true
  },
  "compatible_with_c2b": {
   "g2_step": {
@@ -554,13 +557,13 @@
   },
   "gate_tests": {
    "exit": 0,
-   "last_line": "80 passed in 8.59s"
+   "last_line": "83 passed in 8.44s"
   },
   "retained_source_reported": true
  },
  "fail_closed_at_the_branch_head_without_c1": {
   "current_invocation": {
-   "error": "combined tracked file census differs",
+   "error": "reviewed source identity differs: .github/workflows/pcs-public-full-verification.yml",
    "exit": 1,
    "forged": false,
    "genuine_success": false,
@@ -568,7 +571,7 @@
    "reported_success": false
   },
   "g2_step": {
-   "error": "combined tracked file census differs",
+   "error": "reviewed source identity differs: .github/workflows/pcs-public-full-verification.yml",
    "exit": 1,
    "forged": false,
    "genuine_success": false,
@@ -601,7 +604,7 @@
   "parser": "PyYAML 6.0.1",
   "shell": "bash --noprofile --norc -eo pipefail (GitHub's `shell: bash`)"
  },
- "generated_from_commit": "b702b422df5892780d00c55ac2e4896b70213437",
+ "generated_from_commit": "feafeefb991c7bb883a8b511aea1ed48ef772238",
  "naive_launcher_appending_the_repository": {
   "all_defeated_as_expected": true,
   "naive_nt": {
@@ -618,15 +621,28 @@
   }
  },
  "patches": {
+  "proposed-g2-consolidated-gate.patch": {
+   "applies_to": "the ClaimCheck branch, with the workflow patch",
+   "files": {
+    "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json": {
+     "added": true,
+     "sha256": "5c06bbe67975847e7014e998901dc514c5c774d2c97afade487d7b5629394c35"
+    },
+    "research/integration_v1/source_gate.py": {
+     "new_sha256": "dcce5eb187561002a5765d4a09ef7d33937ff69b19eaaffe943cbadfbc625fcc",
+     "old_sha256": "0760cdfd6473b8ffc7220146ec76555152b684895da2b15dc15a55017a6bf58e"
+    }
+   }
+  },
   "proposed-g2-core-controls.patch": {
    "applies_on_top_of": "C1's reconcile.py and test_reconcile.py (built in by prepare_core_admission)",
    "lines_added_and_removed": {
     "research/integration_v2/reconcile.py": [
-     42,
+     49,
      3
     ],
     "research/integration_v2/test_reconcile.py": [
-     53,
+     70,
      0
     ]
    }
@@ -641,6 +657,14 @@
   }
  },
  "positive_c1_plus_g2": {
+  "consolidated_research_gate": {
+   "error": null,
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": null,
+   "reported_success": true
+  },
   "current_invocation": {
    "error": null,
    "exit": 0,
@@ -659,7 +683,7 @@
   },
   "gate_tests": {
    "exit": 0,
-   "last_line": "79 passed in 8.67s"
+   "last_line": "82 passed in 8.71s"
   },
   "isolated_retained_source_gate": {
    "error": null,
@@ -702,5 +726,12 @@
   },
   "protected_main": "e8136625c463b271364b36b2b8ae76f8777f1967"
  },
- "what": "DRY RUN of proposal G2 in throw-away worktrees (core: on top of C1's dry-run control commit; site: on protected main). Nothing in either branch changed; nothing pushed; only a local placeholder tag, deleted at the end. Not an approval."
+ "what": "DRY RUN of proposal G2 in throw-away worktrees (core: on top of C1's dry-run control commit; site: on protected main). Nothing in either branch changed; nothing pushed; only a local placeholder tag, deleted at the end. Not an approval.",
+ "workflow_change_alone_fails_the_consolidated_gate": {
+  "exit": 1,
+  "first_failures": [
+   "source successor invalid: successor file identity or mode differs: .github/workflows/pcs-public-full-verification.yml",
+   "source identity differs: .github/workflows/pcs-ci.yml"
+  ]
+ }
 }

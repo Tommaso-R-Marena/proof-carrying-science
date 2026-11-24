@@ -1,5 +1,5 @@
 diff --git a/research/integration_v2/reconcile.py b/research/integration_v2/reconcile.py
-index 7add963e..23196a58 100644
+index 63aba1d1..d5416f34 100644
 --- a/research/integration_v2/reconcile.py
 +++ b/research/integration_v2/reconcile.py
 @@ -11,10 +11,12 @@ from collections import Counter
@@ -15,7 +15,7 @@ index 7add963e..23196a58 100644
  import urllib.request
  
  ROOT = Path(__file__).resolve().parents[2]
-@@ -306,6 +308,28 @@ def _pr117_resolution(root, *, protected=PR117_PROTECTED_HEAD, research=PR117_RE
+@@ -352,6 +354,28 @@ def _pr117_resolution(root, *, protected=PR117_PROTECTED_HEAD, research=PR117_RE
                  scope="EXACT_PROTECTED_SOURCE_PRESERVATION_NOT_SEMANTIC_OR_HOST_SECURITY_PROOF")
  
  
@@ -44,7 +44,7 @@ index 7add963e..23196a58 100644
  def check(*, require_committed=False, live=False):
      raw = (ROOT / MANIFEST).read_bytes()
      if hashlib.sha256(raw).hexdigest() != MANIFEST_SHA256:
-@@ -317,6 +341,7 @@ def check(*, require_committed=False, live=False):
+@@ -363,6 +387,7 @@ def check(*, require_committed=False, live=False):
      _snapshot(ROOT, manifest)
      _workflows(ROOT, manifest)
      pr117 = _pr117_resolution(ROOT)
@@ -52,7 +52,7 @@ index 7add963e..23196a58 100644
      if require_committed:
          if _git(ROOT, "diff", "--name-only", "HEAD").strip():
              raise ValueError("committed source required; staged/working changes remain")
-@@ -325,6 +350,7 @@ def check(*, require_committed=False, live=False):
+@@ -371,6 +396,7 @@ def check(*, require_committed=False, live=False):
          for name in manifest["control_paths"]:
              if _git(ROOT, "show", "HEAD:" + name) != (ROOT / name).read_bytes():
                  raise ValueError("control source must match committed HEAD")
@@ -60,7 +60,7 @@ index 7add963e..23196a58 100644
      if live:
          request = urllib.request.Request(API, headers={"User-Agent": "PCS-source-reconciliation"})
          with urllib.request.urlopen(request, timeout=30) as response:
-@@ -335,7 +361,7 @@ def check(*, require_committed=False, live=False):
+@@ -381,7 +407,7 @@ def check(*, require_committed=False, live=False):
              raise ValueError("live PR census changed; a new explicit review is required")
      return dict(result, committed_source_required=require_committed, live_heads_checked=live,
                  manifest_sha256=MANIFEST_SHA256, whole_tree_files_checked=len(manifest["snapshot"]),
@@ -70,13 +70,13 @@ index 7add963e..23196a58 100644
                  reviewed_test_successor=dict(path=RECEIVER_CLEANUP_TEST,
                      old_sha256=RECEIVER_CLEANUP_OLD, new_sha256=RECEIVER_CLEANUP_NEW,
 diff --git a/research/integration_v2/test_reconcile.py b/research/integration_v2/test_reconcile.py
-index 8b468e69..2bd50255 100644
+index e7278cee..98031fa4 100644
 --- a/research/integration_v2/test_reconcile.py
 +++ b/research/integration_v2/test_reconcile.py
-@@ -450,3 +450,28 @@ def test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar():
-     assert current['snapshot'][v22_path]==dict(sha256='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83',mode='100644')
-     added=set(current['snapshot'])-set(v22['snapshot'])-{v22_path}
-     assert added and all(n.startswith(('research/claimcheck_v1/', 'research/claimcheck_v1_1/', 'docs/integration/claimcheck/')) or n in ('.github/workflows/pcs-claimcheck-v1.yml',) for n in added)
+@@ -520,3 +520,28 @@ def test_g2_launcher_runs_only_the_gate_sources(tmp_path):
+     (pkg / "__init__.abi3.so").write_bytes(b"")
+     run = launch("-I", "-B", "-X", fresh())
+     assert run.returncode == 1 and "beside the gate's sources" in run.stderr and not marker.exists()
 +
 +
 +def test_require_committed_runs_the_retained_source_gate(monkeypatch):

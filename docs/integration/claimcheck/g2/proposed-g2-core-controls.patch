@@ -1,8 +1,8 @@
 diff --git a/research/integration_v2/reconcile.py b/research/integration_v2/reconcile.py
-index d668a52c..7fe0e7f6 100644
+index c7c5b4e8..63aba1d1 100644
 --- a/research/integration_v2/reconcile.py
 +++ b/research/integration_v2/reconcile.py
-@@ -38,6 +38,41 @@ RECEIVER_CLEANUP_TEST = "research/scientific_receiver_v1/tests/test_host.py"
+@@ -38,6 +38,46 @@ RECEIVER_CLEANUP_TEST = "research/scientific_receiver_v1/tests/test_host.py"
  RECEIVER_CLEANUP_OLD = "46916b52b9bfa2443a71ea106fd8fe891c626a1df5318eb347a65b6e1aa25a8a"
  RECEIVER_CLEANUP_NEW = "1952bd78f5f9a787a5fd1617e45dd2c75fe9d4188e87535e017e2e72317b4aba"
  
@@ -13,6 +13,11 @@ index d668a52c..7fe0e7f6 100644
 +SOURCE_POLICY_WORKFLOW = ".github/workflows/pcs-public-full-verification.yml"
 +SOURCE_POLICY_OLD = "bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf"
 +SOURCE_POLICY_NEW = "b4e6b4ef2aed4378557b3e44fba3dfddd872e68392844fd524f545de7e595d5a"
++# The consolidated research-integration gate pins that workflow's bytes too; its exact reviewed successor (new successor
++# record path and one identity line). V22 keeps its original identity as well.
++CONSOLIDATED_GATE = "research/integration_v1/source_gate.py"
++CONSOLIDATED_GATE_OLD = "0760cdfd6473b8ffc7220146ec76555152b684895da2b15dc15a55017a6bf58e"
++CONSOLIDATED_GATE_NEW = "dcce5eb187561002a5765d4a09ef7d33937ff69b19eaaffe943cbadfbc625fcc"
 +ISOLATED_GATE_LAUNCHER = """import os, runpy, sys, tempfile
 +# Refuse unless isolated (-I), not writing bytecode (-B) and reading cached bytecode only from a new, empty
 +# directory (-X pycache_prefix): without that, cached bytecode beside the gate's sources could replace them.
@@ -44,20 +49,22 @@ index d668a52c..7fe0e7f6 100644
  WORKFLOW_PREDECESSOR_TREE = "1fdf12112394c1ad7438e2add4460fba8fd34da0"
  
  
-@@ -78,7 +113,11 @@ def _identity(root, name):
+@@ -78,7 +118,13 @@ def _identity(root, name):
  
  
  def _current_expected(name, recorded):
 -    """Bind the reviewed test repair without changing historical classifications."""
-+    """Bind the reviewed test repair and G2's workflow successor without changing historical classifications."""
-+    if name == SOURCE_POLICY_WORKFLOW:
-+        if recorded != {"sha256": SOURCE_POLICY_OLD, "mode": "100644"}:
-+            raise ValueError("source-policy workflow successor predecessor identity differs")
-+        return {"sha256": SOURCE_POLICY_NEW, "mode": "100644"}
++    """Bind the reviewed test repair and G2's two successors without changing historical classifications."""
++    if name in (SOURCE_POLICY_WORKFLOW, CONSOLIDATED_GATE):
++        old, new = ((SOURCE_POLICY_OLD, SOURCE_POLICY_NEW) if name == SOURCE_POLICY_WORKFLOW
++                    else (CONSOLIDATED_GATE_OLD, CONSOLIDATED_GATE_NEW))
++        if recorded != {"sha256": old, "mode": "100644"}:
++            raise ValueError("G2 successor predecessor identity differs: " + name)
++        return {"sha256": new, "mode": "100644"}
      if name != RECEIVER_CLEANUP_TEST:
          return recorded
      if recorded != {"sha256": RECEIVER_CLEANUP_OLD, "mode": "100644"}:
-@@ -217,10 +256,10 @@ def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_
+@@ -217,10 +263,10 @@ def workflow_successor(raw, *, update_python=False, update_codeql=False, pytest_
      if pytest_context:
          text = text.replace("python -m pytest ", "python -m pytest -p research.integration_v2.pytest_phase_context ")
      if combined_source:
@@ -71,7 +78,7 @@ index d668a52c..7fe0e7f6 100644
          needle = "          bash scripts/core_ci_cloudflare.sh\n"
          if text.count(needle) != 1:
 diff --git a/research/integration_v2/test_reconcile.py b/research/integration_v2/test_reconcile.py
-index 8b468e69..26c44cfe 100644
+index 8b468e69..e7278cee 100644
 --- a/research/integration_v2/test_reconcile.py
 +++ b/research/integration_v2/test_reconcile.py
 @@ -407,6 +407,12 @@ def test_v21_preserves_frozen_v20_and_protected_proofs_with_exact_dependency_suc
@@ -87,7 +94,7 @@ index 8b468e69..26c44cfe 100644
          assert (gate.ROOT/name).read_bytes()==expected
  
  
-@@ -450,3 +456,50 @@ def test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar():
+@@ -450,3 +456,67 @@ def test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar():
      assert current['snapshot'][v22_path]==dict(sha256='28cc42a65a20f1d7697833d8a6ecca0f8cb37ac787f9eaeeb7ffc3686d26ce83',mode='100644')
      added=set(current['snapshot'])-set(v22['snapshot'])-{v22_path}
      assert added and all(n.startswith(('research/claimcheck_v1/', 'research/claimcheck_v1_1/', 'docs/integration/claimcheck/')) or n in ('.github/workflows/pcs-claimcheck-v1.yml',) for n in added)
@@ -104,10 +111,27 @@ index 8b468e69..26c44cfe 100644
 +    assert "python -m research.integration_v2.reconcile" not in raw.decode()
 +
 +
-+@pytest.mark.parametrize("recorded", [{"sha256": "0" * 64, "mode": "100644"}, {"sha256": gate.SOURCE_POLICY_OLD, "mode": "100755"}])
-+def test_g2_workflow_successor_requires_the_exact_original_identity(recorded):
++@pytest.mark.parametrize("name,recorded", [
++    (gate.SOURCE_POLICY_WORKFLOW, {"sha256": "0" * 64, "mode": "100644"}),
++    (gate.SOURCE_POLICY_WORKFLOW, {"sha256": gate.SOURCE_POLICY_OLD, "mode": "100755"}),
++    (gate.CONSOLIDATED_GATE, {"sha256": "0" * 64, "mode": "100644"}),
++    (gate.CONSOLIDATED_GATE, {"sha256": gate.CONSOLIDATED_GATE_OLD, "mode": "100755"}),
++])
++def test_g2_successors_require_the_exact_original_identity(name, recorded):
 +    with pytest.raises(ValueError, match="predecessor"):
-+        gate._current_expected(gate.SOURCE_POLICY_WORKFLOW, recorded)
++        gate._current_expected(name, recorded)
++
++
++def test_g2_consolidated_gate_names_the_new_workflow_identity():
++    """G2: the consolidated research gate, which pins the workflow's bytes, names G2's workflow; bound here by digest."""
++    raw = (gate.ROOT / gate.CONSOLIDATED_GATE).read_bytes()
++    assert hashlib.sha256(raw).hexdigest() == gate.CONSOLIDATED_GATE_NEW
++    text = raw.decode()
++    assert 'SUCCESSOR_PATH = "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json"' in text
++    assert text.count(gate.SOURCE_POLICY_NEW) == 1 and text.index(gate.SOURCE_POLICY_NEW) > text.index(gate.SOURCE_POLICY_OLD)
++    record = json.loads((gate.ROOT / "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json").read_bytes())
++    assert record["files"][gate.SOURCE_POLICY_WORKFLOW]["new_sha256"] == gate.SOURCE_POLICY_NEW
++    assert record["files"][gate.CONSOLIDATED_GATE]["new_sha256"] == gate.CONSOLIDATED_GATE_NEW
 +
 +
 +def test_g2_launcher_runs_only_the_gate_sources(tmp_path):
