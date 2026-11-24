@@ -49,7 +49,7 @@ admission, `S` changes. Every value below must then be regenerated and this revi
 | C1.6 | **Retained-source ancestry** | the `commit-tree` commands in `ADMISSION_PROPOSAL.md`, step 4, with `H`, for the design you approve under H1 (H1-b: two commands); then the ancestry commands below | the printed ID equals `proposed_retained_source_commit.commit` in `/tmp/c1/dry-run.json` and the PR description; `/tmp/c1/dry-run.json` reports `retained_history_as_designed: true` **and** `proposed_retained_source_commit.history` is the chosen design (`clean` for H1-b; `retained_history_as_designed` alone is also true for H1-a); `retained_history_review.withheld_blobs_reachable` is empty; `check_admission_consistency --history clean` reports `consistent: true` |
 | C1.7 | **Tag security, before creation** | `git ls-remote --tags origin 'refs/tags/pcs-source-intake/core-claimcheck-v1-20261114'` | prints nothing (the name is not squatted) |
 | C1.8 | Negative controls | in `/tmp/c1/dry-run.json`: `negative_controls` | all nine `rejected: true`; `dry_run_tested_the_proposal.only_the_tag_name_and_its_consequent_digests_differ: true` |
-| C1.9 | The protected suites pass with the successor | in `/tmp/c1/dry-run.json`: `gate_tests_on_the_successor`, `retained_source_gate_tests_on_the_successor` | 84 passed with G2 (75 without; G2's four tests count 9 cases); OK (13 tests, including the whole-tree squash) |
+| C1.9 | The protected suites pass with the successor | in `/tmp/c1/dry-run.json`: `gate_tests_on_the_successor`, `retained_source_gate_tests_on_the_successor` | 82 passed with G2 (75 without; G2's four tests count 7 cases); OK (13 tests, including the whole-tree squash) |
 
 **What C1.3 checks:**
 
