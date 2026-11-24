@@ -111,8 +111,8 @@ Test 12 still simulates it for the research branch, which keeps the originals un
 are in `h1b/h1b-adversarial.json` and in the PR description. The table below is the run of
 2026-11-19.
 
-Run at `044d7ee2`, and again at `ad43f21c` after the independent review with the same results (`h1b/h1b-adversarial.json`, the later run; commit IDs differ with the head). The branch still holds the original responses (the
-withholding waits for your archive, A1), so the tests ran on a throw-away commit with the stubs that
+Run at `044d7ee2`, and again at `ad43f21c` after the independent review with the same results (commit IDs differ with the head; `h1b/h1b-adversarial.json` now holds the 2026-11-24 rerun). At that time the branch still held the original responses (the
+withholding waited for your archive, A1), so the tests ran on a throw-away commit with the stubs that
 the governed tool writes, marked as a simulation. The H1-b retained commit there is `1b3e3967…`, on
 snapshot `d11ebb31…`; the H1-a commit for the same tree is `52638462…`. Both are objects in a
 throw-away worktree, with no ref.

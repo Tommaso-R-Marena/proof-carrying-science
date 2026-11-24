@@ -60,8 +60,9 @@ them at that head (`OWNER_EXECUTION_CHECKLIST.md`, C1).
 ### C1. Admit the ClaimCheck sidecar (core, protected)
 * **Changes:**
   * the retained commit (per H1) and the annotated tag `pcs-source-intake/core-claimcheck-v1-20261114`;
-  * one control commit with four files: V23, `reconcile.py` constants, the protected test's
-    successor, and the retained-source entry.
+  * one control commit with four files: V23; `reconcile.py`, with C1's constants and G2's binding
+    (one `_current_expected` branch and the isolated step's insertion point); the protected test's
+    successor (one C1 test and four G2 tests, 82 in all); and the retained-source entry.
 * **Why:** the protected gate pins every tracked file, so new files can only be admitted this way.
 * **Evidence:** [`ADMISSION_PROPOSAL.md`](ADMISSION_PROPOSAL.md):
   * the dry run, the audit and the census, and the H1-b, C2b and G2 dry runs, regenerated at the source
@@ -99,7 +100,7 @@ them at that head (`OWNER_EXECUTION_CHECKLIST.md`, C1).
   not required.
 * **Evidence:** `c2b/c2b-dry-run.json`, all as expected:
   * on top of C1 (H1-b), the gate passes on 72 PRs and reports the retained source;
-  * the protected suites pass (76 tests, and OK);
+  * the protected suites pass (83 tests with C1 and G2, and OK);
   * the CI steps before the gate leave no untracked file;
   * tag deleted, tag moved and an untracked file: each passes under C1 alone and is rejected with
     C2b;
@@ -173,7 +174,7 @@ them at that head (`OWNER_EXECUTION_CHECKLIST.md`, C1).
   reviewed transaction needs your separate authorisation.
 * **Changes:**
   * core: in `source-policy`, the manifest gate becomes the first step after checkout and
-    setup-python, as `python -I -B -X pycache_prefix="$(mktemp -d)"` through a fixed 16-line launcher.
+    setup-python, as `python -I -B -X pycache_prefix="$(mktemp -d)"` through a fixed 20-line launcher (14 lines of code).
     The launcher refuses to go on unless it runs isolated, without writing bytecode and with a new,
     empty bytecode directory;
   * the consolidated research gate (`research/integration_v1/source_gate.py`), which pins this
@@ -189,7 +190,7 @@ them at that head (`OWNER_EXECUTION_CHECKLIST.md`, C1).
   beside the gate, `nt.py` and `PYTHONPATH`.
 * **Evidence:** `g2/g2-dry-run.json`, all as expected (24 rows):
   * at C1 + G2, the same report as the current invocation (72 PRs);
-  * the protected suites pass (79 tests), and with C2b too (80);
+  * the protected suites pass (82 tests), and with C2b too (83);
   * fail-closed with the same error without C1;
   * every vector: planted code never ran, and the gate failed;
   * the site's positive case and its planted `scripts/json.py` case behave as expected.

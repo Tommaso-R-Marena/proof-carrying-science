@@ -43,7 +43,7 @@ Any of these lets a pull request make the gate report success without changing a
   * `reconcile.py`, two exact reviewed successors, the workflow and the consolidated gate, bound like
     the receiver test repair (`_current_expected`, original and new SHA-256), and the `combined_source`
     transformation that inserts the new step;
-  * `test_reconcile.py`, three new tests. The existing test that freezes every adapted workflow at its
+  * `test_reconcile.py`, four new tests. The existing test that freezes every adapted workflow at its
     reviewed bytes now states this one change explicitly.
 * *Site.* `open-pr-reconciliation.yml`, a control file of the site's retained-source gate, runs the gate
   first and as `python -I`, then the tests.

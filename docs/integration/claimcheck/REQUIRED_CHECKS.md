@@ -172,7 +172,7 @@ removed so its assertions cannot be stripped. It fails the source contract if th
 
 | | |
 | --- | --- |
-| files changed | `research/integration_v2/reconcile.py` (+26 −1 lines), `research/integration_v2/test_reconcile.py` (+25 lines, one test) |
+| files changed | `research/integration_v2/reconcile.py` (+27 −1 lines), `research/integration_v2/test_reconcile.py` (+25 lines, one test) |
 | unchanged | workflows, manifests, pinned files, retained commits, rulesets |
 | order | after C1. It edits C1's versions of the two files, which are control paths of both gates, so it is its own control commit with no manifest change |
 | patch and dry run | `python -m research.claimcheck_v1_1.governance.prepare_c2b --out docs/integration/claimcheck/c2b --pytest-python <python>` writes `proposed-c2b.patch` and `c2b-dry-run.json` |
@@ -180,13 +180,13 @@ removed so its assertions cannot be stripped. It fails the source contract if th
 | no false failure | the `source-policy` steps that run before the gate leave no untracked file; `__pycache__` is ignored |
 | caveats | annotated tags are not enforced (a lightweight tag at the right commit passes), and authority rests on the commit ID in the gate. Every workflow that runs `reconcile --require-committed` checks out full history with tags |
 
-**C2b dry run (regenerated 2026-11-21 at `ad43f21c` after the independent review, `c2b/c2b-dry-run.json`,
-patch `c2b/proposed-c2b.patch`, SHA-256 `c8d96303…560e`): all as expected.** The gate's child
+**C2b dry run (regenerated on 2026-11-24 at the source commit it names, on top of the final C1 with
+G2; `c2b/c2b-dry-run.json`, patch `c2b/proposed-c2b.patch`): all as expected.** The gate's child
 process now runs in isolated mode (`-I`). It ran on top of C1's dry-run control commit with the H1-b
 retained commit:
 
 * the gate passes on 72 PRs and reports `retained_source.passed: true`;
-* the protected suites pass: `test_reconcile.py`, 76 tests (75 plus the new one), and
+* the protected suites pass: `test_reconcile.py`, 83 tests (82 with C1 and G2, plus the new one), and
   `scripts/test_reconciled_prs.py`, OK;
 * the CI steps that run before the gate in `source-policy` leave no untracked file, including
   `check_pr_contributions.py`; the gate passes after them;
@@ -196,7 +196,7 @@ retained commit:
   tags, and its aggregate rejects a skipped or failed `source-policy`. A pull request can still edit
   that workflow, or `reconcile.py` itself (D2b's caveat; H1-b test 9).
 
-The patch changes two files and adds 51 lines. Regenerate it at the commit after C1.
+The patch changes two files, adds 52 lines and removes one. Regenerate it at the commit after C1.
 
 ### D2b: require the website's retained-source and public-tree check (ruleset)
 

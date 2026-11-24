@@ -1,10 +1,13 @@
 # G2: the source gates run before anything from the pull request (proposal; G1 evaluated)
 
-**Status (2026-11-21).** Prepared, tested in throw-away worktrees, and reviewed independently (section
-7). **Not applied.** No workflow, gate file, manifest, tag or ruleset was changed in either repository.
-**Owner decision (2026-11-22): approved in principle,** to be included in the final C1 admission,
-preserving all existing integrity checks. The workflow edit is committed in the sequence after A1
-(section 5). Nothing protected is applied until the owner authorises the final reviewed transaction.
+**Status (2026-11-21, updated 2026-11-24).** Prepared, tested in throw-away worktrees, and reviewed
+independently (section 7). **Owner decision (2026-11-22): approved in principle,** to be included in
+the final C1 admission, preserving all existing integrity checks. On 2026-11-24, after A1, the
+workflow edit (`0f0fe031`) and the consolidated research gate's successor (`8631e9c2`; to be
+confirmed by the owner, section 2) were committed on the ClaimCheck draft branch, as part of the
+tree C1 admits (section 5). **Nothing protected is applied:** protected `main`, the gates' control
+files, the manifest, tags and rulesets are unchanged in both repositories until the owner authorises
+the final reviewed transaction.
 G1 is deferred. The remaining workflow risk is in `WORKFLOW_SELF_MODIFICATION_RISK.md`.
 
 ## 1. The weakness
@@ -19,7 +22,7 @@ So Python looks in the root, or in `scripts/`, before the standard library. A pu
 file that runs before the gate has checked anything. It then forges the gate's report and exits 0,
 without changing any gate file.
 
-The dry run (`g2/g2-dry-run.json`, at `b702b422`, Python 3.12) planted each of the following and
+The dry run (`g2/g2-dry-run.json`, at the source commit it names, Python 3.12) planted each of the following and
 committed it. Each planted module writes a marker, prints a forged success report and exits 0.
 
 | Vector | Example | Today | With G2 | Flagged by the pre-merge path list |
@@ -61,7 +64,7 @@ runs isolated:
         shell: bash
         run: |
           python -I -B -X pycache_prefix="$(mktemp -d)" - "$PWD" --require-committed <<'PY'
-          ...the launcher, 16 lines (g2_isolation.LAUNCHER)...
+          ...the launcher, 20 lines, 14 of them code (g2_isolation.LAUNCHER)...
           PY
 ```
 
@@ -93,6 +96,10 @@ G2 therefore also changes that gate, in its own established successor pattern (`
 
 The gate's SHA-256 becomes `dcce5eb1…5fcc`, and the new record's is `5c06bbe6…4c35`. The gate passes:
 1,992 files checked, the new successor accepted, no failure. Its two tests that failed in CI pass.
+
+**This part was found after the owner's approval in principle, so the owner is asked to confirm it in
+the final approval.** The alternative is C1 without G2: revert `8631e9c2` and `0f0fe031`, then
+regenerate. The workflow alone is not an option, since it fails the five jobs.
 
 Two control files change. V23 does not: it keeps V22's identities for both modified files, as for
 the earlier receiver test repair.
@@ -127,10 +134,12 @@ gate without the workflow, and any other bytes or mode.
 
 * **Same verdict on a good tree.** At C1 + G2, G2's step passes (72 PRs). It is read from the
   workflow file with a YAML parser and run with bash as GitHub runs it. It gives the same report as
-  the current invocation. The protected suites pass (79 tests; retained-source tests OK).
+  the current invocation. The protected suites pass (82 tests; retained-source tests OK).
 * **Same verdict on a bad tree.** At the branch head without C1, G2's step fails with the same error
-  as the current invocation ("combined tracked file census differs"). Exit codes pass through.
-* **C2b still fits.** C1 + G2 + C2b passes and reports the retained source (80 tests).
+  as the current invocation ("reviewed source identity differs:
+  .github/workflows/pcs-public-full-verification.yml": V22 alone does not bind G2's workflow). Exit
+  codes pass through.
+* **C2b still fits.** C1 + G2 + C2b passes and reports the retained source (83 tests).
 * **C1 carries G2 only when chosen.** C1 includes G2's control edits only when the source commit
   carries G2's exact workflow, as a regular non-executable file. Any other bytes, or the executable
   mode, are refused. V23 is byte-identical with and without G2.

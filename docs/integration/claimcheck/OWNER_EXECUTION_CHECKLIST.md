@@ -285,20 +285,29 @@ new values.
 
 ### G2 (approved in principle 2026-11-22; core, in the final C1). The source gates run first, with isolated imports ([`G2_IMPORT_ISOLATION.md`](G2_IMPORT_ISOLATION.md))
 * **Authorises:**
-  * core: committing `g2/proposed-g2-core-workflow.patch` on the ClaimCheck branch before C1 is
-    regenerated. C1's control commit then carries G2's two control edits
-    (`g2/proposed-g2-core-controls.patch`): `reconcile.py` binds exactly this workflow successor, and
-    `test_reconcile.py` tests it. V23 is unchanged;
+  * core: G2's two commits on the ClaimCheck branch, made on 2026-11-24 before C1 was regenerated:
+    * `g2/proposed-g2-core-workflow.patch` (`0f0fe031`), the workflow;
+    * `g2/proposed-g2-consolidated-gate.patch` (`8631e9c2`), the consolidated research gate's
+      successor and its new successor record. That gate pins the workflow's bytes, which CI showed
+      after your approval in principle. **Please confirm it with this decision;**
+  * core: G2's two control edits in C1's control commit (`g2/proposed-g2-core-controls.patch`).
+    `reconcile.py` binds exactly these two successors, each only in place of its exact V22 identity,
+    and `test_reconcile.py` tests them. V23 is unchanged: it keeps V22's identities for both files;
   * site: committing `g2/proposed-g2-site.patch`, one control file. Meaningful together with D2b.
 * **Why:** a file a pull request adds can run before either gate checks anything, and forge the
   gate's report without changing a gate file. 19 working vectors were reproduced.
-* **Evidence:** `g2/g2-dry-run.json`, all as expected (24 rows, the site, C2b compatible). An
-  independent security review found that the claim holds, with two minor findings, both fixed
-  (`G2_IMPORT_ISOLATION.md`, section 7).
+* **Evidence:** `g2/g2-dry-run.json`, all as expected (24 rows, the site, C2b compatible; the
+  consolidated gate passes with both successors and fails with the workflow alone). An independent
+  security review found that the claim holds, with two minor findings, both fixed
+  (`G2_IMPORT_ISOLATION.md`, section 7). The independent review of the final C1 package (2026-11-24)
+  verified both successors (`INDEPENDENT_REVIEW_CHECKLIST.md`, G2.1 to G2.7).
 * **Does not cover:** edits of the workflow or of the gate's own sources: review, the pre-merge
   check, or G1.
 * **If decided after C1:** G2 needs an admission cycle of its own.
-* **Undo:** before C1, drop the workflow commit and regenerate. After C1, a new admission.
+* **If you do not confirm the consolidated gate's successor:** revert `8631e9c2` and `0f0fe031` on the
+  branch and regenerate C1 without G2. The workflow alone fails five existing jobs.
+* **Undo:** before C1, drop G2's two commits (`8631e9c2`, `0f0fe031`) and regenerate. After C1, a new
+  admission.
 
 ## Before every merge (no change; required by the owner's decision of 2026-11-22 while G1 is deferred)
 

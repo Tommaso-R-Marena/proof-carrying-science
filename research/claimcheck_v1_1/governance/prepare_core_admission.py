@@ -224,8 +224,10 @@ def build(src: Path, head: str, intake: str, tag: str, v22: dict, v22_raw: bytes
                                    RETAINED: {"sha256": sha(files[RETAINED]), "mode": retained_mode}}.items()))
     v23["scope"] = ("V23: V22 unchanged and retained as an immutable predecessor, plus additive admission of the ClaimCheck research sidecar "
                     "(research/claimcheck_v1, research/claimcheck_v1_1, one path-scoped workflow, admission documents). One pinned control "
-                    "script (scripts/check_reconciled_prs.py) names the new retained source commit and the V23 control path. No existing "
-                    "source, science, Lean or authority byte changes. PR census and held PR117 unchanged.")
+                    "script (scripts/check_reconciled_prs.py) names the new retained source commit and the V23 control path; it is the only "
+                    "V22 entry whose identity changes. Where the admitted tree carries a reviewed successor of an existing file, this "
+                    "manifest keeps the file's V22 identity, and the gate (research/integration_v2/reconcile.py, _current_expected) "
+                    "binds the successor to that exact predecessor. PR census and held PR117 unchanged.")
     v23["reviewer"] = "PROPOSED by an AI assistant for the owner's review; not reviewed, not approved"
     files[V23] = (json.dumps(v23, indent=2, sort_keys=True) + "\n").encode()
     # (2) the compiled-in constants of the gate

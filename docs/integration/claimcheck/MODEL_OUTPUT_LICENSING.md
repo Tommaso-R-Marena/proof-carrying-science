@@ -2,7 +2,10 @@
 
 Prepared 2026-11-19 at the owner's request. **No permission to redistribute is assumed beyond what
 the providers' terms show.** This is a reading of published terms, not legal advice; the owner may
-want legal review before deciding L2. Nothing has been removed, rewritten or relicensed.
+want legal review before deciding L2. **Since 2026-11-24** (after the owner's private archive, A1, and
+decisions L1 to L3), the 22 Nemotron and Cohere responses are provenance stubs in the branch's tree
+(`bed63365`; section 7). No history was rewritten and nothing was relicensed: the originals remain in
+the branch's history, in pull requests 212 and 216, and in clones.
 
 ## 1. What is recorded: 45 outputs, not 35
 
@@ -207,9 +210,15 @@ What withholding changes, and what it does not:
   can be established and verified, stop before altering the originals and name the minimal owner
   action.** Status: section 7.
 
-## 5. Reachability after C1: the retained-source tag keeps the originals reachable
+## 5. Reachability after C1: under the original design (H1-a), the tag would keep the originals reachable
 
-* **The retained commit's ancestry.** The retained commit that C1 creates has two parents: the
+**Owner decision (2026-11-22): H1-b.** Under H1-b, C1's retained commit is built on a snapshot whose
+only parent is protected `main` (`bc78660b`), so neither the retained commit nor its tag reaches any
+commit of this branch, and no withheld response is reachable from it (`H1B_CLEAN_HISTORY.md`; the dry
+run's `retained_history_review`). The analysis below is of the original design, H1-a, and is kept as
+the reason for H1-b.
+
+* **The retained commit's ancestry.** Under H1-a, the retained commit would have two parents: the
   admitted commit `H` and the previous intake `0b521f39` (`ADMISSION_PROPOSAL.md`, step 4). Its
   first parent, `H`, has the whole history of this branch as ancestors. That includes the three
   commits that added the recorded outputs, checked on 2026-11-19:
@@ -217,23 +226,23 @@ What withholding changes, and what it does not:
   * `dbe31d72`: 14 files;
   * `87900a17`: 21 files.
 * **The tag.** The annotated tag `pcs-source-intake/core-claimcheck-v1-20261114` points at the
-  retained commit, so it makes that history permanently reachable from a public ref. T1 would also
+  retained commit, so under H1-a it would make that history permanently reachable from a public ref. T1 would also
   make the tag undeletable except by you.
 * **The gate.** It checks that the original PR heads are ancestors of the retained commit, through
   the previous intake. It does not require this branch's own history.
 
-Consequently:
+Consequently, under H1-a:
 
-* the stubs (L2, L3), a squash merge and deleting the branch each leave the originals publicly
-  reachable;
-* C1 as designed adds a durable, protected public reference to them, beyond PR 212's own references
-  (which GitHub keeps in any case);
-* only two things would avoid that new reference: building the retained commit on a source commit
-  without this branch's history (H1-b below), or rewriting history (H1-c). Neither is proposed for
-  execution; both need your authorisation, and H1-b changes the retained-source design.
+* the stubs (L2, L3), a squash merge and deleting the branch would each leave the originals
+  reachable from the tag, as well as from pull request 212's own references, which GitHub keeps under
+  either design;
+* C1 would add a durable, protected public reference to them;
+* only two things avoid that new reference: building the retained commit on a source commit without
+  this branch's history (H1-b), or rewriting history (H1-c, not proposed).
 * **Update (2026-11-19):** H1-b is now designed, implemented in the admission tooling and tested
   ([`H1B_CLEAN_HISTORY.md`](H1B_CLEAN_HISTORY.md)). It avoids the new reference. It does not remove
-  the originals from pull request 212 or 216, or from clones.
+  the originals from pull request 212 or 216, or from clones. **2026-11-22:** the owner confirmed
+  H1-b for C1 and for R1.
 
 ## 6. Before C1: provider clarification (P1) and historical exposure (H1)
 
@@ -285,12 +294,12 @@ Consequently:
 | 4. verification against the inventory | done on a private copy inside this session's container: 22 of 22 match |
 | 5. recoverability | done on that copy: read back, every digest recomputed, complete |
 | 6. replacement with the governed tool | **done** after the owner's decisions L1 to L3 of 2026-11-24, in `bed633654eca603da4c4975c547853a630f27532`: exactly the 22 files; every stub checked against the inventory and against the original in history |
-| 7. provenance kept in the stubs | prepared: provider, model, cache key (as `cache_key`), prompt digest, usage, finish reason, digests and sizes of the original and of its text, the commit and time the file was first recorded, request identifier (not recorded by the client), terms, reason |
-| 8. regression suites | measured in a throw-away worktree with the stubs applied by the governed tool: all pass (below) |
+| 7. provenance kept in the stubs | kept: provider, model, cache key (as `cache_key`), prompt digest, usage, finish reason, digests and sizes of the original and of its text, the commit and time the file was first recorded, request identifier (not recorded by the client), terms, reason |
+| 8. regression suites | **done** on the committed stubs: all pass (below), including the frozen freeze check and the real-kernel replays |
 | 9. effect on offline reproducibility | measured: only the Nemotron arm, and the union of both models, can no longer be regenerated offline (below) |
 | 10. admission evidence | regenerated at the source commit named in `dry-run.json`, after step 6 and G2's workflow commit |
 
-**Why no private archive.** The archive must be private, outside every public repository and artifact
+**Why the archive had to be yours.** The archive must be private, outside every public repository and artifact
 location, and recoverable. Nothing available to this session meets all three:
 
 * this session's container is private, but it is reclaimed when the session ends: a copy there is
@@ -311,15 +320,15 @@ On a private copy in the container (directory 0700, files 0600, outside the repo
 
 That copy disappears with the container and does not count as the archive.
 
-**The minimal owner action (A1)** is [`A1_ARCHIVE_PROCEDURE.md`](A1_ARCHIVE_PROCEDURE.md):
+**The minimal owner action (A1, done on 2026-11-24)** was [`A1_ARCHIVE_PROCEDURE.md`](A1_ARCHIVE_PROCEDURE.md):
 
 * Windows PowerShell, on your own computer;
 * a fresh clone at the pinned commit `e6099049`, then the archive in your user folder;
 * a second copy on a drive you own, and a check of that copy.
 
-Nothing is uploaded. You then send two values: the SHA-256 (expected `91acf4ff…69a3`) and
-`recoverable_and_complete: true`. The withholding runs only after that, and not before (owner,
-2026-11-21).
+Nothing was uploaded. You then sent two values for each copy: the SHA-256 (`91acf4ff…69a3`, as
+expected) and `recoverable_and_complete: true`. The withholding ran only after that, as you required
+(owner, 2026-11-21).
 
 Tested here on 2026-11-21, from a fresh GitHub clone at that commit:
 
@@ -332,9 +341,9 @@ Tested here on 2026-11-21, from a fresh GitHub clone at that commit:
 Windows and PowerShell themselves could not be run in this environment. Every copy made for the
 tests was deleted.
 
-**Measured effect of the withholding** (`withholding/withholding-effect.json`; simulated at
-`044d7ee2` in two throw-away worktrees, one without and one with the stubs written by the governed
-tool):
+**Measured effect of the withholding** (`withholding/withholding-effect.json`, regenerated on
+2026-11-24: the commit before the withholding, `6867b551`, compared with the committed stubs of
+`bed63365`, in two throw-away worktrees):
 
 * the stubs change exactly the 22 files and nothing outside `results/*/model_responses/`;
 * with the stubs, every check still passes: the frozen freeze check (both digests), the v1 offline
@@ -356,8 +365,8 @@ and overwrite the stub with a new response. That would be a new model call, whic
 authorised in any case. Never run the frozen v1 benchmark with the network allowed against these
 directories.
 
-After your confirmation, steps 6 to 10 follow:
+After your confirmation of 2026-11-24, steps 6 to 10 were done:
 
-* `withhold_model_outputs --apply --groups N,C --decision "<reference>"`, as one commit;
-* the suites;
-* the admission evidence regenerated at the new head.
+* `withhold_model_outputs --apply --groups N,C --decision "<reference>"`, as one commit (`bed63365`);
+* the suites, all passing;
+* the admission evidence, regenerated at the source commit named in `dry-run.json`.
