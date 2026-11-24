@@ -7,7 +7,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "docs/integration/2026-10-18"
-SUCCESSOR_PATH = "docs/integration/2026-11-05/receipt-source-profile-successor-v21-transport.json"
+SUCCESSOR_PATH = "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json"
 PREDECESSOR_COMMIT = "b916eec1b9d0d5c02c9cc19b070f7a47df5e5d87"
 PREDECESSOR_PROFILE_SHA256 = "0610914446b24a6b2e7fb70cd385155531c42d65a95ec04b896d37c29f9d7297"
 # These exact repair bytes require source review; the manifest cannot authorize
@@ -52,6 +52,10 @@ RECEIPT_REPAIR_IDENTITIES['README.md'] = (RECEIPT_REPAIR_IDENTITIES['README.md']
 RECEIPT_REPAIR_IDENTITIES['README.md'] = (RECEIPT_REPAIR_IDENTITIES['README.md'][0], '57741c2a3bb217e1cb7fdfff3953127124f799a1ce808ad159015ca095e16ac8')
 
 RECEIPT_REPAIR_IDENTITIES['pcs/transport_trace_kernel_v1.py'] = (RECEIPT_REPAIR_IDENTITIES['pcs/transport_trace_kernel_v1.py'][0], 'ff409b9a4a1c062c51761afc2c05f459d95f56eb3ca689c2a3a59b4d0e20e4eb')
+
+# G2 (owner, 2026-11-22: approved in principle, in C1): the exact reviewed source-policy successor, which runs the
+# manifest gate first in Python's isolated mode. The earlier successor record stays frozen.
+RECEIPT_REPAIR_IDENTITIES['.github/workflows/pcs-public-full-verification.yml'] = (RECEIPT_REPAIR_IDENTITIES['.github/workflows/pcs-public-full-verification.yml'][0], 'b4e6b4ef2aed4378557b3e44fba3dfddd872e68392844fd524f545de7e595d5a')
 
 GATE_PATH = "research/integration_v1/source_gate.py"
 PREDECESSOR_GATE_SHA256 = "63b60bcec9538195f43506fed3102c37e960bb36654c57ee07e3d2452df6e625"
