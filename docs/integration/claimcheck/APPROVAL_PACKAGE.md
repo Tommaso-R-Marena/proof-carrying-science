@@ -5,17 +5,19 @@ Approving one decision does not approve another. Steps, stop conditions and undo
 [`OWNER_EXECUTION_CHECKLIST.md`](OWNER_EXECUTION_CHECKLIST.md); the independent review steps are in
 [`INDEPENDENT_REVIEW_CHECKLIST.md`](INDEPENDENT_REVIEW_CHECKLIST.md).
 
-**One prerequisite is open: your action A1**, a private archive of the 22 responses to withhold. The
-procedure is [`A1_ARCHIVE_PROCEDURE.md`](A1_ARCHIVE_PROCEDURE.md): Windows PowerShell, local only,
-with a second copy on a drive you own. You then send two values: the archive's SHA-256 (expected
-`91acf4ff…69a3`) and `recoverable_and_complete: true`. Until then the originals stay unchanged, and
-the C1 numbers (V23 digest, retained commit, control-file digests) cannot be final. They are
-regenerated at the commit you admit, after the withholding commit.
+**A1 is done (2026-11-24).** You confirmed both private archive copies (SHA-256 `91acf4ff…69a3`,
+`recoverable_and_complete: true`, 22 of 22) and authorised L1 to L3. The 22 responses are withheld in
+`bed63365`, and G2's workflow is committed in `0f0fe031`.
+
+The C1 evidence in this directory is regenerated at the source commit named in `dry-run.json`, after
+both commits. The exact values for the head you admit are in the PR description, and you regenerate
+them at that head (`OWNER_EXECUTION_CHECKLIST.md`, C1).
 
 ## Order
 
-* **First:** A1 and the withholding commit; P1 (optional, yours to send); then H1 and G2. Both
-  decide what C1 is regenerated from: G2's workflow edit is part of the admitted tree.
+* **Done:** A1 and the withholding commit (`bed63365`); H1 (H1-b) and G2 (in principle) decided; G2's
+  workflow committed (`0f0fe031`), with the consolidated research gate's successor (`8631e9c2`). P1 stays
+  optional, yours to send.
 * **Core:** T1 (recommended), then C1, then C2, then C2b (optional), then R1.
 * **Website:** D1 and D3, then regenerate, then D2, then D2b (optional).
 * **Either repository, optional, not recommended now:** G1 (see its entry).
@@ -61,10 +63,18 @@ regenerated at the commit you admit, after the withholding commit.
   * one control commit with four files: V23, `reconcile.py` constants, the protected test's
     successor, and the retained-source entry.
 * **Why:** the protected gate pins every tracked file, so new files can only be admitted this way.
-* **Evidence:** [`ADMISSION_PROPOSAL.md`](ADMISSION_PROPOSAL.md); the dry run, the audit and the
-  census, regenerated at the commit you admit; `review_v23_manifest`.
+* **Evidence:** [`ADMISSION_PROPOSAL.md`](ADMISSION_PROPOSAL.md):
+  * the dry run, the audit and the census, and the H1-b, C2b and G2 dry runs, regenerated at the source
+    commit named in `dry-run.json`;
+  * `review_v23_manifest`;
+  * an independent review of the whole package (PR description).
+
+  The values for the head you admit are in the PR description.
 * **Assumptions:**
-  * the withholding commit is in place (A1);
+  * the withholding commit is in place (`bed63365`), so no withheld response is reachable from the
+    retained commit;
+  * G2 is included: the branch carries its workflow (`0f0fe031`) and the consolidated gate's
+    successor (`8631e9c2`), and the control commit binds both;
   * the gate's own source files are trusted configuration, which no gate can check (H1-b test 9);
     review of the control commit is what protects them;
   * a module a pull request adds at the root or in `scripts/` would run before either gate checks
@@ -157,15 +167,21 @@ regenerated at the commit you admit, after the withholding commit.
 
 ### G2. The source gates run first, with isolated imports (core and site, protected; recommended)
 * **Owner decision (2026-11-22): approved in principle,** to be included in the final C1 admission,
-  preserving all existing integrity checks. Not applied: the final reviewed transaction needs your
-  separate authorisation.
+  preserving all existing integrity checks. Its workflow (`0f0fe031`) and the consolidated gate's
+  successor (`8631e9c2`) are committed in the admitted tree.
+  Its two control edits are part of C1's proposed control commit, which is not applied: the final
+  reviewed transaction needs your separate authorisation.
 * **Changes:**
   * core: in `source-policy`, the manifest gate becomes the first step after checkout and
     setup-python, as `python -I -B -X pycache_prefix="$(mktemp -d)"` through a fixed 16-line launcher.
     The launcher refuses to go on unless it runs isolated, without writing bytecode and with a new,
     empty bytecode directory;
-  * `reconcile.py` (+42 −3) binds exactly this workflow successor, and `test_reconcile.py` (+53)
-    tests it. V23 is unchanged;
+  * the consolidated research gate (`research/integration_v1/source_gate.py`), which pins this
+    workflow's bytes, names its new identity through a new successor record (`8631e9c2`). **This was
+    found by CI after your approval in principle; please confirm it.** Without it, five existing jobs
+    fail;
+  * `reconcile.py` (+49 −3) binds exactly these two successors, and `test_reconcile.py` (+70) tests
+    them. V23 is unchanged;
   * site: `open-pr-reconciliation.yml` runs `python -I scripts/check_reconciled_prs.py` first.
 * **Why:** a file a pull request adds can run before either gate checks anything and forge its
   report, without changing any gate file. The dry run reproduced 19 working vectors, among them

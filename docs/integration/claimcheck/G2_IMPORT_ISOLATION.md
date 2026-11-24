@@ -77,18 +77,36 @@ runs isolated:
   to the gate's sources. No other file of the repository can be imported, so none can replace a
   module the gate imports. It runs the gate unchanged, with `runpy`.
 
-Two control files change. V23 does not: it keeps V22's identity for the workflow, as for the
-earlier receiver test repair.
+**The consolidated research gate also pins this workflow (found on 2026-11-24).**
+`research/integration_v1/source_gate.py`, run by `pcs-integration-research.yml` (`cross-pr`, the three
+`focused-python` jobs, `formal-research`), pins the workflow's bytes. With G2's workflow alone, all
+five jobs failed on GitHub ("successor file identity or mode differs"). The G2 dry runs had not run
+that gate, and neither had the independent review. Pushing the workflow commit to the draft branch
+showed it.
 
-* **`reconcile.py`**, +42 −3 lines:
-  * constants: the workflow's original and new SHA-256 (`bb920a82…67cf` → `b4e6b4ef…5d5a`) and the
-    launcher;
-  * `_current_expected` maps exactly that original identity to the new one;
+G2 therefore also changes that gate, in its own established successor pattern (`8631e9c2`):
+
+* `SUCCESSOR_PATH` names a new successor record,
+  `g2/receipt-source-profile-successor-g2.json`. The previous record stays frozen;
+* one dated line sets the workflow's identity to `b4e6b4ef…5d5a`, exactly as the same gate recorded
+  the earlier combined-source successor of this workflow.
+
+The gate's SHA-256 becomes `dcce5eb1…5fcc`, and the new record's is `5c06bbe6…4c35`. The gate passes:
+1,992 files checked, the new successor accepted, no failure. Its two tests that failed in CI pass.
+
+Two control files change. V23 does not: it keeps V22's identities for both modified files, as for
+the earlier receiver test repair.
+
+* **`reconcile.py`**, +49 −3 lines:
+  * constants: the original and new SHA-256 of the workflow (`bb920a82…67cf` → `b4e6b4ef…5d5a`) and
+    of the consolidated gate (`0760cdfd…f58e` → `dcce5eb1…5fcc`), and the launcher;
+  * `_current_expected` maps exactly those two original identities to the new ones;
   * the `combined_source` transformation inserts the new step at the new place.
-* **`test_reconcile.py`**, +53 lines:
-  * three new tests: the step order, the exact-predecessor binding, and the launcher on a stand-in
-    gate with planted files, including its refusals;
-  * the existing test that freezes every adapted workflow at its reviewed bytes states this one
+* **`test_reconcile.py`**, +70 lines:
+  * four new tests: the step order; the exact-predecessor binding of both successors; the
+    consolidated gate naming the new workflow identity; and the launcher on a stand-in gate with
+    planted files, including its refusals;
+  * the existing test that freezes every adapted workflow at its reviewed bytes states the workflow's
     change explicitly.
 
 **Site.** `open-pr-reconciliation.yml`, a control file of the site gate, runs
@@ -96,8 +114,14 @@ earlier receiver test repair.
 reordered lines). The retained-source gate excludes its control files from the tree comparison, so
 no other site file changes.
 
-Patches: `g2/proposed-g2-core-workflow.patch`, `g2/proposed-g2-core-controls.patch` (on top of C1's
-two files) and `g2/proposed-g2-site.patch`.
+Patches:
+* `g2/proposed-g2-core-workflow.patch`;
+* `g2/proposed-g2-consolidated-gate.patch`;
+* `g2/proposed-g2-core-controls.patch`, on top of C1's two files;
+* `g2/proposed-g2-site.patch`.
+
+G2 is all three tree files or none: the admission tooling refuses the workflow without the gate, the
+gate without the workflow, and any other bytes or mode.
 
 ## 3. Evidence (dry run, `python -m research.claimcheck_v1_1.governance.prepare_g2`; all as expected)
 
@@ -150,7 +174,10 @@ An independent security review is in section 7.
 ## 5. Order and cost
 
 * **Core: decide before C1's final regeneration.** The workflow edit is part of the tree C1 admits.
-  If you approve G2:
+  Approved in principle on 2026-11-22. The workflow edit is committed in `0f0fe031` and the
+  consolidated gate's successor in `8631e9c2` (2026-11-24). **Please confirm this second file in your
+  final approval: it was not in the design you approved in principle.** The fallback, if you prefer
+  not to: revert both commits and regenerate C1 without G2. The steps were:
   1. I commit `proposed-g2-core-workflow.patch` on the ClaimCheck branch;
   2. I regenerate C1. `prepare_core_admission` then builds G2's control edits into C1's control
      commit;

@@ -43,13 +43,13 @@ admission, `S` changes. Every value below must then be regenerated and this revi
 | --- | --- | --- | --- |
 | C1.1 | The committed evidence is about one commit and only evidence changed after it | `python -m research.claimcheck_v1_1.governance.check_admission_consistency` | `consistent: true`, all 11 checks; note `source_commit` (= `S`) |
 | C1.2 | The proposal regenerates at `H` | `python -m research.claimcheck_v1_1.governance.prepare_core_admission --out /tmp/c1 --pytest-python "$(command -v python)" --emit /tmp/c1-emit` | `all_as_expected: true` |
-| C1.3 | **Manifest integrity**, by code separate from the generator | `python -m research.claimcheck_v1_1.governance.review_v23_manifest --emit /tmp/c1-emit --head H` | `consistent: true`; all 10 checks (see below) |
+| C1.3 | **Manifest integrity**, by code separate from the generator | `python -m research.claimcheck_v1_1.governance.review_v23_manifest --emit /tmp/c1-emit --head H` | `consistent: true`; all 11 checks with G2 (10 without; see below) |
 | C1.4 | **Exact digests** of the four control files | `sha256sum /tmp/c1-emit/docs/integration/2026-11-14/RECONCILIATION_V23.json /tmp/c1-emit/research/integration_v2/reconcile.py /tmp/c1-emit/research/integration_v2/test_reconcile.py /tmp/c1-emit/scripts/check_reconciled_prs.py` | each equals the PR description's value for `H` |
 | C1.5 | The control files change only what they must | `git diff --no-index <(git show H:research/integration_v2/reconcile.py) /tmp/c1-emit/research/integration_v2/reconcile.py`, and the same for the other two files | as listed in "The expected hunks" below |
 | C1.6 | **Retained-source ancestry** | the `commit-tree` commands in `ADMISSION_PROPOSAL.md`, step 4, with `H`, for the design you approve under H1 (H1-b: two commands); then the ancestry commands below | the printed ID equals `proposed_retained_source_commit.commit` in `/tmp/c1/dry-run.json` and the PR description; `/tmp/c1/dry-run.json` reports `retained_history_as_designed: true` **and** `proposed_retained_source_commit.history` is the chosen design (`clean` for H1-b; `retained_history_as_designed` alone is also true for H1-a); `retained_history_review.withheld_blobs_reachable` is empty; `check_admission_consistency --history clean` reports `consistent: true` |
 | C1.7 | **Tag security, before creation** | `git ls-remote --tags origin 'refs/tags/pcs-source-intake/core-claimcheck-v1-20261114'` | prints nothing (the name is not squatted) |
 | C1.8 | Negative controls | in `/tmp/c1/dry-run.json`: `negative_controls` | all nine `rejected: true`; `dry_run_tested_the_proposal.only_the_tag_name_and_its_consequent_digests_differ: true` |
-| C1.9 | The protected suites pass with the successor | in `/tmp/c1/dry-run.json`: `gate_tests_on_the_successor`, `retained_source_gate_tests_on_the_successor` | 75 passed; OK (13 tests, including the whole-tree squash) |
+| C1.9 | The protected suites pass with the successor | in `/tmp/c1/dry-run.json`: `gate_tests_on_the_successor`, `retained_source_gate_tests_on_the_successor` | 84 passed with G2 (75 without; G2's four tests count 9 cases); OK (13 tests, including the whole-tree squash) |
 
 **What C1.3 checks:**
 
@@ -65,19 +65,42 @@ admission, `S` changes. Every value below must then be regenerated and this revi
     `docs/integration/claimcheck/` or `.github/workflows/pcs-claimcheck-v1.yml`, with mode 100644.
     The one exception is V22 itself, now pinned as an ordinary file.
 * **Against `H`:**
-  * every entry equals the blob at `H`, except the gate script the control commit replaces and the
-    gate's one pinned test repair (`research/scientific_receiver_v1/tests/test_host.py`, manifest
-    `46916b52…`, accepted successor `1952bd78…`, rule `RECEIVER_CLEANUP_*` in `reconcile.py`);
+  * every entry equals the blob at `H`, except:
+    * the gate script the control commit replaces;
+    * the gate's one pinned test repair (`research/scientific_receiver_v1/tests/test_host.py`,
+      manifest `46916b52…`, accepted successor `1952bd78…`, rule `RECEIVER_CLEANUP_*` in
+      `reconcile.py`);
+    * with G2, two files. V23 keeps their V22 identities, `H` has the new ones with mode 100644, and
+      the emitted `reconcile.py` binds exactly these pairs. This is the eleventh check:
+      * the workflow `.github/workflows/pcs-public-full-verification.yml`: `bb920a82…67cf` →
+        `b4e6b4ef…5d5a` (`SOURCE_POLICY_*`);
+      * the consolidated gate `research/integration_v1/source_gate.py`: `0760cdfd…f58e` →
+        `dcce5eb1…5fcc` (`CONSOLIDATED_GATE_*`);
   * no file at `H` is missing from V23 except the control paths.
 * **Control paths:** V23 is a control path and V22 is not.
 
 **The expected hunks (C1.5):**
 
 * `reconcile.py`: the manifest path, the manifest digest (`MANIFEST_SHA256`), acceptance of format
-  v23 as current, and the relation-scope label. No change to the gate's logic.
+  v23 as current, and the relation-scope label. **With G2** (`g2/proposed-g2-core-controls.patch`):
+  * the constants `SOURCE_POLICY_WORKFLOW`, `SOURCE_POLICY_OLD`, `SOURCE_POLICY_NEW`,
+    `CONSOLIDATED_GATE`, `CONSOLIDATED_GATE_OLD`, `CONSOLIDATED_GATE_NEW`, `ISOLATED_GATE_LAUNCHER` and
+    `ISOLATED_GATE_STEP`;
+  * in `_current_expected`, one branch that maps exactly the two V22 identities to the new ones and
+    refuses any other recorded identity;
+  * in `workflow_successor`, the `combined_source` transformation inserts the isolated step before
+    "Audit revision, repository governance, and Python source" instead of the old step before
+    "Exercise disclosure-audit unit tests". It still refuses zero or two insertion points.
+
+  No other change to the gate's logic.
 * `test_reconcile.py`: the existing test "V22 keeps the V21 intake manifest" reads V22 by path. One
-  test is added, `test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar`. No existing assertion is
-  removed or weakened.
+  test is added, `test_v23_keeps_v22_and_only_adds_the_claimcheck_sidecar`. **With G2:**
+  * four tests are added: the step order, the exact predecessors of both successors, the
+    consolidated gate naming the new workflow identity, and the launcher with its refusals;
+  * the test that freezes every adapted workflow at its reviewed bytes states G2's one change
+    explicitly and checks the new digest.
+
+  No existing assertion is removed or weakened.
 * `check_reconciled_prs.py`: the core entry of `INTAKES` names the new retained commit and tag, and
   `CONTROLS` names V23 instead of V22. The site entry, the tag check and every other line are
   unchanged.
@@ -121,9 +144,10 @@ succeed:
 
 | ID | Check | How | Expected |
 | --- | --- | --- | --- |
-| G2.1 | The branch carries exactly G2's workflow, and nothing else changed in an existing file | `git diff --name-status --no-renames bc78660b H` | `A` lines only, plus `M .github/workflows/pcs-public-full-verification.yml`; that file's SHA-256 is `b4e6b4ef…5d5a`, mode `100644` |
+| G2.1 | The branch carries exactly G2's three files, and nothing else changed in an existing file | `git diff --name-status --no-renames bc78660b H` | `A` lines only, plus `M .github/workflows/pcs-public-full-verification.yml` (`b4e6b4ef…5d5a`) and `M research/integration_v1/source_gate.py` (`dcce5eb1…5fcc`), both mode `100644`; the added record `g2/receipt-source-profile-successor-g2.json` is `5c06bbe6…4c35` |
 | G2.2 | C1's control commit carries G2's control edits, and only those, beyond C1's | the dry run's `c1_includes_g2_only_when_the_source_carries_its_workflow`; `git diff` of `reconcile.py` and `test_reconcile.py` against `g2/proposed-g2-core-controls.patch` | true; identical |
-| G2.3 | V23 is unchanged by G2 | the same report: `v23_identical_with_and_without_g2` | true; V23 keeps V22's identity `bb920a82…67cf` for the workflow, and `_current_expected` maps exactly that identity |
+| G2.3 | V23 is unchanged by G2 | the same report: `v23_identical_with_and_without_g2` | true; V23 keeps V22's identities (`bb920a82…67cf`, `0760cdfd…f58e`), and `_current_expected` maps exactly those |
+| G2.7 | The consolidated research gate passes with G2, and fails without its successor | the G2 dry run: `positive_c1_plus_g2.consolidated_research_gate`, `workflow_change_alone_fails_the_consolidated_gate`; or `python -m research.integration_v1.source_gate` at `H` | exit 0, no failures; with the workflow change alone, exit 1 |
 | G2.4 | The gate step is first and isolated | the protected test `test_g2_source_policy_runs_the_gate_first_through_the_isolated_launcher`; read the step in the workflow | passes; only checkout and setup-python run before it |
 | G2.5 | The launcher is the reviewed one | compare the step's here-document with `g2_isolation.LAUNCHER`, line by line | identical; it puts no repository directory on the import path except `research/integration_v2` |
 | G2.6 | No planted file runs, and the verdict is unchanged | `prepare_g2` at the regenerated head | `all_as_expected: true`; every vulnerable row: planted code not run, gate failed; positive: the same report as the current invocation |

@@ -19,23 +19,27 @@ None of this can be approved by an assistant.
 
 ## What this branch adds
 
-**The committed census, dry run, audit and patch describe `763aaa8b`, under the H1-a design** (retained
-commit `0770f493…`, parents `763aaa8b` and `0b521f39`). They are not the numbers for the head. On
-2026-11-19 the head adds 2,048 files: 1,901 under `research/claimcheck_v1/`, 120 under
-`research/claimcheck_v1_1/`, 26 under `docs/integration/claimcheck/`, and the workflow. They are
-regenerated after the withholding commit (A1) with `prepare_core_admission --history clean`.
+**The committed census, dry run, audit and patch describe the source commit named in `dry-run.json`
+(`generated_from_commit`), under H1-b.** They were regenerated on 2026-11-24, after the withholding
+commit `bed63365` and G2's workflow commit `0f0fe031`. The head you admit may differ from that commit only in
+the evidence files (`check_admission_consistency`). Its exact values are in the PR description.
 
 [`ADMISSION_CENSUS.json`](ADMISSION_CENSUS.json): every added file with SHA-256 and mode, generated
 from the commit named in [`dry-run.json`](dry-run.json) (`generated_from_commit`). No existing file
-is changed or removed (checked against every entry of the V22 snapshot, using the gate's own rule for
-its one reviewed test repair).
+is removed. Exactly two are changed, both G2's reviewed successors and both bound by C1's control
+commit (owner, G2):
+* `.github/workflows/pcs-public-full-verification.yml`;
+* `research/integration_v1/source_gate.py`, the consolidated research gate, which pins that workflow.
+
+That is checked against every entry of the V22 snapshot, using the gate's own rule for its reviewed
+successors.
 
 | Added | Files | What |
 | --- | ---: | --- |
 | `research/claimcheck_v1/**` | 1,901 | frozen v1 software, Lean checker and Mathlib meaning theorems, benchmark documents (open-licence article text and data), receipts, bundles; one added file beside them, the legacy-replay warning (no frozen file changed) |
-| `research/claimcheck_v1_1/**` | 92 | v1.1 policy layer with the outward-verdict guard, the hardened runner, the v1.1 replayer and the checked replay of v1 bundles, tools, tests, development results, protocol draft 3 (unapproved) with its spending guard and Lean memory guard and the prospective decision package, prepared adjudication and usability materials, these governance scripts |
+| `research/claimcheck_v1_1/**` | 122 | v1.1 policy layer with the outward-verdict guard, the hardened runner, the v1.1 replayer and the checked replay of v1 bundles, tools, tests, development results, protocol draft 3 (unapproved) with its spending guard and Lean memory guard and the prospective decision package, prepared adjudication and usability materials, these governance scripts |
 | `.github/workflows/pcs-claimcheck-v1.yml` | 1 | path-scoped research CI (read-only permissions) |
-| `docs/integration/claimcheck/**` | 12 | this proposal, the census, the dry-run record, the proposed control changes as a patch, the audit (narrative and record), the third-party attribution index, the required-check recommendation, the runner's security-review package with its two source diffs, the owner authorization package |
+| `docs/integration/claimcheck/**` | 34 | this proposal, the census, the dry-run record, the proposed control changes as a patch, the audit (narrative and record), the third-party attribution index, the required-check recommendation, the runner's security-review package with its two source diffs, the owner authorization and approval packages, the checklists, the licensing note and inventory, the A1 procedure, the H1-b, C2b, G1 and G2 records (with G2's successor record for the consolidated gate), the withholding effect, and the residual-risk note |
 
 An audit of every added file finds nothing that blocks admission: no credential values or key
 formats, no generated or unnecessary files, no links, submodules or executables, every file given a

@@ -1,8 +1,15 @@
 # A1: your private archive of the 22 responses to withhold (Windows PowerShell)
 
-**Your action. Nothing here has been done for you.** The 22 original responses (21 Nemotron, 1 Cohere)
-are unchanged on the branch. They are withheld only after you send the two values in step 5, and not
-before (`MODEL_OUTPUT_LICENSING.md`, section 7).
+**Done by the owner on 2026-11-24.** Both copies were built from commit `e6099049` and verified on the
+owner's Windows computer (Python 3.12.10, Git 2.55.0):
+
+| Copy | SHA-256 | `recoverable_and_complete` | Files | Missing | Mismatches | Unexpected | Errors |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| local | `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3` | true | 22 of 22 | 0 | 0 | 0 | none |
+| USB | `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3` | true | 22 of 22 | 0 | 0 | 0 | none |
+
+Both values equal those obtained here. The owner then authorised L1 to L3, and the 22 responses were
+withheld in `bed63365` (see the end of this page). The procedure below is kept as it was run.
 
 The procedure copies the public repository to your computer, builds the archive there, and makes a
 second copy on a drive you own. Nothing is uploaded. The archive goes in your user folder, not in
@@ -129,10 +136,11 @@ its error message.
 
 Every copy made here for these tests was deleted afterwards.
 
-## After you confirm, and not before
+## After you confirmed (done 2026-11-24)
 
-These are the steps I will then take on the draft branch. None of them changes Git history, frozen
-benchmark files or protected `main`.
+The steps below were taken on the draft branch, in this order: withholding `bed63365`, G2's workflow
+`0f0fe031` and the consolidated gate's successor `8631e9c2`, then the evidence. None of them changed Git history, frozen benchmark files or protected
+`main`.
 
 1. **Withhold.** Run
    `withhold_model_outputs --apply --groups N,C --decision "<your confirmation: date, SHA-256>"`.

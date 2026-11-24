@@ -275,20 +275,20 @@ Consequently:
    and H1-b. H1-b is the smallest step that avoids adding a protected public reference.
 4. Withhold the Cohere output under any option.
 
-## 7. Archive and withholding: status (2026-11-19; A1 procedure 2026-11-21)
+## 7. Archive and withholding: status (2026-11-24: done)
 
 | Step | Status |
 | --- | --- |
 | 1. capacity study's cache-dependent work | done: the isolated reruns and both further configurations finished before anything else read or changed the cache |
 | 2. the 22 files | identified from the inventory: 21 Nemotron (4 development, 17 held-out) and 1 Cohere (development); paths and digests in `model_outputs_inventory.json` |
-| 3. private archive | **not established.** See below |
+| 3. private archive | **established by the owner (2026-11-24):** two copies, each verified complete (SHA-256 `91acf4ff…69a3`, 22 of 22, no missing, mismatched or unexpected member); see `A1_ARCHIVE_PROCEDURE.md` |
 | 4. verification against the inventory | done on a private copy inside this session's container: 22 of 22 match |
 | 5. recoverability | done on that copy: read back, every digest recomputed, complete |
-| 6. replacement with the governed tool | **not done**: stopped before altering the originals, as instructed |
+| 6. replacement with the governed tool | **done** after the owner's decisions L1 to L3 of 2026-11-24, in `bed633654eca603da4c4975c547853a630f27532`: exactly the 22 files; every stub checked against the inventory and against the original in history |
 | 7. provenance kept in the stubs | prepared: provider, model, cache key (as `cache_key`), prompt digest, usage, finish reason, digests and sizes of the original and of its text, the commit and time the file was first recorded, request identifier (not recorded by the client), terms, reason |
 | 8. regression suites | measured in a throw-away worktree with the stubs applied by the governed tool: all pass (below) |
 | 9. effect on offline reproducibility | measured: only the Nemotron arm, and the union of both models, can no longer be regenerated offline (below) |
-| 10. admission evidence | **not regenerated**: it follows step 6 |
+| 10. admission evidence | regenerated at the source commit named in `dry-run.json`, after step 6 and G2's workflow commit |
 
 **Why no private archive.** The archive must be private, outside every public repository and artifact
 location, and recoverable. Nothing available to this session meets all three:

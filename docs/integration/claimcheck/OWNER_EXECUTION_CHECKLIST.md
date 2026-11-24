@@ -30,6 +30,10 @@ source commit. The evidence must then be regenerated and reviewed again.
   * squash-merge PR 212 only;
   * no history rewrite.
 * **Authorised (2026-11-19):** preparation, and the replacement after a verified private archive.
+* **Done (2026-11-24).** You confirmed both archive copies and authorised L1 to L3. The withholding
+  is `bed633654eca603da4c4975c547853a630f27532`, G2's workflow `0f0fe0313db3fac8b0fd208e3f3e1ce3197bc6dd`, and the
+  consolidated gate's successor `8631e9c2924f2618df264dda3f69ceeede56e624`. The evidence was regenerated afterwards at
+  the source commit named in `dry-run.json`. The steps below are kept as they were run.
 * **Status (2026-11-21):** the capacity study's cache-dependent work is finished. The originals are
   unchanged. The archive tool was tested end to end:
   * a fresh clone from GitHub at commit `e6099049`, the tool run as a plain script in isolated mode;
@@ -42,7 +46,7 @@ source commit. The evidence must then be regenerated and reviewed again.
   PowerShell, local only, a second copy on a drive you own). Then send the SHA-256 and
   `recoverable_and_complete` from both checks. Expected:
   `91acf4ff324f6547eaa51cc9a03e2a377c43a7544adc65f3cb2da38c2a6669a3` and `true`.
-* **Steps after your confirmation, and not before:**
+* **Steps after your confirmation (done):**
   1. Run `withhold_model_outputs --apply --groups N,C --decision "<your confirmation: date, SHA-256>"`.
      It writes the provenance stubs and touches nothing else.
   2. Check:

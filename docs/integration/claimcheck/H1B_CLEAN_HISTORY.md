@@ -103,7 +103,13 @@ runs them in throw-away worktrees with a local placeholder tag. It runs the two 
 Fast unit tests of the construction: `research/claimcheck_v1_1/tests/test_retained_history.py`
 (7 tests).
 
-## 6. Results (2026-11-19)
+## 6. Results (2026-11-19; rerun 2026-11-24)
+
+**Rerun on 2026-11-24 at the source commit named in `dry-run.json`.** That commit carries the committed
+stubs (`bed63365`) and G2's files (`0f0fe031`, `8631e9c2`), so no withholding is simulated for the ClaimCheck branch.
+Test 12 still simulates it for the research branch, which keeps the originals until R1. The results
+are in `h1b/h1b-adversarial.json` and in the PR description. The table below is the run of
+2026-11-19.
 
 Run at `044d7ee2`, and again at `ad43f21c` after the independent review with the same results (`h1b/h1b-adversarial.json`, the later run; commit IDs differ with the head). The branch still holds the original responses (the
 withholding waits for your archive, A1), so the tests ran on a throw-away commit with the stubs that
