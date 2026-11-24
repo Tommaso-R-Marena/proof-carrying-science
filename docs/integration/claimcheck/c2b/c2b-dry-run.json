@@ -1,10 +1,10 @@
 {
  "all_as_expected": true,
  "c1_retained_commit": {
-  "commit": "7b6624286bdbcf5796acb0b9a2cb6f764b7c1b6e",
+  "commit": "1b9bd4040be162ace29f65b8ba85a2abbd870b69",
   "history": "clean",
   "parents": [
-   "64ab8190062a6f9a0486e5e1cb5d04cc4eed8bfe",
+   "e27e068ba5329ee1c7c293500819cdba66f4a2e5",
    "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
   ]
  },
@@ -23,7 +23,7 @@
    "prs_checked": 72,
    "retained_source": {
     "passed": true,
-    "qualified_source_commit": "7b6624286bdbcf5796acb0b9a2cb6f764b7c1b6e",
+    "qualified_source_commit": "1b9bd4040be162ace29f65b8ba85a2abbd870b69",
     "retention_tag": "pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag"
    }
   },
@@ -31,9 +31,9 @@
  },
  "gate_tests_with_c2b": {
   "exit": 0,
-  "last_line": "83 passed in 8.44s"
+  "last_line": "83 passed in 8.98s"
  },
- "generated_from_commit": "feafeefb991c7bb883a8b511aea1ed48ef772238",
+ "generated_from_commit": "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9",
  "negative_controls": {
   "an_untracked_file_is_present": {
    "c1_alone_passes": true,
@@ -43,7 +43,7 @@
   "the_retained_tag_is_deleted": {
    "c1_alone_passes": true,
    "c1_plus_c2b_rejects": true,
-   "error_with_c2b": "retained-source gate failed: subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-c2b-dry-run-9s1z71pm/wt', 'rev-parse', 'refs/tags/pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag^{commit}']' returned non-zero exit status 128."
+   "error_with_c2b": "retained-source gate failed: subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-c2b-dry-run-1vf_8j9t/wt', 'rev-parse', 'refs/tags/pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag^{commit}']' returned non-zero exit status 128."
   },
   "the_tag_points_at_another_commit": {
    "c1_alone_passes": true,
@@ -72,7 +72,7 @@
   "prs_checked": 72,
   "retained_source": {
    "passed": true,
-   "qualified_source_commit": "7b6624286bdbcf5796acb0b9a2cb6f764b7c1b6e",
+   "qualified_source_commit": "1b9bd4040be162ace29f65b8ba85a2abbd870b69",
    "retention_tag": "pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag"
   }
  },

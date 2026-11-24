@@ -1,18 +1,18 @@
 {
  "what": "Adversarial tests of H1-b in throw-away worktrees. Nothing in the branch changed; nothing pushed; only a local placeholder tag, deleted at the end. Not an approval.",
- "generated_from_commit": "feafeefb991c7bb883a8b511aea1ed48ef772238",
+ "generated_from_commit": "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9",
  "research_head": "0ff8d553213ad6553e5bbe846ffae5d6249525ec",
  "tests": {
   "1_retained_tree_equals_reviewed_tree": {
-   "retained_tree": "d9b2d93769661efa1e29b320065db6bf37e12803",
-   "source_tree": "d9b2d93769661efa1e29b320065db6bf37e12803",
-   "snapshot_tree": "d9b2d93769661efa1e29b320065db6bf37e12803",
+   "retained_tree": "ed2ca507fa2a1263dd367c7c5f285c1489db8033",
+   "source_tree": "ed2ca507fa2a1263dd367c7c5f285c1489db8033",
+   "snapshot_tree": "ed2ca507fa2a1263dd367c7c5f285c1489db8033",
    "passed": true
   },
   "2_no_file_introduced_or_removed": {
-   "files": 10105,
+   "files": 10106,
    "snapshot_tree_id_equals_source_tree_id": true,
-   "files_added_to_protected_main": 2058,
+   "files_added_to_protected_main": 2059,
    "existing_files_changed_or_removed_against_protected_main": [],
    "passed": true
   },
@@ -47,7 +47,7 @@
     "withheld_blobs_reachable": []
    },
    "development_h1a_positive_control": {
-    "commits_beyond_protected_history": 93,
+    "commits_beyond_protected_history": 95,
     "output_commits_reachable": [
      "f17649ca",
      "dbe31d72",
@@ -145,7 +145,7 @@
    "tag_deleted": {
     "exit": 1,
     "passed": false,
-    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-uj6sxj2b/wt', 'rev-parse', 'refs/tags/pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag^{commit}']' returned non-zero exit status 128."
+    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-cfsu7p9f/wt', 'rev-parse', 'refs/tags/pcs-source-intake/DRY-RUN-core-claimcheck-not-a-real-tag^{commit}']' returned non-zero exit status 128."
    },
    "passed": true
   },
@@ -153,12 +153,12 @@
    "previous_intake_missing": {
     "exit": 1,
     "passed": false,
-    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-uj6sxj2b/wt', 'merge-base', '--is-ancestor', '7c119370990ca6917f09328aab0abea24584d969', 'a8c7f6d8914a1ca378e22eecfecb888ebe500186']' returned non-zero exit status 1."
+    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-cfsu7p9f/wt', 'merge-base', '--is-ancestor', '7c119370990ca6917f09328aab0abea24584d969', 'b6f6dda3078988a925e19d23b3f1ce1a02f74951']' returned non-zero exit status 1."
    },
    "previous_intake_forged_same_tree_no_history": {
     "exit": 1,
     "passed": false,
-    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-uj6sxj2b/wt', 'merge-base', '--is-ancestor', '7c119370990ca6917f09328aab0abea24584d969', '72df25535753487838f69c43ea4a65be0118964e']' returned non-zero exit status 1."
+    "error": "subprocess.CalledProcessError: Command '['git', '-C', '/tmp/pcs-h1b-cfsu7p9f/wt', 'merge-base', '--is-ancestor', '7c119370990ca6917f09328aab0abea24584d969', '0aad57148169bcd2b8946ab84d837e1c3e13766a']' returned non-zero exit status 1."
    },
    "predecessor_manifest_edited": {
     "exit": 1,
@@ -290,7 +290,7 @@
    "passed": false
   },
   "10_successor_manifest_enforces_the_same_authority": {
-   "snapshot_entries": 10101,
+   "snapshot_entries": 10102,
    "entries_that_differ_between_h1a_and_h1b": [
     "scripts/check_reconciled_prs.py"
    ],
@@ -385,21 +385,21 @@
    "passed": true
   }
  },
- "source_commit_tested": "feafeefb991c7bb883a8b511aea1ed48ef772238",
+ "source_commit_tested": "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9",
  "withholding_simulated": false,
  "retained": {
   "clean": {
    "history": "clean",
-   "commit": "7b6624286bdbcf5796acb0b9a2cb6f764b7c1b6e",
-   "tree": "d9b2d93769661efa1e29b320065db6bf37e12803",
+   "commit": "1b9bd4040be162ace29f65b8ba85a2abbd870b69",
+   "tree": "ed2ca507fa2a1263dd367c7c5f285c1489db8033",
    "parents": [
-    "64ab8190062a6f9a0486e5e1cb5d04cc4eed8bfe",
+    "e27e068ba5329ee1c7c293500819cdba66f4a2e5",
     "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
    ],
-   "source_commit": "feafeefb991c7bb883a8b511aea1ed48ef772238",
+   "source_commit": "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9",
    "snapshot": {
-    "commit": "64ab8190062a6f9a0486e5e1cb5d04cc4eed8bfe",
-    "tree": "d9b2d93769661efa1e29b320065db6bf37e12803",
+    "commit": "e27e068ba5329ee1c7c293500819cdba66f4a2e5",
+    "tree": "ed2ca507fa2a1263dd367c7c5f285c1489db8033",
     "parents": [
      "bc78660b5fac857fce3873eb6cda0445d1903da1"
     ]
@@ -407,13 +407,13 @@
   },
   "development": {
    "history": "development",
-   "commit": "13a5425460ad4f495ff2714ec3b2e7484032822a",
-   "tree": "d9b2d93769661efa1e29b320065db6bf37e12803",
+   "commit": "daaba76f6bb8db9b03b0c6ef2dc2c8a28f1a24ea",
+   "tree": "ed2ca507fa2a1263dd367c7c5f285c1489db8033",
    "parents": [
-    "feafeefb991c7bb883a8b511aea1ed48ef772238",
+    "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9",
     "0b521f39af99f5856b69dfcc25bc274ec9dc804a"
    ],
-   "source_commit": "feafeefb991c7bb883a8b511aea1ed48ef772238"
+   "source_commit": "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9"
   }
  },
  "positive": {
