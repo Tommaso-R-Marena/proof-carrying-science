@@ -1,0 +1,737 @@
+{
+ "all_as_expected": true,
+ "attacks": {
+  "bytecode_directory_unavailable": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [
+    "TMPDIR"
+   ],
+   "files": [
+    "research/integration_v2/__pycache__/reconcile.cpython-312.pyc"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "source contract refused before the gate ran: not isolated, or no new empty bytecode directory",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "edit_of_the_gate_itself": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research/integration_v2/reconcile.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": null,
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "kind": "outside_g2"
+  },
+  "env_pythonpath": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [
+    "PYTHONPATH"
+   ],
+   "files": [
+    "research/claimcheck_v1_1/ENV_PROBE.txt"
+   ],
+   "flagged_by_g1_paths": false,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "gate_bytecode_checked_genuine_hash": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research/integration_v2/__pycache__/reconcile.cpython-312.pyc"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "gate_bytecode_unchecked": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research/integration_v2/__pycache__/reconcile.cpython-312.pyc"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "gate_init_extension": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research/integration_v2/__init__.cpython-312-x86_64-linux-gnu.so"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "source contract refused before the gate ran: ['__init__.cpython-312-x86_64-linux-gnu.so'] beside the gate's sources",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "gate_package_shadow": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research/integration_v2/reconcile/__init__.py",
+    "research/integration_v2/reconcile/__main__.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "source contract refused before the gate ran: ['reconcile'] beside the gate's sources",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "pre_gate_script_plants_bytecode": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "scripts/check_repository_integrity.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined source bytes or mode differ: scripts/check_repository_integrity.py",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "research_init": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research/__init__.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_argparse": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "argparse.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_extension_json": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "json.cpython-312-x86_64-linux-gnu.so"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_hashlib": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "hashlib.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_json": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "json.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_nt_fallback": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "nt.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_package_json": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "json/__init__.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_pathlib": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "pathlib.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_pth": {
+   "as_expected": true,
+   "current": {
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "env": [],
+   "files": [
+    "probe.pth"
+   ],
+   "flagged_by_g1_paths": false,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "not_a_vector"
+  },
+  "root_re": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "re.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_research_py": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "research.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_sitecustomize": {
+   "as_expected": true,
+   "current": {
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "env": [],
+   "files": [
+    "sitecustomize.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "not_a_vector"
+  },
+  "root_sourceless_json_pyc": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "json.pyc"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_subprocess": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "subprocess.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  },
+  "root_usercustomize": {
+   "as_expected": true,
+   "current": {
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "env": [],
+   "files": [
+    "usercustomize.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "combined tracked file census differs",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "not_a_vector"
+  },
+  "scripts_json_retained_gate": {
+   "as_expected": true,
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true,
+    "reported_success": true
+   },
+   "env": [],
+   "files": [
+    "scripts/json.py"
+   ],
+   "flagged_by_g1_paths": true,
+   "g2": {
+    "error": "AssertionError: Qualified non-control source bytes, modes or census differ",
+    "exit": 1,
+    "forged": false,
+    "planted_code_ran": false,
+    "reported_success": false
+   },
+   "kind": "vulnerable"
+  }
+ },
+ "branch_carries_g2": true,
+ "c1_includes_g2_only_when_the_source_carries_its_workflow": {
+  "consolidated_gate_without_the_workflow_refused": true,
+  "control_files_differ_only_in_the_gate_and_its_test": true,
+  "executable_mode_refused": true,
+  "other_bytes_refused": true,
+  "source_with_g2_workflow": true,
+  "source_without_it": false,
+  "v23_identical_with_and_without_g2": true,
+  "workflow_without_the_consolidated_gate_refused": true
+ },
+ "compatible_with_c2b": {
+  "g2_step": {
+   "error": null,
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": 72,
+   "reported_success": true
+  },
+  "gate_tests": {
+   "exit": 0,
+   "last_line": "83 passed in 8.01s"
+  },
+  "retained_source_reported": true
+ },
+ "fail_closed_at_the_branch_head_without_c1": {
+  "current_invocation": {
+   "error": "reviewed source identity differs: .github/workflows/pcs-public-full-verification.yml",
+   "exit": 1,
+   "forged": false,
+   "genuine_success": false,
+   "prs_checked": null,
+   "reported_success": false
+  },
+  "g2_step": {
+   "error": "reviewed source identity differs: .github/workflows/pcs-public-full-verification.yml",
+   "exit": 1,
+   "forged": false,
+   "genuine_success": false,
+   "prs_checked": null,
+   "reported_success": false
+  },
+  "same_error": true
+ },
+ "g1_pathspec_compared": [
+  ".github",
+  "scripts",
+  "research/integration_v2",
+  "research/__init__.py",
+  "docs/reconciliation/OPEN_PRS.json",
+  "docs/integration/2026-11-05",
+  "docs/integration/2026-11-14",
+  ":(top,glob)*.py",
+  ":(top,glob)*.pyc",
+  ":(top,glob)*.so",
+  ":(top,glob)*/__init__.*",
+  ":(glob)**/__pycache__/**",
+  ":(glob)**/*.pyc",
+  ":(glob)**/*.so",
+  ":(glob)**/conftest.py",
+  ":(glob)**/sitecustomize.py",
+  ":(glob)**/usercustomize.py"
+ ],
+ "g2_step_as_read_from_the_workflow": {
+  "equals_the_reviewed_launcher": true,
+  "parser": "PyYAML 6.0.1",
+  "shell": "bash --noprofile --norc -eo pipefail (GitHub's `shell: bash`)"
+ },
+ "generated_from_commit": "c11f092a8f2ebc549a0c6ec31f2dcf08196dddc9",
+ "naive_launcher_appending_the_repository": {
+  "all_defeated_as_expected": true,
+  "naive_nt": {
+   "forged": true,
+   "planted_code_ran": true
+  },
+  "naive_research_init": {
+   "forged": true,
+   "planted_code_ran": true
+  },
+  "naive_research_py": {
+   "forged": true,
+   "planted_code_ran": true
+  }
+ },
+ "patches": {
+  "proposed-g2-consolidated-gate.patch": {
+   "applies_to": "the ClaimCheck branch, with the workflow patch",
+   "files": {
+    "docs/integration/claimcheck/g2/receipt-source-profile-successor-g2.json": {
+     "added": true,
+     "sha256": "5c06bbe67975847e7014e998901dc514c5c774d2c97afade487d7b5629394c35"
+    },
+    "research/integration_v1/source_gate.py": {
+     "new_sha256": "dcce5eb187561002a5765d4a09ef7d33937ff69b19eaaffe943cbadfbc625fcc",
+     "old_sha256": "0760cdfd6473b8ffc7220146ec76555152b684895da2b15dc15a55017a6bf58e"
+    }
+   }
+  },
+  "proposed-g2-core-controls.patch": {
+   "applies_on_top_of": "C1's reconcile.py and test_reconcile.py (built in by prepare_core_admission)",
+   "lines_added_and_removed": {
+    "research/integration_v2/reconcile.py": [
+     49,
+     3
+    ],
+    "research/integration_v2/test_reconcile.py": [
+     70,
+     0
+    ]
+   }
+  },
+  "proposed-g2-core-workflow.patch": {
+   "applies_to": "the ClaimCheck branch, before C1 is regenerated",
+   "files": [
+    ".github/workflows/pcs-public-full-verification.yml"
+   ],
+   "new_sha256": "b4e6b4ef2aed4378557b3e44fba3dfddd872e68392844fd524f545de7e595d5a",
+   "old_sha256": "bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf"
+  }
+ },
+ "positive_c1_plus_g2": {
+  "consolidated_research_gate": {
+   "error": null,
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": null,
+   "reported_success": true
+  },
+  "current_invocation": {
+   "error": null,
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": 72,
+   "reported_success": true
+  },
+  "g2_step": {
+   "error": null,
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": 72,
+   "reported_success": true
+  },
+  "gate_tests": {
+   "exit": 0,
+   "last_line": "82 passed in 8.29s"
+  },
+  "isolated_retained_source_gate": {
+   "error": null,
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": null,
+   "reported_success": true
+  },
+  "retained_source_gate_tests": {
+   "exit": 0,
+   "last_line": "OK"
+  },
+  "same_report": true
+ },
+ "python": "3.12.3",
+ "site": {
+  "all_as_expected": true,
+  "attack_scripts_json": {
+   "current": {
+    "exit": 0,
+    "forged": true,
+    "planted_code_ran": true
+   },
+   "g2": {
+    "error": "AssertionError: Qualified non-control source bytes, modes or census differ",
+    "exit": 1,
+    "planted_code_ran": false,
+    "reported_success": false
+   }
+  },
+  "control_file_only": true,
+  "positive_g2_step_on_main": {
+   "error": "OK",
+   "exit": 0,
+   "forged": false,
+   "genuine_success": true,
+   "prs_checked": null,
+   "reported_success": true
+  },
+  "protected_main": "e8136625c463b271364b36b2b8ae76f8777f1967"
+ },
+ "what": "DRY RUN of proposal G2 in throw-away worktrees (core: on top of C1's dry-run control commit; site: on protected main). Nothing in either branch changed; nothing pushed; only a local placeholder tag, deleted at the end. Not an approval.",
+ "workflow_change_alone_fails_the_consolidated_gate": {
+  "exit": 1,
+  "first_failures": [
+   "source successor invalid: successor file identity or mode differs: .github/workflows/pcs-public-full-verification.yml",
+   "source identity differs: .github/workflows/pcs-ci.yml"
+  ]
+ }
+}

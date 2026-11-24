@@ -1,0 +1,233 @@
+{
+ "status": "draft 3: computed for the owner's choice between designs with the scorer's own rule; nothing sampled, nothing run",
+ "icc_floor": 0.25,
+ "assumptions": {
+  "equal_cluster_sizes": "except C1 at 2.5 per paper (2 and 3 alternating)",
+  "events": "at most one per paper unless stated",
+  "attempts_per_call": 4,
+  "prompt_tokens_per_successful_call": [
+   2088,
+   5160
+  ],
+  "output_tokens_per_successful_call": [
+   134,
+   3032
+  ],
+  "kernel_hours_per_60_papers": 10,
+  "adjudicator_minutes_per_paper": [
+   35,
+   57.5
+  ],
+  "adjudication_figures": "assumptions from the adjudication plan, not measurements"
+ },
+ "designs": [
+  {
+   "papers": 60,
+   "papers_per_context": 20,
+   "screening_cap_per_context": 300,
+   "lowest_screening_yield_that_fills_a_context": 0.067,
+   "screened_per_context_at_the_v1_yield": 45,
+   "statistics": {
+    "C2b_affected_papers_allowed": 0,
+    "C2b_chance_of_passing_by_true_paper_rate": {
+     "0.005": 0.74,
+     "0.01": 0.547,
+     "0.02": 0.298,
+     "0.05": 0.046
+    },
+    "C1_paper_level_affected_papers_allowed": 1,
+    "C2a_by_exposed_numbers_per_paper": {
+     "4": {
+      "bound_no_flag": 0.0216,
+      "bound_one_flag": 0.0342,
+      "flags_allowed_alone": -1,
+      "affected_papers_allowed": 0,
+      "flags_allowed_spread": -1,
+      "flags_allowed_all_in_one_paper": -1
+     },
+     "5": {
+      "bound_no_flag": 0.0198,
+      "bound_one_flag": 0.0312,
+      "flags_allowed_alone": 0,
+      "affected_papers_allowed": 0,
+      "flags_allowed_spread": 0,
+      "flags_allowed_all_in_one_paper": 0
+     },
+     "8": {
+      "bound_no_flag": 0.0171,
+      "bound_one_flag": 0.027,
+      "flags_allowed_alone": 0,
+      "affected_papers_allowed": 0,
+      "flags_allowed_spread": 0,
+      "flags_allowed_all_in_one_paper": 0
+     },
+     "10": {
+      "bound_no_flag": 0.0161,
+      "bound_one_flag": 0.0255,
+      "flags_allowed_alone": 0,
+      "affected_papers_allowed": 0,
+      "flags_allowed_spread": 0,
+      "flags_allowed_all_in_one_paper": 0
+     }
+    },
+    "C2a_lowest_possible_bound_no_flag": 0.0124,
+    "C1_unsupported_confirmations_allowed_by_confirmations_per_paper": {
+     "2.5": {
+      "allowed": 1,
+      "binding_at_one_more": "claim-level bound"
+     },
+     "4": {
+      "allowed": 1,
+      "binding_at_one_more": "paper-level bound"
+     },
+     "5": {
+      "allowed": 1,
+      "binding_at_one_more": "paper-level bound"
+     }
+    },
+    "C3_lower_bound_at_estimate_25_percent_by_numbers_per_paper": {
+     "5": 0.1957,
+     "8": 0.1981,
+     "10": 0.197
+    },
+    "per_context_paper_level_bound_with_no_event": 0.1391
+   },
+   "costs": {
+    "model_calls": 240,
+    "http_requests_worst_case": 960,
+    "prompt_tokens_million": [
+     0.5,
+     1.24
+    ],
+    "output_tokens_million": [
+     0.03,
+     0.73
+    ],
+    "nemotron_usd": [
+     1.2,
+     5.0
+    ],
+    "gemini_usd": "unknown: the price could not be read from the provider's listing (MODEL_ACCESS.md)",
+    "kernel_hours_reference_machine": 10.0,
+    "replay_runner_hours_C4": 10.0,
+    "replay_jobs": 6,
+    "adjudication_hours_per_adjudicator_covering_all_papers": [
+     35.0,
+     57.5
+    ],
+    "adjudication_person_hours_two_labels_per_number": [
+     70.0,
+     115.0
+    ],
+    "resolver_hours": [
+     11.2,
+     18.8
+    ]
+   }
+  },
+  {
+   "papers": 120,
+   "papers_per_context": 40,
+   "screening_cap_per_context": 600,
+   "lowest_screening_yield_that_fills_a_context": 0.067,
+   "screened_per_context_at_the_v1_yield": 90,
+   "statistics": {
+    "C2b_affected_papers_allowed": 1,
+    "C2b_chance_of_passing_by_true_paper_rate": {
+     "0.005": 0.878,
+     "0.01": 0.662,
+     "0.02": 0.305,
+     "0.05": 0.016
+    },
+    "C1_paper_level_affected_papers_allowed": 6,
+    "C2a_by_exposed_numbers_per_paper": {
+     "4": {
+      "bound_no_flag": 0.0109,
+      "bound_one_flag": 0.0172,
+      "flags_allowed_alone": 1,
+      "affected_papers_allowed": 1,
+      "flags_allowed_spread": 1,
+      "flags_allowed_all_in_one_paper": 2
+     },
+     "5": {
+      "bound_no_flag": 0.0099,
+      "bound_one_flag": 0.0157,
+      "flags_allowed_alone": 2,
+      "affected_papers_allowed": 1,
+      "flags_allowed_spread": 1,
+      "flags_allowed_all_in_one_paper": 2
+     },
+     "8": {
+      "bound_no_flag": 0.0085,
+      "bound_one_flag": 0.0135,
+      "flags_allowed_alone": 4,
+      "affected_papers_allowed": 1,
+      "flags_allowed_spread": 1,
+      "flags_allowed_all_in_one_paper": 3
+     },
+     "10": {
+      "bound_no_flag": 0.0081,
+      "bound_one_flag": 0.0128,
+      "flags_allowed_alone": 6,
+      "affected_papers_allowed": 1,
+      "flags_allowed_spread": 1,
+      "flags_allowed_all_in_one_paper": 5
+     }
+    },
+    "C2a_lowest_possible_bound_no_flag": 0.0062,
+    "C1_unsupported_confirmations_allowed_by_confirmations_per_paper": {
+     "2.5": {
+      "allowed": 6,
+      "binding_at_one_more": "estimate"
+     },
+     "4": {
+      "allowed": 6,
+      "binding_at_one_more": "paper-level bound"
+     },
+     "5": {
+      "allowed": 6,
+      "binding_at_one_more": "paper-level bound"
+     }
+    },
+    "C3_lower_bound_at_estimate_25_percent_by_numbers_per_paper": {
+     "5": 0.2092,
+     "8": 0.2108,
+     "10": 0.2119
+    },
+    "per_context_paper_level_bound_with_no_event": 0.0722
+   },
+   "costs": {
+    "model_calls": 480,
+    "http_requests_worst_case": 1920,
+    "prompt_tokens_million": [
+     1.0,
+     2.48
+    ],
+    "output_tokens_million": [
+     0.06,
+     1.46
+    ],
+    "nemotron_usd": [
+     2.4,
+     10.0
+    ],
+    "gemini_usd": "unknown: the price could not be read from the provider's listing (MODEL_ACCESS.md)",
+    "kernel_hours_reference_machine": 20.0,
+    "replay_runner_hours_C4": 20.0,
+    "replay_jobs": 12,
+    "adjudication_hours_per_adjudicator_covering_all_papers": [
+     70.0,
+     115.0
+    ],
+    "adjudication_person_hours_two_labels_per_number": [
+     140.0,
+     230.0
+    ],
+    "resolver_hours": [
+     22.5,
+     37.5
+    ]
+   }
+  }
+ ]
+}

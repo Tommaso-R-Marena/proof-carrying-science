@@ -1,0 +1,16 @@
+{
+ "status": "DRAFT FOR OWNER REVIEW. Not run.",
+ "source": "Zenodo records API: type=dataset, access_right=open, licence cc-zero or cc-by-4.0, at least one .csv file of at most 64000 bytes, with a related identifier pointing to a journal article; article looked up in the Europe PMC open-access subset (licence CC BY).",
+ "order": "SHA-256 of 'claimcheck-v1.1-prospective-2026|<Zenodo id>', ascending, within each stratum",
+ "per_stratum": {"eligible_papers_wanted": 20, "screen_at_most": 150},
+ "strata": {
+  "A_ecology_organismal_biology": ["body mass", "clutch size", "survival", "abundance", "growth rate"],
+  "B_biomedical_health": ["patients", "cohort", "blood pressure", "body mass index", "biomarker"],
+  "C_psychology_behavioural_social": ["participants", "questionnaire", "reaction time", "survey", "score"]
+ },
+ "notes": [
+  "Query words name subjects and kinds of measurement, never results.",
+  "A record returned by queries of two strata is assigned by the article's Europe PMC journal subject; if that does not decide, to the stratum whose query returned it first in the order above.",
+  "Stratum A deliberately repeats the v1 context; every record of the v1 pool is excluded by contamination.py."
+ ]
+}

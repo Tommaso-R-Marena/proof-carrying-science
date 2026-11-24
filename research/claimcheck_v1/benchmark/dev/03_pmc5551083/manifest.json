@@ -1,0 +1,83 @@
+{
+ "description": "One row per Elimia livescens snail: size, metabolic rate, parasite status and species, tissue elemental content, N and P excretion rates.",
+ "na_tokens": [
+  "",
+  "NA"
+ ],
+ "columns": {
+  "shell_length": {
+   "unit": "mm",
+   "aliases": [
+    "shell length",
+    "length"
+   ]
+  },
+  "metabolic_rate": {
+   "aliases": [
+    "metabolic rate",
+    "metabolic rates"
+   ]
+  },
+  "rate_ N": {
+   "aliases": [
+    "N excretion",
+    "nitrogen excretion",
+    "mmol N"
+   ],
+   "description": "nitrogen (ammonium) excretion rate"
+  },
+  "rate_ P": {
+   "aliases": [
+    "P excretion",
+    "phosphorus excretion",
+    "mmol P"
+   ],
+   "description": "phosphorus excretion rate"
+  },
+  "weight": {
+   "aliases": [
+    "weight",
+    "mass"
+   ]
+  },
+  "parasites": {
+   "description": "Yes if the snail contained trematodes"
+  },
+  "species": {
+   "description": "trematode species found in the snail; NA if none"
+  }
+ },
+ "values": {
+  "parasites": {
+   "Yes": [
+    "parasitized",
+    "infected",
+    "contained trematodes",
+    "with parasites"
+   ],
+   "No": [
+    "nonparasitized",
+    "uninfected",
+    "unparasitized"
+   ]
+  },
+  "species": {
+   "Macrovestibulum obtusicaudum": [
+    "Macrovestibulum obtusicaudum"
+   ],
+   "Protometra macrostoma": [
+    "Protometra macrostoma"
+   ],
+   "Acanthatrium oregonense": [
+    "Acanthatrium oregonense"
+   ],
+   "Azygia sp.": [
+    "Azygia sp."
+   ]
+  }
+ },
+ "sha256": "0d134a5d7a69b7c92eb3719bdc31a3e51dcc2722c9946194bd9c93af438f1e2b",
+ "data_name": "Chodkowski_EE_elemental.csv",
+ "license": "cc-zero",
+ "origin": "https://zenodo.org/api/records/5012363/files/Chodkowski_EE_elemental.csv/content"
+}

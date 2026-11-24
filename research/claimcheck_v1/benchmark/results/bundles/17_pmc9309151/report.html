@@ -1,0 +1,607 @@
+<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+<title>ClaimCheck report</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:60rem;margin:2rem auto;padding:0 1rem;color:#1a1a1a}h1{font-size:1.5rem}h2{font-size:1.1rem;margin:0}article{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0}.b{display:inline-block;color:#fff;border-radius:4px;padding:.1rem .5rem;font-weight:700;font-size:.85rem}blockquote{margin:.5rem 0;padding:.25rem .75rem;border-left:4px solid #999;background:#f6f6f6}dt{font-weight:700;margin-top:.6rem}dd{margin:0}code{background:#f0f0f0;padding:0 .2rem}small{color:#555}ul{margin:.2rem 0 .2rem 1.2rem;padding:0}</style>
+<h1>ClaimCheck report</h1>
+<p>Paper text: <code>article.txt</code>. Data file: <code>mackerel3D_burst_routine.csv</code>. Research tool; no production PCS authority.</p>
+<p>Each statement gets three separate answers. <b>1 — the arithmetic</b>: decided by the Lean kernel on the exact bytes of the data file. <b>2 — the link to the paper</b>: which mechanical source checks passed. <b>3 — the science</b>: never assessed here.</p>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c001</h2>
+<blockquote>For experiments, 20, 24, 27, and 30 days post-hatch individuals within the size range of 14.5–25.3 mm were used.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of SL_mm over all rows equals 14.5 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 14.49 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 14.5 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column SL_mm” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column SL_mm” (accepted wordings: standard length, SL, length, SL_mm, SL mm, SL).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 52386fdb0c04e3b6</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c002</h2>
+<blockquote>For experiments, 20, 24, 27, and 30 days post-hatch individuals within the size range of 14.5–25.3 mm were used.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of SL_mm over all rows equals 25.3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>max</code>: exact value ≈ 25.25 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 25.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column SL_mm” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “column SL_mm” (accepted wordings: standard length, SL, length, SL_mm, SL mm, SL).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6b70ea32a29aba75</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c003</h2>
+<blockquote>The standard length (SL) of the experimental fish ranged from 14.5 to 25.3 mm (Fig. 1a, see Table S1 for details).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of SL_mm over all rows equals 14.5 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The minimum of SL_mm over all rows equals 14.5 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 14.49 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-001.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 14.5 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “standard length”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt ac870e9040e25c1b</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c004</h2>
+<blockquote>The standard length (SL) of the experimental fish ranged from 14.5 to 25.3 mm (Fig. 1a, see Table S1 for details).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of SL_mm over all rows equals 25.3 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The maximum of SL_mm over all rows equals 25.3 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 25.25 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-001.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 25.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “standard length”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt cebc1809089d961e</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c005</h2>
+<blockquote>CAPTION: Fig. 1 Size distribution of 57 individuals tested at different days post-hatch (a) and schematic diagram of the experimental tank (b)</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 57 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of all rows equals 57 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 332 from 332 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-002.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 57 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 1b06f12e0dddeb7d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c006</h2>
+<p>The proposed claim is not well formed: mean needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 9d32b5549c53deaa</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c007</h2>
+<p>The proposed claim is not well formed: max needs a target column</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 9de7b6b121de81e1</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c008</h2>
+<blockquote>Sample sizes were 171 and 161 for the GLMM analyses of routine speed and burst speed, respectively, and 57 for the GLM analyses.</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “routine” equals 171 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of rows where group is “routine” equals 171 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 171 from 171 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-002.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 171 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“group = routine” — named in the sentence as “routine”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 69577ae1c8f9e634</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c009</h2>
+<blockquote>Sample sizes were 171 and 161 for the GLMM analyses of routine speed and burst speed, respectively, and 57 for the GLM analyses.</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “burst” equals 161 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of rows where group is “burst” equals 161 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 161 from 161 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 161 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“group = burst” — named in the sentence as “burst”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 3189e8c9a3bce89b</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c010</h2>
+<blockquote>Sample sizes were 171 and 161 for the GLMM analyses of routine speed and burst speed, respectively, and 57 for the GLM analyses.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 57 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of all rows equals 57 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 332 from 332 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-003.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 57 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 8fbb32e289d8b26d</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c011</h2>
+<blockquote>The Akaike information criterion (AIC) values of the linear, quadratic, and cubic polynomials fitted to the plots of growth rate against burst speed were 2000.5, 1996.9, and 1997.9, respectively (Table 2; see Table S4 for details).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 2000.5 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of all rows equals 2000.5 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 332 from 332 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 2000.5 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 38b7c9a3d3e8ce06</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c012</h2>
+<blockquote>The Akaike information criterion (AIC) values of the linear, quadratic, and cubic polynomials fitted to the plots of growth rate against burst speed were 2000.5, 1996.9, and 1997.9, respectively (Table 2; see Table S4 for details).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 1996.9 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of all rows equals 1996.9 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 332 from 332 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-004.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 1996.9 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 1452e8373a1b2d51</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c013</h2>
+<blockquote>The Akaike information criterion (AIC) values of the linear, quadratic, and cubic polynomials fitted to the plots of growth rate against burst speed were 2000.5, 1996.9, and 1997.9, respectively (Table 2; see Table S4 for details).</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 1997.9 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of all rows equals 1997.9 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 332 from 332 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 1997.9 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 0bad8d23f7ffd23c</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c014</h2>
+<blockquote>Solid line indicates the quadratic curve fitted to the data (n = 161).</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “burst” equals 161 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>count</code>: exact value ≈ 161 from 161 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 161 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“group = burst” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “group = burst” (accepted wordings: burst, burst).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (indicates); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 89174bb61a842776</small></article>
+<article><h2><span class=b style='background:#a12626'>REFUTED</span> c015</h2>
+<blockquote>Solid and dashed lines indicate the generalized linear models (GLMs; a and b; n = 57) or the generalized linear mixed model (GLMM; c; n = 161) fitted to the data.</blockquote>
+<p><b>Reading that was checked:</b> The number of all rows equals 57 when rounded to the printed precision.</p>
+<p>Under the stated reading, the data file does not give the printed number.</p><p><small>REFUTED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of all rows equals 57 when rounded to the printed precision.” This shows a mismatch between the printed number and this file under this reading. It does not show that the paper is wrong: the reading may be mistaken, or the authors may have analysed different rows or a different file version.</small></p><dl>
+<dt>1 — Is the arithmetic right? REFUTED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 332 from 332 rows (0 skipped as missing) — REFUTED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-005.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 57 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (indicate); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt 6dbcc7655f21d910</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c016</h2>
+<blockquote>Solid and dashed lines indicate the generalized linear models (GLMs; a and b; n = 57) or the generalized linear mixed model (GLMM; c; n = 161) fitted to the data.</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “burst” equals 161 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>count</code>: exact value ≈ 161 from 161 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 161 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“group = burst” — <b>not named in the sentence</b><br>
+<b>Failed:</b> Nothing in the sentence names “group = burst” (accepted wordings: burst, burst).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (indicate); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: openrouter:nvidia/nemotron-3-ultra-550b-a55b:free · receipt df7e3a646f3d8b93</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c017</h2>
+<blockquote>For experiments, 20, 24, 27, and 30 days post-hatch individuals within the size range of 14.5–25.3 mm were used.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of dph over all rows equals 20 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The minimum of dph over all rows equals 20 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 20 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-006.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 20 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column dph” — named in the sentence as “days post-hatch”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 8ef79730f16aea24</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c018</h2>
+<blockquote>For experiments, 20, 24, 27, and 30 days post-hatch individuals within the size range of 14.5–25.3 mm were used.</blockquote>
+<p><b>Reading that was checked:</b> The median of dph over all rows equals 27 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>median</code>: exact value ≈ 27 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 27 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “days post-hatch”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “median” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt a1cb5a8048e97239</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c019</h2>
+<blockquote>For experiments, 20, 24, 27, and 30 days post-hatch individuals within the size range of 14.5–25.3 mm were used.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of dph over all rows equals 30 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The maximum of dph over all rows equals 30 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 30 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-006.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 30 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column dph” — named in the sentence as “days post-hatch”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt ddc77915056fff7d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c020</h2>
+<blockquote>ABSTRACT: The online version contains supplementary material available at 10.1007/s00442-022-05216-6.</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Muscle_area over all rows equals 022 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 22.48318072 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 022 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Muscle_area” — named in the sentence as “MA”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “mean” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 1507b4d5db880c9a</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c021</h2>
+<blockquote>To obtain an adequate number of eggs, we used two parent groups of different ages, 1 year old and 3 years old.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of age over all rows equals 3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>max</code>: exact value ≈ 3 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column age” — named in the sentence as “age”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “max” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt d85c88a5ca780887</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c022</h2>
+<blockquote>Approximately 10,000 eggs collected evenly from the two parental age groups were pooled in a 1000-L plastic tank which was maintained at an average temperature of 22 °C, and a total of four such tanks were prepared.</blockquote>
+<p><b>Reading that was checked:</b> The arithmetic mean of Muscle_area over all rows equals 22 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The arithmetic mean of Muscle_area over all rows equals 22 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>mean</code>: exact value ≈ 22.48318072 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-007.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 22 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column Muscle_area” — named in the sentence as “MA”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 01c9b386ac4233c7</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c023</h2>
+<blockquote>The larvae were fed with a mixture of rotifers (Brachionus) and planktonic algae (Isochrysis galbana or Nannochloropsis oculata) once per day until 10 days post-hatch (dph), after which they were also fed with newly hatched brine shrimp (Artemia salina) once per day and reared until 30 dph.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of dph over all rows equals 30 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>max</code>: exact value ≈ 30 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 30 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “days post-hatch”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “max” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt ca672c8440e3cf57</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c024</h2>
+<blockquote>Juveniles were sampled from the rearing tanks at 20, 24, 27, and 30 dph for use in behavioral assays.</blockquote>
+<p><b>Reading that was checked:</b> The minimum of dph over all rows equals 20 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 20 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 20 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “dph”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 7cbbd6996bf86ae4</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c025</h2>
+<blockquote>Juveniles were sampled from the rearing tanks at 20, 24, 27, and 30 dph for use in behavioral assays.</blockquote>
+<p><b>Reading that was checked:</b> The median of dph over all rows equals 27 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>median</code>: exact value ≈ 27 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 27 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “dph”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “median” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 9a954b1b42b0d012</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c026</h2>
+<blockquote>Juveniles were sampled from the rearing tanks at 20, 24, 27, and 30 dph for use in behavioral assays.</blockquote>
+<p><b>Reading that was checked:</b> The maximum of dph over all rows equals 30 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>max</code>: exact value ≈ 30 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 30 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “dph”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “max” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt e3d98a1a0cb0ed1a</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c027</h2>
+<blockquote>The standard length (SL) of the experimental fish ranged from 14.5 to 25.3 mm (Fig. 1a, see Table S1 for details).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of SL_mm over all rows equals 14.5 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The minimum of SL_mm over all rows equals 14.5 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>min</code>: exact value ≈ 14.49 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-007.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 14.5 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “standard length”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt a80f4ff191ccc22a</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c028</h2>
+<blockquote>The standard length (SL) of the experimental fish ranged from 14.5 to 25.3 mm (Fig. 1a, see Table S1 for details).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of SL_mm over all rows equals 25.3 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The maximum of SL_mm over all rows equals 25.3 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>max</code>: exact value ≈ 25.25 from 332 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-008.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 25.3 stands for any exact value within ±1/20 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “standard length”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt c5999efde3b7af9d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c029</h2>
+<blockquote>The burst speed of an individual in each 20-s recording period was defined as the maximum speed in any of the four frames (i.e. 1/5 s) after the initiation of a burst event, which was defined as a startle response initiated in a C- or S-type start (Domenici ) following the approach of the probe.</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of Muscle_area over rows where group is “burst” equals 1 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.5372260556 from 161 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 1 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Muscle_area” — named in the sentence as “MA”<br>
+“group = burst” — named in the sentence as “burst”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 89063aff2faf2cc8</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c030</h2>
+<blockquote>Growth rate was calculated for each individual by subtracting the SL of hatched larvae (fixed at 3 mm) from the individual’s SL and dividing the resultant value by dph.</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of SL_mm over all rows equals 3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 2.595188388 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 2.591277024 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “SL”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 70fd5e958b768e13</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c031</h2>
+<blockquote>CAPTION: Table 1 Summary of modeling results of generalized linear mixed models (GLMMs) and Wald’s test to examine effects of standard length (SL) and growth rate on routine or burst swimming speed (n = 171 and 161, respectively)</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “routine” equals 171 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of rows where group is “routine” equals 171 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 171 from 171 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-008.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 171 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“group = routine” — named in the sentence as “routine”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effects); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 1c532f19a1bfa0ed</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c032</h2>
+<blockquote>CAPTION: Table 1 Summary of modeling results of generalized linear mixed models (GLMMs) and Wald’s test to examine effects of standard length (SL) and growth rate on routine or burst swimming speed (n = 171 and 161, respectively)</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “burst” equals 161 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of rows where group is “burst” equals 161 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 161 from 161 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_0 in batch-009.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 161 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“group = burst” — named in the sentence as “burst”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effects); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 28850e342fa5c1d1</small></article>
+<article><h2><span class=b style='background:#1b6e3c'>PROVED</span> c033</h2>
+<blockquote>CAPTION: Table 2 Summary of modeling results of generalized linear mixed models (GLMMs) and Wald’s test to examine the relationship between burst speed and growth rate (n = 161)</blockquote>
+<p><b>Reading that was checked:</b> The number of rows where group is “burst” equals 161 when rounded to the printed precision.</p>
+<p>The printed number is reproduced exactly from the data file under the stated reading.</p><p><small>PROVED, for the data file mackerel3D_burst_routine.csv (SHA-256 27a4372092b2e6dd…) only: “The number of rows where group is “burst” equals 161 when rounded to the printed precision.” Not established: that this reading is what the authors meant, that this is the data they analysed, or that the number supports any conclusion.</small></p><dl>
+<dt>1 — Is the arithmetic right? PROVED</dt><dd>
+Statistic <code>count</code>: exact value ≈ 161 from 161 rows (0 skipped as missing) — PROVED; Lean kernel accepted: True (theorem pcs_claim_1 in batch-009.lean).<br>
+Assumptions:<ul><li>Rounding: the printed value 161 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? GROUNDED</dt><dd>
+“group = burst” — named in the sentence as “burst”<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 7c262abb066e3753</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c034</h2>
+<blockquote>Growth rate had a significant positive effect on muscle area (P &lt; 0.01; Fig. 3a) but not on body depth (P = 0.53).</blockquote>
+<p><b>Reading that was checked:</b> The standard error of the mean (sample SD / √n) of growth_speed over all rows equals 0.01 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sem</code>: exact value ≈ 0.008230878399 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 0.01 stands for any exact value within ±1/200 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column growth_speed” — named in the sentence as “growth rate”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sem” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 82b0b2e8c9583e7d</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c035</h2>
+<blockquote>Growth rate had a significant positive effect on muscle area (P &lt; 0.01; Fig. 3a) but not on body depth (P = 0.53).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of Body_depth over all rows equals 3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 2.905 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column Body_depth” — named in the sentence as “body depth”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (effect, significant); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt d8c6fb2a1ffe9188</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c036</h2>
+<blockquote>Muscle area was significantly affected by both SL and dph (Fig. 3b).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of SL_mm over all rows equals 3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 2.595188388 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 2.591277024 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “SL”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+<li>The sentence uses interpretive wording (significantly); none of that was checked.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt f02a6ae7965db35f</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c037</h2>
+<blockquote>Larger individuals showed larger muscle areas (P &lt; 0.01) and individuals of 20 dph showed larger muscle areas than the same-size individuals of 30 dph (P = 0.04).</blockquote>
+<p><b>Reading that was checked:</b> The minimum of dph over all rows equals 20 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>min</code>: exact value ≈ 20 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 20 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “dph”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “min” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt c3de5b9ea43691ff</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c038</h2>
+<blockquote>Larger individuals showed larger muscle areas (P &lt; 0.01) and individuals of 20 dph showed larger muscle areas than the same-size individuals of 30 dph (P = 0.04).</blockquote>
+<p><b>Reading that was checked:</b> The maximum of dph over all rows equals 30 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>max</code>: exact value ≈ 30 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed).<br>
+Assumptions:<ul><li>Rounding: the printed value 30 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column dph” — named in the sentence as “dph”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “max” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt 736dbe5cf0c14203</small></article>
+<article><h2><span class=b style='background:#6b5b00'>UNKNOWN</span> c039</h2>
+<blockquote>Muscle area also showed a clearly positive correlation with growth rate, and rapidly growing individuals showed larger muscle areas than the same-size slow growers (Fig. 3a, b).</blockquote>
+<p><b>Reading that was checked:</b> The standard deviation (denominator n − 1) of SL_mm over all rows equals 3 when rounded to the printed precision.</p>
+<p>The Lean kernel did not confirm a verdict: not sent to the kernel because the source binding failed</p><p><small>Nothing is asserted about the paper’s statement.</small></p><dl>
+<dt>1 — Is the arithmetic right? UNKNOWN</dt><dd>
+Statistic <code>sd_sample</code>: exact value ≈ 2.595188388 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n − 1.<br>
+Statistic <code>sd_pop</code>: exact value ≈ 2.591277024 from 332 rows (0 skipped as missing) — UNKNOWN; Lean kernel accepted: False (not sent to the kernel because the source binding failed); assumes standard deviation uses denominator n.<br>
+Assumptions:<ul><li>Rounding: the printed value 3 stands for any exact value within ±1/2 of it (rounding to the last printed digit, ties accepted either way).</li><li>Missing values: cells equal to one of [&#x27;&#x27;, &#x27;NA&#x27;] are excluded; the count of excluded rows is part of the proof.</li><li>Every other cell in the columns used is read as an exact decimal number; no rows are added, removed or reweighted.</li></ul>
+</dd><dt>2 — Is it linked to the paper and the data? NOT_GROUNDED</dt><dd>
+“column SL_mm” — named in the sentence as “SL”<br>
+<b>Failed:</b> The sentence has no wording that names the statistic “sd_sample” (for example mean, median, SD, range).<br>
+Whether the sentence really means this reading: <b>UNREVIEWED</b> (a person must confirm).
+</dd><dt>3 — Does it support the scientific interpretation? NOT_ASSESSED</dt><dd><ul>
+<li>Whether this file is the data the authors actually analysed (custody and completeness).</li>
+<li>Whether sampling, measurement and exclusions make the statistic meaningful for the question asked.</li>
+<li>Whether any comparison, trend or causal reading drawn from the number is justified.</li>
+</ul></dd></dl><small>proposed by: search:deterministic · receipt d540c733212026fc</small></article>
+</html>

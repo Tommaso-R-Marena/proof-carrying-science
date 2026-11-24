@@ -1,0 +1,113 @@
+{
+ "what": "Effect of withholding on offline reproducibility, measured in throw-away worktrees. Nothing in the branch changed and nothing was committed. Not an owner decision.",
+ "head": "6867b551b80242c57b03288921a4105cedf48c57",
+ "stubs": "committed in bed633654eca603da4c4975c547853a630f27532",
+ "stubs_applied": {
+  "committed_in": "bed633654eca603da4c4975c547853a630f27532",
+  "files_changed": 22,
+  "outside_model_responses": []
+ },
+ "steps": {
+  "freeze_check": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "{\"software_freeze_sha256\": \"1a7eeb57029e5ff35ee1586908f77fa949a7577777a2495dc00db18c6af0ae2d\", \"benchmark_freeze_sha256\": \"1a2001809d1e923900817e17273a975fb554b13bc5b72809f4bd23e2f9ecc890\"}"
+  },
+  "v1_offline_tests": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "OK"
+  },
+  "v1_1_offline_tests": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "OK"
+  },
+  "heldout_analysis": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "{\"note\": \"Post hoc and exploratory. Only 'frozen_parser' reproduces the frozen openrouter+critic arm.\", \"openrouter_filtered_by_gemini\": {\"frozen_parser\": {\"abstained\": 54, \"correct_abstention\": 27}, \"lenient_parser\": {\"abstained\": 54, \"cor"
+  },
+  "development_evaluation": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "seconds 218.8"
+  },
+  "demonstration": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "gemini {'C1_unsupported_confirmations': (False, 'NOT evaluable'), 'C2_misleading_refutations': (False, 'NOT evaluable'), 'C3_useful_coverage': (False, 'NOT evaluable')}"
+  },
+  "independent_replay_of_one_bundle": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "}"
+  },
+  "checked_replay_of_one_bundle": {
+   "exit_baseline": 0,
+   "exit_stubbed": 0,
+   "last_line_stubbed": "}"
+  }
+ },
+ "output_differences": {
+  "heldout_analysis_baseline_vs_committed": {
+   "count_shown": 0,
+   "first": []
+  },
+  "heldout_analysis_stubbed_vs_baseline": {
+   "count_shown": 41,
+   "first": [
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/abstained: 21 -> 54",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/correct_abstention: 17 -> 27",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/correct_refutation: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/correct_verification: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/unannotated_proved: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/unannotated_refuted: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/unsupported_positive: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/frozen_parser/unsupported_refutation: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/lenient_parser/abstained: 21 -> 54",
+    "/critic_posthoc/openrouter_filtered_by_gemini/lenient_parser/correct_abstention: 17 -> 27",
+    "/critic_posthoc/openrouter_filtered_by_gemini/lenient_parser/correct_refutation: missing from the new output",
+    "/critic_posthoc/openrouter_filtered_by_gemini/lenient_parser/correct_verification: missing from the new output"
+   ]
+  },
+  "dev_arms_baseline_vs_committed": {
+   "count_shown": 0,
+   "first": []
+  },
+  "dev_arms_stubbed_vs_committed": {
+   "count_shown": 8,
+   "first": [
+    "/splits/dev/by_policy/v1/openrouter: missing from the new output",
+    "/splits/dev/by_policy/v1.1 tau=1/50/openrouter: missing from the new output",
+    "/splits/dev/record_verdicts/v1.1 tau=1/50/openrouter: missing from the new output",
+    "/splits/dev/why_v1_results_were_withheld_at_frozen_tau: [{\"arm\": \"openrouter\", \"v1_result\": \"PROVED\", \"rule\": \"low_chance_of_coincidence -> [{\"arm\": \"rules\", \"v1_result\": \"REFUTED\", \"rule\": \"beyond_rounding_convention\", ",
+    "/splits/heldout/by_policy/v1/openrouter: missing from the new output",
+    "/splits/heldout/by_policy/v1.1 tau=1/50/openrouter: missing from the new output",
+    "/splits/heldout/record_verdicts/v1.1 tau=1/50/openrouter: missing from the new output",
+    "/splits/heldout/why_v1_results_were_withheld_at_frozen_tau: [{\"arm\": \"gemini\", \"v1_result\": \"PROVED\", \"rule\": \"low_chance_of_coincidence\", \" -> [{\"arm\": \"gemini\", \"v1_result\": \"PROVED\", \"rule\": \"low_chance_of_coincidence\", \""
+   ]
+  },
+  "demonstration_baseline_vs_committed": {
+   "count_shown": 0,
+   "first": []
+  },
+  "demonstration_stubbed_vs_committed": {
+   "count_shown": 2,
+   "first": [
+    "/arms/openrouter: missing from the new output",
+    "/arms/union: missing from the new output"
+   ]
+  }
+ },
+ "summary": {
+  "every_check_and_suite_passes_with_the_stubs": true,
+  "tools_that_read_the_cache_still_run": true,
+  "baseline_reproduces_every_recorded_value": true,
+  "results_that_change_without_the_originals": [
+   "heldout_analysis_stubbed_vs_baseline",
+   "dev_arms_stubbed_vs_committed",
+   "demonstration_stubbed_vs_committed"
+  ]
+ }
+}

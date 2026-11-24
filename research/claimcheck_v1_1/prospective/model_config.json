@@ -1,0 +1,36 @@
+{
+ "status": "DRAFT 3 FOR OWNER REVIEW. Frozen with the protocol at approval (section 12). Read by prospective/budget.py; a price of null refuses every request to that provider. Prices are entered by the owner from the provider's price page, with the date, before any paid call. Nothing here authorises a call.",
+ "attempts_per_call": 4,
+ "configurations": {
+  "F": {
+   "meaning": "free tiers only (MODEL_ACCESS.md)",
+   "providers": {
+    "gemini": {"model": "gemini-3.6-flash", "usd_per_million_prompt_tokens": 0, "usd_per_million_output_tokens": 0,
+               "price_source": "free tier", "max_requests_per_utc_day": 20,
+               "daily_limit_source": "observed in v1: about 20 successful calls a day (MODEL_ACCESS.md); an assumption, not a quota the provider guarantees"},
+    "openrouter": {"model": "nvidia/nemotron-3-ultra-550b-a55b:free", "usd_per_million_prompt_tokens": 0, "usd_per_million_output_tokens": 0,
+                   "price_source": "free tier", "max_requests_per_utc_day": null}
+   },
+   "caps_usd": {"60": {"total": 0, "gemini": 0, "openrouter": 0}, "120": {"total": 0, "gemini": 0, "openrouter": 0}}
+  },
+  "P": {
+   "meaning": "capped paid route (MODEL_ACCESS.md)",
+   "providers": {
+    "gemini": {"model": "gemini-3.6-flash", "usd_per_million_prompt_tokens": null, "usd_per_million_output_tokens": null,
+               "price_source": "to be read by the owner from Google's price page and entered here, with the date, before authorisation",
+               "max_requests_per_utc_day": null},
+    "openrouter": {"model": "nvidia/nemotron-3-ultra-550b-a55b", "usd_per_million_prompt_tokens": 0.6, "usd_per_million_output_tokens": 2.4,
+                   "price_source": "OpenRouter model listing read on 2026-11-15 (MODEL_ACCESS.md); to be re-read before authorisation",
+                   "max_requests_per_utc_day": null}
+   },
+   "caps_usd": {"60": {"total": 15, "gemini": 10, "openrouter": 5}, "120": {"total": 30, "gemini": 20, "openrouter": 10}}
+  }
+ },
+ "reissue": {
+  "max_further_rounds": 2,
+  "min_hours_between_rounds": 24,
+  "reissuable": "a call none of whose attempts succeeded and whose last failure was a transport failure, HTTP 429, HTTP 5xx or a refusal by the daily request limit; never a call refused by a cost cap, a deterministic failure (HTTP 400-404, an answer without text) or an answer that does not parse",
+  "before": "step 4 of protocol 6 (no verification result exists while calls are re-issued)"
+ },
+ "billing_assumptions": "An attempt is charged the usage the provider reports. Without reported usage, a transport failure, a time-out or a server error is charged its worst case (it may have been billed); an HTTP 4xx answer is charged nothing. To be reconciled with the providers' statements after the run."
+}

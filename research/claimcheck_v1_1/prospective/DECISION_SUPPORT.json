@@ -1,0 +1,2330 @@
+{
+ "status": "synthetic operating characteristics for the owner's decisions; nothing sampled, nothing run, no network",
+ "icc_floor_proposed": 0.25,
+ "assumptions": {
+  "nemotron_sub_cap_usd": {
+   "60": 5,
+   "120": 10
+  },
+  "gemini_free_tier_successful_calls_per_day": 20,
+  "adjudication": {
+   "minutes_reading_per_paper": [
+    10,
+    20
+   ],
+   "numbers_per_paper": 25,
+   "minutes_per_number": [
+    1,
+    1.5
+   ],
+   "disagreement_share": [
+    0.15,
+    0.25
+   ],
+   "resolver_minutes_per_disagreement": 3,
+   "source": "adjudication/RECRUITMENT_AND_ADJUDICATION_PLAN.md section 4 (assumptions, not measurements)"
+  },
+  "adjudicator_hours_per_week": [
+   4,
+   8
+  ],
+  "screening_minutes_per_candidate": [
+   10,
+   20
+  ],
+  "screening_yields": [
+   0.05,
+   0.067,
+   0.08,
+   0.1,
+   0.15,
+   0.25,
+   0.44
+  ],
+  "decided_verdicts_per_paper_any_arm": [
+   5,
+   10
+  ],
+  "chance_a_decided_verdict_falls_on_an_ambiguous_number": [
+   0.0005,
+   0.001,
+   0.005
+  ],
+  "per_paper_rate_of_a_misleading_flag": [
+   0.005,
+   0.01,
+   0.02
+  ],
+  "replay_underestimate_factors": [
+   1,
+   1.5,
+   2,
+   3
+  ],
+  "replay_setup_hours_per_job": 0.5,
+  "recall_values": [
+   0.05,
+   0.1,
+   0.115,
+   0.15,
+   0.2,
+   0.25,
+   0.3,
+   0.4
+  ],
+  "feasibility_minutes_per_paper": [
+   30,
+   45,
+   57.5,
+   60,
+   75,
+   90
+  ],
+  "feasibility_screening_candidates_per_context": [
+   90,
+   300,
+   600
+  ],
+  "per_call_success_grid": [
+   0.9,
+   0.95,
+   0.97,
+   0.98,
+   0.99,
+   0.995
+  ]
+ },
+ "claim_level_tolerance": {
+  "note": "events placed at most one per paper (ICC estimate 0, so the floor governs); the scorer divides events and opportunities by the design effect; 'draft_2_table_rule' divides only opportunities, as draft 2's design_120.py did",
+  "C1": [
+   {
+    "per_paper": "2.5 (2 and 3 alternating)",
+    "papers": 60,
+    "opportunities": 150,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 150.0,
+      "upper_bound_with_events": {
+       "0": 0.0198,
+       "1": 0.0396,
+       "2": 0.0428
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 2
+     },
+     "0.1": {
+      "design_effect": 1.16,
+      "effective": 129.3,
+      "upper_bound_with_events": {
+       "0": 0.023,
+       "1": 0.0396,
+       "2": 0.048
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 2
+     },
+     "0.25": {
+      "design_effect": 1.4,
+      "effective": 107.1,
+      "upper_bound_with_events": {
+       "0": 0.0276,
+       "1": 0.0436,
+       "2": 0.0577
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 1,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 1.8,
+      "effective": 83.3,
+      "upper_bound_with_events": {
+       "0": 0.0354,
+       "1": 0.0559,
+       "2": 0.0739
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     }
+    }
+   },
+   {
+    "per_paper": "2.5 (2 and 3 alternating)",
+    "papers": 120,
+    "opportunities": 300,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 300.0,
+      "upper_bound_with_events": {
+       "0": 0.0099,
+       "1": 0.0199,
+       "2": 0.0217
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 8
+     },
+     "0.1": {
+      "design_effect": 1.16,
+      "effective": 258.6,
+      "upper_bound_with_events": {
+       "0": 0.0115,
+       "1": 0.0199,
+       "2": 0.0242
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 6
+     },
+     "0.25": {
+      "design_effect": 1.4,
+      "effective": 214.3,
+      "upper_bound_with_events": {
+       "0": 0.0139,
+       "1": 0.022,
+       "2": 0.0291
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 5,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 1.8,
+      "effective": 166.7,
+      "upper_bound_with_events": {
+       "0": 0.0179,
+       "1": 0.0283,
+       "2": 0.0374
+      },
+      "events_allowed_by_scorer": 5,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 3
+     }
+    }
+   },
+   {
+    "per_paper": "4",
+    "papers": 60,
+    "opportunities": 240,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 240.0,
+      "upper_bound_with_events": {
+       "0": 0.0124,
+       "1": 0.0196,
+       "2": 0.026
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 6
+     },
+     "0.1": {
+      "design_effect": 1.3,
+      "effective": 184.6,
+      "upper_bound_with_events": {
+       "0": 0.0161,
+       "1": 0.0255,
+       "2": 0.0338
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 4
+     },
+     "0.25": {
+      "design_effect": 1.75,
+      "effective": 137.1,
+      "upper_bound_with_events": {
+       "0": 0.0216,
+       "1": 0.0342,
+       "2": 0.0452
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 2,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 2.5,
+      "effective": 96.0,
+      "upper_bound_with_events": {
+       "0": 0.0307,
+       "1": 0.0485,
+       "2": 0.0485
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 1
+     }
+    }
+   },
+   {
+    "per_paper": "4",
+    "papers": 120,
+    "opportunities": 480,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 480.0,
+      "upper_bound_with_events": {
+       "0": 0.0062,
+       "1": 0.0098,
+       "2": 0.0131
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 15
+     },
+     "0.1": {
+      "design_effect": 1.3,
+      "effective": 369.2,
+      "upper_bound_with_events": {
+       "0": 0.0081,
+       "1": 0.0128,
+       "2": 0.017
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 11
+     },
+     "0.25": {
+      "design_effect": 1.75,
+      "effective": 274.3,
+      "upper_bound_with_events": {
+       "0": 0.0109,
+       "1": 0.0172,
+       "2": 0.0228
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 7,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 2.5,
+      "effective": 192.0,
+      "upper_bound_with_events": {
+       "0": 0.0155,
+       "1": 0.0245,
+       "2": 0.0245
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 4
+     }
+    }
+   },
+   {
+    "per_paper": "5",
+    "papers": 60,
+    "opportunities": 300,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 300.0,
+      "upper_bound_with_events": {
+       "0": 0.0099,
+       "1": 0.0157,
+       "2": 0.0208
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 8
+     },
+     "0.1": {
+      "design_effect": 1.4,
+      "effective": 214.3,
+      "upper_bound_with_events": {
+       "0": 0.0139,
+       "1": 0.022,
+       "2": 0.0291
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 5
+     },
+     "0.25": {
+      "design_effect": 2.0,
+      "effective": 150.0,
+      "upper_bound_with_events": {
+       "0": 0.0198,
+       "1": 0.0312,
+       "2": 0.0312
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 2,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 3.0,
+      "effective": 100.0,
+      "upper_bound_with_events": {
+       "0": 0.0295,
+       "1": 0.0466,
+       "2": 0.0466
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 1
+     }
+    }
+   },
+   {
+    "per_paper": "5",
+    "papers": 120,
+    "opportunities": 600,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 600.0,
+      "upper_bound_with_events": {
+       "0": 0.005,
+       "1": 0.0079,
+       "2": 0.0105
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 20
+     },
+     "0.1": {
+      "design_effect": 1.4,
+      "effective": 428.6,
+      "upper_bound_with_events": {
+       "0": 0.007,
+       "1": 0.011,
+       "2": 0.0146
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 13
+     },
+     "0.25": {
+      "design_effect": 2.0,
+      "effective": 300.0,
+      "upper_bound_with_events": {
+       "0": 0.0099,
+       "1": 0.0157,
+       "2": 0.0157
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 8,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 3.0,
+      "effective": 200.0,
+      "upper_bound_with_events": {
+       "0": 0.0149,
+       "1": 0.0235,
+       "2": 0.0235
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "paper-level bound",
+      "draft_2_table_rule_events_allowed": 4
+     }
+    }
+   }
+  ],
+  "C2a": [
+   {
+    "per_paper": "4",
+    "papers": 60,
+    "opportunities": 240,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 240.0,
+      "upper_bound_with_events": {
+       "0": 0.0124,
+       "1": 0.0196,
+       "2": 0.026
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 1
+     },
+     "0.1": {
+      "design_effect": 1.3,
+      "effective": 184.6,
+      "upper_bound_with_events": {
+       "0": 0.0161,
+       "1": 0.0255,
+       "2": 0.0338
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     },
+     "0.25": {
+      "design_effect": 1.75,
+      "effective": 137.1,
+      "upper_bound_with_events": {
+       "0": 0.0216,
+       "1": 0.0342,
+       "2": 0.0452
+      },
+      "events_allowed_by_scorer": -1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": -1,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 2.5,
+      "effective": 96.0,
+      "upper_bound_with_events": {
+       "0": 0.0307,
+       "1": 0.0485,
+       "2": 0.0485
+      },
+      "events_allowed_by_scorer": -1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": -1
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.005,
+     "0.25": 0.0124,
+     "0.5": 0.0247
+    }
+   },
+   {
+    "per_paper": "4",
+    "papers": 120,
+    "opportunities": 480,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 480.0,
+      "upper_bound_with_events": {
+       "0": 0.0062,
+       "1": 0.0098,
+       "2": 0.0131
+      },
+      "events_allowed_by_scorer": 2,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 4
+     },
+     "0.1": {
+      "design_effect": 1.3,
+      "effective": 369.2,
+      "upper_bound_with_events": {
+       "0": 0.0081,
+       "1": 0.0128,
+       "2": 0.017
+      },
+      "events_allowed_by_scorer": 2,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 2
+     },
+     "0.25": {
+      "design_effect": 1.75,
+      "effective": 274.3,
+      "upper_bound_with_events": {
+       "0": 0.0109,
+       "1": 0.0172,
+       "2": 0.0228
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 1,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 2.5,
+      "effective": 192.0,
+      "upper_bound_with_events": {
+       "0": 0.0155,
+       "1": 0.0245,
+       "2": 0.0245
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.0025,
+     "0.25": 0.0062,
+     "0.5": 0.0124
+    }
+   },
+   {
+    "per_paper": "5",
+    "papers": 60,
+    "opportunities": 300,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 300.0,
+      "upper_bound_with_events": {
+       "0": 0.0099,
+       "1": 0.0157,
+       "2": 0.0208
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 1
+     },
+     "0.1": {
+      "design_effect": 1.4,
+      "effective": 214.3,
+      "upper_bound_with_events": {
+       "0": 0.0139,
+       "1": 0.022,
+       "2": 0.0291
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     },
+     "0.25": {
+      "design_effect": 2.0,
+      "effective": 150.0,
+      "upper_bound_with_events": {
+       "0": 0.0198,
+       "1": 0.0312,
+       "2": 0.0312
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 3.0,
+      "effective": 100.0,
+      "upper_bound_with_events": {
+       "0": 0.0295,
+       "1": 0.0466,
+       "2": 0.0466
+      },
+      "events_allowed_by_scorer": -1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": -1
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.005,
+     "0.25": 0.0124,
+     "0.5": 0.0247
+    }
+   },
+   {
+    "per_paper": "5",
+    "papers": 120,
+    "opportunities": 600,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 600.0,
+      "upper_bound_with_events": {
+       "0": 0.005,
+       "1": 0.0079,
+       "2": 0.0105
+      },
+      "events_allowed_by_scorer": 3,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 6
+     },
+     "0.1": {
+      "design_effect": 1.4,
+      "effective": 428.6,
+      "upper_bound_with_events": {
+       "0": 0.007,
+       "1": 0.011,
+       "2": 0.0146
+      },
+      "events_allowed_by_scorer": 3,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 3
+     },
+     "0.25": {
+      "design_effect": 2.0,
+      "effective": 300.0,
+      "upper_bound_with_events": {
+       "0": 0.0099,
+       "1": 0.0157,
+       "2": 0.0157
+      },
+      "events_allowed_by_scorer": 2,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 1,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 3.0,
+      "effective": 200.0,
+      "upper_bound_with_events": {
+       "0": 0.0149,
+       "1": 0.0235,
+       "2": 0.0235
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.0025,
+     "0.25": 0.0062,
+     "0.5": 0.0124
+    }
+   },
+   {
+    "per_paper": "8",
+    "papers": 60,
+    "opportunities": 480,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 480.0,
+      "upper_bound_with_events": {
+       "0": 0.0062,
+       "1": 0.0098,
+       "2": 0.0131
+      },
+      "events_allowed_by_scorer": 2,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 4
+     },
+     "0.1": {
+      "design_effect": 1.7,
+      "effective": 282.4,
+      "upper_bound_with_events": {
+       "0": 0.0106,
+       "1": 0.0167,
+       "2": 0.0222
+      },
+      "events_allowed_by_scorer": 1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 1
+     },
+     "0.25": {
+      "design_effect": 2.75,
+      "effective": 174.5,
+      "upper_bound_with_events": {
+       "0": 0.0171,
+       "1": 0.027,
+       "2": 0.027
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 4.5,
+      "effective": 106.7,
+      "upper_bound_with_events": {
+       "0": 0.0279,
+       "1": 0.044,
+       "2": 0.044
+      },
+      "events_allowed_by_scorer": -1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": -1
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.005,
+     "0.25": 0.0124,
+     "0.5": 0.0247
+    }
+   },
+   {
+    "per_paper": "8",
+    "papers": 120,
+    "opportunities": 960,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 960.0,
+      "upper_bound_with_events": {
+       "0": 0.0031,
+       "1": 0.0049,
+       "2": 0.0065
+      },
+      "events_allowed_by_scorer": 4,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 11
+     },
+     "0.1": {
+      "design_effect": 1.7,
+      "effective": 564.7,
+      "upper_bound_with_events": {
+       "0": 0.0053,
+       "1": 0.0084,
+       "2": 0.0111
+      },
+      "events_allowed_by_scorer": 4,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 5
+     },
+     "0.25": {
+      "design_effect": 2.75,
+      "effective": 349.1,
+      "upper_bound_with_events": {
+       "0": 0.0085,
+       "1": 0.0135,
+       "2": 0.0135
+      },
+      "events_allowed_by_scorer": 4,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 2,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 4.5,
+      "effective": 213.3,
+      "upper_bound_with_events": {
+       "0": 0.014,
+       "1": 0.0221,
+       "2": 0.0221
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.0025,
+     "0.25": 0.0062,
+     "0.5": 0.0124
+    }
+   },
+   {
+    "per_paper": "10",
+    "papers": 60,
+    "opportunities": 600,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 600.0,
+      "upper_bound_with_events": {
+       "0": 0.005,
+       "1": 0.0079,
+       "2": 0.0105
+      },
+      "events_allowed_by_scorer": 3,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 6
+     },
+     "0.1": {
+      "design_effect": 1.9,
+      "effective": 315.8,
+      "upper_bound_with_events": {
+       "0": 0.0095,
+       "1": 0.015,
+       "2": 0.0199
+      },
+      "events_allowed_by_scorer": 3,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 2
+     },
+     "0.25": {
+      "design_effect": 3.25,
+      "effective": 184.6,
+      "upper_bound_with_events": {
+       "0": 0.0161,
+       "1": 0.0255,
+       "2": 0.0255
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 5.5,
+      "effective": 109.1,
+      "upper_bound_with_events": {
+       "0": 0.0271,
+       "1": 0.0428,
+       "2": 0.0428
+      },
+      "events_allowed_by_scorer": -1,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": -1
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.005,
+     "0.25": 0.0124,
+     "0.5": 0.0247
+    }
+   },
+   {
+    "per_paper": "10",
+    "papers": 120,
+    "opportunities": 1200,
+    "by_icc": {
+     "0.0": {
+      "design_effect": 1.0,
+      "effective": 1200.0,
+      "upper_bound_with_events": {
+       "0": 0.0025,
+       "1": 0.004,
+       "2": 0.0052
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 15
+     },
+     "0.1": {
+      "design_effect": 1.9,
+      "effective": 631.6,
+      "upper_bound_with_events": {
+       "0": 0.0047,
+       "1": 0.0075,
+       "2": 0.0099
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 6
+     },
+     "0.25": {
+      "design_effect": 3.25,
+      "effective": 369.2,
+      "upper_bound_with_events": {
+       "0": 0.0081,
+       "1": 0.0128,
+       "2": 0.0128
+      },
+      "events_allowed_by_scorer": 6,
+      "binding_condition_at_one_more": "estimate",
+      "draft_2_table_rule_events_allowed": 2,
+      "verified_by_stats_proportion": true
+     },
+     "0.5": {
+      "design_effect": 5.5,
+      "effective": 218.2,
+      "upper_bound_with_events": {
+       "0": 0.0136,
+       "1": 0.0216,
+       "2": 0.0216
+      },
+      "events_allowed_by_scorer": 0,
+      "binding_condition_at_one_more": "claim-level bound",
+      "draft_2_table_rule_events_allowed": 0
+     }
+    },
+    "lowest_possible_bound_no_flag_by_icc": {
+     "0.1": 0.0025,
+     "0.25": 0.0062,
+     "0.5": 0.0124
+    }
+   }
+  ]
+ },
+ "C2_a_and_b_together": {
+  "rows": [
+   {
+    "papers": 60,
+    "exposed_per_paper": 5,
+    "c2b_affected_papers_allowed": 0,
+    "misleading_flags_allowed_all_in_one_paper": 0,
+    "misleading_flags_allowed_spread_one_per_paper": 0
+   },
+   {
+    "papers": 60,
+    "exposed_per_paper": 10,
+    "c2b_affected_papers_allowed": 0,
+    "misleading_flags_allowed_all_in_one_paper": 0,
+    "misleading_flags_allowed_spread_one_per_paper": 0
+   },
+   {
+    "papers": 120,
+    "exposed_per_paper": 5,
+    "c2b_affected_papers_allowed": 1,
+    "misleading_flags_allowed_all_in_one_paper": 2,
+    "misleading_flags_allowed_spread_one_per_paper": 1
+   },
+   {
+    "papers": 120,
+    "exposed_per_paper": 10,
+    "c2b_affected_papers_allowed": 1,
+    "misleading_flags_allowed_all_in_one_paper": 5,
+    "misleading_flags_allowed_spread_one_per_paper": 1
+   }
+  ]
+ },
+ "C2a_original_and_copy_counted_twice": {
+  "note": "ICC floor 0.25, equal sizes; most exposed numbers of the copy repeat the original's, which a 0.25 floor treats as nearly independent",
+  "rows": [
+   {
+    "papers": 60,
+    "exposed_per_document": 4,
+    "bound_no_flag_originals_only": 0.0216,
+    "bound_no_flag_both_copies": 0.0171,
+    "bound_one_flag_originals_only": 0.0342,
+    "bound_one_flag_both_copies": 0.027
+   },
+   {
+    "papers": 60,
+    "exposed_per_document": 5,
+    "bound_no_flag_originals_only": 0.0198,
+    "bound_no_flag_both_copies": 0.0161,
+    "bound_one_flag_originals_only": 0.0312,
+    "bound_one_flag_both_copies": 0.0255
+   },
+   {
+    "papers": 60,
+    "exposed_per_document": 8,
+    "bound_no_flag_originals_only": 0.0171,
+    "bound_no_flag_both_copies": 0.0147,
+    "bound_one_flag_originals_only": 0.027,
+    "bound_one_flag_both_copies": 0.0233
+   },
+   {
+    "papers": 120,
+    "exposed_per_document": 4,
+    "bound_no_flag_originals_only": 0.0109,
+    "bound_no_flag_both_copies": 0.0085,
+    "bound_one_flag_originals_only": 0.0172,
+    "bound_one_flag_both_copies": 0.0135
+   },
+   {
+    "papers": 120,
+    "exposed_per_document": 5,
+    "bound_no_flag_originals_only": 0.0099,
+    "bound_no_flag_both_copies": 0.0081,
+    "bound_one_flag_originals_only": 0.0157,
+    "bound_one_flag_both_copies": 0.0128
+   },
+   {
+    "papers": 120,
+    "exposed_per_document": 8,
+    "bound_no_flag_originals_only": 0.0085,
+    "bound_no_flag_both_copies": 0.0074,
+    "bound_one_flag_originals_only": 0.0135,
+    "bound_one_flag_both_copies": 0.0117
+   }
+  ]
+ },
+ "C2c": {
+  "threshold": 0.5,
+  "min_flags": 5,
+  "scorer_rule_ignoring_clustering": [
+   {
+    "flags": 4,
+    "evaluable": false,
+    "bound_0": 0.5271,
+    "bound_1": 0.7514,
+    "bound_2": 0.9024,
+    "misleading_allowed": null
+   },
+   {
+    "flags": 5,
+    "evaluable": true,
+    "bound_0": 0.4507,
+    "bound_1": 0.6574,
+    "bound_2": 0.8107,
+    "misleading_allowed": 0
+   },
+   {
+    "flags": 6,
+    "evaluable": true,
+    "bound_0": 0.393,
+    "bound_1": 0.5818,
+    "bound_2": 0.7287,
+    "misleading_allowed": 0
+   },
+   {
+    "flags": 8,
+    "evaluable": true,
+    "bound_0": 0.3123,
+    "bound_1": 0.4707,
+    "bound_2": 0.5997,
+    "misleading_allowed": 1
+   },
+   {
+    "flags": 10,
+    "evaluable": true,
+    "bound_0": 0.2589,
+    "bound_1": 0.3942,
+    "bound_2": 0.5069,
+    "misleading_allowed": 1
+   },
+   {
+    "flags": 15,
+    "evaluable": true,
+    "bound_0": 0.181,
+    "bound_1": 0.2794,
+    "bound_2": 0.3634,
+    "misleading_allowed": 3
+   },
+   {
+    "flags": 20,
+    "evaluable": true,
+    "bound_0": 0.1391,
+    "bound_1": 0.2161,
+    "bound_2": 0.2826,
+    "misleading_allowed": 5
+   },
+   {
+    "flags": 25,
+    "evaluable": true,
+    "bound_0": 0.1129,
+    "bound_1": 0.1761,
+    "bound_2": 0.231,
+    "misleading_allowed": 7
+   },
+   {
+    "flags": 30,
+    "evaluable": true,
+    "bound_0": 0.095,
+    "bound_1": 0.1486,
+    "bound_2": 0.1953,
+    "misleading_allowed": 10
+   },
+   {
+    "flags": 40,
+    "evaluable": true,
+    "bound_0": 0.0722,
+    "bound_1": 0.1132,
+    "bound_2": 0.1492,
+    "misleading_allowed": 14
+   },
+   {
+    "flags": 60,
+    "evaluable": true,
+    "bound_0": 0.0487,
+    "bound_1": 0.0766,
+    "bound_2": 0.1012,
+    "misleading_allowed": 23
+   }
+  ],
+  "alternative_thresholds": {
+   "0.5": {
+    "min_flags_none_misleading": 5,
+    "misleading_allowed_at": {
+     "10": 1,
+     "20": 5,
+     "40": 14
+    }
+   },
+   "0.3333": {
+    "min_flags_none_misleading": 8,
+    "misleading_allowed_at": {
+     "10": 0,
+     "20": 2,
+     "40": 8
+    }
+   },
+   "0.2": {
+    "min_flags_none_misleading": 14,
+    "misleading_allowed_at": {
+     "10": -1,
+     "20": 0,
+     "40": 3
+    }
+   }
+  },
+  "with_design_effect_floor_0_25": [
+   {
+    "flags_per_flagged_paper": 1,
+    "design_effect": 1.0,
+    "min_flags_none_misleading": 5,
+    "misleading_allowed_at": {
+     "20": 5,
+     "40": 14
+    }
+   },
+   {
+    "flags_per_flagged_paper": 2,
+    "design_effect": 1.25,
+    "min_flags_none_misleading": 8,
+    "misleading_allowed_at": {
+     "20": 5,
+     "40": 12
+    }
+   },
+   {
+    "flags_per_flagged_paper": 4,
+    "design_effect": 1.75,
+    "min_flags_none_misleading": 12,
+    "misleading_allowed_at": {
+     "20": 3,
+     "40": 10
+    }
+   }
+  ],
+  "development_union_arm": {
+   "flags": 3,
+   "misleading": 0,
+   "papers": 2,
+   "bound_ignoring_clustering": 0.6316,
+   "conservative_bound_with_floor": 0.7764,
+   "flags_on_original_articles": 0
+  },
+  "expected_correct_flags_on_planted_errors": {
+   "4 per paper (protocol 5 text)": {
+    "60": {
+     "0.05": 12.0,
+     "0.115": 27.6,
+     "0.2": 48.0
+    },
+    "120": {
+     "0.05": 24.0,
+     "0.115": 55.2,
+     "0.2": 96.0
+    }
+   },
+   "4.33 per paper (frozen mutate.py, v1 held-out)": {
+    "60": {
+     "0.05": 13.0,
+     "0.115": 29.9,
+     "0.2": 52.0
+    },
+    "120": {
+     "0.05": 26.0,
+     "0.115": 59.8,
+     "0.2": 104.0
+    }
+   }
+  },
+  "illustration_real_share_of_flags": {
+   "assumptions": {
+    "natural_F_per_paper": 1.0,
+    "planted_per_paper": 4.33,
+    "exposed_non_F_numbers_per_document": 7.75,
+    "flag_recall": 0.115,
+    "source": "DEMONSTRATION_ON_DEVELOPMENT_DATA.json union arm: 26 planted errors (3 flagged), 6 natural F numbers, 93 exposed numbers, 6 papers; natural errors assumed detected as often as planted ones"
+   },
+   "rows": [
+    {
+     "misleading_per_exposed_number": 0.005,
+     "real_share_of_flags_originals_only": 0.749,
+     "real_share_of_flags_originals_and_copies": 0.904
+    },
+    {
+     "misleading_per_exposed_number": 0.02,
+     "real_share_of_flags_originals_only": 0.427,
+     "real_share_of_flags_originals_and_copies": 0.702
+    }
+   ]
+  }
+ },
+ "D1_flag_recall": {
+  "development_icc_estimate_union": 0.3166,
+  "rows": [
+   {
+    "papers": 60,
+    "planted": "4 per paper (protocol 5 text)",
+    "planted_errors": 240,
+    "weighted_cluster_size": 4.0,
+    "lower_bound_at_observed_recall": {
+     "0.25": {
+      "0.05": 0.0191,
+      "0.1": 0.0566,
+      "0.115": 0.0741,
+      "0.15": 0.0982,
+      "0.2": 0.1418,
+      "0.25": 0.187,
+      "0.3": 0.2333,
+      "0.4": 0.3216
+     },
+     "0.32": {
+      "0.05": 0.0215,
+      "0.1": 0.0573,
+      "0.115": 0.0701,
+      "0.15": 0.0968,
+      "0.2": 0.1383,
+      "0.25": 0.1814,
+      "0.3": 0.2255,
+      "0.4": 0.3165
+     }
+    },
+    "observed_recall_needed_for_lower_bound": {
+     "0.1": {
+      "detections": 37,
+      "observed_recall": 0.154,
+      "chance_if_true_recall": {
+       "0.115": 0.04,
+       "0.15": 0.456,
+       "0.2": 0.971,
+       "0.25": 1.0,
+       "0.3": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "0.15": {
+      "detections": 51,
+      "observed_recall": 0.212,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.006,
+       "0.2": 0.338,
+       "0.25": 0.924,
+       "0.3": 0.999,
+       "0.4": 1.0
+      }
+     },
+     "0.2": {
+      "detections": 63,
+      "observed_recall": 0.263,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.011,
+       "0.25": 0.351,
+       "0.3": 0.911,
+       "0.4": 1.0
+      }
+     },
+     "0.3": {
+      "detections": 90,
+      "observed_recall": 0.375,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.0,
+       "0.25": 0.0,
+       "0.3": 0.008,
+       "0.4": 0.804
+      }
+     }
+    },
+    "necessary_condition": {
+     "c2a_bound_no_flag_10_exposed": 0.0161,
+     "detections": 11,
+     "observed_recall": 0.046
+    }
+   },
+   {
+    "papers": 60,
+    "planted": "as frozen mutate.py did in v1 held-out (7,1,4,4,9,1)",
+    "planted_errors": 260,
+    "weighted_cluster_size": 6.31,
+    "lower_bound_at_observed_recall": {
+     "0.25": {
+      "0.05": 0.0178,
+      "0.1": 0.0561,
+      "0.115": 0.063,
+      "0.15": 0.0917,
+      "0.2": 0.1369,
+      "0.25": 0.1759,
+      "0.3": 0.2241,
+      "0.4": 0.3154
+     },
+     "0.32": {
+      "0.05": 0.0142,
+      "0.1": 0.0493,
+      "0.115": 0.0649,
+      "0.15": 0.0894,
+      "0.2": 0.1322,
+      "0.25": 0.1769,
+      "0.3": 0.2136,
+      "0.4": 0.3085
+     }
+    },
+    "observed_recall_needed_for_lower_bound": {
+     "0.1": {
+      "detections": 42,
+      "observed_recall": 0.162,
+      "chance_if_true_recall": {
+       "0.115": 0.015,
+       "0.15": 0.326,
+       "0.2": 0.951,
+       "0.25": 1.0,
+       "0.3": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "0.15": {
+      "detections": 56,
+      "observed_recall": 0.215,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.003,
+       "0.2": 0.29,
+       "0.25": 0.915,
+       "0.3": 0.999,
+       "0.4": 1.0
+      }
+     },
+     "0.2": {
+      "detections": 73,
+      "observed_recall": 0.281,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.001,
+       "0.25": 0.142,
+       "0.3": 0.77,
+       "0.4": 1.0
+      }
+     },
+     "0.3": {
+      "detections": 101,
+      "observed_recall": 0.388,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.0,
+       "0.25": 0.0,
+       "0.3": 0.001,
+       "0.4": 0.67
+      }
+     }
+    },
+    "necessary_condition": {
+     "c2a_bound_no_flag_10_exposed": 0.0161,
+     "detections": 12,
+     "observed_recall": 0.046
+    }
+   },
+   {
+    "papers": 120,
+    "planted": "4 per paper (protocol 5 text)",
+    "planted_errors": 480,
+    "weighted_cluster_size": 4.0,
+    "lower_bound_at_observed_recall": {
+     "0.25": {
+      "0.05": 0.0282,
+      "0.1": 0.0702,
+      "0.115": 0.0828,
+      "0.15": 0.1149,
+      "0.2": 0.1577,
+      "0.25": 0.2049,
+      "0.3": 0.2528,
+      "0.4": 0.347
+     },
+     "0.32": {
+      "0.05": 0.0285,
+      "0.1": 0.0685,
+      "0.115": 0.0825,
+      "0.15": 0.111,
+      "0.2": 0.1551,
+      "0.25": 0.204,
+      "0.3": 0.2499,
+      "0.4": 0.3436
+     }
+    },
+    "observed_recall_needed_for_lower_bound": {
+     "0.1": {
+      "detections": 65,
+      "observed_recall": 0.135,
+      "chance_if_true_recall": {
+       "0.115": 0.094,
+       "0.15": 0.831,
+       "0.2": 1.0,
+       "0.25": 1.0,
+       "0.3": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "0.15": {
+      "detections": 91,
+      "observed_recall": 0.19,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.011,
+       "0.2": 0.733,
+       "0.25": 0.999,
+       "0.3": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "0.2": {
+      "detections": 118,
+      "observed_recall": 0.246,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.008,
+       "0.25": 0.601,
+       "0.3": 0.996,
+       "0.4": 1.0
+      }
+     },
+     "0.3": {
+      "detections": 168,
+      "observed_recall": 0.35,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.0,
+       "0.25": 0.0,
+       "0.3": 0.01,
+       "0.4": 0.989
+      }
+     }
+    },
+    "necessary_condition": {
+     "c2a_bound_no_flag_10_exposed": 0.0081,
+     "detections": 11,
+     "observed_recall": 0.023
+    }
+   },
+   {
+    "papers": 120,
+    "planted": "as frozen mutate.py did in v1 held-out (7,1,4,4,9,1)",
+    "planted_errors": 520,
+    "weighted_cluster_size": 6.31,
+    "lower_bound_at_observed_recall": {
+     "0.25": {
+      "0.05": 0.0278,
+      "0.1": 0.0674,
+      "0.115": 0.0788,
+      "0.15": 0.1098,
+      "0.2": 0.1537,
+      "0.25": 0.1987,
+      "0.3": 0.2488,
+      "0.4": 0.3426
+     },
+     "0.32": {
+      "0.05": 0.0245,
+      "0.1": 0.0654,
+      "0.115": 0.0784,
+      "0.15": 0.1051,
+      "0.2": 0.151,
+      "0.25": 0.1981,
+      "0.3": 0.2414,
+      "0.4": 0.3399
+     }
+    },
+    "observed_recall_needed_for_lower_bound": {
+     "0.1": {
+      "detections": 73,
+      "observed_recall": 0.14,
+      "chance_if_true_recall": {
+       "0.115": 0.043,
+       "0.15": 0.748,
+       "0.2": 1.0,
+       "0.25": 1.0,
+       "0.3": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "0.15": {
+      "detections": 103,
+      "observed_recall": 0.198,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.002,
+       "0.2": 0.561,
+       "0.25": 0.998,
+       "0.3": 1.0,
+       "0.4": 1.0
+      }
+     },
+     "0.2": {
+      "detections": 131,
+      "observed_recall": 0.252,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.002,
+       "0.25": 0.476,
+       "0.3": 0.993,
+       "0.4": 1.0
+      }
+     },
+     "0.3": {
+      "detections": 187,
+      "observed_recall": 0.36,
+      "chance_if_true_recall": {
+       "0.115": 0.0,
+       "0.15": 0.0,
+       "0.2": 0.0,
+       "0.25": 0.0,
+       "0.3": 0.002,
+       "0.4": 0.973
+      }
+     }
+    },
+    "necessary_condition": {
+     "c2a_bound_no_flag_10_exposed": 0.0081,
+     "detections": 12,
+     "observed_recall": 0.023
+    }
+   }
+  ],
+  "note": "ICC floor 0.25 unless stated; detections spread evenly so the floor governs; 'chance_if_true_recall' treats detections as independent (binomial), which understates the spread when detections cluster by paper"
+ },
+ "model_calls": {
+  "v1_ledgers": {
+   "openrouter": [
+    {
+     "ledger": "prefetch_ledger.day1.json",
+     "attempts": 14,
+     "failed_attempts": 0,
+     "successful": 14,
+     "prompt_tokens_per_successful_call": 4404.0,
+     "output_tokens_per_successful_call": 3032.0,
+     "prompt_tokens_per_attempt": 4404.0,
+     "seconds_per_attempt": 66.9
+    },
+    {
+     "ledger": "prefetch_ledger.json",
+     "attempts": 3,
+     "failed_attempts": 1,
+     "successful": 2,
+     "prompt_tokens_per_successful_call": 2088.0,
+     "output_tokens_per_successful_call": 134.0,
+     "prompt_tokens_per_attempt": 1392.0,
+     "seconds_per_attempt": 3.9
+    }
+   ],
+   "gemini": [
+    {
+     "ledger": "prefetch_ledger.gemini_day2.json",
+     "attempts": 14,
+     "failed_attempts": 7,
+     "successful": 7,
+     "prompt_tokens_per_successful_call": 5160.0,
+     "output_tokens_per_successful_call": 563.0,
+     "prompt_tokens_per_attempt": 2580.0,
+     "seconds_per_attempt": 3.8
+    },
+    {
+     "ledger": "prefetch_ledger.json",
+     "attempts": 15,
+     "failed_attempts": 5,
+     "successful": 10,
+     "prompt_tokens_per_successful_call": 2846.0,
+     "output_tokens_per_successful_call": 643.0,
+     "prompt_tokens_per_attempt": 1897.0,
+     "seconds_per_attempt": 4.5
+    }
+   ]
+  },
+  "v1_failed_attempt_share": {
+   "openrouter": 0.059,
+   "gemini": 0.414
+  },
+  "backoff_seconds_per_call_worst_case": {
+   "server_or_transport": 90,
+   "quota_429": 240
+  },
+  "timeout_seconds_per_attempt": 300,
+  "nemotron_usd_per_call": {
+   "measured_sizes": 0.00992,
+   "full_output": 0.04196
+  },
+  "gemini_tokens_per_successful_call_highest_ledger_mean": 5723.0,
+  "designs": [
+   {
+    "papers": 60,
+    "calls": 240,
+    "calls_per_provider": 120,
+    "attempts_worst_case": 960,
+    "ledger_attempt_budget_needed_per_provider": 480,
+    "ledger_default_budget": {
+     "gemini": 60,
+     "openrouter": 40
+    },
+    "worst_case_wall_hours_per_provider_one_at_a_time": 48.0,
+    "free_tier_days_for_gemini_calls_at_20_a_day": 6,
+    "nemotron_usd": {
+     "measured_sizes": 1.19,
+     "measured_sizes_every_call_four_attempts": 4.76,
+     "every_attempt_full_16384_output_tokens": 20.14
+    },
+    "cap_usd": 15,
+    "nemotron_sub_cap_usd": 5,
+    "gemini_sub_cap_usd": 10,
+    "gemini_highest_average_usd_per_million_tokens_within_sub_cap": {
+     "every_call_once": 14.56,
+     "every_call_four_attempts": 3.64
+    },
+    "chance_primary_complete_share_at_least_90_percent_by_per_call_success": {
+     "0.9": 0.0,
+     "0.95": 0.055,
+     "0.97": 0.459,
+     "0.98": 0.818,
+     "0.99": 0.991,
+     "0.995": 1.0
+    },
+    "v1_failure_rates_if_independent": {
+     "per_call_success_gemini": 0.9707,
+     "per_call_success_nemotron": 0.999988,
+     "per_paper_complete": 0.9422,
+     "chance_share_at_least_90_percent": 0.943
+    },
+    "if_gemini_answers_only_20_calls_a_day_and_calls_are_not_paced": {
+     "successful_gemini_calls_first_day": 20,
+     "primary_complete_share_at_most": 0.167
+    },
+    "sequential_hours_at_v1_latency": {
+     "nemotron": 2.2,
+     "gemini": 0.1
+    }
+   },
+   {
+    "papers": 120,
+    "calls": 480,
+    "calls_per_provider": 240,
+    "attempts_worst_case": 1920,
+    "ledger_attempt_budget_needed_per_provider": 960,
+    "ledger_default_budget": {
+     "gemini": 60,
+     "openrouter": 40
+    },
+    "worst_case_wall_hours_per_provider_one_at_a_time": 96.0,
+    "free_tier_days_for_gemini_calls_at_20_a_day": 12,
+    "nemotron_usd": {
+     "measured_sizes": 2.38,
+     "measured_sizes_every_call_four_attempts": 9.52,
+     "every_attempt_full_16384_output_tokens": 40.29
+    },
+    "cap_usd": 30,
+    "nemotron_sub_cap_usd": 10,
+    "gemini_sub_cap_usd": 20,
+    "gemini_highest_average_usd_per_million_tokens_within_sub_cap": {
+     "every_call_once": 14.56,
+     "every_call_four_attempts": 3.64
+    },
+    "chance_primary_complete_share_at_least_90_percent_by_per_call_success": {
+     "0.9": 0.0,
+     "0.95": 0.008,
+     "0.97": 0.371,
+     "0.98": 0.86,
+     "0.99": 0.999,
+     "0.995": 1.0
+    },
+    "v1_failure_rates_if_independent": {
+     "per_call_success_gemini": 0.9707,
+     "per_call_success_nemotron": 0.999988,
+     "per_paper_complete": 0.9422,
+     "chance_share_at_least_90_percent": 0.978
+    },
+    "if_gemini_answers_only_20_calls_a_day_and_calls_are_not_paced": {
+     "successful_gemini_calls_first_day": 20,
+     "primary_complete_share_at_most": 0.083
+    },
+    "sequential_hours_at_v1_latency": {
+     "nemotron": 4.5,
+     "gemini": 0.3
+    }
+   }
+  ]
+ },
+ "kernel_and_replay": {
+  "measured": {
+   "cpus": 4,
+   "memory_limit_gb_per_process": 11,
+   "time_limit_seconds": 600,
+   "note": "One claim per proof file. Synthetic two-decimal data. Peak RSS is the Lean process's maximum resident set size."
+  },
+  "by_statistic": {
+   "count": {
+    "largest_rows_accepted": 2400,
+    "bytes": 51209,
+    "seconds": 35.16,
+    "peak_gb": 4.24,
+    "first_failure_rows": null,
+    "first_failure_peak_gb": null,
+    "first_failure": null
+   },
+   "mean": {
+    "largest_rows_accepted": 1600,
+    "bytes": 33760,
+    "seconds": 32.28,
+    "peak_gb": 4.12,
+    "first_failure_rows": 2400,
+    "first_failure_peak_gb": 5.78,
+    "first_failure": "recursion depth"
+   },
+   "min": {
+    "largest_rows_accepted": 400,
+    "bytes": 8219,
+    "seconds": 9.79,
+    "peak_gb": 1.4,
+    "first_failure_rows": 800,
+    "first_failure_peak_gb": 2.26,
+    "first_failure": "recursion depth"
+   },
+   "sd_sample": {
+    "largest_rows_accepted": 1600,
+    "bytes": 33760,
+    "seconds": 35.73,
+    "peak_gb": 4.43,
+    "first_failure_rows": 2400,
+    "first_failure_peak_gb": 5.78,
+    "first_failure": "recursion depth"
+   },
+   "median": {
+    "largest_rows_accepted": 400,
+    "bytes": 8219,
+    "seconds": 34.63,
+    "peak_gb": 4.05,
+    "first_failure_rows": 800,
+    "first_failure_peak_gb": 10.22,
+    "first_failure": "out of memory"
+   },
+   "pearson": {
+    "largest_rows_accepted": 1600,
+    "bytes": 33760,
+    "seconds": 54.16,
+    "peak_gb": 6.19,
+    "first_failure_rows": 2400,
+    "first_failure_peak_gb": 7.3,
+    "first_failure": "recursion depth"
+   }
+  },
+  "largest_bytes_at_which_every_statistic_was_accepted": 8219,
+  "highest_peak_gb_among_accepted_runs": 6.19,
+  "highest_peak_gb_any_run": 10.3,
+  "two_workers_two_highest_accepted_peaks_gb": 12.38,
+  "two_workers_two_failing_median_runs_gb": 20.6,
+  "reference_machine_gb": 16,
+  "c7_peak_limit_gb": 8,
+  "replay": [
+   {
+    "papers": 60,
+    "runner_hours": 10.0,
+    "fewest_jobs_under_6_h": 2,
+    "fewest_jobs_under_6_h_if_twice_the_estimate": 4,
+    "hours_per_job_by_jobs_and_underestimate": {
+     "4": {
+      "1": 3.0,
+      "1.5": 4.25,
+      "2": 5.5,
+      "3": 8.0
+     },
+     "6": {
+      "1": 2.17,
+      "1.5": 3.0,
+      "2": 3.83,
+      "3": 5.5
+     },
+     "8": {
+      "1": 1.75,
+      "1.5": 2.38,
+      "2": 3.0,
+      "3": 4.25
+     },
+     "12": {
+      "1": 1.33,
+      "1.5": 1.75,
+      "2": 2.17,
+      "3": 3.0
+     }
+    }
+   },
+   {
+    "papers": 120,
+    "runner_hours": 20.0,
+    "fewest_jobs_under_6_h": 4,
+    "fewest_jobs_under_6_h_if_twice_the_estimate": 7,
+    "hours_per_job_by_jobs_and_underestimate": {
+     "4": {
+      "1": 5.5,
+      "1.5": 8.0,
+      "2": 10.5,
+      "3": 15.5
+     },
+     "6": {
+      "1": 3.83,
+      "1.5": 5.5,
+      "2": 7.17,
+      "3": 10.5
+     },
+     "8": {
+      "1": 3.0,
+      "1.5": 4.25,
+      "2": 5.5,
+      "3": 8.0
+     },
+     "12": {
+      "1": 2.17,
+      "1.5": 3.0,
+      "2": 3.83,
+      "3": 5.5
+     }
+    }
+   }
+  ]
+ },
+ "adjudication": {
+  "minutes_per_paper_per_adjudicator": [
+   35,
+   57.5
+  ],
+  "designs": [
+   {
+    "papers": 60,
+    "hours_each_two_adjudicators_covering_all": [
+     35.0,
+     57.5
+    ],
+    "person_hours_two_labels_per_number": [
+     70.0,
+     115.0
+    ],
+    "resolver_hours": [
+     11.2,
+     18.8
+    ],
+    "hours_each_six_adjudicators_two_per_context": [
+     11.7,
+     19.2
+    ],
+    "weeks_two_adjudicators_by_hours_per_week": {
+     "4": [
+      8.8,
+      14.4
+     ],
+     "8": [
+      4.4,
+      7.2
+     ]
+    },
+    "weeks_six_adjudicators_by_hours_per_week": {
+     "4": [
+      2.9,
+      4.8
+     ],
+     "8": [
+      1.5,
+      2.4
+     ]
+    }
+   },
+   {
+    "papers": 120,
+    "hours_each_two_adjudicators_covering_all": [
+     70.0,
+     115.0
+    ],
+    "person_hours_two_labels_per_number": [
+     140.0,
+     230.0
+    ],
+    "resolver_hours": [
+     22.5,
+     37.5
+    ],
+    "hours_each_six_adjudicators_two_per_context": [
+     23.3,
+     38.3
+    ],
+    "weeks_two_adjudicators_by_hours_per_week": {
+     "4": [
+      17.5,
+      28.8
+     ],
+     "8": [
+      8.8,
+      14.4
+     ]
+    },
+    "weeks_six_adjudicators_by_hours_per_week": {
+     "4": [
+      5.8,
+      9.6
+     ],
+     "8": [
+      2.9,
+      4.8
+     ]
+    }
+   }
+  ],
+  "preliminary_round_hours_each_by_these_rates": [
+   1.0,
+   1.75
+  ]
+ },
+ "usability": {
+  "rows": [
+   {
+    "participants": 5,
+    "correct_needed": 4,
+    "chance_one_question_passes": {
+     "0.7": 0.528,
+     "0.8": 0.737,
+     "0.9": 0.919,
+     "0.95": 0.977
+    },
+    "chance_all_four_questions_pass_if_independent": {
+     "0.7": 0.078,
+     "0.8": 0.295,
+     "0.9": 0.713,
+     "0.95": 0.911
+    },
+    "lower_bound_at_threshold": 0.343,
+    "lower_bound_all_correct": 0.549
+   },
+   {
+    "participants": 8,
+    "correct_needed": 7,
+    "chance_one_question_passes": {
+     "0.7": 0.255,
+     "0.8": 0.503,
+     "0.9": 0.813,
+     "0.95": 0.943
+    },
+    "chance_all_four_questions_pass_if_independent": {
+     "0.7": 0.004,
+     "0.8": 0.064,
+     "0.9": 0.437,
+     "0.95": 0.791
+    },
+    "lower_bound_at_threshold": 0.529,
+    "lower_bound_all_correct": 0.688
+   },
+   {
+    "participants": 10,
+    "correct_needed": 8,
+    "chance_one_question_passes": {
+     "0.7": 0.383,
+     "0.8": 0.678,
+     "0.9": 0.93,
+     "0.95": 0.988
+    },
+    "chance_all_four_questions_pass_if_independent": {
+     "0.7": 0.022,
+     "0.8": 0.211,
+     "0.9": 0.748,
+     "0.95": 0.953
+    },
+    "lower_bound_at_threshold": 0.493,
+    "lower_bound_all_correct": 0.741
+   }
+  ]
+ },
+ "screening": {
+  "rows": [
+   {
+    "yield": 0.05,
+    "chance_20_within_300": 0.119,
+    "chance_40_within_600": 0.042,
+    "chance_40_within_300": 0.0,
+    "chance_at_least_20_within_600": 0.981,
+    "expected_screened_for_40": 800.0
+   },
+   {
+    "yield": 0.067,
+    "chance_20_within_300": 0.542,
+    "chance_40_within_600": 0.536,
+    "chance_40_within_300": 0.0,
+    "chance_at_least_20_within_600": 1.0,
+    "expected_screened_for_40": 597.0
+   },
+   {
+    "yield": 0.08,
+    "chance_20_within_300": 0.831,
+    "chance_40_within_600": 0.902,
+    "chance_40_within_300": 0.001,
+    "chance_at_least_20_within_600": 1.0,
+    "expected_screened_for_40": 500.0
+   },
+   {
+    "yield": 0.1,
+    "chance_20_within_300": 0.983,
+    "chance_40_within_600": 0.998,
+    "chance_40_within_300": 0.038,
+    "chance_at_least_20_within_600": 1.0,
+    "expected_screened_for_40": 400.0
+   },
+   {
+    "yield": 0.15,
+    "chance_20_within_300": 1.0,
+    "chance_40_within_600": 1.0,
+    "chance_40_within_300": 0.812,
+    "chance_at_least_20_within_600": 1.0,
+    "expected_screened_for_40": 267.0
+   },
+   {
+    "yield": 0.25,
+    "chance_20_within_300": 1.0,
+    "chance_40_within_600": 1.0,
+    "chance_40_within_300": 1.0,
+    "chance_at_least_20_within_600": 1.0,
+    "expected_screened_for_40": 160.0
+   },
+   {
+    "yield": 0.44,
+    "chance_20_within_300": 1.0,
+    "chance_40_within_600": 1.0,
+    "chance_40_within_300": 1.0,
+    "chance_at_least_20_within_600": 1.0,
+    "expected_screened_for_40": 91.0
+   }
+  ],
+  "worst_case_screening_hours": {
+   "10": {
+    "cap_300_all_contexts_hours": 150.0,
+    "cap_600_all_contexts_hours": 300.0
+   },
+   "20": {
+    "cap_300_all_contexts_hours": 300.0,
+    "cap_600_all_contexts_hours": 600.0
+   }
+  },
+  "intermediate_sizes": {
+   "60": {
+    "c2b_affected_allowed": 0,
+    "chance_of_passing_at_1_percent": 0.547
+   },
+   "75": {
+    "c2b_affected_allowed": 0,
+    "chance_of_passing_at_1_percent": 0.471
+   },
+   "90": {
+    "c2b_affected_allowed": 0,
+    "chance_of_passing_at_1_percent": 0.405
+   },
+   "105": {
+    "c2b_affected_allowed": 1,
+    "chance_of_passing_at_1_percent": 0.717
+   },
+   "120": {
+    "c2b_affected_allowed": 1,
+    "chance_of_passing_at_1_percent": 0.662
+   }
+  }
+ },
+ "zero_event_rules": {
+  "C6_no_decided_verdict_on_an_ambiguous_number": [
+   {
+    "papers": 60,
+    "decided_verdicts_per_paper": 5,
+    "chance_no_event": {
+     "0.0005": 0.861,
+     "0.001": 0.741,
+     "0.005": 0.222
+    }
+   },
+   {
+    "papers": 60,
+    "decided_verdicts_per_paper": 10,
+    "chance_no_event": {
+     "0.0005": 0.741,
+     "0.001": 0.549,
+     "0.005": 0.049
+    }
+   },
+   {
+    "papers": 120,
+    "decided_verdicts_per_paper": 5,
+    "chance_no_event": {
+     "0.0005": 0.741,
+     "0.001": 0.549,
+     "0.005": 0.049
+    }
+   },
+   {
+    "papers": 120,
+    "decided_verdicts_per_paper": 10,
+    "chance_no_event": {
+     "0.0005": 0.549,
+     "0.001": 0.301,
+     "0.005": 0.002
+    }
+   }
+  ],
+  "scope_rule_any_misleading_flag_excludes_its_context": [
+   {
+    "papers": 60,
+    "per_paper_rate": 0.005,
+    "c2b_chance_of_passing": 0.74,
+    "chance_all_three_contexts_in_scope": 0.74,
+    "chance_at_least_two_in_scope": 0.974,
+    "expected_contexts_in_scope": 2.71
+   },
+   {
+    "papers": 60,
+    "per_paper_rate": 0.01,
+    "c2b_chance_of_passing": 0.547,
+    "chance_all_three_contexts_in_scope": 0.547,
+    "chance_at_least_two_in_scope": 0.913,
+    "expected_contexts_in_scope": 2.45
+   },
+   {
+    "papers": 60,
+    "per_paper_rate": 0.02,
+    "c2b_chance_of_passing": 0.298,
+    "chance_all_three_contexts_in_scope": 0.298,
+    "chance_at_least_two_in_scope": 0.742,
+    "expected_contexts_in_scope": 2.0
+   },
+   {
+    "papers": 120,
+    "per_paper_rate": 0.005,
+    "c2b_chance_of_passing": 0.878,
+    "chance_all_three_contexts_in_scope": 0.548,
+    "chance_at_least_two_in_scope": 0.913,
+    "expected_contexts_in_scope": 2.45
+   },
+   {
+    "papers": 120,
+    "per_paper_rate": 0.01,
+    "c2b_chance_of_passing": 0.662,
+    "chance_all_three_contexts_in_scope": 0.299,
+    "chance_at_least_two_in_scope": 0.744,
+    "expected_contexts_in_scope": 2.01
+   },
+   {
+    "papers": 120,
+    "per_paper_rate": 0.02,
+    "c2b_chance_of_passing": 0.305,
+    "chance_all_three_contexts_in_scope": 0.089,
+    "chance_at_least_two_in_scope": 0.419,
+    "expected_contexts_in_scope": 1.34
+   }
+  ],
+  "scope_rule_C1_unsupported_confirmations_allowed_per_context_by_its_confirmations": {
+   "25": 0,
+   "40": 0,
+   "50": 1,
+   "75": 1,
+   "100": 2,
+   "150": 3,
+   "200": 4
+  }
+ },
+ "development_icc_estimates": {
+  "gemini": {
+   "C3_coverage": {
+    "events": 14,
+    "opportunities": 48,
+    "icc_estimate": 0.5341
+   },
+   "D1_flag_recall_planted": {
+    "events": 2,
+    "opportunities": 26,
+    "icc_estimate": 0.0
+   },
+   "C1_unsupported_among_confirmations": {
+    "events": 0,
+    "opportunities": 14,
+    "icc_estimate": 0.0
+   },
+   "C2a_misleading_per_exposed_number": {
+    "events": 0,
+    "opportunities": 36,
+    "icc_estimate": 0.0
+   }
+  },
+  "openrouter": {
+   "C3_coverage": {
+    "events": 16,
+    "opportunities": 48,
+    "icc_estimate": 0.3162
+   },
+   "D1_flag_recall_planted": {
+    "events": 3,
+    "opportunities": 26,
+    "icc_estimate": 0.3166
+   },
+   "C1_unsupported_among_confirmations": {
+    "events": 1,
+    "opportunities": 17,
+    "icc_estimate": 0.0
+   },
+   "C2a_misleading_per_exposed_number": {
+    "events": 0,
+    "opportunities": 91,
+    "icc_estimate": 0.0
+   }
+  },
+  "union": {
+   "C3_coverage": {
+    "events": 18,
+    "opportunities": 48,
+    "icc_estimate": 0.4881
+   },
+   "D1_flag_recall_planted": {
+    "events": 3,
+    "opportunities": 26,
+    "icc_estimate": 0.3166
+   },
+   "C1_unsupported_among_confirmations": {
+    "events": 1,
+    "opportunities": 19,
+    "icc_estimate": 0.0
+   },
+   "C2a_misleading_per_exposed_number": {
+    "events": 0,
+    "opportunities": 93,
+    "icc_estimate": 0.0
+   }
+  }
+ },
+ "feasibility_study": {
+  "pilot_adjudication": {
+   "hours_each_adjudicator": [
+    5.5,
+    8.75
+   ],
+   "resolver_hours": [
+    1.12,
+    1.88
+   ],
+   "person_hours_two_adjudicators_and_resolver": [
+    12.1,
+    19.4
+   ]
+  },
+  "smoke_run_configuration_P": {
+   "papers": 8,
+   "documents": 16,
+   "calls": 32,
+   "nemotron_calls": 16,
+   "nemotron_usd_at_measured_sizes": 0.16
+  },
+  "adjudication_at_120_papers_by_measured_minutes_per_paper": {
+   "30": {
+    "hours_each_two_adjudicators": 60.0,
+    "person_hours": 120.0,
+    "hours_each_six_adjudicators": 20.0
+   },
+   "45": {
+    "hours_each_two_adjudicators": 90.0,
+    "person_hours": 180.0,
+    "hours_each_six_adjudicators": 30.0
+   },
+   "57.5": {
+    "hours_each_two_adjudicators": 115.0,
+    "person_hours": 230.0,
+    "hours_each_six_adjudicators": 38.3
+   },
+   "60": {
+    "hours_each_two_adjudicators": 120.0,
+    "person_hours": 240.0,
+    "hours_each_six_adjudicators": 40.0
+   },
+   "75": {
+    "hours_each_two_adjudicators": 150.0,
+    "person_hours": 300.0,
+    "hours_each_six_adjudicators": 50.0
+   },
+   "90": {
+    "hours_each_two_adjudicators": 180.0,
+    "person_hours": 360.0,
+    "hours_each_six_adjudicators": 60.0
+   }
+  },
+  "screening_hours_three_contexts_by_candidates_per_context_and_minutes_each": {
+   "90": {
+    "10": 45.0,
+    "20": 90.0
+   },
+   "300": {
+    "10": 150.0,
+    "20": 300.0
+   },
+   "600": {
+    "10": 300.0,
+    "20": 600.0
+   }
+  },
+  "plan_rates_minutes_per_paper": [
+   35,
+   57.5
+  ]
+ }
+}

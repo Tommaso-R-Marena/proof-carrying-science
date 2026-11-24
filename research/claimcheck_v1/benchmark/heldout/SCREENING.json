@@ -1,0 +1,113 @@
+{
+ "protocol": "PROTOCOL.md, section 'Candidate pool and selection'",
+ "screened_on": "2026-11-10",
+ "judged_by": "reading article text and table headers only; ClaimCheck was not run on any candidate",
+ "candidates": [
+  {
+   "index": 6,
+   "pmcid": "PMC5980576",
+   "eligible": true,
+   "slug": "06_pmc5980576",
+   "E3_basis": "sample sizes, reproductive-effort range/mean/SE, plasma alpha-tocopherol mean/SE/range"
+  },
+  {
+   "index": 7,
+   "pmcid": "PMC5969317",
+   "eligible": false,
+   "reason": "E2: the only CSV is not comma-separated/rectangular under the csv module"
+  },
+  {
+   "index": 8,
+   "pmcid": "PMC6238128",
+   "eligible": true,
+   "slug": "08_pmc6238128",
+   "E3_basis": "numbers of individuals and species, range of specimens per species"
+  },
+  {
+   "index": 9,
+   "pmcid": "PMC6476783",
+   "eligible": true,
+   "slug": "09_pmc6476783",
+   "E3_basis": "numbers of sequences overall, per haplotype and per site"
+  },
+  {
+   "index": 10,
+   "pmcid": "PMC5817150",
+   "eligible": true,
+   "slug": "10_pmc5817150",
+   "E3_basis": "mean and median age, lifespan range, numbers of mass estimates"
+  },
+  {
+   "index": 11,
+   "pmcid": "PMC4264948",
+   "eligible": false,
+   "reason": "E3: prose reports model results and design counts (101 sampling points vs 72 rows), no descriptive statistics of the table's rows"
+  },
+  {
+   "index": 12,
+   "pmcid": "PMC4417136",
+   "eligible": true,
+   "slug": "12_pmc4417136",
+   "E3_basis": "means, SEs and ranges of pH, organic matter and sodium"
+  },
+  {
+   "index": 13,
+   "pmcid": "PMC7319169",
+   "eligible": false,
+   "reason": "E3: no descriptive statistics of the table's rows in prose"
+  },
+  {
+   "index": 14,
+   "pmcid": "PMC5098986",
+   "eligible": false,
+   "reason": "E3: prose reports model estimates only"
+  },
+  {
+   "index": 15,
+   "pmcid": "PMC9731912",
+   "eligible": false,
+   "reason": "E2: CSV not rectangular under the csv module"
+  },
+  {
+   "index": 16,
+   "pmcid": "PMC6606457",
+   "eligible": false,
+   "reason": "E2: no CSV other than a README"
+  },
+  {
+   "index": 17,
+   "pmcid": "PMC9309151",
+   "eligible": true,
+   "slug": "17_pmc9309151",
+   "E3_basis": "standard-length range (abstract and methods)"
+  },
+  {
+   "index": 18,
+   "pmcid": "PMC4567864",
+   "eligible": false,
+   "reason": "not needed (six eligible documents already found); also fails E2",
+   "note": "acquired in the same batch as 14-17"
+  },
+  {
+   "index": 19,
+   "pmcid": "PMC6141465",
+   "eligible": null,
+   "reason": "not needed (six eligible documents already found); acquired in the same batch and its cue sentences were seen, but it was not annotated or used"
+  }
+ ],
+ "funnel": {
+  "development": {
+   "screened": 6,
+   "fail_E2": 2,
+   "fail_E3": 2,
+   "eligible": 2
+  },
+  "heldout": {
+   "screened": 12,
+   "fail_E2": 3,
+   "fail_E3": 3,
+   "eligible": 6
+  }
+ },
+ "note": "About half of the candidates that pass the format screen have no checkable descriptive statistics in their prose at all. That is a property of the literature, and it bounds the coverage any tool of this kind can have."
+}
