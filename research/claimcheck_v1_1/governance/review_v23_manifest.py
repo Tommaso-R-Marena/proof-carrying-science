@@ -15,8 +15,9 @@ code separate from the generator, against V22 read from the protected commit tha
   * every V23 entry equals the blob at `H`, except:
     * the gate script the control commit replaces;
     * the gate's one pinned test repair (`reconcile.py`, `RECEIVER_CLEANUP_*`);
-    * if `H` carries it, G2's reviewed workflow successor. V23 keeps V22's identity for it, and the
-      emitted `reconcile.py` must map exactly that identity to the new one (`SOURCE_POLICY_*`). The two
+    * if `H` carries G2, its two reviewed successors: the source-policy workflow, and the consolidated
+      research gate that pins it. V23 keeps V22's identities for both, and the emitted `reconcile.py` must
+      map exactly those identities to the new ones (`SOURCE_POLICY_*`, `CONSOLIDATED_GATE_*`). The
       digests are written here independently of the generator;
   * no file at `H` is missing from V23 other than the control paths.
 
@@ -44,6 +45,10 @@ UNCHANGED_FIELDS = ("prs", "superseded_closed_prs", "workflow_adaptations", "wor
 G2_WORKFLOW = ".github/workflows/pcs-public-full-verification.yml"
 G2_OLD = "bb920a828812bcf3db3df4620b883a2595294db9dd9e64d11d4a0dc6b52567cf"
 G2_NEW = "b4e6b4ef2aed4378557b3e44fba3dfddd872e68392844fd524f545de7e595d5a"
+# and the consolidated research gate that pins that workflow's bytes (its exact reviewed successor)
+G2_GATE = "research/integration_v1/source_gate.py"
+G2_GATE_OLD = "0760cdfd6473b8ffc7220146ec76555152b684895da2b15dc15a55017a6bf58e"
+G2_GATE_NEW = "dcce5eb187561002a5765d4a09ef7d33937ff69b19eaaffe943cbadfbc625fcc"
 
 
 def git(*args: str) -> bytes:
@@ -87,7 +92,7 @@ def main(argv=None) -> int:
         if mode != e["mode"] or hashlib.sha256(git("cat-file", "blob", blob)).hexdigest() != e["sha256"]:
             differ.append(p)
     g2 = hashlib.sha256(git("show", f"{a.head}:{G2_WORKFLOW}")).hexdigest() == G2_NEW
-    expected_differ = sorted([GATE, REPAIR] + ([G2_WORKFLOW] if g2 else []))
+    expected_differ = sorted([GATE, REPAIR] + ([G2_WORKFLOW, G2_GATE] if g2 else []))
     report["g2_workflow_successor_at_head"] = g2
     checks["entries_equal_head_except_gate_script_and_pinned_repair"] = (
         sorted(differ) == expected_differ and s23[REPAIR]["sha256"] == REPAIR_OLD
@@ -96,7 +101,10 @@ def main(argv=None) -> int:
         emitted_gate = open(f"{a.emit}/research/integration_v2/reconcile.py", encoding="utf-8").read()
         checks["g2_successor_kept_at_v22_identity_and_bound_by_the_emitted_gate"] = (
             s23[G2_WORKFLOW] == {"sha256": G2_OLD, "mode": "100644"} and tree[G2_WORKFLOW][0] == "100644"
-            and f'SOURCE_POLICY_OLD = "{G2_OLD}"' in emitted_gate and f'SOURCE_POLICY_NEW = "{G2_NEW}"' in emitted_gate)
+            and f'SOURCE_POLICY_OLD = "{G2_OLD}"' in emitted_gate and f'SOURCE_POLICY_NEW = "{G2_NEW}"' in emitted_gate
+            and s23[G2_GATE] == {"sha256": G2_GATE_OLD, "mode": "100644"} and tree[G2_GATE][0] == "100644"
+            and hashlib.sha256(git("show", f"{a.head}:{G2_GATE}")).hexdigest() == G2_GATE_NEW
+            and f'CONSOLIDATED_GATE_OLD = "{G2_GATE_OLD}"' in emitted_gate and f'CONSOLIDATED_GATE_NEW = "{G2_GATE_NEW}"' in emitted_gate)
     missing = sorted(set(tree) - set(s23) - set(v23["control_paths"]))
     checks["every_file_at_head_is_pinned_or_a_control"] = not missing
     checks["v23_is_a_control_and_v22_is_not"] = V23_PATH in v23["control_paths"] and V22_PATH not in v23["control_paths"]

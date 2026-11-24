@@ -160,20 +160,30 @@ def main(argv=None) -> int:
     try:
         P.git(P.ROOT, "worktree", "add", "--detach", str(wt), head)
         # ---- C1 + G2, built the way C1 would be built if G2 is chosen -------------------------------------------------------
-        old_wf = P.show(wt, P.V22_COMMIT, G2.WORKFLOW)
+        old_files = {f: P.show(wt, P.V22_COMMIT, f) for f in (G2.WORKFLOW, G2.CONSOLIDATED_GATE, G2.SUCCESSOR_RECORD_OLD)}
+        old_wf = old_files[G2.WORKFLOW]
+        g2_tree = G2.expected_tree(old_wf, old_files[G2.CONSOLIDATED_GATE], old_files[G2.SUCCESSOR_RECORD_OLD])
         branch_carries_g2 = G2.carried(wt, P.V22_COMMIT, head)
-        if branch_carries_g2:           # the branch carries G2's workflow: it is the source; C1 alone is a scratch commit with V22's
+        if branch_carries_g2:           # the branch carries G2: it is the source; C1 alone is a scratch commit with V22's files
             source = head
-            (wt / G2.WORKFLOW).write_bytes(old_wf)
-            P.git(wt, "commit", "-q", "-am", "scratch: V22's workflow, for the comparison with C1 alone", env=P.FIXED)
+            for f in G2.MODIFIED:
+                (wt / f).write_bytes(old_files[f])
+            (wt / G2.SUCCESSOR_RECORD_NEW).unlink()
+            P.git(wt, "add", "-A")
+            P.git(wt, "commit", "-q", "-m", "scratch: V22's workflow and consolidated gate, for the comparison with C1 alone", env=P.FIXED)
             without = P.git(wt, "rev-parse", "HEAD")
             P.git(wt, "checkout", "-q", "--detach", source)
         else:
-            (wt / G2.WORKFLOW).write_bytes(G2.successor(old_wf))
-            P.git(wt, "commit", "-q", "-am", "DRY RUN: G2's workflow on the source branch (never pushed)", env=P.FIXED)
+            for f, data in g2_tree.items():
+                (wt / f).parent.mkdir(parents=True, exist_ok=True)
+                (wt / f).write_bytes(data)
+            P.git(wt, "add", "-A")
+            P.git(wt, "commit", "-q", "-m", "DRY RUN: G2's three files on the source branch (never pushed)", env=P.FIXED)
             source, without = P.git(wt, "rev-parse", "HEAD"), head
-        report["branch_carries_g2_workflow"] = branch_carries_g2
-        (out / "proposed-g2-core-workflow.patch").write_text(P.git(wt, "diff", without, source) + "\n", encoding="utf-8")
+        report["branch_carries_g2"] = branch_carries_g2
+        (out / "proposed-g2-core-workflow.patch").write_text(P.git(wt, "diff", without, source, "--", G2.WORKFLOW) + "\n", encoding="utf-8")
+        (out / "proposed-g2-consolidated-gate.patch").write_text(
+            P.git(wt, "diff", without, source, "--", G2.CONSOLIDATED_GATE, G2.SUCCESSOR_RECORD_NEW) + "\n", encoding="utf-8")
         v22_raw = (wt / P.V22).read_bytes()
         v22 = json.loads(v22_raw)
         tracked = set(P.git(wt, "ls-files", "-z").split("\0")) - {""}
@@ -187,10 +197,21 @@ def main(argv=None) -> int:
             "control_files_differ_only_in_the_gate_and_its_test": sorted(n for n in with_g2 if with_g2[n] != plain[n]) == sorted([P.GATE, P.GATE_TEST]),
             "v23_identical_with_and_without_g2": with_g2[P.V23] == plain[P.V23]}
         refused = {}
+
+        def only(paths, start):
+            def damage():
+                P.git(wt, "checkout", "-q", "-f", "--detach", start)
+                for f in paths:
+                    (wt / f).parent.mkdir(parents=True, exist_ok=True)
+                    (wt / f).write_bytes(g2_tree[f])
+            return damage
         for name, damage in (("executable_mode_refused", lambda: os.chmod(wt / G2.WORKFLOW, 0o755)),
-                             ("other_bytes_refused", lambda: (wt / G2.WORKFLOW).write_bytes((wt / G2.WORKFLOW).read_bytes() + b"\n"))):
+                             ("other_bytes_refused", lambda: (wt / G2.WORKFLOW).write_bytes((wt / G2.WORKFLOW).read_bytes() + b"\n")),
+                             ("workflow_without_the_consolidated_gate_refused", only([G2.WORKFLOW], without)),
+                             ("consolidated_gate_without_the_workflow_refused", only([G2.CONSOLIDATED_GATE, G2.SUCCESSOR_RECORD_NEW], without))):
             damage()
-            P.git(wt, "commit", "-q", "-am", f"scratch: {name}", env=P.FIXED)
+            P.git(wt, "add", "-A")
+            P.git(wt, "commit", "-q", "-m", f"scratch: {name}", env=P.FIXED)
             try:
                 G2.carried(wt, P.V22_COMMIT, P.git(wt, "rev-parse", "HEAD"))
                 refused[name] = False
@@ -213,6 +234,10 @@ def main(argv=None) -> int:
         report["patches"] = {
             "proposed-g2-core-workflow.patch": {"applies_to": "the ClaimCheck branch, before C1 is regenerated", "files": [G2.WORKFLOW],
                                                 "old_sha256": G2.OLD_SHA256, "new_sha256": P.sha(G2.successor(old_wf))},
+            "proposed-g2-consolidated-gate.patch": {"applies_to": "the ClaimCheck branch, with the workflow patch",
+                                                    "files": {G2.CONSOLIDATED_GATE: {"old_sha256": G2.CONSOLIDATED_OLD_SHA256,
+                                                                                     "new_sha256": P.sha(g2_tree[G2.CONSOLIDATED_GATE])},
+                                                              G2.SUCCESSOR_RECORD_NEW: {"added": True, "sha256": P.sha(g2_tree[G2.SUCCESSOR_RECORD_NEW])}}},
             "proposed-g2-core-controls.patch": {"applies_on_top_of": "C1's reconcile.py and test_reconcile.py (built in by prepare_core_admission)",
                                                 "lines_added_and_removed": {n[2]: [int(n[0]), int(n[1])] for n in numstat}}}
         P.git(P.ROOT, "tag", "-f", "-a", P.DRY_TAG, intake, "-m", "G2 dry run, local only, deleted at the end", env=P.FIXED)
@@ -247,7 +272,17 @@ def main(argv=None) -> int:
             "same_report": pos_g2["_json"] == pos_old["_json"],
             "isolated_retained_source_gate": {k: v for k, v in isolated_retained().items() if k != "_json"},
             "gate_tests": P.suite([args.pytest_python, "-m", "pytest", "-q", "-p", "no:cacheprovider", P.GATE_TEST], wt),
-            "retained_source_gate_tests": P.suite([sys.executable, "scripts/test_reconciled_prs.py"], wt)}
+            "retained_source_gate_tests": P.suite([sys.executable, "scripts/test_reconciled_prs.py"], wt),
+            "consolidated_research_gate": {k: v for k, v in py(wt, ["-m", "research.integration_v1.source_gate"], env).items() if k != "_json"}}
+        # why G2 includes the consolidated gate: with the workflow change alone, that gate rejects the tree
+        P.git(wt, "checkout", "-q", "-f", "--detach", without)
+        (wt / G2.WORKFLOW).write_bytes(g2_tree[G2.WORKFLOW])
+        alone = subprocess.run([sys.executable, "-m", "research.integration_v1.source_gate"], cwd=wt, capture_output=True, text=True, env=env)
+        try:
+            alone_failures = json.loads(alone.stdout).get("failures", [])
+        except ValueError:
+            alone_failures = [(alone.stderr or "").strip()[-200:]]
+        report["workflow_change_alone_fails_the_consolidated_gate"] = {"exit": alone.returncode, "first_failures": alone_failures[:2]}
         reset()
         # ---- fail-closed: without C1 the gate fails, through G2's step as through the current invocation ----------------
         reset(head)
@@ -464,10 +499,13 @@ def main(argv=None) -> int:
             inc["source_with_g2_workflow"] is True and inc["source_without_it"] is False
             and inc["control_files_differ_only_in_the_gate_and_its_test"] and inc["v23_identical_with_and_without_g2"]
             and inc["executable_mode_refused"] and inc["other_bytes_refused"]
+            and inc["workflow_without_the_consolidated_gate_refused"] and inc["consolidated_gate_without_the_workflow_refused"]
             and report["g2_step_as_read_from_the_workflow"]["equals_the_reviewed_launcher"]
             and pos["g2_step"]["genuine_success"] and pos["g2_step"]["prs_checked"] == 72 and pos["current_invocation"]["genuine_success"]
             and pos["same_report"] and pos["isolated_retained_source_gate"]["genuine_success"]
             and pos["gate_tests"]["exit"] == 0 and pos["retained_source_gate_tests"]["exit"] == 0
+            and pos["consolidated_research_gate"]["exit"] == 0
+            and report["workflow_change_alone_fails_the_consolidated_gate"]["exit"] == 1
             and report["fail_closed_at_the_branch_head_without_c1"]["same_error"]
             and report["compatible_with_c2b"]["g2_step"]["genuine_success"] and report["compatible_with_c2b"]["retained_source_reported"]
             and report["compatible_with_c2b"]["gate_tests"]["exit"] == 0

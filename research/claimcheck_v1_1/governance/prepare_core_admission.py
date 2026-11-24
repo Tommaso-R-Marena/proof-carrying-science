@@ -75,7 +75,8 @@ EVIDENCE = {"docs/integration/claimcheck/dry-run.json", "docs/integration/claimc
             "docs/integration/claimcheck/THIRD_PARTY_ATTRIBUTION.md", "docs/integration/claimcheck/h1b/h1b-adversarial.json",
             "docs/integration/claimcheck/c2b/c2b-dry-run.json", "docs/integration/claimcheck/c2b/proposed-c2b.patch",
             "docs/integration/claimcheck/g2/g2-dry-run.json", "docs/integration/claimcheck/g2/proposed-g2-core-workflow.patch",
-            "docs/integration/claimcheck/g2/proposed-g2-core-controls.patch", "docs/integration/claimcheck/g2/proposed-g2-site.patch"}
+            "docs/integration/claimcheck/g2/proposed-g2-core-controls.patch", "docs/integration/claimcheck/g2/proposed-g2-site.patch",
+            "docs/integration/claimcheck/g2/proposed-g2-consolidated-gate.patch"}
 # H1-b: the protected main commit the source branch is based on; the snapshot's only parent (pinned, like V22_COMMIT)
 PROTECTED_MAIN = V22_COMMIT
 RETAINED_MESSAGE = "Retained qualified source: previous intake plus ClaimCheck sidecar (proposed; tree identical to the source commit)"
@@ -198,7 +199,7 @@ def history_review(cwd: Path, head: str, retained: dict) -> dict:
             git(cwd, "rev-parse", f"{s}^{{tree}}") == git(cwd, "rev-parse", f"{head}^{{tree}}")
             and git(cwd, "rev-list", "--parents", "-n", "1", s).split()[1:] == [PROTECTED_MAIN]
             and git(cwd, "rev-list", "--parents", "-n", "1", r).split()[1:] == [s, OLD_INTAKE])
-    reviewed = {"M\t" + G2.WORKFLOW} if G2.carried(cwd, PROTECTED_MAIN, head) else set()      # G2's one reviewed successor, if chosen
+    reviewed = {"M\t" + p for p in G2.MODIFIED} if G2.carried(cwd, PROTECTED_MAIN, head) else set()      # G2's reviewed successors, if chosen
     facts["source_only_adds_files_to_protected_main"] = all(
         line.startswith("A\t") or line in reviewed for line in git(cwd, "diff", "--name-status", "--no-renames", PROTECTED_MAIN, head).splitlines())
     facts.update(reach(cwd, r, [PROTECTED_MAIN, OLD_INTAKE], withheld_blobs(cwd, search_from=head)))
@@ -249,7 +250,8 @@ def build(src: Path, head: str, intake: str, tag: str, v22: dict, v22_raw: bytes
     files[GATE_TEST] = t.encode("utf-8")
     # G2 (a separate owner decision): its two control edits, only if the source commit carries G2's reviewed workflow successor
     if G2.carried(src, V22_COMMIT, head):
-        g, t = G2.controls(files[GATE].decode("utf-8"), files[GATE_TEST].decode("utf-8"), show(src, V22_COMMIT, G2.WORKFLOW))
+        g, t = G2.controls(files[GATE].decode("utf-8"), files[GATE_TEST].decode("utf-8"), show(src, V22_COMMIT, G2.WORKFLOW),
+                           show(src, V22_COMMIT, G2.CONSOLIDATED_GATE), show(src, V22_COMMIT, G2.SUCCESSOR_RECORD_OLD))
         files[GATE], files[GATE_TEST] = g.encode("utf-8"), t.encode("utf-8")
     return files
 
@@ -317,7 +319,7 @@ def main(argv=None) -> int:
         from research.integration_v2.reconcile import _current_expected
         changed = [n for n, ident in v22["snapshot"].items() if n not in tracked or identity(wt, n) != _current_expected(n, ident)]
         g2 = G2.carried(wt, V22_COMMIT, head)          # G2's reviewed workflow successor, bound by its control edits in build()
-        changed = [n for n in changed if not (g2 and n == G2.WORKFLOW)]
+        changed = [n for n in changed if not (g2 and n in G2.MODIFIED)]
         report["g2_included"] = g2
         added_names = sorted(tracked - set(v22["snapshot"]) - controls22)
         outside = [n for n in added_names if not (n.startswith(ADDED_ROOTS) or n in ADDED_FILES)]
@@ -326,8 +328,9 @@ def main(argv=None) -> int:
         report["files_added"] = len(added_names)
         report["added_files_outside_the_admitted_roots"] = outside
         census = {"note": "Every file this branch adds to the tree pinned by RECONCILIATION_V22, with its identity at the commit above. "
-                          + ("No other existing file is changed or removed: G2's reviewed successor of the source-policy workflow is bound "
-                             "by C1's control files. " if g2 else "No existing file is changed or removed."),
+                          + ("No other existing file is changed or removed: G2's two reviewed successors (the source-policy workflow and "
+                             "the consolidated research gate that pins it) are bound by C1's control files. " if g2
+                             else "No existing file is changed or removed."),
                   "generated_from_commit": head, "existing_files_changed_or_removed": changed,
                   "by_directory": {}, "files": added}
         for n in added_names:

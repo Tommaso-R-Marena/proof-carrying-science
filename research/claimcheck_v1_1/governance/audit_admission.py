@@ -197,7 +197,7 @@ def main(argv=None) -> int:
     changes = [line.split("\t", 1) for line in git("diff", "--name-status", "--no-renames", base, head).splitlines()]
     added = sorted(p for s, p in changes if s == "A")
     from . import g2_isolation as G2
-    reviewed = {G2.WORKFLOW} if G2.carried(ROOT, base, head) else set()     # G2's reviewed successor, if chosen; bound by C1
+    reviewed = set(G2.MODIFIED) if G2.carried(ROOT, base, head) else set()     # G2's reviewed successors, if chosen; bound by C1
     not_added = sorted(f"{s} {p}" for s, p in changes if s != "A" and not (s == "M" and p in reviewed))
     outside = [p for p in added if not p.startswith(ADMITTED_ROOTS)]
     tree = {}
