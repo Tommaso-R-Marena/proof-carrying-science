@@ -280,7 +280,7 @@ def main(argv=None) -> int:
     report["all_clear"] = (not not_added and not outside and not exact_hits and not pattern_hits and not sensitive_names
                            and not generated and not report["modes"]["symlinks"] and not report["modes"]["submodules"]
                            and not licence_problems and freeze.returncode == 0 and not report["protected_paths_changed"]
-                           and wf_changes == [".github/workflows/pcs-claimcheck-v1.yml"]
+                           and sorted(wf_changes) == sorted([".github/workflows/pcs-claimcheck-v1.yml"] + [w for w in reviewed if w.startswith(".github/")])
                            and not unclassified and not attribution_problems and attribution_current)
     out.mkdir(parents=True, exist_ok=True)
     (out / "THIRD_PARTY_ATTRIBUTION.md").write_text(attribution_text, encoding="utf-8")
